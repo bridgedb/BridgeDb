@@ -368,7 +368,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         if (sourceRef == null){
             return mapUnkownUri(sourceUri, graph, tgtUriPatterns);
         }
-        System.out.println(sourceRef);
         return mapUri(sourceRef, lensUri, graph, tgtUriPatterns);
     }
              

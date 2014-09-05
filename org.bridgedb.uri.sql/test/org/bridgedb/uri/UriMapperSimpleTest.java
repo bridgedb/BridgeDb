@@ -184,7 +184,6 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         String lensId = Lens.DEFAULT_LENS_NAME;
         MappingsBySet lensMapping = uriMapper.mapBySet(sourceUris, lensId, NULL_GRAPH);
         Set<String> results = lensMapping.getTargetUris();
-        System.out.println(results);
         assertThat(results, hasItem(mapBadUri1));
         assertEquals(1, results.size());
     }
@@ -197,7 +196,6 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         String lensId = Lens.DEFAULT_LENS_NAME;
         MappingsBySet lensMapping = uriMapper.mapBySet(sourceUris, lensId, NULL_GRAPH, badUriPrefix+"$id");
         Set<String> results = lensMapping.getTargetUris();
-        System.out.println(results);
         assertThat(results, hasItem(mapBadUri1));
         assertEquals(1, results.size());
     }
@@ -210,7 +208,6 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         String lensId = Lens.DEFAULT_LENS_NAME;
         MappingsBySet lensMapping = uriMapper.mapBySet(sourceUris, lensId, NULL_GRAPH, badUriPrefix+"$id", stringPattern3);
         Set<String> results = lensMapping.getTargetUris();
-        System.out.println(results);
         assertEquals(1, results.size());
     }
 
@@ -222,7 +219,6 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         String lensId = Lens.DEFAULT_LENS_NAME;
         MappingsBySet lensMapping = uriMapper.mapBySet(sourceUris, lensId, NULL_GRAPH, stringPattern2, stringPattern3);
         Set<String> results = lensMapping.getTargetUris();
-        System.out.println(results);
         assertEquals(0, results.size());
     }
     

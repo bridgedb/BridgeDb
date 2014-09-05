@@ -412,7 +412,6 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         //Date start = new Date();
         report("ChemblProtclass4");
         String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
-        System.out.println(uriMapper.getClass());
         Set<String> results = uriMapper.mapUri(uri, null, null, "http://www.example.com/protclass/");        
         assertEquals (0, results.size());
     }
@@ -423,7 +422,6 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         //Date start = new Date();
         report("ChemblProtclassFull");
         String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
-        System.out.println(uriMapper.getClass());
         Set<Mapping> results = uriMapper.mapFull(uri, null, null, null);        
         //if
         assertEquals (1, results.size());
@@ -435,7 +433,6 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         //Date start = new Date();
         report("ChemblProtclass2Full");
         String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
-        System.out.println(uriMapper.getClass());
         Set<Mapping> results = uriMapper.mapFull(uri, null, null, "http://rdf.ebi.ac.uk/resource/chembl/protclass/");        
         assertEquals (1, results.size());
     }
@@ -446,7 +443,6 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         //Date start = new Date();
         report("ChemblProtclass3Full");
         String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
-        System.out.println(uriMapper.getClass());
         Set<Mapping> results = uriMapper.mapFull(uri, null, null, "http://rdf.ebi.ac.uk/resource/chembl/protclass/", "http://www.example.com/protclass/");        
         assertEquals (1, results.size());
     }
@@ -457,7 +453,6 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         //Date start = new Date();
         report("ChemblProtclass4Full");
         String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
-        System.out.println(uriMapper.getClass());
         Set<Mapping> results = uriMapper.mapFull(uri, null, null, "http://www.example.com/protclass/");        
         assertEquals (0, results.size());
     }
