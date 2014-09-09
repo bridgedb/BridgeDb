@@ -2462,5 +2462,50 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }  
     }
  
+    public Set<TransitiveMapping> getDirectMappings(IdSysCodePair sourceRef) throws BridgeDBException{
+        StringBuilder query =  startMappingsBySetQuery();
+        query.append(", ");
+        query.append(SYMMETRIC_COLUMN_NAME);
+        appendMappingFromJoinMapping(query);
+        appendSourceIdSysCodePair(query, sourceRef);
+        Statement statement = this.createStatement();
+        ResultSet rs = null;
+        Set<TransitiveMapping> results = new HashSet<TransitiveMapping>();
+        System.out.println(query);
+        try {
+             rs = statement.executeQuery(query.toString());
+             while (rs.next()){
+                String id = rs.getString(TARGET_ID_COLUMN_NAME);
+                String sysCode = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
+                IdSysCodePair targetRef = new IdSysCodePair(id, sysCode);
+                System.out.println(targetRef);
+                Integer mappingSetId = rs.getInt(MAPPING_SET_ID_COLUMN_NAME);
+                Integer symmetric = rs.getInt(SYMMETRIC_COLUMN_NAME);
+                String predicate = rs.getString(PREDICATE_COLUMN_NAME);
+                String justification = rs.getString(JUSTIFICATION_COLUMN_NAME);
+                String mappingSource = rs.getString(MAPPING_SOURCE_COLUMN_NAME);
+                String mappingResource = rs.getString(MAPPING_RESOURCE_COLUMN_NAME);
+                TransitiveMapping mapping = new TransitiveMapping (mappingSetId, symmetric, predicate, justification, mappingSource, mappingResource, sourceRef, targetRef);
+                results.add(mapping);
+             }
+             return results;
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to run query. " + query, ex);           
+        } finally {
+            close (statement, rs);
+        }
+    }
+    
+    public Set<TransitiveMapping> getTransitiveMappings(IdSysCodePair sourceRef) throws BridgeDBException{
+        TransitiveMappings transitiveMappings = new TransitiveMappings(sourceRef);
+        Set<TransitiveMapping> direct = getDirectMappings(sourceRef);
+        transitiveMappings.addMappings(direct);
+        while (transitiveMappings.moreToCheck()){
+            TransitiveMapping toCheck = transitiveMappings.nextToCheck();
+            Set<TransitiveMapping> transitives = getDirectMappings(toCheck.getTarget());
+            transitiveMappings.addMappings(toCheck, transitives);
+        }
+        return transitiveMappings.getMappings();
+    }
 }
  
