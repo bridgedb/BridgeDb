@@ -221,8 +221,8 @@ public class JustificationMaker {
         if (justification.equals(ChemInf.isOPSNormalizedCounterpartOf)){
             return ChemInf.hasOPSNormalizedCounterpart;
         }
-        if (justification.equals(OboConstants.HAS_PART)){
-            return OboConstants.PART_OF;
+        if (justification.equals(OboConstants.PART_OF)){
+            return OboConstants.HAS_PART;
         }
         if (justification.equals(OboConstants.HAS_PART)){
             return OboConstants.PART_OF;
