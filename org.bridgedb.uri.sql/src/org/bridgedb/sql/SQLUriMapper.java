@@ -2521,14 +2521,14 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         Statement statement = this.createStatement();
         ResultSet rs = null;
         Set<DirectMapping> results = new HashSet<DirectMapping>();
-        System.out.println(query);
+        //ystem.out.println(query);
         try {
              rs = statement.executeQuery(query.toString());
              while (rs.next()){
                 String id = rs.getString(TARGET_ID_COLUMN_NAME);
                 String sysCode = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
                 IdSysCodePair targetRef = new IdSysCodePair(id, sysCode);
-                System.out.println(targetRef);
+                //ystem.out.println(targetRef);
                 Integer mappingSetId = rs.getInt(MAPPING_SET_ID_COLUMN_NAME);
                 Integer symmetric = rs.getInt(SYMMETRIC_COLUMN_NAME);
                 String predicate = rs.getString(PREDICATE_COLUMN_NAME);
@@ -2547,7 +2547,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
     
     public Set<AbstractMapping> getTransitiveMappings(IdSysCodePair sourceRef) throws BridgeDBException{
-        TransitiveMappings transitiveMappings = new TransitiveMappings(sourceRef);
+        MappingsHandlers transitiveMappings = new MappingsHandlers(sourceRef);
         Set<DirectMapping> direct = getDirectMappings(sourceRef);
         transitiveMappings.addMappings(direct);
         while (transitiveMappings.moreToCheck()){

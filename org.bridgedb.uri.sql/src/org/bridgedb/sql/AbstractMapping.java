@@ -41,4 +41,8 @@ public class AbstractMapping {
     IdSysCodePair getTarget() {
         return target;
     }
+
+    IdSysCodePair getSource() {
+        return source;
+    }
 }

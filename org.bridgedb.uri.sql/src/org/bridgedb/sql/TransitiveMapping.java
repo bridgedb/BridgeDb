@@ -27,22 +27,15 @@ import org.bridgedb.pairs.IdSysCodePair;
  *
  * @author christian
  */
-public class TransitiveMapping {
-    private final IdSysCodePair source;
-    private final IdSysCodePair target;
+public class TransitiveMapping extends AbstractMapping {
     private final List<DirectMapping> via;
     
     public TransitiveMapping (IdSysCodePair source, IdSysCodePair target, List<DirectMapping> via){
-        this.source = source;
-        this.target = target;
+        super(source, target);
         this.via = via;
     }
-    
-    public String toString(){
-        return source + " -> " + target;
-    }
 
-    IdSysCodePair getTarget() {
-        return target;
+    List<DirectMapping> getVia() {
+        return via;
     }
 }
