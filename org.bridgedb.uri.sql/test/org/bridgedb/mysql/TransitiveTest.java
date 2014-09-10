@@ -83,7 +83,7 @@ public class TransitiveTest extends UriListenerTest{
 
         String sysCode = "Bc";
         DataSource xds = DataSource.getExistingBySystemCode(sysCode);
-        UriPattern xuriPattern = UriPattern.byCode(sysCode).iterator().next();
+        UriPattern xuriPattern = UriPattern.byPattern(xds.getKnownUrl("$id"));
         resource = new URIImpl("http://example.com/3toX");
         RegexUriPattern xregexUriPattern = RegexUriPattern.factory(xuriPattern, sysCode);
         mappingSet = listener.registerMappingSet(regexUriPattern3, TEST_PREDICATE, 
@@ -91,6 +91,12 @@ public class TransitiveTest extends UriListenerTest{
         String xmap1Uri = xds.getKnownUrl(xds.getExample().getId());
         listener.insertUriMapping(map1Uri3, xmap1Uri, mappingSet, SYMETRIC);
         listener.closeInput();
+
+//        resource = new URIImpl("http://example.com/1toX");
+//        mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
+//                Lens.getDefaultJustifictaionString(), xregexUriPattern, resource, resource, SYMETRIC, NO_VIA, NO_CHAIN);
+//        listener.insertUriMapping(map2Uri1, xmap1Uri, mappingSet, SYMETRIC);
+//        listener.closeInput();
     }
 
     @Test
@@ -98,7 +104,7 @@ public class TransitiveTest extends UriListenerTest{
         report("DirectMappings");
         IdSysCodePair source = new IdSysCodePair(ds1Id1, dataSource1Code);
         Set<DirectMapping> mappings = sqlUriMapper.getDirectMappings(source);
-        assertThat(mappings.size(), greaterThanOrEqualTo(1));
+        assertEquals(1, mappings.size());
     }
 
     @Test
@@ -107,7 +113,7 @@ public class TransitiveTest extends UriListenerTest{
         IdSysCodePair source = new IdSysCodePair(ds1Id1, dataSource1Code);
         Set<AbstractMapping> mappings = sqlUriMapper.getTransitiveMappings(source);
         System.out.println(mappings);
-        assertThat(mappings.size(), greaterThanOrEqualTo(3));
+        assertEquals(3, mappings.size());
     }
 
 }
