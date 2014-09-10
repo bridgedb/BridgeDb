@@ -19,23 +19,19 @@
 //
 package org.bridgedb.sql;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.bridgedb.pairs.IdSysCodePair;
 
 /**
  *
  * @author christian
  */
-public class TransitiveMapping {
+public class AbstractMapping {
     private final IdSysCodePair source;
     private final IdSysCodePair target;
-    private final List<DirectMapping> via;
     
-    public TransitiveMapping (IdSysCodePair source, IdSysCodePair target, List<DirectMapping> via){
+    public AbstractMapping (IdSysCodePair source, IdSysCodePair target){
         this.source = source;
         this.target = target;
-        this.via = via;
     }
     
     public String toString(){

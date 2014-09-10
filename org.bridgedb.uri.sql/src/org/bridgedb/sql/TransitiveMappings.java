@@ -18,23 +18,23 @@ import org.bridgedb.pairs.IdSysCodePair;
 public class TransitiveMappings {
     
     private final IdSysCodePair sourceRef;
-    private final ArrayDeque<TransitiveMapping> toCheck = new ArrayDeque<TransitiveMapping>();
+    private final ArrayDeque<AbstractMapping> toCheck = new ArrayDeque<AbstractMapping>();
     private final Set<IdSysCodePair> checkedPairs = new HashSet<IdSysCodePair>();
-    private final Set<TransitiveMapping> mappings = new HashSet<TransitiveMapping>();
+    private final Set<AbstractMapping> mappings = new HashSet<AbstractMapping>();
             
     public TransitiveMappings(IdSysCodePair sourceRef){
         this.sourceRef = sourceRef;
         checkedPairs.add(sourceRef);
     }
 
-    private void addMapping(TransitiveMapping mapping){
+    private void addMapping(AbstractMapping mapping){
         toCheck.push(mapping);
         mappings.add(mapping);
         checkedPairs.add(mapping.getTarget());
     }
     
-    void addMappings(Set<TransitiveMapping> newMappings) {
-        for (TransitiveMapping mapping: newMappings){
+    void addMappings(Set<DirectMapping> newMappings) {
+        for (DirectMapping mapping: newMappings){
             if (checkedPairs.contains(mapping.getTarget())){
                 System.out.println("Duplicate " + mapping.getTarget());
             } else {
@@ -47,12 +47,12 @@ public class TransitiveMappings {
         return !toCheck.isEmpty();
     }
 
-    TransitiveMapping nextToCheck() {
+    AbstractMapping nextToCheck() {
         return toCheck.pop();
     }
 
-    void addMappings(TransitiveMapping toCheck, Set<TransitiveMapping> transitives) {
-        for (TransitiveMapping transitive: transitives){
+    void addMappings(AbstractMapping previous, Set<DirectMapping> transitives) {
+        for (DirectMapping transitive: transitives){
             IdSysCodePair targetRef = transitive.getTarget();
             System.out.println(targetRef);
             System.out.println(checkedPairs);
@@ -64,7 +64,7 @@ public class TransitiveMappings {
         }
     }
 
-    Set<TransitiveMapping> getMappings() {
+    Set<AbstractMapping> getMappings() {
         return mappings;
     }
 }

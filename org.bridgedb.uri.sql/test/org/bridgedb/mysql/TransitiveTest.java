@@ -21,9 +21,11 @@ package org.bridgedb.mysql;
 
 import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
-import org.bridgedb.sql.TransitiveMapping;
+import org.bridgedb.sql.AbstractMapping;
+import org.bridgedb.sql.DirectMapping;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
+import org.bridgedb.sql.TransitiveMapping;
 import org.bridgedb.uri.UriListenerTest;
 import static org.bridgedb.uri.UriListenerTest.NO_CHAIN;
 import static org.bridgedb.uri.UriListenerTest.NO_VIA;
@@ -81,7 +83,7 @@ public class TransitiveTest extends UriListenerTest{
     public void testDirectMappings() throws Exception{
         report("DirectMappings");
         IdSysCodePair source = new IdSysCodePair(ds1Id1, dataSource1Code);
-        Set<TransitiveMapping> mappings = sqlUriMapper.getDirectMappings(source);
+        Set<DirectMapping> mappings = sqlUriMapper.getDirectMappings(source);
         assertThat(mappings.size(), greaterThanOrEqualTo(1));
     }
 
@@ -89,7 +91,7 @@ public class TransitiveTest extends UriListenerTest{
     public void testTransitiveMappings() throws Exception{
         report("TransitiveMappings");
         IdSysCodePair source = new IdSysCodePair(ds1Id1, dataSource1Code);
-        Set<TransitiveMapping> mappings = sqlUriMapper.getTransitiveMappings(source);
+        Set<AbstractMapping> mappings = sqlUriMapper.getTransitiveMappings(source);
         System.out.println(mappings);
         assertThat(mappings.size(), greaterThanOrEqualTo(1));
     }
