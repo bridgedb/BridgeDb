@@ -72,6 +72,8 @@ public class MappingsHandlers {
             IdSysCodePair targetRef = newMapping.getTarget();
             if (checkedPairs.contains(targetRef)){
                 System.out.println("Duplicate " + targetRef);
+            } else if (previous.createsLoop(targetRef)){
+                System.out.println("Loop " + targetRef);        
             } else {
                 System.out.println(targetRef);
                 System.out.println(checkedPairs);

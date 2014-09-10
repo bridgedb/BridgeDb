@@ -25,7 +25,7 @@ import org.bridgedb.pairs.IdSysCodePair;
  *
  * @author christian
  */
-public class AbstractMapping {
+public abstract class AbstractMapping {
     private final IdSysCodePair source;
     private final IdSysCodePair target;
     
@@ -45,4 +45,6 @@ public class AbstractMapping {
     IdSysCodePair getSource() {
         return source;
     }
+
+    abstract boolean createsLoop(IdSysCodePair targetRef);
 }

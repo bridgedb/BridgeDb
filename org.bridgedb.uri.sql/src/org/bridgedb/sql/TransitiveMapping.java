@@ -19,7 +19,6 @@
 //
 package org.bridgedb.sql;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.bridgedb.pairs.IdSysCodePair;
 
@@ -38,4 +37,9 @@ public class TransitiveMapping extends AbstractMapping {
     List<DirectMapping> getVia() {
         return via;
     }
+    
+    boolean createsLoop(IdSysCodePair targetRef){
+        return getSource().getSysCode().equals(targetRef.getSysCode());
+    }
+
 }

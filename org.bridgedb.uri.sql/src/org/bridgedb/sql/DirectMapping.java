@@ -49,5 +49,9 @@ public class DirectMapping extends AbstractMapping{
         this.mappingSource = mappingSource;
         this.mappingResource = mappingResource;
     }
-    
+
+    boolean createsLoop(IdSysCodePair targetRef){
+        return getSource().getSysCode().equals(targetRef.getSysCode());
+    }
+
 }
