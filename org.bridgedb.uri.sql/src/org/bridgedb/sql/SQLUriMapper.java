@@ -251,14 +251,19 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         } catch (SQLException ex) {
             close (statement, rs);
             throw new BridgeDBException("Unable to run query. " + query, ex);
-        }   
-        Set<IdSysCodePair> results = resultSetToIdSysCodePairSet(rs);
-         //Add mapping to self
-        if (sourcePair.getSysCode().equals(tgtSysCode)){
-             results.add(sourcePair);
+        } 
+        try {
+            Set<IdSysCodePair> results = resultSetToIdSysCodePairSet(rs);
+             //Add mapping to self
+            if (sourcePair.getSysCode().equals(tgtSysCode)){
+                results.add(sourcePair);
+            }
+            return results;
+        } catch (BridgeDBException ex){
+            throw ex;
+        } finally {   
+            close (statement, rs);
         }
-        close (statement, rs);
-        return results;
     }
 
     private Set<IdSysCodePair> mapID(IdSysCodePair sourceRef, String lensUri) throws BridgeDBException {
@@ -275,9 +280,16 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             close (statement, rs);
             throw new BridgeDBException("Unable to run query. " + query, ex);
         }
-        Set<IdSysCodePair> results = resultSetToIdSysCodePairSet(rs);
-        WeakReference ref = new WeakReference<Object>(rs);
-        close (statement, rs);
+        try {
+            Set<IdSysCodePair> results = resultSetToIdSysCodePairSet(rs);
+            WeakReference ref = new WeakReference<Object>(rs);
+            results.add(sourceRef);
+            return results;
+        } catch (BridgeDBException ex){
+            throw ex;
+        } finally {
+            close (statement, rs);            
+        }
         //rs = null;
         //while(ref.get() != null) {
         //    System.gc();
@@ -285,8 +297,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         //}
         //ystem.out.println("GC");
          //Add mapping to self
-        results.add(sourceRef);
-        return results;
     }
     
     private Set<IdSysCodePair> mapID(IdSysCodePair sourceRef, String lensUri, DataSource... tgtDataSource) throws BridgeDBException {
@@ -484,12 +494,20 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private void mapBySet(IdSysCodePair sourceRef, String sourceUri, MappingsBySet mappingsBySet, String lensUri, RegexUriPattern tgtUriPattern) throws BridgeDBException {
         if (tgtUriPattern != null){
             String tgtSysCode = tgtUriPattern.getSysCode();
-            ResultSet rs = mapBySetOnly(sourceRef, sourceUri, lensUri, tgtSysCode);       
-            resultSetAddToMappingsBySet(rs, sourceUri, mappingsBySet, tgtUriPattern);           
+            Statement statement = null;
+            ResultSet rs = null;
+            try {
+                statement = this.createStatement();
+                rs = mapBySetOnly(statement, sourceRef, sourceUri, lensUri, tgtSysCode);       
+                resultSetAddToMappingsBySet(rs, sourceUri, mappingsBySet, tgtUriPattern);           
+            } catch (BridgeDBException ex){
+                throw ex;
+            } finally {
+                close(statement, rs);
+            }                
             if (sourceRef.getSysCode().equals(tgtSysCode)){
                 mappingsBySet.addMapping(sourceUri, tgtUriPattern.getUri(sourceRef.getId())); 
             }
-            close(null, rs);
         }
     }
 
@@ -523,25 +541,34 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         sourceUri = scrubUri(sourceUri);
         IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
         if (sourceRef != null){
-            ResultSet rs = mapBySetOnly(sourceRef, sourceUri, lensUri, null);
-            resultSetAddToMappingsBySet(rs, sourceUri, mappingsBySet);
-            mappingsBySet.addMapping(sourceUri, toUris(sourceRef));
-            close(null, rs);
+            Statement statement = null;
+            ResultSet rs = null;
+            try {
+                statement = this.createStatement();
+                rs = mapBySetOnly(statement, sourceRef, sourceUri, lensUri, null);
+                resultSetAddToMappingsBySet(rs, sourceUri, mappingsBySet);
+                mappingsBySet.addMapping(sourceUri, toUris(sourceRef));
+            } catch (BridgeDBException ex){
+                throw ex;
+            } finally {
+                close(statement, rs);
+            }
         } else {
             mappingsBySet.addMapping(sourceUri, sourceUri);
         }
         return mappingsBySet;
     }
 
-    private ResultSet mapBySetOnly(IdSysCodePair sourceRef, String sourceUri, String lensUri, String tgtSysCode) 
+    private ResultSet mapBySetOnly(Statement statement, IdSysCodePair sourceRef, String sourceUri, String lensUri, String tgtSysCode) 
             throws BridgeDBException {
         StringBuilder query =  startMappingsBySetQuery();
         appendMappingFromAndWhere(query, sourceRef, lensUri, tgtSysCode);
-        Statement statement = this.createStatement();
+        ResultSet result = null;
         try {
-            return statement.executeQuery(query.toString());
+            result = statement.executeQuery(query.toString());
+            return result;
         } catch (SQLException ex) {
-            close (statement, null);
+            close (statement, result);
             throw new BridgeDBException("Unable to run query. " + query, ex);           
         }
     }
@@ -561,15 +588,20 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             close (statement, rs);
             throw new BridgeDBException("Unable to run query. " + query, ex);
         }    
-        Set<Mapping> results = resultSetToMappingSet(sourceRef, rs);
-        //Add mapping to self
-        results.add(new Mapping(codeMapper1.toXref(sourceRef)));
-        //Add targetUris
-        for (Mapping mapping: results){
-            mapping.addTargetUris(toUris(mapping.getTarget()));
+        try{
+            Set<Mapping> results = resultSetToMappingSet(sourceRef, rs);
+            //Add mapping to self
+            results.add(new Mapping(codeMapper1.toXref(sourceRef)));
+            //Add targetUris
+            for (Mapping mapping: results){
+                mapping.addTargetUris(toUris(mapping.getTarget()));
+            }
+            return results;
+        } catch (BridgeDBException ex){
+            throw ex;
+        } finally {
+            close (statement, rs);
         }
-        close (statement, rs);
-        return results;
     }
 
     private Set<Mapping> mapFull (IdSysCodePair sourceRef, String lensUri, String tgtSysCode) throws BridgeDBException{
@@ -589,17 +621,22 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         } catch (SQLException ex) {
             close (statement, rs);
             throw new BridgeDBException("Unable to run query. " + query, ex);
-        }    
-        Set<Mapping> results = resultSetToMappingSet(sourceRef, rs);
-        //Add map to self if correct
-        if (sourceRef.getSysCode().equals(tgtSysCode)){
-            results.add(new Mapping(codeMapper1.toXref(sourceRef)));
+        } 
+        try {
+            Set<Mapping> results = resultSetToMappingSet(sourceRef, rs);
+            //Add map to self if correct
+            if (sourceRef.getSysCode().equals(tgtSysCode)){
+                results.add(new Mapping(codeMapper1.toXref(sourceRef)));
+            }
+            return results;
+        } catch (BridgeDBException ex){
+            throw ex;
+        } finally {
+            close (statement, rs);
         }
-        close (statement, rs);
-        return results;
     }
 
-	private Set<Mapping> mapFull (IdSysCodePair sourceRef, String lensUri, DataSource tgtDataSource) throws BridgeDBException{
+    private Set<Mapping> mapFull (IdSysCodePair sourceRef, String lensUri, DataSource tgtDataSource) throws BridgeDBException{
         String tgtSysCode = toCode(tgtDataSource);
         Set<Mapping> results = mapFull(sourceRef, lensUri, tgtSysCode);
         //Add targetUris
@@ -925,7 +962,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                     }
                 }
             }
-                //Should do some checking here but until there is a reason
+            //Should do some checking here but until there is a reason
             //if (result != null){
                 return result;
             //}
@@ -1027,15 +1064,20 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         } catch (SQLException ex) {
             close (statement, rs);
             throw new BridgeDBException("Unable to run query. " + query, ex);
-        } 
-        Set<Mapping> results = resultSetToMappingSet(null, rs);
-        for (Mapping result:results){
-            addSourceURIs(result);
-            addTargetURIs(result);      
         }
-        ArrayList list =  new ArrayList<Mapping>(results);
-        close (statement, rs);
-        return list;
+        try {
+            Set<Mapping> results = resultSetToMappingSet(null, rs);
+            for (Mapping result:results){
+                addSourceURIs(result);
+                addTargetURIs(result);      
+            }
+            ArrayList list =  new ArrayList<Mapping>(results);
+            return list;
+        } catch (BridgeDBException ex){
+            throw ex;
+        } finally {
+            close (statement, rs);
+        }
     }
 
     @Override
@@ -1081,8 +1123,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 throw new BridgeDBException("no Results for query. " + query.toString());
             }
         } catch (SQLException ex) {
-            close (statement, rs);
             throw new BridgeDBException("Unable to run query. " + query.toString(), ex);
+        } finally {
+            close (statement, rs);            
         }
     }
 
@@ -1426,15 +1469,16 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                     + " = ? AND " + REGEX_COLUMN_NAME + " = ?";            
         }
     	PreparedStatement statement = this.createPreparedStatement(query);
+        ResultSet rs = null;
     	try {
             statement.setString(1, pattern.getPrefix());
             statement.setString(2, postfix);
             if (pattern.getRegex() != null){
                 statement.setString(3, pattern.getRegex().pattern());
             }
-			ResultSet rs = statement.executeQuery();
-			if (rs.next()) {
-				String storedCode = rs.getString(DATASOURCE_COLUMN_NAME);
+            rs = statement.executeQuery();
+            if (rs.next()) {
+                String storedCode = rs.getString(DATASOURCE_COLUMN_NAME);
                 String newCode = pattern.getSysCode();
                 if (!storedCode.equals(newCode)){
                     throw new BridgeDBException(pattern + " has a different Code to what was registered. Expected "
@@ -1443,9 +1487,11 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 			} else {
                throw new BridgeDBException("Unregistered pattern. " + pattern);
             }
-		} catch (SQLException e) {
-			throw new BridgeDBException("Unable to check pattern. " + query, e);
-		}        
+        } catch (SQLException e) {
+            throw new BridgeDBException("Unable to check pattern. " + query, e);
+        } finally {
+            close(statement, rs);
+        }       
     }
     
     private void registerChain(int mappingSetId, Set<Integer> chainedLinkSets) throws BridgeDBException {
@@ -1640,8 +1686,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 + " WHERE " + MAPPING_SET_ID_COLUMN_NAME + " = \"" + id + "\"");
     	Statement statement = this.createStatement();
         HashSet<DataSetInfo> results = new HashSet<DataSetInfo>();
+        ResultSet rs = null;
         try {
-            ResultSet rs = statement.executeQuery(query);
+            rs = statement.executeQuery(query);
             while (rs.next()){
                 String sysCode = rs.getString(VIA_DATASOURCE_COLUMN_NAME);
                 results.add(findDataSetInfo(sysCode));
@@ -1649,7 +1696,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         } catch (SQLException e) {
             throw new BridgeDBException("Unable to retrieve lenses.", e);
         } finally {
-            close(statement, null);
+            close(statement, rs);
         }
         return results;
     }
@@ -1911,7 +1958,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             query.append(" = ? ");
         }
         PreparedStatement statement = this.createPreparedStatement(query.toString());
-        ResultSet rs;
+        ResultSet rs = null;
         try {
             statement.setString(1, prefix);
             statement.setString(2, postfix);
@@ -1920,8 +1967,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             }
             rs = statement.executeQuery();
         } catch (SQLException ex) {
+            close (statement, rs);
             throw new BridgeDBException("Unable to run query. " + query, ex);
-        }    
+        }   
         try {
             if (rs.next()){
                 String dataSourceKey = rs.getString(DATASOURCE_COLUMN_NAME);
@@ -1932,7 +1980,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             }
         } catch (SQLException ex) {
             throw new BridgeDBException("Unable to get SysCode. " + statement, ex);
-        }    
+        } finally {
+            close (statement, rs);
+        }   
     }
 
    private boolean appendSystemCodes(StringBuilder query, String sourceSysCode, String targetSysCode) {
