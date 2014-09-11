@@ -199,7 +199,7 @@ public class SQLListener extends SQLBase implements MappingListener{
             throw new BridgeDBException ("Error analyze table mapping ", ex);
         }        
         insertQuery = null;
-        logger.info("Finished processing linkset");
+        logger.debug("Finished processing linkset");
         if (possibleOpenConnection != null){
             try {
                 //possibleOpenConnection.commit();
