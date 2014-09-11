@@ -85,7 +85,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
     public Set<Xref> mapID(Xref xref, DataSource... tgtDataSources) throws BridgeDBException {
         IdSysCodePair ref = toIdSysCodePair(xref);
         if (ref == null) {
-            logger.warn("mapId called with a badXref " + xref);
+            logger.debug("mapId called with a badXref " + xref);
             return new HashSet<Xref>();
         }
         String[] tgtSysCodes = toCodes(tgtDataSources);
@@ -146,13 +146,17 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             if (targets.isEmpty()){
                 targets = "all DataSources";
             }
-            if (results.isEmpty()){
-                logger.warn("Unable to map " + ref + " to any results for " + targets);
-            } else {
-                logger.warn("Only able to map " + ref + " to itself for " + targets);
+            if (logger.isDebugEnabled()){
+                if (results.isEmpty()){
+                    logger.debug("Unable to map " + ref + " to any results for " + targets);
+                } else {
+                    logger.debug("Only able to map " + ref + " to itself for " + targets);
+                }
             }
         } else {
-            logger.info("Mapped " + ref + " to " + results.size() + " results");
+            if (logger.isDebugEnabled()){
+                logger.debug("Mapped " + ref + " to " + results.size() + " results");
+            }
         }
         close(statement, rs);
         return results;
@@ -170,7 +174,9 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
     public Set<Xref> mapID(Xref xref, DataSource tgtDataSource) throws BridgeDBException {
         IdSysCodePair ref = toIdSysCodePair(xref);
         if (ref == null) {
-            logger.warn("mapId called with a badXref " + xref);
+            if (logger.isDebugEnabled()){
+                logger.debug("mapId called with a badXref " + xref);
+            }
             return new HashSet<Xref>();
         }
         if (tgtDataSource == null){
