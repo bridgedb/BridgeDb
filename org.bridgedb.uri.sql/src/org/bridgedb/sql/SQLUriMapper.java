@@ -111,7 +111,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private final HashMap<Integer,RegexUriPattern> targetUriPatterns;
     private boolean processingRawLinkset = true;
             
-    static final Logger logger = Logger.getLogger(SQLListener.class);
+    private static final Logger logger = Logger.getLogger(SQLUriMapper.class);
 
     public static SQLUriMapper getExisting() throws BridgeDBException{
         if (mapper == null){
@@ -788,7 +788,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 query.append("' ");   
         }
         appendLensClause(query, lensUri, true);
-        logger.error(query.toString());
     }
 
     private void appendMappingFromJoinMapping(StringBuilder query){ 
@@ -2216,7 +2215,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * @throws BridgeDBException 
      */
     private void countLinks () throws BridgeDBException{
-        logger.info ("Updating link counts. Please Wait!");
+        logger.debug ("Updating link counts. Please Wait!");
         Statement countStatement = this.createStatement();
         String query = ("select " + ID_COLUMN_NAME
                 + " from " + MAPPING_SET_TABLE_NAME 
@@ -2230,7 +2229,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 int mappings = countLinks(mappingSetId);
                 countFrequency(mappingSetId);
             }
-            logger.info ("Updating counts finished!");
+            logger.debug ("Updating counts finished!");
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new BridgeDBException("Unable to run query. " + query, ex);
@@ -2246,7 +2245,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * @throws BridgeDBException 
      */
     private int countLinks (int mappingSetId ) throws BridgeDBException{
-        logger.info ("Updating link count for " + mappingSetId + ". Please Wait!");
+        logger.debug ("Updating link count for " + mappingSetId + ". Please Wait!");
         Statement countStatement = this.createStatement();
         Statement updateStatement = this.createStatement();
         StringBuilder query = new StringBuilder("select count(distinct("); 
@@ -2262,7 +2261,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         ResultSet rs = null;
         try {
             rs = countStatement.executeQuery(query.toString());    
-            logger.info ("Count query run. Updating link count now");
+            logger.debug ("Count query run. Updating link count now");
             while (rs.next()){
                 int sources = rs.getInt("sources");
                 int targets = rs.getInt("targets");
@@ -2288,7 +2287,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                     if (updateCount != 1){
                         throw new BridgeDBException("Updated rows " + updateCount + " <> 1 when running " + update);
                     }
-                    logger.info ("Updating counts finished!");
+                    logger.debug ("Updating counts finished!");
                     return mappings;
                 } catch (SQLException ex) {
                      throw new BridgeDBException("Unable to run update. " + update, ex);
@@ -2327,7 +2326,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private void countFrequency (int mappingSetId) throws BridgeDBException{
         float numberOfsource = 0;
         //ystem.out.println ("Updating frequency count for " + mappingSetId + ". Please Wait!");
-        logger.info ("Updating frequency count for " + mappingSetId + ". Please Wait!");
+        logger.debug ("Updating frequency count for " + mappingSetId + ". Please Wait!");
         Statement countStatement = this.createStatement();
         Statement updateStatement = this.createStatement();
         StringBuilder query = new StringBuilder("SELECT targetFrequency, COUNT("); 
@@ -2347,7 +2346,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         try {
             //ystem.out.println(query);
             rs = countStatement.executeQuery(query.toString());    
-            logger.info ("Count query run. Updating link count now");
+            logger.debug ("Count query run. Updating link count now");
             while (rs.next()){
                 int frequency = rs.getInt("frequency");
                 numberOfsource+= frequency;
@@ -2434,7 +2433,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             } catch (SQLException ex) {
                     throw new BridgeDBException("Unable to run update. " + update, ex);
             }
-            logger.info ("Updating frequency finished!");
+            logger.debug ("Updating frequency finished!");
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new BridgeDBException("Unable to run query. " + query, ex);
