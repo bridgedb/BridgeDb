@@ -19,7 +19,10 @@
 //
 package org.bridgedb.sql;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
 
 /**
@@ -28,10 +31,20 @@ import org.bridgedb.pairs.IdSysCodePair;
  */
 public class TransitiveMapping extends AbstractMapping {
     private final List<DirectMapping> via;
+    private static final String NEW_LINE = System.getProperty("line.separator");
     
-    public TransitiveMapping (IdSysCodePair source, IdSysCodePair target, List<DirectMapping> via){
-        super(source, target);
-        this.via = via;
+    //private final Set<String> inboundSyscodes = new HashSet<String>();
+    
+    public TransitiveMapping (AbstractMapping previous, DirectMapping newMapping){
+        super(previous.getSource(), newMapping.getTarget());
+        if (previous instanceof DirectMapping ){
+            via = new ArrayList<DirectMapping>();
+            via.add((DirectMapping)previous);
+        } else {
+            TransitiveMapping previousT = (TransitiveMapping)previous;  
+            via = new ArrayList<DirectMapping>(previousT.getVia());
+        }
+        via.add(newMapping);
     }
 
     List<DirectMapping> getVia() {
@@ -42,4 +55,11 @@ public class TransitiveMapping extends AbstractMapping {
         return getSource().getSysCode().equals(targetRef.getSysCode());
     }
 
+    public String toString(){
+        StringBuilder builder = new StringBuilder(super.toString());
+        for (DirectMapping mapping:via){
+            builder.append(NEW_LINE).append("\t").append(mapping);
+        }
+        return builder.toString();
+    }
 }

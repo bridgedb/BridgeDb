@@ -43,7 +43,7 @@ public class MappingsHandlers {
     }
 
     private void addMapping(AbstractMapping mapping){
-        System.out.println("+ " + mapping);
+        //ystem.out.println("+ " + mapping);
         toCheck.push(mapping);
         mappings.add(mapping);
         checkedPairs.add(mapping.getTarget());
@@ -52,7 +52,7 @@ public class MappingsHandlers {
     void addMappings(Set<DirectMapping> newMappings) {
         for (DirectMapping mapping: newMappings){
             if (checkedPairs.contains(mapping.getTarget())){
-                System.out.println("Duplicate " + mapping.getTarget());
+                //ystem.out.println("Duplicate " + mapping.getTarget());
             } else {
                 addMapping(mapping);
             }
@@ -71,22 +71,11 @@ public class MappingsHandlers {
         for (DirectMapping newMapping: newMappings){
             IdSysCodePair targetRef = newMapping.getTarget();
             if (checkedPairs.contains(targetRef)){
-                System.out.println("Duplicate " + targetRef);
+                //ystem.out.println("Duplicate " + targetRef);
             } else if (previous.createsLoop(targetRef)){
-                System.out.println("Loop " + targetRef);        
+                //stem.out.println("Loop " + targetRef);        
             } else {
-                System.out.println(targetRef);
-                System.out.println(checkedPairs);
-                List<DirectMapping> via;
-                if (previous instanceof DirectMapping ){
-                    via = new ArrayList<DirectMapping>();
-                    via.add((DirectMapping)previous);
-                } else {
-                    TransitiveMapping previousT = (TransitiveMapping)previous;  
-                    via = new ArrayList<DirectMapping>(previousT.getVia());
-                }
-                via.add(newMapping);
-                TransitiveMapping transitiveMapping = new TransitiveMapping(previous.getSource(), targetRef, via);
+                TransitiveMapping transitiveMapping = new TransitiveMapping(previous, newMapping);
                 addMapping(transitiveMapping);
             }
         }
