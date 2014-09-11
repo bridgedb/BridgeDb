@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  *
@@ -67,7 +68,7 @@ public class MappingsHandlers {
         return toCheck.pop();
     }
 
-    void addMappings(AbstractMapping previous, Set<DirectMapping> newMappings) {
+    void addMappings(AbstractMapping previous, Set<DirectMapping> newMappings) throws BridgeDBException {
         for (DirectMapping newMapping: newMappings){
             IdSysCodePair targetRef = newMapping.getTarget();
             if (checkedPairs.contains(targetRef)){

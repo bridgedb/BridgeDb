@@ -19,6 +19,8 @@
 //
 package org.bridgedb.sql;
 
+import java.util.List;
+import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
 
 /**
@@ -47,4 +49,8 @@ public abstract class AbstractMapping {
     }
 
     abstract boolean createsLoop(IdSysCodePair targetRef);
+
+    abstract boolean hasMappingToSelf();
+
+    abstract Set<String> getSysCodesToCheck();
 }

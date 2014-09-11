@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  *
@@ -33,26 +34,58 @@ public class TransitiveMapping extends AbstractMapping {
     private final List<DirectMapping> via;
     private static final String NEW_LINE = System.getProperty("line.separator");
     
-    //private final Set<String> inboundSyscodes = new HashSet<String>();
+    private final Set<String> sysCodesToCheck;
+    private boolean includesMappingToSelf = false;
     
-    public TransitiveMapping (AbstractMapping previous, DirectMapping newMapping){
+    public TransitiveMapping (AbstractMapping previous, DirectMapping newMapping) throws BridgeDBException{
         super(previous.getSource(), newMapping.getTarget());
+        //Never expected but just in case
+        if (!previous.getTarget().equals(newMapping.getSource())){
+            throw new BridgeDBException ("Unexpected broken mapping chain");
+        }
+        via = createVia(previous, newMapping);
+        sysCodesToCheck = recordSysCodes(previous, newMapping);
+    }
+    
+    private List<DirectMapping> createVia(AbstractMapping previous, DirectMapping newMapping){
+        List<DirectMapping> newVia;
         if (previous instanceof DirectMapping ){
-            via = new ArrayList<DirectMapping>();
-            via.add((DirectMapping)previous);
+            newVia = new ArrayList<DirectMapping>();
+            newVia.add((DirectMapping)previous);
         } else {
             TransitiveMapping previousT = (TransitiveMapping)previous;  
-            via = new ArrayList<DirectMapping>(previousT.getVia());
+            newVia = new ArrayList<DirectMapping>(previousT.getVia());
         }
-        via.add(newMapping);
+        newVia.add(newMapping);
+        return newVia;
     }
+
+    private Set<String> recordSysCodes(AbstractMapping previous, DirectMapping newMapping) throws BridgeDBException {
+        //Check if new mapping is mapping to self.
+        Set<String> syscodes;
+        if (newMapping.getSource().getSysCode().equals(newMapping.getTarget().getSysCode())){
+            if (previous.hasMappingToSelf()){
+                throw new BridgeDBException("Two mappings to self in same chain.");
+            } else {
+                //Ony code that matters is the last mapping which is added at the end.
+                syscodes = new HashSet<String>();
+                includesMappingToSelf = true;
+            }
+        } else {
+            includesMappingToSelf = previous.hasMappingToSelf();
+            syscodes = new HashSet<String>(previous.getSysCodesToCheck());  
+        }
+        syscodes.add(newMapping.getTarget().getSysCode());
+        return syscodes;
+    }
+
 
     List<DirectMapping> getVia() {
         return via;
     }
     
     boolean createsLoop(IdSysCodePair targetRef){
-        return getSource().getSysCode().equals(targetRef.getSysCode());
+        return sysCodesToCheck.contains(targetRef.getSysCode());
     }
 
     public String toString(){
@@ -62,4 +95,34 @@ public class TransitiveMapping extends AbstractMapping {
         }
         return builder.toString();
     }
+
+    @Override
+    boolean hasMappingToSelf() {
+        return includesMappingToSelf;
+    }
+
+    @Override
+    Set<String> getSysCodesToCheck() {
+        return sysCodesToCheck;
+    }
+
+
 }
+/*
+//Assume it is just adding
+    private void addSysCode(DirectMapping newMapping) throws BridgeDBException {
+        if (newMapping.getSource().getSysCode().equals(newMapping.getTarget().getSysCode())){
+            if (includesMappingToSelf){
+                throw new BridgeDBException("Unexpected seond mapping to self");
+            }
+            includesMappingToSelf = true;
+            inboundSyscodes.add(newMapping.getTarget().getSysCode());
+        } else if (includesMappingToSelf){
+            outboundSyscodes.add(newMapping.getTarget().getSysCode());
+        } else {
+            inboundSyscodes.add(newMapping.getTarget().getSysCode());
+        }
+    }
+
+
+*/

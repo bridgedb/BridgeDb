@@ -20,7 +20,9 @@
 package org.bridgedb.sql;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
 
 /**
@@ -52,6 +54,19 @@ public class DirectMapping extends AbstractMapping{
 
     boolean createsLoop(IdSysCodePair targetRef){
         return getSource().getSysCode().equals(targetRef.getSysCode());
+    }
+
+    @Override
+    boolean hasMappingToSelf() {
+        return getSource().getSysCode().equals(getTarget().getSysCode());
+    }
+
+    @Override
+    Set<String> getSysCodesToCheck() {
+        Set<String> sysCodes = new HashSet<String>();
+        sysCodes.add(getSource().getSysCode());
+        sysCodes.add(getTarget().getSysCode());
+        return sysCodes;
     }
 
 }

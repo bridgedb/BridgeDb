@@ -253,6 +253,9 @@ public class TransitiveTest {
         Reporter.println("TransitiveMappings3A");
         IdSysCodePair source = new IdSysCodePair("3a", sysCodeA);
         Set<AbstractMapping> mappings = sqlUriMapper.getTransitiveMappings(source);
+        for (AbstractMapping mapping: mappings){
+            System.out.println(mapping);
+        }        
         assertEquals(3, mappings.size()); //B3, C3, D3
     }
 
@@ -281,7 +284,7 @@ public class TransitiveTest {
     }
 
 
-    /*@Test
+    @Test
     public void testTransitiveMappings6A() throws Exception{
         Reporter.println("TransitiveMappings6A");
         IdSysCodePair source = new IdSysCodePair("6a", sysCodeA);
@@ -290,7 +293,7 @@ public class TransitiveTest {
             System.out.println(mapping);
         }
         assertEquals(2, mappings.size()); //B6a, C6
-    }*/
+    }
 
     @Test
     public void testTransitiveMappings6B() throws Exception{
