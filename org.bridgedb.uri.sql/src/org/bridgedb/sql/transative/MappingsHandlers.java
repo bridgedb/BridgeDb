@@ -17,8 +17,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.sql;
+package org.bridgedb.sql.transative;
 
+import org.bridgedb.sql.transative.DirectMapping;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -50,7 +51,7 @@ public class MappingsHandlers {
         checkedPairs.add(mapping.getTarget());
     }
     
-    void addMappings(Set<DirectMapping> newMappings) {
+    public final void addMappings(Set<DirectMapping> newMappings) {
         for (DirectMapping mapping: newMappings){
             if (checkedPairs.contains(mapping.getTarget())){
                 //ystem.out.println("Duplicate " + mapping.getTarget());
@@ -60,15 +61,15 @@ public class MappingsHandlers {
         }
     }
 
-    boolean moreToCheck() {
+    public final boolean moreToCheck() {
         return !toCheck.isEmpty();
     }
 
-    AbstractMapping nextToCheck() {
+    public final AbstractMapping nextToCheck() {
         return toCheck.pop();
     }
 
-    void addMappings(AbstractMapping previous, Set<DirectMapping> newMappings) throws BridgeDBException {
+    public final void addMappings(AbstractMapping previous, Set<DirectMapping> newMappings) throws BridgeDBException {
         for (DirectMapping newMapping: newMappings){
             IdSysCodePair targetRef = newMapping.getTarget();
             if (checkedPairs.contains(targetRef)){
@@ -82,7 +83,7 @@ public class MappingsHandlers {
         }
     }
 
-    Set<AbstractMapping> getMappings() {
+    public final Set<AbstractMapping> getMappings() {
         return mappings;
     }
 }

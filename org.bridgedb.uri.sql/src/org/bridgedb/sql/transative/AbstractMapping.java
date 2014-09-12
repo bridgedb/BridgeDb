@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.sql;
+package org.bridgedb.sql.transative;
 
 import java.util.List;
 import java.util.Set;
@@ -40,11 +40,11 @@ public abstract class AbstractMapping {
         return source + " -> " + target;
     }
 
-    IdSysCodePair getTarget() {
+    public final IdSysCodePair getTarget() {
         return target;
     }
 
-    IdSysCodePair getSource() {
+    public final IdSysCodePair getSource() {
         return source;
     }
 

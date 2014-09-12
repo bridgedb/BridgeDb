@@ -42,6 +42,9 @@ import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.rdf.DataSourceMetaDataProvidor;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.pairs.RdfBasedCodeMapper;
+import org.bridgedb.sql.transative.AbstractMapping;
+import org.bridgedb.sql.transative.DirectMapping;
+import org.bridgedb.sql.transative.MappingsHandlers;
 import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
@@ -51,9 +54,9 @@ import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.MappingsBySysCodeId;
 import org.bridgedb.uri.api.UriMapper;
-import org.bridgedb.uri.tools.GraphResolver;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.lens.LensTools;
+import org.bridgedb.uri.tools.GraphResolver;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;
@@ -2547,15 +2550,15 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
     
     public Set<AbstractMapping> getTransitiveMappings(IdSysCodePair sourceRef) throws BridgeDBException{
-        MappingsHandlers transitiveMappings = new MappingsHandlers(sourceRef);
+        MappingsHandlers mappingsHandler = new MappingsHandlers(sourceRef);
         Set<DirectMapping> direct = getDirectMappings(sourceRef);
-        transitiveMappings.addMappings(direct);
-        while (transitiveMappings.moreToCheck()){
-            AbstractMapping toCheck = transitiveMappings.nextToCheck();
+        mappingsHandler.addMappings(direct);
+        while (mappingsHandler.moreToCheck()){
+            AbstractMapping toCheck = mappingsHandler.nextToCheck();
             Set<DirectMapping> transitives = getDirectMappings(toCheck.getTarget());
-            transitiveMappings.addMappings(toCheck, transitives);
+            mappingsHandler.addMappings(toCheck, transitives);
         }
-        return transitiveMappings.getMappings();
+        return mappingsHandler.getMappings();
     }
 }
  
