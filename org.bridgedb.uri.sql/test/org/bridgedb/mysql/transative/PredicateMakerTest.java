@@ -17,12 +17,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.loader.transative;
+package org.bridgedb.mysql.transative;
 
-import org.bridgedb.uri.loader.transative.PredicateMaker;
-import org.bridgedb.uri.loader.transative.constant.SkosConstants;
-import org.bridgedb.uri.loader.transative.constant.OwlConstants;
-import org.bridgedb.uri.loader.transative.constant.OboConstants;
+import org.bridgedb.sql.transative.PredicateMaker;
+import org.bridgedb.rdf.constants.SkosConstants;
+import org.bridgedb.rdf.constants.OWLConstants;
+import org.bridgedb.rdf.constants.OboConstants;
 import java.util.ArrayList;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
@@ -42,8 +42,8 @@ public class PredicateMakerTest {
     @BeforeClass
     public static void setUpClass() {
         equivelentPredicates = new ArrayList<String>();
-        equivelentPredicates.add(OwlConstants.SAME_AS);
-        equivelentPredicates.add(OwlConstants.EQUIVALENT_CLASS);
+        equivelentPredicates.add(OWLConstants.SAME_AS);
+        equivelentPredicates.add(OWLConstants.EQUIVALENT_CLASS);
         skosPredicates = new ArrayList<String>();
         skosPredicates.add(SkosConstants.EXACT_MATCH);
         skosPredicates.add(SkosConstants.CLOSE_MATCH);
@@ -73,22 +73,22 @@ public class PredicateMakerTest {
 	//TODO: Need to write tests for the logic in the PredicateMaker
 	@Test
 	public void testCombine_sameAs_oboHasParts() throws BridgeDBException {
-		assertEquals(OboConstants.HAS_PART, PredicateMaker.combine(OwlConstants.SAME_AS, OboConstants.HAS_PART));
+		assertEquals(OboConstants.HAS_PART, PredicateMaker.combine(OWLConstants.SAME_AS, OboConstants.HAS_PART));
 	}
 
 	@Test
 	public void testCombine_oboHasParts_sameAs() throws BridgeDBException {
-		assertEquals(OboConstants.HAS_PART, PredicateMaker.combine(OboConstants.HAS_PART, OwlConstants.SAME_AS));
+		assertEquals(OboConstants.HAS_PART, PredicateMaker.combine(OboConstants.HAS_PART, OWLConstants.SAME_AS));
 	}
 	
 	@Test
 	public void testCombine_eqClass_oboHasParts() throws BridgeDBException {
-		assertEquals(OboConstants.HAS_PART, PredicateMaker.combine(OwlConstants.EQUIVALENT_CLASS, OboConstants.HAS_PART));
+		assertEquals(OboConstants.HAS_PART, PredicateMaker.combine(OWLConstants.EQUIVALENT_CLASS, OboConstants.HAS_PART));
 	}
 
 	@Test
 	public void testCombine_oboHasParts_eqClass() throws BridgeDBException {
-		assertEquals(OboConstants.HAS_PART, PredicateMaker.combine(OboConstants.HAS_PART, OwlConstants.EQUIVALENT_CLASS));
+		assertEquals(OboConstants.HAS_PART, PredicateMaker.combine(OboConstants.HAS_PART, OWLConstants.EQUIVALENT_CLASS));
 	}
 	
 	@Test

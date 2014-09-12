@@ -17,23 +17,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.uri.loader.transative.constant;
+package org.bridgedb.rdf.constants;
 
 /**
- *
- */
-public class SkosConstants {
+ * seeAlso
 
-    private static final String PREFIX = "http://www.w3.org/2004/02/skos/core#";
+ */
+public class RdfSchemaConstants {
+
+    private static final String PREFIX = "http://www.w3.org/2000/01/rdf-schema#";
     
-    public static final String BROAD_MATCH = PREFIX + "broadMatch";
-    public static final String BROADER = PREFIX + "broader";
-    public static final String CLOSE_MATCH = PREFIX + "closeMatch";
-    public static final String EXACT_MATCH = PREFIX + "exactMatch";
-    public static final String MAPPING_RELATION = PREFIX + "mappingRelation";
-    public static final String NARROW_MATCH = PREFIX + "narrowMatch";
-    public static final String NARROWER = PREFIX + "narrower";
-    public static final String RELATED_MATCH = PREFIX + "relatedMatch";
-    public static final String RELATED = PREFIX + "related"; //Ugly but used.
+    public static final String SEE_ALSO = PREFIX + "seeAlso";
 
 }

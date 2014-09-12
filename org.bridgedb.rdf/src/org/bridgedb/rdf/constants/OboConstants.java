@@ -1,4 +1,4 @@
-package org.bridgedb.uri.loader.transative.constant;
+package org.bridgedb.rdf.constants;
 
 public class OboConstants {
 

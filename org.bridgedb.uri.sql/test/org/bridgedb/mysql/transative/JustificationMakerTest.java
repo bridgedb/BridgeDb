@@ -1,8 +1,8 @@
-package org.bridgedb.loader.transative;
+package org.bridgedb.mysql.transative;
 
-import org.bridgedb.uri.loader.transative.JustificationMaker;
-import org.bridgedb.uri.loader.transative.constant.ChemInf;
-import org.bridgedb.uri.loader.transative.constant.OboConstants;
+import org.bridgedb.sql.transative.JustificationMaker;
+import org.bridgedb.rdf.constants.ChemInf;
+import org.bridgedb.rdf.constants.OboConstants;
 import org.bridgedb.utils.BridgeDBException;
 import static org.junit.Assert.*;
 

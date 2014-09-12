@@ -16,14 +16,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.uri.loader.transative;
+package org.bridgedb.sql.transative;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import org.bridgedb.rdf.constants.ChemInf;
+import org.bridgedb.rdf.constants.OboConstants;
 import org.bridgedb.uri.lens.Lens;
-import org.bridgedb.uri.loader.transative.constant.ChemInf;
-import org.bridgedb.uri.loader.transative.constant.OboConstants;
 import org.bridgedb.utils.BridgeDBException;
 
 /**

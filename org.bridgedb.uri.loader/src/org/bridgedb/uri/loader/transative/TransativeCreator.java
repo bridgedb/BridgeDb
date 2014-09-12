@@ -4,6 +4,8 @@
  */
 package org.bridgedb.uri.loader.transative;
 
+import org.bridgedb.sql.transative.PredicateMaker;
+import org.bridgedb.sql.transative.JustificationMaker;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
