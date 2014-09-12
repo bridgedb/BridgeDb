@@ -74,7 +74,7 @@ public class MappingsHandlers {
             if (checkedPairs.contains(targetRef)){
                 //ystem.out.println("Duplicate " + targetRef);
             } else if (previous.createsLoop(targetRef)){
-                //stem.out.println("Loop " + targetRef);        
+                //ystem.out.println("Loop " + targetRef);        
             } else {
                 TransitiveMapping transitiveMapping = new TransitiveMapping(previous, newMapping);
                 addMapping(transitiveMapping);

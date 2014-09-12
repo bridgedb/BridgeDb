@@ -2512,6 +2512,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
  
     public Set<DirectMapping> getDirectMappings(IdSysCodePair sourceRef) throws BridgeDBException{
+        //ystem.out.println("£" + sourceRef);
         StringBuilder query =  startMappingsBySetQuery();
         query.append(", ");
         query.append(SYMMETRIC_COLUMN_NAME);
@@ -2527,7 +2528,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 String id = rs.getString(TARGET_ID_COLUMN_NAME);
                 String sysCode = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
                 IdSysCodePair targetRef = new IdSysCodePair(id, sysCode);
-                //ystem.out.println(targetRef);
+                //stem.out.println(" = " + targetRef);
                 Integer mappingSetId = rs.getInt(MAPPING_SET_ID_COLUMN_NAME);
                 Integer symmetric = rs.getInt(SYMMETRIC_COLUMN_NAME);
                 String predicate = rs.getString(PREDICATE_COLUMN_NAME);

@@ -62,6 +62,9 @@ public class TransitiveMapping extends AbstractMapping {
 
     private Set<String> recordSysCodes(AbstractMapping previous, DirectMapping newMapping) throws BridgeDBException {
         //Check if new mapping is mapping to self.
+        //stem.out.println("recording System codes");
+        //ystem.out.println(previous);
+        //ystem.out.println(newMapping);
         Set<String> syscodes;
         if (newMapping.getSource().getSysCode().equals(newMapping.getTarget().getSysCode())){
             if (previous.hasMappingToSelf()){
@@ -76,6 +79,7 @@ public class TransitiveMapping extends AbstractMapping {
             syscodes = new HashSet<String>(previous.getSysCodesToCheck());  
         }
         syscodes.add(newMapping.getTarget().getSysCode());
+        //ystem.out.println("==" + syscodes + "==");
         return syscodes;
     }
 
@@ -85,6 +89,17 @@ public class TransitiveMapping extends AbstractMapping {
     }
     
     boolean createsLoop(IdSysCodePair targetRef){
+        //ystem.out.println ("c " + this);
+        //ystem.out.println (targetRef);
+        //Check if incoming is a mapping to self (Same syscode)
+        if (getTarget().getSysCode().equals(targetRef.getSysCode())){
+            //Only allow one per transitive
+            //ystem.out.println("mapping to self");
+            return includesMappingToSelf;
+        }
+        //ystem.out.println ("!= " + getTarget().getSysCode());
+        //ystem.out.println(sysCodesToCheck);
+        //The target must be a new one
         return sysCodesToCheck.contains(targetRef.getSysCode());
     }
 
