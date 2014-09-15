@@ -20,7 +20,8 @@ import org.bridgedb.sql.SQLBase;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.justification.JustificationMaker;
 import org.bridgedb.sql.justification.OpsJustificationMaker;
-import org.bridgedb.sql.transative.PredicateMaker;
+import org.bridgedb.sql.predicate.LoosePredicateMaker;
+import org.bridgedb.sql.predicate.PredicateMaker;
 import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.uri.loader.LinksetListener;
@@ -46,6 +47,7 @@ public class TransativeFinder extends SQLBase{
     
     private static Set<String> limitedSysCodes;
     private final JustificationMaker justificationMaker;
+    private final PredicateMaker predicateMaker;
     
     static final Logger logger = Logger.getLogger(TransativeFinder.class);
 
@@ -62,6 +64,8 @@ public class TransativeFinder extends SQLBase{
         getLimited();
         OpsJustificationMaker.init();
         justificationMaker = OpsJustificationMaker.getInstance();
+        LoosePredicateMaker.init();
+        predicateMaker = LoosePredicateMaker.getInstance();
      }
     
     public void UpdateTransative() throws BridgeDBException, RDFHandlerException, IOException{
@@ -474,7 +478,7 @@ public class TransativeFinder extends SQLBase{
         String justification;
         File fileName;
         try {
-           predicate = PredicateMaker.combine(left.getPredicate(), right.getPredicate());
+           predicate = predicateMaker.combine(left.getPredicate(), right.getPredicate());
            justification = justificationMaker.combine(left.getJustification(), right.getJustification());
            fileName = doTransativeIfPossible(left, right);
         } catch (IOException ex) {

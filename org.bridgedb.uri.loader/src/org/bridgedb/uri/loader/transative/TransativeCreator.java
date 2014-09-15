@@ -17,7 +17,7 @@ import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.sql.justification.OpsJustificationMaker;
-import org.bridgedb.sql.transative.PredicateMaker;
+import org.bridgedb.sql.predicate.LoosePredicateMaker;
 import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.uri.api.UriMapper;
@@ -73,7 +73,7 @@ public class TransativeCreator {
         mapper = SQLUriMapper.getExisting();
         leftInfo = left;
         rightInfo = right;
-        predicate = new URIImpl(PredicateMaker.combine(left.getPredicate(), right.getPredicate()));
+        predicate = new URIImpl(LoosePredicateMaker.getInstance().combine(left.getPredicate(), right.getPredicate()));
         justification = OpsJustificationMaker.getInstance().combine(left.getJustification(), right.getJustification());
         reflexive = left.getSource().getSysCode().equals(right.getTarget().getSysCode());
         UriPattern sourceUriPattern = getUriPattern(left.getSource());

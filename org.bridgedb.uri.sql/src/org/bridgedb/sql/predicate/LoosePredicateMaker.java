@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.sql.transative;
+package org.bridgedb.sql.predicate;
 
 import org.bridgedb.rdf.constants.OWLConstants;
 import org.bridgedb.rdf.constants.OboConstants;
@@ -29,10 +29,24 @@ import org.bridgedb.utils.BridgeDBException;
  *
  * @author Christian
  */
-public class PredicateMaker {
+public class LoosePredicateMaker implements PredicateMaker{
 //Broaawed + narrow = error
     
-    public static String combine(String left, String right) throws BridgeDBException {
+    private static final LoosePredicateMaker instance = new LoosePredicateMaker();
+    
+    private LoosePredicateMaker(){
+    }
+    
+    public static LoosePredicateMaker getInstance(){
+        return instance;
+    }
+    
+    public static void init() throws BridgeDBException{
+        //Currently does nothing but this is where you would read a proerties file.
+    }
+    
+    @Override
+    public String combine(String left, String right) throws BridgeDBException {
         if (left.equals(right)){
             return left;
         }
