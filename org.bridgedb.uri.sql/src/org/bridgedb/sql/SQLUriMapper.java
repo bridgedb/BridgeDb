@@ -42,9 +42,17 @@ import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.rdf.DataSourceMetaDataProvidor;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.pairs.RdfBasedCodeMapper;
+import org.bridgedb.sql.justification.JustificationMaker;
+import org.bridgedb.sql.justification.OpsJustificationMaker;
+import org.bridgedb.sql.predicate.LoosePredicateMaker;
+import org.bridgedb.sql.predicate.PredicateMaker;
 import org.bridgedb.sql.transative.AbstractMapping;
 import org.bridgedb.sql.transative.DirectMapping;
+import org.bridgedb.sql.transative.ExtendableTransitiveChecker;
 import org.bridgedb.sql.transative.MappingsHandlers;
+import org.bridgedb.sql.transative.OpsTransitiveChecker;
+import org.bridgedb.sql.transative.TestTransitiveChecker;
+import org.bridgedb.sql.transative.TransitiveChecker;
 import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
@@ -60,6 +68,7 @@ import org.bridgedb.uri.tools.GraphResolver;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;
+import org.bridgedb.utils.ConfigReader;
 import org.openrdf.model.Resource;
 
 /**
@@ -113,7 +122,12 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private final HashMap<Integer,RegexUriPattern> subjectUriPatterns;
     private final HashMap<Integer,RegexUriPattern> targetUriPatterns;
     private boolean processingRawLinkset = true;
-            
+    
+    //Currently there is only one of each of these but could be lens dependent
+    private final TransitiveChecker transitiveChecker;  
+    private final PredicateMaker predicateMaker;
+    private final JustificationMaker justificationMaker;
+    
     private static final Logger logger = Logger.getLogger(SQLUriMapper.class);
 
     public static SQLUriMapper getExisting() throws BridgeDBException{
@@ -150,6 +164,17 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         subjectUriPatterns = new HashMap<Integer,RegexUriPattern>();
         targetUriPatterns = new HashMap<Integer,RegexUriPattern>();
         LensTools.init(this);
+        if (ConfigReader.inTestMode()){
+            TestTransitiveChecker.init();
+            transitiveChecker = TestTransitiveChecker.getInstance();
+        } else {
+            OpsTransitiveChecker.init();
+            transitiveChecker = OpsTransitiveChecker.getInstance();
+        }
+        LoosePredicateMaker.init();
+        predicateMaker = LoosePredicateMaker.getInstance();
+        OpsJustificationMaker.init();
+        justificationMaker = OpsJustificationMaker.getInstance();
     }   
     
     @Override
@@ -2550,7 +2575,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
     
     public Set<AbstractMapping> getTransitiveMappings(IdSysCodePair sourceRef) throws BridgeDBException{
-        MappingsHandlers mappingsHandler = new MappingsHandlers(sourceRef);
+        MappingsHandlers mappingsHandler = new MappingsHandlers(sourceRef, transitiveChecker, predicateMaker, justificationMaker);
         Set<DirectMapping> direct = getDirectMappings(sourceRef);
         mappingsHandler.addMappings(direct);
         while (mappingsHandler.moreToCheck()){

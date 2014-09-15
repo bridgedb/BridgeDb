@@ -30,10 +30,14 @@ import org.bridgedb.pairs.IdSysCodePair;
 public abstract class AbstractMapping {
     private final IdSysCodePair source;
     private final IdSysCodePair target;
-    
-    public AbstractMapping (IdSysCodePair source, IdSysCodePair target){
+    private final String predicate;
+    private final String justification;
+
+    public AbstractMapping (IdSysCodePair source, IdSysCodePair target, String predicate, String justification){
         this.source = source;
         this.target = target;
+        this.predicate = predicate;
+        this.justification = justification;
     }
     
     public String toString(){
@@ -53,4 +57,18 @@ public abstract class AbstractMapping {
     abstract boolean hasMappingToSelf();
 
     abstract Set<String> getSysCodesToCheck();
+
+    /**
+     * @return the predicate
+     */
+    public String getPredicate() {
+        return predicate;
+    }
+
+    /**
+     * @return the justification
+     */
+    public String getJustification() {
+        return justification;
+    }
 }

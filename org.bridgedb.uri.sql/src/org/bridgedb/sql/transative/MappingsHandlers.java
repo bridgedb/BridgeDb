@@ -19,13 +19,15 @@
 //
 package org.bridgedb.sql.transative;
 
-import org.bridgedb.sql.transative.DirectMapping;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
+import org.bridgedb.sql.justification.JustificationMaker;
+import org.bridgedb.sql.predicate.PredicateMaker;
+import org.bridgedb.sql.transative.DirectMapping;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
@@ -38,10 +40,18 @@ public class MappingsHandlers {
     private final ArrayDeque<AbstractMapping> toCheck = new ArrayDeque<AbstractMapping>();
     private final Set<IdSysCodePair> checkedPairs = new HashSet<IdSysCodePair>();
     private final Set<AbstractMapping> mappings = new HashSet<AbstractMapping>();
-            
-    public MappingsHandlers(IdSysCodePair sourceRef){
+    private final TransitiveChecker transitiveChecker;  
+    private final PredicateMaker predicateMaker;
+    private final JustificationMaker justificationMaker;
+    
+    
+    public MappingsHandlers(IdSysCodePair sourceRef, TransitiveChecker transitiveChecker, 
+            PredicateMaker predicateMaker, JustificationMaker justificationMaker){
         this.sourceRef = sourceRef;
         checkedPairs.add(sourceRef);
+        this.transitiveChecker = transitiveChecker;
+        this.predicateMaker = predicateMaker;
+        this.justificationMaker = justificationMaker;
     }
 
     private void addMapping(AbstractMapping mapping){
@@ -69,20 +79,43 @@ public class MappingsHandlers {
         return toCheck.pop();
     }
 
-    public final void addMappings(AbstractMapping previous, Set<DirectMapping> newMappings) throws BridgeDBException {
+    public final void addMapping(AbstractMapping previous, DirectMapping newMapping) throws BridgeDBException {   
+        IdSysCodePair targetRef = newMapping.getTarget();
+        if (!transitiveChecker.allowTransitive(previous, newMapping)){
+            System.out.println("Ignoring transative via " + newMapping.getSource().getSysCode());
+            return;
+        //}  else {
+            //ystem.out.println("OK transative via " + newMapping.getSource().getSysCode());                
+        }
+        if (checkedPairs.contains(targetRef)){
+            //ystem.out.println("Duplicate " + targetRef);
+            return;
+        } 
+        if (previous.createsLoop(targetRef)){
+            //ystem.out.println("Loop " + targetRef);        
+            return;
+        }
+        String predicate = predicateMaker.combine(previous.getPredicate(), newMapping.getPredicate());
+        if (predicate == null){
+            //ystem.out.println("unable to combine " + previous.getPredicate() + " and " +  newMapping.getPredicate());
+            return;
+        }
+        String justification = justificationMaker.combine(previous.getJustification(), newMapping.getJustification());
+        if (justification == null){
+            //ystem.out.println("unable to combine " + previous.getJustification() + " and " +  newMapping.getJustification());
+            return;
+        }            
+        TransitiveMapping transitiveMapping = new TransitiveMapping(previous, newMapping, predicate, justification);
+        //ystem.out.println("Adding " + transitiveMapping);
+        addMapping(transitiveMapping);
+    }
+ 
+    public final void addMappings(AbstractMapping previous, Set<DirectMapping> newMappings) throws BridgeDBException {   
         for (DirectMapping newMapping: newMappings){
-            IdSysCodePair targetRef = newMapping.getTarget();
-            if (checkedPairs.contains(targetRef)){
-                //ystem.out.println("Duplicate " + targetRef);
-            } else if (previous.createsLoop(targetRef)){
-                //ystem.out.println("Loop " + targetRef);        
-            } else {
-                TransitiveMapping transitiveMapping = new TransitiveMapping(previous, newMapping);
-                addMapping(transitiveMapping);
-            }
+            this.addMapping(previous, newMapping);
         }
     }
-
+    
     public final Set<AbstractMapping> getMappings() {
         return mappings;
     }

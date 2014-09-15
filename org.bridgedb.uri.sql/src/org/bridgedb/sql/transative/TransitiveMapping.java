@@ -38,8 +38,8 @@ public class TransitiveMapping extends AbstractMapping {
     private final Set<String> sysCodesToCheck;
     private boolean includesMappingToSelf = false;
     
-    public TransitiveMapping (AbstractMapping previous, DirectMapping newMapping) throws BridgeDBException{
-        super(previous.getSource(), newMapping.getTarget());
+    public TransitiveMapping (AbstractMapping previous, DirectMapping newMapping, String predicate, String justification) throws BridgeDBException{
+        super(previous.getSource(), newMapping.getTarget(), predicate, justification);
         //Never expected but just in case
         if (!previous.getTarget().equals(newMapping.getSource())){
             throw new BridgeDBException ("Unexpected broken mapping chain");

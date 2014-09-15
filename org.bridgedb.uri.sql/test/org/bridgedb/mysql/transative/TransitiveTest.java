@@ -24,10 +24,11 @@ import org.bridgedb.DataSource;
 import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.UriPatternType;
-import org.bridgedb.sql.transative.AbstractMapping;
-import org.bridgedb.sql.transative.DirectMapping;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
+import org.bridgedb.sql.transative.AbstractMapping;
+import org.bridgedb.sql.transative.DirectMapping;
+import org.bridgedb.sql.transative.TestTransitiveChecker;
 import static org.bridgedb.uri.UriListenerTest.NO_CHAIN;
 import static org.bridgedb.uri.UriListenerTest.NO_VIA;
 import static org.bridgedb.uri.UriListenerTest.SYMETRIC;
@@ -105,6 +106,13 @@ public class TransitiveTest {
     public static void setupIDMapper() throws BridgeDBException{
         TestSqlFactory.checkSQLAccess();
         ConfigReader.useTest();
+        
+        TestTransitiveChecker.addAcceptableVai(dsA);
+        TestTransitiveChecker.addAcceptableVai(dsB);
+        TestTransitiveChecker.addAcceptableVai(dsC);
+        TestTransitiveChecker.addAcceptableVai(dsD);
+        TestTransitiveChecker.addAcceptableVai(dsE);
+        
         UriPattern pattern = UriPattern.register(prefixA + "$id", sysCodeA, UriPatternType.dataSourceUriPattern);
         pattern = UriPattern.register(prefixB + "$id", sysCodeB, UriPatternType.dataSourceUriPattern);
         pattern = UriPattern.register(prefixC + "$id", sysCodeC, UriPatternType.dataSourceUriPattern);
@@ -635,5 +643,5 @@ public class TransitiveTest {
         Set<AbstractMapping> mappings = sqlUriMapper.getTransitiveMappings(source);
         assertEquals(5, mappings.size()); //CA7 E17a E17b B17 D17
     }
-
+    
 }
