@@ -53,7 +53,6 @@ public class TestTransitiveChecker  implements TransitiveChecker{
     }
 
     public static boolean legalMiddle(String sysCode) {
-        System.out.println(limitedSysCodes);
         return limitedSysCodes.contains(sysCode);
     }
     

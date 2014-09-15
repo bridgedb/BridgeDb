@@ -61,6 +61,8 @@ public class TransitiveTest {
     private static final String sysCodeD = "TransitiveTestD";
     private static final String sysCodeE = "TransitiveTestE";
     private static final String sysCodeF = "TransitiveTestF";
+    private static final String sysCodeX = "TransitiveTestX";
+    private static final String sysCodeY = "TransitiveTestY";
            
     private static final DataSource dsA = DataSource.register(sysCodeA, sysCodeA).asDataSource();
     private static final DataSource dsB = DataSource.register(sysCodeB, sysCodeB).asDataSource();
@@ -68,6 +70,8 @@ public class TransitiveTest {
     private static final DataSource dsD = DataSource.register(sysCodeD, sysCodeD).asDataSource();
     private static final DataSource dsE = DataSource.register(sysCodeE, sysCodeE).asDataSource();
     private static final DataSource dsF = DataSource.register(sysCodeF, sysCodeF).asDataSource();
+    private static final DataSource dsX = DataSource.register(sysCodeX, sysCodeX).asDataSource();
+    private static final DataSource dsY = DataSource.register(sysCodeY, sysCodeY).asDataSource();
    
     private static RegexUriPattern regexUriPatternA;
     private static RegexUriPattern regexUriPatternB;
@@ -75,6 +79,8 @@ public class TransitiveTest {
     private static RegexUriPattern regexUriPatternD;
     private static RegexUriPattern regexUriPatternE;
     private static RegexUriPattern regexUriPatternF;
+    private static RegexUriPattern regexUriPatternX;
+    private static RegexUriPattern regexUriPatternY;
 
     private static final String prefixA = "http://example.com/dsA#";
     private static final String prefixB = "http://example.com/dsB#";
@@ -82,6 +88,8 @@ public class TransitiveTest {
     private static final String prefixD = "http://example.com/dsD#";
     private static final String prefixE = "http://example.com/dsE#";
     private static final String prefixF = "http://example.com/dsF#";
+    private static final String prefixX = "http://example.com/dsX#";
+    private static final String prefixY = "http://example.com/dsY#";
     
     private static int mappingSetAB;
     private static int mappingSetAC;
@@ -100,6 +108,10 @@ public class TransitiveTest {
     private static int mappingSetEE;
     private static int mappingSetEF;
     private static int mappingSetFF;
+    private static int mappingSetAX;
+    private static int mappingSetCX;
+    private static int mappingSetAY;
+    private static int mappingSetCY;
     
     
     @BeforeClass
@@ -112,6 +124,7 @@ public class TransitiveTest {
         TestTransitiveChecker.addAcceptableVai(dsC);
         TestTransitiveChecker.addAcceptableVai(dsD);
         TestTransitiveChecker.addAcceptableVai(dsE);
+        //Do not add X and Y they should not be transative
         
         UriPattern pattern = UriPattern.register(prefixA + "$id", sysCodeA, UriPatternType.dataSourceUriPattern);
         pattern = UriPattern.register(prefixB + "$id", sysCodeB, UriPatternType.dataSourceUriPattern);
@@ -119,6 +132,8 @@ public class TransitiveTest {
         pattern = UriPattern.register(prefixD + "$id", sysCodeD, UriPatternType.dataSourceUriPattern);
         pattern = UriPattern.register(prefixE + "$id", sysCodeE, UriPatternType.dataSourceUriPattern);
         pattern = UriPattern.register(prefixF + "$id", sysCodeF, UriPatternType.dataSourceUriPattern);
+        pattern = UriPattern.register(prefixX + "$id", sysCodeX, UriPatternType.dataSourceUriPattern);
+        pattern = UriPattern.register(prefixY + "$id", sysCodeY, UriPatternType.dataSourceUriPattern);
         
         sqlUriMapper = SQLUriMapper.createNew();
 
@@ -128,6 +143,8 @@ public class TransitiveTest {
         regexUriPatternD = RegexUriPattern.factory(prefixD, "", sysCodeD);
         regexUriPatternE = RegexUriPattern.factory(prefixE, "", sysCodeE);
         regexUriPatternF = RegexUriPattern.factory(prefixF, "", sysCodeF);
+        regexUriPatternX = RegexUriPattern.factory(prefixX, "", sysCodeX);
+        regexUriPatternY = RegexUriPattern.factory(prefixY, "", sysCodeY);
         loadData();
         
         sqlUriMapper = SQLUriMapper.getExisting();
@@ -202,6 +219,22 @@ public class TransitiveTest {
         resource = new URIImpl("http://example.com/TransitiveTest/FtoF");
         mappingSetFF = sqlUriMapper.registerMappingSet(regexUriPatternF, TEST_PREDICATE, 
                 Lens.getDefaultJustifictaionString(), regexUriPatternF, resource, resource, SYMETRIC, NO_VIA, NO_CHAIN);
+
+        resource = new URIImpl("http://example.com/TransitiveTest/AtoX");
+        mappingSetAX = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE, 
+                Lens.getDefaultJustifictaionString(), regexUriPatternX, resource, resource, SYMETRIC, NO_VIA, NO_CHAIN);
+        
+        resource = new URIImpl("http://example.com/TransitiveTest/CtoX");
+        mappingSetCX = sqlUriMapper.registerMappingSet(regexUriPatternC, TEST_PREDICATE, 
+                Lens.getDefaultJustifictaionString(), regexUriPatternX, resource, resource, SYMETRIC, NO_VIA, NO_CHAIN);
+        
+        resource = new URIImpl("http://example.com/TransitiveTest/AtoY");
+        mappingSetAY = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE, 
+                Lens.getDefaultJustifictaionString(), regexUriPatternY, resource, resource, SYMETRIC, NO_VIA, NO_CHAIN);
+        
+        resource = new URIImpl("http://example.com/TransitiveTest/CtoY");
+        mappingSetCY = sqlUriMapper.registerMappingSet(regexUriPatternC, TEST_PREDICATE, 
+                Lens.getDefaultJustifictaionString(), regexUriPatternY, resource, resource, SYMETRIC, NO_VIA, NO_CHAIN);
 
         //A1 -> B1 -> C1 -> D1
         sqlUriMapper.insertUriMapping(prefixA+"1", prefixB+"1", mappingSetAB, SYMETRIC);
@@ -313,6 +346,22 @@ public class TransitiveTest {
         sqlUriMapper.insertUriMapping(prefixB+"17", prefixD+"17", mappingSetBD, SYMETRIC);
         sqlUriMapper.insertUriMapping(prefixB+"17", prefixE+"17b", mappingSetBE, SYMETRIC);
         
+        //A18 - X18  // X18 - C18
+        sqlUriMapper.insertUriMapping(prefixA+"18", prefixX+"18", mappingSetAX, SYMETRIC);
+        sqlUriMapper.insertUriMapping(prefixC+"18", prefixX+"18", mappingSetCX, SYMETRIC);
+
+        //A19 - X19  A19 - Y19 // X19 - C19  Y19 - C19
+        sqlUriMapper.insertUriMapping(prefixA+"19", prefixX+"19", mappingSetAX, SYMETRIC);
+        sqlUriMapper.insertUriMapping(prefixC+"19", prefixX+"19", mappingSetCX, SYMETRIC);
+        sqlUriMapper.insertUriMapping(prefixA+"19", prefixY+"19", mappingSetAY, SYMETRIC);
+        sqlUriMapper.insertUriMapping(prefixC+"19", prefixY+"19", mappingSetCY, SYMETRIC);
+
+        //A20 - B20 - C20 A20 - X20  // X20 - C20
+        sqlUriMapper.insertUriMapping(prefixA+"20", prefixB+"20", mappingSetAB, SYMETRIC);
+        sqlUriMapper.insertUriMapping(prefixA+"20", prefixX+"20", mappingSetAX, SYMETRIC);
+        sqlUriMapper.insertUriMapping(prefixB+"20", prefixC+"20", mappingSetBC, SYMETRIC);
+        sqlUriMapper.insertUriMapping(prefixC+"20", prefixX+"20", mappingSetCX, SYMETRIC);
+
         sqlUriMapper.closeInput();
     }
 
@@ -644,4 +693,31 @@ public class TransitiveTest {
         assertEquals(5, mappings.size()); //CA7 E17a E17b B17 D17
     }
     
+    //A18 - X18  // X18 - C18
+    @Test
+    public void testTransitiveMappings18A() throws Exception{
+        Reporter.println("TransitiveMappings18A");
+        IdSysCodePair source = new IdSysCodePair("18", sysCodeA);
+        Set<AbstractMapping> mappings = sqlUriMapper.getTransitiveMappings(source);
+        assertEquals(1, mappings.size()); //X18 ONLY
+    }
+
+    //A19 - X19  A19 - Y19 // X19 - C19  Y19 - C19
+    @Test
+    public void testTransitiveMappings19A() throws Exception{
+        Reporter.println("TransitiveMappings19A");
+        IdSysCodePair source = new IdSysCodePair("19", sysCodeA);
+        Set<AbstractMapping> mappings = sqlUriMapper.getTransitiveMappings(source);
+        assertEquals(2, mappings.size()); //X19 and Y19 ONLY
+    }
+
+    //A20 - B20 - C20 A20 - X20  // X20 - C20
+    @Test
+    public void testTransitiveMappings20A() throws Exception{
+        Reporter.println("TransitiveMappings20A");
+        IdSysCodePair source = new IdSysCodePair("20", sysCodeA);
+        Set<AbstractMapping> mappings = sqlUriMapper.getTransitiveMappings(source);
+        assertEquals(3, mappings.size()); //B20 C20 X20
+    }
+
 }
