@@ -4,8 +4,6 @@
  */
 package org.bridgedb.uri.loader.transative;
 
-import org.bridgedb.sql.transative.PredicateMaker;
-import org.bridgedb.sql.transative.JustificationMaker;
 import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -16,11 +14,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.sql.SQLBase;
 import org.bridgedb.sql.SQLUriMapper;
+import org.bridgedb.sql.justification.JustificationMaker;
+import org.bridgedb.sql.justification.OpsJustificationMaker;
+import org.bridgedb.sql.transative.PredicateMaker;
 import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.uri.loader.LinksetListener;
@@ -45,6 +45,7 @@ public class TransativeFinder extends SQLBase{
     private final static boolean LIMITED_VIA = true;
     
     private static Set<String> limitedSysCodes;
+    private final JustificationMaker justificationMaker;
     
     static final Logger logger = Logger.getLogger(TransativeFinder.class);
 
@@ -59,6 +60,8 @@ public class TransativeFinder extends SQLBase{
         types = new ArrayList<LinksetType>();
         loadTypes();
         getLimited();
+        OpsJustificationMaker.init();
+        justificationMaker = OpsJustificationMaker.getInstance();
      }
     
     public void UpdateTransative() throws BridgeDBException, RDFHandlerException, IOException{
@@ -226,7 +229,7 @@ public class TransativeFinder extends SQLBase{
         for (int i = 1; i< infos.size(); i++){
             MappingSetInfo possible = infos.get(i);
             if (possible != null){
-                String combine = JustificationMaker.possibleCombine(possible.getJustification(), info.getJustification());
+                String combine = justificationMaker.possibleCombine(possible.getJustification(), info.getJustification());
                 if (combine != null){
                     results.add(possible);
                 }
@@ -472,7 +475,7 @@ public class TransativeFinder extends SQLBase{
         File fileName;
         try {
            predicate = PredicateMaker.combine(left.getPredicate(), right.getPredicate());
-           justification = JustificationMaker.combine(left.getJustification(), right.getJustification());
+           justification = justificationMaker.combine(left.getJustification(), right.getJustification());
            fileName = doTransativeIfPossible(left, right);
         } catch (IOException ex) {
            ex.printStackTrace();

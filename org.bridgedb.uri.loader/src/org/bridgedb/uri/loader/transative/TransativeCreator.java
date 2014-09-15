@@ -4,8 +4,6 @@
  */
 package org.bridgedb.uri.loader.transative;
 
-import org.bridgedb.sql.transative.PredicateMaker;
-import org.bridgedb.sql.transative.JustificationMaker;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,6 +16,8 @@ import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.SqlFactory;
+import org.bridgedb.sql.justification.OpsJustificationMaker;
+import org.bridgedb.sql.transative.PredicateMaker;
 import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.uri.api.UriMapper;
@@ -74,7 +74,7 @@ public class TransativeCreator {
         leftInfo = left;
         rightInfo = right;
         predicate = new URIImpl(PredicateMaker.combine(left.getPredicate(), right.getPredicate()));
-        justification = JustificationMaker.combine(left.getJustification(), right.getJustification());
+        justification = OpsJustificationMaker.getInstance().combine(left.getJustification(), right.getJustification());
         reflexive = left.getSource().getSysCode().equals(right.getTarget().getSysCode());
         UriPattern sourceUriPattern = getUriPattern(left.getSource());
         sourceRegexUriPattern = RegexUriPattern.factory(sourceUriPattern, left.getSource().getSysCode());
