@@ -22,6 +22,8 @@ import org.bridgedb.sql.justification.JustificationMaker;
 import org.bridgedb.sql.justification.OpsJustificationMaker;
 import org.bridgedb.sql.predicate.LoosePredicateMaker;
 import org.bridgedb.sql.predicate.PredicateMaker;
+import org.bridgedb.sql.transative.OpsTransitiveChecker;
+import org.bridgedb.sql.transative.ExtendableTransitiveChecker;
 import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.uri.loader.LinksetListener;
@@ -45,7 +47,6 @@ public class TransativeFinder extends SQLBase{
         
     private final static boolean LIMITED_VIA = true;
     
-    private static Set<String> limitedSysCodes;
     private final JustificationMaker justificationMaker;
     private final PredicateMaker predicateMaker;
     
@@ -61,7 +62,6 @@ public class TransativeFinder extends SQLBase{
         loadInfos();
         types = new ArrayList<LinksetType>();
         loadTypes();
-        getLimited();
         OpsJustificationMaker.init();
         justificationMaker = OpsJustificationMaker.getInstance();
         LoosePredicateMaker.init();
@@ -324,7 +324,7 @@ public class TransativeFinder extends SQLBase{
     private boolean checkAllowedTransativeWithSelf(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) throws BridgeDBException {
         if(LIMITED_VIA){
             //Only some datasource are used transitively
-            if (!getLimited().contains(left.getTarget().getSysCode())){
+            if (!ExtendableTransitiveChecker.legalMiddle(left.getTarget().getSysCode())){
                 if (left.getTarget().getSysCode().equals("ConceptWiki") && left.getSource().getSysCode().equals("drugbankTarget")) {
                     //ok allow this one
                 } else {
@@ -707,27 +707,4 @@ public class TransativeFinder extends SQLBase{
         return loader.parse(file, mappingUri, mappingUri, linkPredicate, justification, symetric, viaLabels, chainIds);
     }
 
-    /**
-     * This allows tests tp 
-     * @param dataSource 
-     */
-    public static void addAcceptableVai(DataSource dataSource) {
-        getLimited().add(dataSource.getSystemCode());
-    }
-
-    private static Set<String> getLimited() {
-        if (limitedSysCodes == null){
-            limitedSysCodes = new HashSet<String>();
-            limitedSysCodes.add(DataSource.getExistingByFullName("Chemspider").getSystemCode());
-            limitedSysCodes.add(DataSource.getExistingByFullName("OPS Chemical Registry Service").getSystemCode());
-            limitedSysCodes.add(DataSource.getExistingByFullName("ChEMBL target component").getSystemCode());
-            limitedSysCodes.add(DataSource.getExistingByFullName("Uniprot-TrEMBL").getSystemCode());
-            limitedSysCodes.add(DataSource.getExistingByFullName("Ensembl").getSystemCode());
-            limitedSysCodes.add(DataSource.getExistingByFullName("DrugBank").getSystemCode());
-            limitedSysCodes.add(DataSource.getExistingByFullName("HMDB").getSystemCode());
-            limitedSysCodes.add(DataSource.getExistingByFullName("HGNC Accession number").getSystemCode());
-        }
-        return limitedSysCodes;
-    }
-    
  }

@@ -27,10 +27,11 @@ import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.UriPatternType;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
+import org.bridgedb.sql.transative.ExtendableTransitiveChecker;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.loader.LinksetListener;
 import org.bridgedb.uri.loader.transative.TransativeFinder;
-import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
@@ -51,7 +52,7 @@ public class TransativeFinderTest {
  
     SQLUriMapper mapper;
     static final boolean SYMETRIC = true;
-   
+    
     @Before
     public void testLoader() throws BridgeDBException, IOException, OpenRDFException, FileNotFoundException {
         //Check database is running and settup correctly or kill the test. 
@@ -72,7 +73,7 @@ public class TransativeFinderTest {
         DataSource dataSource = DataSource.register(name, name)
                 .urlPattern(pattern)
                 .asDataSource();
-        TransativeFinder.addAcceptableVai(dataSource);
+        ExtendableTransitiveChecker.addAcceptableVai(dataSource);
         UriPattern uriPattern = UriPattern.register(pattern, name, UriPatternType.dataSourceUriPattern);
     }
     
