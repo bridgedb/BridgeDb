@@ -47,6 +47,17 @@ public class LoosePredicateMaker implements PredicateMaker{
     
     @Override
     public String combine(String left, String right) throws BridgeDBException {
+        String result = possibleCombine(left, right);
+        if (result == null){
+            throw new BridgeDBException("unable to combine " + left + " with " + right);
+        } else {
+            return result;
+        }
+
+    }
+    
+    @Override
+    public String possibleCombine(String left, String right) {
         if (left.equals(right)){
             return left;
         }
@@ -129,7 +140,7 @@ public class LoosePredicateMaker implements PredicateMaker{
         	if (right.equals(SkosConstants.EXACT_MATCH)) return OboConstants.HAS_PART;
         	if (right.equals(SkosConstants.CLOSE_MATCH)) return OboConstants.HAS_PART;
         }
-        throw new BridgeDBException("unable to combine " + left + " with " + right);
+        return null;
     }
     
     private static String cleanup(String predicate){

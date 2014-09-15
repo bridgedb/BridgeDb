@@ -26,7 +26,8 @@ import org.bridgedb.utils.BridgeDBException;
  * @author Christian
  */
 public interface PredicateMaker {
-//Broaawed + narrow = error
     
+    public String possibleCombine(String left, String right);
+
     public String combine(String left, String right) throws BridgeDBException;
 }

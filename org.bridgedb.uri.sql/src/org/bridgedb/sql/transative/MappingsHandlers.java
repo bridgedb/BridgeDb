@@ -95,12 +95,12 @@ public class MappingsHandlers {
             //ystem.out.println("Loop " + targetRef);        
             return;
         }
-        String predicate = predicateMaker.combine(previous.getPredicate(), newMapping.getPredicate());
+        String predicate = predicateMaker.possibleCombine(previous.getPredicate(), newMapping.getPredicate());
         if (predicate == null){
             //ystem.out.println("unable to combine " + previous.getPredicate() + " and " +  newMapping.getPredicate());
             return;
         }
-        String justification = justificationMaker.combine(previous.getJustification(), newMapping.getJustification());
+        String justification = justificationMaker.possibleCombine(previous.getJustification(), newMapping.getJustification());
         if (justification == null){
             //ystem.out.println("unable to combine " + previous.getJustification() + " and " +  newMapping.getJustification());
             return;
