@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
@@ -2539,7 +2540,65 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }  
     }
  
+    private Set<DirectMapping> getDirectMappings(IdSysCodePair sourceRef, PreparedStatement statement) throws BridgeDBException {
+        ResultSet rs = null;
+        try {
+            Set<DirectMapping> results = new HashSet<DirectMapping>();
+            statement.setString(1, sourceRef.getId());
+            statement.setString(2, sourceRef.getSysCode());
+            rs = statement.executeQuery();
+            while (rs.next()){
+                String id = rs.getString(TARGET_ID_COLUMN_NAME);
+                String sysCode = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
+                IdSysCodePair targetRef = new IdSysCodePair(id, sysCode);
+                //stem.out.println(" = " + targetRef);
+                Integer mappingSetId = rs.getInt(MAPPING_SET_ID_COLUMN_NAME);
+                Integer symmetric = rs.getInt(SYMMETRIC_COLUMN_NAME);
+                String predicate = rs.getString(PREDICATE_COLUMN_NAME);
+                String justification = rs.getString(JUSTIFICATION_COLUMN_NAME);
+                String mappingSource = rs.getString(MAPPING_SOURCE_COLUMN_NAME);
+                String mappingResource = rs.getString(MAPPING_RESOURCE_COLUMN_NAME);
+                DirectMapping mapping = new DirectMapping (sourceRef, targetRef, mappingSetId, symmetric, predicate, justification, mappingSource, mappingResource);
+                results.add(mapping);
+            }
+            return results;
+        } catch (SQLException ex) {
+            close (statement, rs);
+            throw new BridgeDBException("Error running query " + statement, ex);
+        } finally {
+            close (null, rs);
+        }
+    }
+    
+    private static final String DIRECT_MAPPING_QUERY = 
+        "SELECT " + 
+            TARGET_ID_COLUMN_NAME + ", " + 
+            TARGET_DATASOURCE_COLUMN_NAME + ", " + 
+            MAPPING_SET_ID_COLUMN_NAME + ", " +
+            PREDICATE_COLUMN_NAME + ", " + 
+            JUSTIFICATION_COLUMN_NAME + ", " + 
+            MAPPING_SOURCE_COLUMN_NAME + ", " + 
+            MAPPING_RESOURCE_COLUMN_NAME + ", " +
+            SYMMETRIC_COLUMN_NAME +
+        " FROM " + MAPPING_TABLE_NAME + ", " + MAPPING_SET_TABLE_NAME +
+        " WHERE " + MAPPING_SET_ID_COLUMN_NAME + " = " + MAPPING_SET_DOT_ID_COLUMN_NAME +
+            " AND " + SOURCE_ID_COLUMN_NAME + " = ? " +
+            " AND " + SOURCE_DATASOURCE_COLUMN_NAME + " = ?";
+            
     public Set<DirectMapping> getDirectMappings(IdSysCodePair sourceRef) throws BridgeDBException{
+        PreparedStatement statement = null;
+        try {
+            statement = createPreparedStatement(DIRECT_MAPPING_QUERY);
+            Set<DirectMapping> results = getDirectMappings(sourceRef, statement);
+             return results;
+        } catch (BridgeDBException ex) {
+            throw ex;        
+        } finally {
+            close (statement, null);
+        }
+    }
+    
+    public Set<DirectMapping> getDirectMappingsX(IdSysCodePair sourceRef) throws BridgeDBException{
         //ystem.out.println("£" + sourceRef);
         StringBuilder query =  startMappingsBySetQuery();
         query.append(", ");
