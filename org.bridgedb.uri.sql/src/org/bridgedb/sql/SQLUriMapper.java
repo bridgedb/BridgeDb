@@ -2598,51 +2598,24 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
     
-    public Set<DirectMapping> getDirectMappingsX(IdSysCodePair sourceRef) throws BridgeDBException{
-        //ystem.out.println("£" + sourceRef);
-        StringBuilder query =  startMappingsBySetQuery();
-        query.append(", ");
-        query.append(SYMMETRIC_COLUMN_NAME);
-        appendMappingFromJoinMapping(query);
-        appendSourceIdSysCodePair(query, sourceRef);
-        Statement statement = this.createStatement();
-        ResultSet rs = null;
-        Set<DirectMapping> results = new HashSet<DirectMapping>();
-        //ystem.out.println(query);
-        try {
-             rs = statement.executeQuery(query.toString());
-             while (rs.next()){
-                String id = rs.getString(TARGET_ID_COLUMN_NAME);
-                String sysCode = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
-                IdSysCodePair targetRef = new IdSysCodePair(id, sysCode);
-                //stem.out.println(" = " + targetRef);
-                Integer mappingSetId = rs.getInt(MAPPING_SET_ID_COLUMN_NAME);
-                Integer symmetric = rs.getInt(SYMMETRIC_COLUMN_NAME);
-                String predicate = rs.getString(PREDICATE_COLUMN_NAME);
-                String justification = rs.getString(JUSTIFICATION_COLUMN_NAME);
-                String mappingSource = rs.getString(MAPPING_SOURCE_COLUMN_NAME);
-                String mappingResource = rs.getString(MAPPING_RESOURCE_COLUMN_NAME);
-                DirectMapping mapping = new DirectMapping (sourceRef, targetRef, mappingSetId, symmetric, predicate, justification, mappingSource, mappingResource);
-                results.add(mapping);
-             }
-             return results;
-        } catch (SQLException ex) {
-            throw new BridgeDBException("Unable to run query. " + query, ex);           
-        } finally {
-            close (statement, rs);
-        }
-    }
-    
     public Set<AbstractMapping> getTransitiveMappings(IdSysCodePair sourceRef) throws BridgeDBException{
-        MappingsHandlers mappingsHandler = new MappingsHandlers(sourceRef, transitiveChecker, predicateMaker, justificationMaker);
-        Set<DirectMapping> direct = getDirectMappings(sourceRef);
-        mappingsHandler.addMappings(direct);
-        while (mappingsHandler.moreToCheck()){
-            AbstractMapping toCheck = mappingsHandler.nextToCheck();
-            Set<DirectMapping> transitives = getDirectMappings(toCheck.getTarget());
-            mappingsHandler.addMappings(toCheck, transitives);
+        PreparedStatement statement = null;
+        try {
+            statement = createPreparedStatement(DIRECT_MAPPING_QUERY);
+            MappingsHandlers mappingsHandler = new MappingsHandlers(sourceRef, transitiveChecker, predicateMaker, justificationMaker);
+            Set<DirectMapping> direct = getDirectMappings(sourceRef, statement);
+            mappingsHandler.addMappings(direct);
+            while (mappingsHandler.moreToCheck()){
+                AbstractMapping toCheck = mappingsHandler.nextToCheck();
+                Set<DirectMapping> transitives = getDirectMappings(toCheck.getTarget(), statement);
+                mappingsHandler.addMappings(toCheck, transitives);
+            }
+            return mappingsHandler.getMappings();
+        } catch (BridgeDBException ex) {
+            throw ex;        
+        } finally {
+            close (statement, null);
         }
-        return mappingsHandler.getMappings();
     }
 }
  
