@@ -2584,11 +2584,33 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         " WHERE " + MAPPING_SET_ID_COLUMN_NAME + " = " + MAPPING_SET_DOT_ID_COLUMN_NAME +
             " AND " + SOURCE_ID_COLUMN_NAME + " = ? " +
             " AND " + SOURCE_DATASOURCE_COLUMN_NAME + " = ?";
-            
-    public Set<DirectMapping> getDirectMappings(IdSysCodePair sourceRef) throws BridgeDBException{
+         
+    
+    private String andLensClause(String lensId) throws BridgeDBException {
+        StringBuilder query = new StringBuilder();
+        if (lensId == null){
+            lensId = Lens.DEFAULT_LENS_NAME;
+        }
+        if (!LensTools.isAllLens(lensId)) {
+            List<String> justifications = LensTools.getJustificationsbyId(lensId);
+            if (justifications.isEmpty()){
+                throw new BridgeDBException ("No  justifications found for Lens " + lensId);
+            }
+            query.append(" AND ");  
+            query.append(JUSTIFICATION_COLUMN_NAME);
+            query.append(" IN (");
+            for (int i = 0; i < justifications.size() - 1; i++){
+                query.append("'").append(justifications.get(i)).append("', ");
+            }
+            query.append("'").append(justifications.get(justifications.size()-1)).append("')");
+        }
+        return query.toString();
+    }
+
+    public Set<DirectMapping> getDirectMappings(IdSysCodePair sourceRef, String lensId) throws BridgeDBException{
         PreparedStatement statement = null;
         try {
-            statement = createPreparedStatement(DIRECT_MAPPING_QUERY);
+            statement = createPreparedStatement(DIRECT_MAPPING_QUERY + andLensClause(lensId));
             Set<DirectMapping> results = getDirectMappings(sourceRef, statement);
              return results;
         } catch (BridgeDBException ex) {
@@ -2598,10 +2620,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
     
-    public Set<AbstractMapping> getTransitiveMappings(IdSysCodePair sourceRef) throws BridgeDBException{
+    public Set<AbstractMapping> getTransitiveMappings(IdSysCodePair sourceRef, String lensId) throws BridgeDBException{
         PreparedStatement statement = null;
         try {
-            statement = createPreparedStatement(DIRECT_MAPPING_QUERY);
+            statement = createPreparedStatement(DIRECT_MAPPING_QUERY + andLensClause(lensId));
             MappingsHandlers mappingsHandler = new MappingsHandlers(sourceRef, transitiveChecker, predicateMaker, justificationMaker);
             Set<DirectMapping> direct = getDirectMappings(sourceRef, statement);
             mappingsHandler.addMappings(direct);
