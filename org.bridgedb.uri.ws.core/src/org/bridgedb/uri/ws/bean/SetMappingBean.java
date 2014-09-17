@@ -31,7 +31,7 @@ import org.bridgedb.uri.api.UriMapping;
  */
 @XmlRootElement(name="SetMapping")
 public class SetMappingBean {
-    private Integer id;
+    private String id;
     private String predicate;
     private String justification;
     private String mappingSource;
@@ -69,14 +69,14 @@ public class SetMappingBean {
     /**
      * @return the id
      */
-    public final Integer getId() {
+    public final String getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public final void setId(Integer id) {
+    public final void setId(String id) {
         this.id = id;
     }
 
