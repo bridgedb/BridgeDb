@@ -270,134 +270,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
 
-    private Set<IdSysCodePair> mapIDX(IdSysCodePair sourcePair, String lensUri, String tgtSysCode) throws BridgeDBException {
-        if (sourcePair == null || tgtSysCode == null) {
-            return new HashSet<IdSysCodePair>();
-        }
-        StringBuilder query = startMappingQuery();
-        appendMappingFromAndWhere(query, sourcePair, lensUri, tgtSysCode);
-        Statement statement = this.createStatement();
-        ResultSet rs = null;
-        try {
-            rs = statement.executeQuery(query.toString());
-        } catch (SQLException ex) {
-            close(statement, rs);
-            throw new BridgeDBException("Unable to run query. " + query, ex);
-        }
-        try {
-            Set<IdSysCodePair> results = resultSetToIdSysCodePairSet(rs);
-            //Add mapping to self
-            if (sourcePair.getSysCode().equals(tgtSysCode)) {
-                results.add(sourcePair);
-            }
-            return results;
-        } catch (BridgeDBException ex) {
-            throw ex;
-        } finally {
-            close(statement, rs);
-        }
-    }
-
-    private Set<IdSysCodePair> mapIDX(IdSysCodePair sourceRef, String lensUri) throws BridgeDBException {
-        if (sourceRef == null) {
-            return new HashSet<IdSysCodePair>();
-        }
-        StringBuilder query = startMappingQuery();
-        appendMappingFromAndWhere(query, sourceRef, lensUri, null);
-        Statement statement = this.createStatement();
-        ResultSet rs = null;
-        try {
-            rs = statement.executeQuery(query.toString());
-        } catch (SQLException ex) {
-            close(statement, rs);
-            throw new BridgeDBException("Unable to run query. " + query, ex);
-        }
-        try {
-            Set<IdSysCodePair> results = resultSetToIdSysCodePairSet(rs);
-            WeakReference ref = new WeakReference<Object>(rs);
-            results.add(sourceRef);
-            return results;
-        } catch (BridgeDBException ex) {
-            throw ex;
-        } finally {
-            close(statement, rs);
-        }
-        //rs = null;
-        //while(ref.get() != null) {
-        //    System.gc();
-        //    ystem.out.println("GC running");
-        //}
-        //ystem.out.println("GC");
-        //Add mapping to self
-    }
-
-    private Set<IdSysCodePair> mapIDX(IdSysCodePair sourceRef, String lensUri, DataSource... tgtDataSource) throws BridgeDBException {
-        if (tgtDataSource == null || tgtDataSource.length == 0) {
-            return mapIDX(sourceRef, lensUri);
-        }
-        if (tgtDataSource.length == 1) {
-            return mapIDX(sourceRef, lensUri, toCode(tgtDataSource[0]));
-        }
-        HashSet<IdSysCodePair> results = new HashSet<IdSysCodePair>();
-        for (DataSource dataSource : tgtDataSource) {
-            if (dataSource != null) {
-                results.addAll(mapIDX(sourceRef, lensUri, dataSource.getSystemCode()));
-            }
-        }
-        return results;
-    }
-
-    private Set<String> mapUriX(IdSysCodePair sourceRef, String lensUri)
-            throws BridgeDBException {
-        Set<IdSysCodePair> targetRefs = mapIDX(sourceRef, lensUri);
-        HashSet<String> results = new HashSet<String>();
-        for (IdSysCodePair target : targetRefs) {
-            results.addAll(toUris(target));
-        }
-        return results;
-    }
-
-    private Set<String> mapUriX(IdSysCodePair sourceRef, String lensUri, RegexUriPattern tgtUriPattern)
-            throws BridgeDBException {
-        if (tgtUriPattern == null) {
-            return new HashSet<String>();
-        }
-        String tgtSysCode = tgtUriPattern.getSysCode();
-        Set<IdSysCodePair> targetRefs = mapIDX(sourceRef, lensUri, tgtSysCode);
-        HashSet<String> results = new HashSet<String>();
-        for (IdSysCodePair target : targetRefs) {
-            results.add(tgtUriPattern.getUri(target.getId()));
-        }
-        return results;
-    }
-
-    private Set<String> mapUriX(IdSysCodePair sourceRef, String lensUri, String graph, String[] tgtUriPatterns)
-            throws BridgeDBException {
-        //ystem.out.println(graph);
-        //ystem.out.println(tgtUriPatterns);
-        if ((graph == null || graph.isEmpty()) && (tgtUriPatterns == null || tgtUriPatterns.length == 0)) {
-            //ystem.out.println("XXX");
-            return mapUriX(sourceRef, lensUri);
-        }
-        Set<RegexUriPattern> targetUriPatterns = findRegexPatternsWithNulls(graph, tgtUriPatterns);
-        Set<String> results = new HashSet<String>();
-        for (RegexUriPattern tgtUriPattern : targetUriPatterns) {
-            results.addAll(mapUriX(sourceRef, lensUri, tgtUriPattern));
-        }
-        return results;
-    }
-
-//    @Override
-    public Set<String> mapUriX(String sourceUri, String lensUri, String graph, String... tgtUriPatterns)
-            throws BridgeDBException {
-        sourceUri = scrubUri(sourceUri);
-        IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
-        if (sourceRef == null) {
-            return mapUnkownUri(sourceUri, graph, tgtUriPatterns);
-        }
-        return mapUriX(sourceRef, lensUri, graph, tgtUriPatterns);
-    }
-
     private Set<String> mapUnkownUri(String sourceUri, String graph, String... tgtUriPatterns) throws BridgeDBException {
         Set<String> results = new HashSet<String>();
         if (sourceUri == null) {
@@ -463,41 +335,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             result.merge(mapUriBySysCodeId(iterator.next(), lensUri, graph, tgtUriPatterns));
         }
         return result;
-    }
-
-    private MappingsBySysCodeId mapUriBySysCodeIdX(IdSysCodePair sourceRef, String lensUri, String graph, String[] tgtUriPatterns)
-            throws BridgeDBException {
-        Set<RegexUriPattern> targetUriPatterns = findRegexPatternsWithNulls(graph, tgtUriPatterns);
-        if (targetUriPatterns.isEmpty()) {
-            return mapUriBySysCodeIdX(sourceRef, lensUri);
-        }
-        MappingsBySysCodeId results = new MappingsBySysCodeId();
-        for (RegexUriPattern tgtUriPattern : targetUriPatterns) {
-            mapUriBySysCodeIdX(results, sourceRef, lensUri, tgtUriPattern);
-        }
-        return results;
-    }
-
-    private MappingsBySysCodeId mapUriBySysCodeIdX(IdSysCodePair sourceRef, String lensUri)
-            throws BridgeDBException {
-        MappingsBySysCodeId results = new MappingsBySysCodeId();
-        Set<IdSysCodePair> targetRefs = mapIDX(sourceRef, lensUri);
-        for (IdSysCodePair target : targetRefs) {
-            results.addMappings(target, toUris(target));
-        }
-        return results;
-    }
-
-    private void mapUriBySysCodeIdX(MappingsBySysCodeId results, IdSysCodePair sourceRef, String lensUri, RegexUriPattern tgtUriPattern)
-            throws BridgeDBException {
-        if (tgtUriPattern == null) {
-            return;
-        }
-        String tgtSysCode = tgtUriPattern.getSysCode();
-        Set<IdSysCodePair> targetRefs = mapIDX(sourceRef, lensUri, tgtSysCode);
-        for (IdSysCodePair target : targetRefs) {
-            results.addMapping(target, tgtUriPattern.getUri(target.getId()));
-        }
     }
 
     private void mapBySet(IdSysCodePair sourceRef, String sourceUri, MappingsBySet mappingsBySet, String lensUri, RegexUriPattern tgtUriPattern) throws BridgeDBException {
@@ -2737,15 +2574,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return getTransitiveBySysCodeId(sourceRef, lensUri, targetUriPatterns);
     }
 
-    public MappingsBySysCodeId mapUriBySysCodeIdX(String sourceUri, String lensUri, String graph, String... tgtUriPatterns)
-            throws BridgeDBException {    
-        sourceUri = scrubUri(sourceUri);
-        IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
-        return mapUriBySysCodeIdX(sourceRef, lensUri, graph, tgtUriPatterns);
-    }
-
-
-    @Override
+   @Override
     public Set<String> mapUri(Xref sourceXref, String lensUri, String graph, String... tgtUriPatterns)
             throws BridgeDBException {
         IdSysCodePair sourceRef = toIdSysCodePair(sourceXref);
