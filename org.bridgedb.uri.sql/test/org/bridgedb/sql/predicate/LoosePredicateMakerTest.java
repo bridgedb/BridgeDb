@@ -137,6 +137,10 @@ public class LoosePredicateMakerTest {
 		assertEquals(OboConstants.HAS_PART, predicateMaker.combine(OboConstants.HAS_PART, SkosConstants.NARROW_MATCH));
 	}
 	
+	public void testCombine_related_related() throws BridgeDBException {
+		assertEquals(SkosConstants.RELATED_MATCH, predicateMaker.combine(SkosConstants.RELATED_MATCH, SkosConstants.RELATED_MATCH));
+	}
+
     /**
      * Test of combine method, of class PredicateMaker.
      */
