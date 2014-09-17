@@ -51,7 +51,7 @@ public class UriMapperRecoverTest extends UriListenerTest {
         TestSqlFactory.checkSQLAccess();
         ConfigReader.useTest();
         listener = SQLUriMapper.createNew();
-        loadDataPart1();
+        loadDataPart1(LOAD_TRANSITIVES);
         uriMapper = SQLUriMapper.getExisting();
         OverallStatistics stats = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         stats.getNumberOfMappings();

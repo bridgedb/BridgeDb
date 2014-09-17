@@ -48,7 +48,7 @@ public class UriMapperAllLensTest extends org.bridgedb.uri.UriMapperAllLensTest 
         connectionOk = true;
         ConfigReader.useTest();
         listener = SQLUriMapper.createNew();
-        loadData();
+        loadData(LOAD_TRANSITIVES);
         uriMapper = SQLUriMapper.getExisting();
     }
             

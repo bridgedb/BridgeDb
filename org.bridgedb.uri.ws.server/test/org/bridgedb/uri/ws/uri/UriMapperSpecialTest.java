@@ -46,7 +46,7 @@ public class UriMapperSpecialTest extends org.bridgedb.uri.UriMapperSpecialTest 
         connectionOk = true;
         ConfigReader.useTest();
         listener = SQLUriMapper.createNew();
-        loadData();
+        loadData(LOAD_TRANSITIVES);
         SQLUriMapper sqlUriMapper = SQLUriMapper.getExisting();
         uriMapper = new WSUriMapper(new WSUriInterfaceService(sqlUriMapper)); 
     }

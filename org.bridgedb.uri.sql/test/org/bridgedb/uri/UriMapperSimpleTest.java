@@ -16,6 +16,7 @@ import org.bridgedb.uri.lens.Lens;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -122,6 +123,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         checkForNoOtherlensId(results);
     }
 
+@Ignore
     @Test
     public void testMapBySet_sourceUris_lensId_tgtUriPatterns() throws Exception {
         report("MapBySet_sourceUris_lensId_tgtUriPatterns");
