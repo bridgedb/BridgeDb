@@ -9,14 +9,10 @@ import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.UriPattern;
-import org.bridgedb.sql.transative.OpsTransitiveChecker;
-import org.bridgedb.sql.transative.TestTransitiveChecker;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.lens.Lens;
-import org.bridgedb.utils.BridgeDBException;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -26,8 +22,6 @@ import org.junit.Test;
 public abstract class UriMapperAllLensTest extends UriListenerTest{
 
     private static  final String NULL_GRAPH = null;
-    
-//        TestTransitiveChecker.addAcceptableVai(OpsTransitiveChecker.getOpsCodes());
     
    /**
      * Test of mapID method, of class UriMapper.
@@ -79,9 +73,6 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         Xref sourceXref = map2xref2;
         String lensId = Lens.ALL_LENS_NAME;
         Set results = uriMapper.mapID(sourceXref, lensId);
-        System.out.println(map2xref2);
-        System.out.println(results);
-        System.out.println(map2xref1);
         assertTrue(results.contains(map2xref1));
         assertTrue(results.contains(map2xref2));
         assertTrue(results.contains(map2xref3));
