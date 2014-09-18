@@ -128,9 +128,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
     protected static String mapBadUri1;
     protected static String mapBadUri2;
     protected static String mapBadUri3;
-    
-    public static final boolean LOAD_TRANSITIVES = true;
-    
+        
     @BeforeClass
     public static void setupUris() throws BridgeDBException{
         map1Axref1 = new Xref(ds1Id1+"000001", DataSource1);
@@ -213,9 +211,8 @@ public abstract class UriListenerTest extends IDMapperTestBase{
      * 
      * @throws BridgeDBException
      */
-    public static void loadDataPart1(boolean loadTransitives) throws BridgeDBException{
+    public static void loadDataPart1() throws BridgeDBException{
 
-        System.out.println("Load data " + loadTransitives);
         Resource resource = new URIImpl("http://example.com/1to2");
         int mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
                 Lens.getDefaultJustifictaionString(), Lens.getDefaultJustifictaionString(), regexUriPattern2, resource, resource);
@@ -231,14 +228,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         listener.insertUriMapping(map2Uri2, map2Uri3, mappingSet2_3, SYMETRIC);
         listener.insertUriMapping(map3Uri2, map3Uri3, mappingSet2_3, SYMETRIC);
 
-        if (loadTransitives){
-            resource = new URIImpl("http://example.com/1to3");
-            mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
-                Lens.getDefaultJustifictaionString(), Lens.getDefaultJustifictaionString(), regexUriPattern3, resource, resource);
-            listener.insertUriMapping(map1Uri1, map1Uri3, mappingSet, SYMETRIC);
-            listener.insertUriMapping(map2Uri1, map2Uri3, mappingSet, SYMETRIC);
-            listener.insertUriMapping(map3Uri1, map3Uri3, mappingSet, SYMETRIC);
-        }
+        //Close here to test recover
         listener.closeInput();
         
         resource = new URIImpl("http://example.com/1to2Lensed");
@@ -264,31 +254,11 @@ public abstract class UriListenerTest extends IDMapperTestBase{
     }
     
     public static void loadData() throws BridgeDBException{
-        loadData(false);
-    }
-    /**
-     * Method for loading the Test data
-     * Should be called in a @beforeClass method after setting listener
-     * 
-     * @throws BridgeDBException
-     */
-    @Deprecated
-    public static void loadData(boolean loadTransitives) throws BridgeDBException{
-        loadDataPart1(loadTransitives);        
-        if (loadTransitives){
-            Resource resource = new URIImpl("http://example.com/1to3Lensed");
-            int mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
-        		Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern3, resource, resource);
-            listener.insertUriMapping(map1Uri1, map1AUri3, mappingSet, SYMETRIC);
-            listener.insertUriMapping(map2Uri1, map2AUri3, mappingSet, SYMETRIC);
-            listener.insertUriMapping(map3Uri1, map3AUri3, mappingSet, SYMETRIC);
-            listener.insertUriMapping(map1AUri1, map1Uri3, mappingSet, SYMETRIC);
-            listener.insertUriMapping(map2AUri1, map2Uri3, mappingSet, SYMETRIC);
-            listener.insertUriMapping(map3AUri1, map3Uri3, mappingSet, SYMETRIC);
-        }
+        loadDataPart1();
+        //Close here if not testing recover
         listener.closeInput();
     }
-    
+
     /**
      * Method for loading the Test data
      * Should be called in a @beforeClass method after setting listener

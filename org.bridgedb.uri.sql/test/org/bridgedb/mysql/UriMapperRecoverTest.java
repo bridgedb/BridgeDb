@@ -22,8 +22,11 @@ package org.bridgedb.mysql;
 import java.util.Date;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
+import org.bridgedb.sql.transative.OpsTransitiveChecker;
+import org.bridgedb.sql.transative.TestTransitiveChecker;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.uri.UriListenerTest;
+import static org.bridgedb.uri.UriListenerTest.loadData;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
@@ -51,18 +54,23 @@ public class UriMapperRecoverTest extends UriListenerTest {
         TestSqlFactory.checkSQLAccess();
         ConfigReader.useTest();
         listener = SQLUriMapper.createNew();
-        loadDataPart1(LOAD_TRANSITIVES);
+        loadDataPart1();
+        TestTransitiveChecker.addAcceptableVai(OpsTransitiveChecker.getOpsCodes());
         uriMapper = SQLUriMapper.getExisting();
         OverallStatistics stats = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         stats.getNumberOfMappings();
-        assertEquals(10, stats.getNumberOfMappingSets());
+        assertEquals(8, stats.getNumberOfMappingSets());
+        assertEquals(12, stats.getNumberOfMappings());
         listener.recover();
         stats = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
-        assertEquals(6, stats.getNumberOfMappingSets());
+        assertEquals(12, stats.getNumberOfMappings());
+        assertEquals(4, stats.getNumberOfMappingSets());
         Resource resource = new URIImpl("http://example.com/1to2Another");
         int mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
         		Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern2, resource, resource);
-        assertEquals(7, mappingSet);
+        assertEquals(5, mappingSet);
+        stats = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
+        assertEquals(12, stats.getNumberOfMappings());
     }
             
 }
