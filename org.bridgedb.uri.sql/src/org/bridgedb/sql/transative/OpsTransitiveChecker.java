@@ -59,7 +59,7 @@ public class OpsTransitiveChecker implements TransitiveChecker{
         return limitedSysCodes.contains(newMapping.getSource().getSysCode());
     }
 
-   static Set<String> getOpsCodes(){
+    public static Set<String> getOpsCodes(){
         return limitedSysCodes;
     }
     

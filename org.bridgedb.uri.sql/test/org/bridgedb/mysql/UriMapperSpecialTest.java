@@ -22,6 +22,8 @@ package org.bridgedb.mysql;
 import java.util.Date;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
+import org.bridgedb.sql.transative.OpsTransitiveChecker;
+import org.bridgedb.sql.transative.TestTransitiveChecker;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.junit.BeforeClass;
@@ -48,7 +50,8 @@ public class UriMapperSpecialTest extends org.bridgedb.uri.UriMapperSpecialTest 
         connectionOk = true;
         ConfigReader.useTest();
         listener = SQLUriMapper.createNew();
-        loadData(LOAD_TRANSITIVES);
+        loadData();
+        TestTransitiveChecker.addAcceptableVai(OpsTransitiveChecker.getOpsCodes());
         uriMapper = SQLUriMapper.getExisting();
     }
             

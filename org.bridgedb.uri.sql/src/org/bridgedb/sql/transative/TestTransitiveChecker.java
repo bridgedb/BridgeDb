@@ -56,9 +56,11 @@ public class TestTransitiveChecker  implements TransitiveChecker{
         return limitedSysCodes.contains(sysCode);
     }
     
+    public static void addAcceptableVai(Set<String> additional) {
+        limitedSysCodes.addAll(additional);
+    }
+    
     public static void addAcceptableVai(DataSource dataSource) {
         limitedSysCodes.add(dataSource.getSystemCode());
     }
-    
-    
 }

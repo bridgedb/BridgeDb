@@ -168,8 +168,8 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     public void testGetOverallStatistics() throws BridgeDBException {
         report("GetOverallStatistics()");
         OverallStatistics results = uriMapper.getOverallStatistics(Lens.DEFAULT_LENS_NAME);
-        assertThat (results.getNumberOfMappings(), greaterThanOrEqualTo(18));
-        assertThat (results.getNumberOfMappingSets(), greaterThanOrEqualTo(6));
+        assertThat (results.getNumberOfMappings(), greaterThanOrEqualTo(12));
+        assertThat (results.getNumberOfMappingSets(), greaterThanOrEqualTo(4));
         assertThat (results.getNumberOfSourceDataSources(), greaterThanOrEqualTo(3));
         assertThat (results.getNumberOfTargetDataSources(), greaterThanOrEqualTo(3));
         assertThat (results.getNumberOfPredicates(), greaterThanOrEqualTo(1));
@@ -217,7 +217,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     @Test
     public void testGetSourceTargetInfos() throws BridgeDBException {
         report("GetSourceTargetInfos");
-        List<SourceTargetInfo> results = uriMapper.getSourceTargetInfos(DataSource1.getSystemCode(), Lens.DEFAULT_LENS_NAME);
+        List<SourceTargetInfo> results = uriMapper.getSourceTargetInfos(DataSource2.getSystemCode(), Lens.DEFAULT_LENS_NAME);
         assertThat (results.size(), greaterThanOrEqualTo(2));
     }
 
@@ -231,7 +231,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     @Test
     public void testGetSourceTargetInfosAll() throws BridgeDBException {
         report("GetSourceTargetInfosAll");
-        List<SourceTargetInfo> results = uriMapper.getSourceTargetInfos(DataSource1.getSystemCode(), Lens.ALL_LENS_NAME);
+        List<SourceTargetInfo> results = uriMapper.getSourceTargetInfos(DataSource2.getSystemCode(), Lens.ALL_LENS_NAME);
         assertThat (results.size(), greaterThanOrEqualTo(2));
     }
 
