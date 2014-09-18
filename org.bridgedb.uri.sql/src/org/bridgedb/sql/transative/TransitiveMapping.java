@@ -122,6 +122,24 @@ public class TransitiveMapping extends AbstractMapping {
         return sysCodesToCheck;
     }
 
+    @Override
+    public String getId() {
+        StringBuilder id = new StringBuilder();
+        for (DirectMapping aVia:via){
+            id.append("_").append(aVia.getId());
+        }
+        return id.substring(2);
+    }
+
+    @Override
+    public String getMappingSource() {
+        return "transitive";
+    }
+
+    @Override
+    public String getMappingResource() {
+        return "transitive";
+    }
 
 }
 /*

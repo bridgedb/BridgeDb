@@ -19,9 +19,7 @@
 //
 package org.bridgedb.sql.transative;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
 
@@ -63,6 +61,21 @@ public class DirectMapping extends AbstractMapping{
         sysCodes.add(getSource().getSysCode());
         sysCodes.add(getTarget().getSysCode());
         return sysCodes;
+    }
+
+    @Override
+    public String getId() {
+        return "" + id;
+    }
+
+    @Override
+    public String getMappingSource() {
+        return mappingSource;
+    }
+
+    @Override
+    public String getMappingResource() {
+        return this.mappingResource;
     }
 
 }

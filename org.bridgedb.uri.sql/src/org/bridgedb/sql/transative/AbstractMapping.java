@@ -71,4 +71,10 @@ public abstract class AbstractMapping {
     public String getJustification() {
         return justification;
     }
+
+    public abstract String getId();
+
+    public abstract String getMappingSource();
+
+    public abstract String getMappingResource();
 }

@@ -46,7 +46,7 @@ public class MappingsBySet {
         this.mappings = new HashSet<UriMapping>();
     }
     
-    public void addMapping (String mappingSetId, String predicate, String justification, String mappingSource, 
+    public void addMappings (String mappingSetId, String predicate, String justification, String mappingSource, 
             String mappingResource, String sourceUri, Set<String> targetUris){
         SetMappings setMapping = setMappingById(mappingSetId);
         if (setMapping == null){
@@ -79,12 +79,19 @@ public class MappingsBySet {
     public final void addMapping (UriMapping uriMapping){
         mappings.add(uriMapping);
     }
-     public void addMapping (String sourceUri, Set<String> targetUris){
+    
+    public void addMappings (String sourceUri, Set<String> targetUris){
        for (String targetUri:targetUris){
            addMapping(sourceUri, targetUri);
        }
     }
 
+    public void addMappings (MappingsBySet other){
+        for (UriMapping uriMapping: other.getMappings()){
+            addMapping(uriMapping);
+        }
+    }
+    
     private SetMappings setMappingById(String id) {
         for (SetMappings setMapping: getSetMappings()){
             if (setMapping.getId().equals(id)){
