@@ -1399,8 +1399,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         try {
             while (rs.next()) {
                 int id = rs.getInt(ID_COLUMN_NAME);
-                Set<DataSetInfo> viaSysCodes = getViaCodes(id);
-                Set<Integer> chainIds = getChainIds(id);
+                //Set<DataSetInfo> viaSysCodes = getViaCodes(id);
+                //Set<Integer> chainIds = getChainIds(id);
                 DataSetInfo sourceInfo = findDataSetInfo(rs.getString(SOURCE_DATASOURCE_COLUMN_NAME));
                 DataSetInfo targetInfo = findDataSetInfo(rs.getString(TARGET_DATASOURCE_COLUMN_NAME));
 
@@ -1412,8 +1412,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                         rs.getString(MAPPING_RESOURCE_COLUMN_NAME),
                         rs.getString(MAPPING_SOURCE_COLUMN_NAME),
                         rs.getInt(SYMMETRIC_COLUMN_NAME),
-                        viaSysCodes,
-                        chainIds,
                         rs.getInt(MAPPING_LINK_COUNT_COLUMN_NAME),
                         rs.getInt(MAPPING_SOURCE_COUNT_COLUMN_NAME),
                         rs.getInt(MAPPING_TARGET_COUNT_COLUMN_NAME),

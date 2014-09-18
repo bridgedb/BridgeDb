@@ -56,6 +56,7 @@ public class LinksetHandler extends RDFHandlerBase{
     private int mappingSet;
     private int noneLinkStatements;
     
+    @Deprecated
     public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, Resource mappingResource, 
             Resource mappingSource, boolean symetric, Set<String> viaLabels, Set<Integer> chainedLinkSets){
         this.uriListener = uriListener;

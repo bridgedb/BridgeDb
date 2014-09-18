@@ -38,8 +38,6 @@ public class MappingSetInfo {
     private final String mappingResource;
     private final String mappingSource;
     private final int symmetric;
-    private Set<DataSetInfo> viaDataSets;
-    private Set<Integer> chainIds;
     private Integer numberOfLinks;
     private final Integer numberOfSources;
     private final Integer numberOfTargets;
@@ -50,7 +48,7 @@ public class MappingSetInfo {
     private final Integer frequencyMax;
 
     public MappingSetInfo(int id, DataSetInfo source, String predicate, DataSetInfo target, String justification,
-            String mappingResource, String mappingSource, int symmetric, Set<DataSetInfo> viaDataSets,  Set<Integer> chainIds, 
+            String mappingResource, String mappingSource, int symmetric, 
             Integer numberOfLinks, Integer numberOfSources, Integer numberOfTargets, Integer frequencyMedium,
             Integer frequency75, Integer frequency90, Integer frequency99, Integer frequencyMax){
         intId = id;
@@ -62,8 +60,6 @@ public class MappingSetInfo {
         this.mappingResource = mappingResource;
         this.mappingSource = mappingSource;
         this.symmetric = symmetric;
-        setViaDataSets(viaDataSets);
-        setChainIds(chainIds);
         this.numberOfLinks = numberOfLinks;
         this.numberOfSources = numberOfSources;
         this.numberOfTargets = numberOfTargets;
@@ -144,8 +140,6 @@ public class MappingSetInfo {
                 + "\n\tpredicate:" + this.predicate 
                 + "\n\ttarget: " + this.getTarget() 
                 + "\n\tsymetric: " + this.symmetric
-                + "\n\tviaDataSets: " + this.getViaDataSets()
-                + "\n\tchainIds: " + this.chainIds
                 + "\n\tnumberOfLinks: " + this.numberOfLinks
                 //+ "\n\tmappingName: " + this.mappingName 
                 //+ "\n\tmappingUri: " + this.mappingUri           
@@ -164,24 +158,6 @@ public class MappingSetInfo {
      */
     public String justificationLocalName() {
         return localName(justification);
-    }
-
-    /**
-     * @return the chainIds
-     */
-    public Set<Integer> getChainIds() {
-        return chainIds;
-    }
-
-    /**
-     * @param chainIds the chainIds to set
-     */
-    public final void setChainIds(Set<Integer> chainIds) {
-        if (chainIds != null){
-            this.chainIds = chainIds;
-        } else {
-            chainIds = new HashSet<Integer>();
-        }
     }
 
     /**
@@ -205,26 +181,8 @@ public class MappingSetInfo {
         return target;
     }
 
-    /**
-     * @return the viaDataSets
-     */
-    public Set<DataSetInfo> getViaDataSets() {
-        return viaDataSets;
-    }
-
-    /**
-     * @param viaDataSets the viaDataSets to set
-     */
-    public final void setViaDataSets(Set<DataSetInfo> viaDataSets) {
-        if (viaDataSets != null){
-            this.viaDataSets = viaDataSets;
-        } else {
-            this.viaDataSets = new HashSet<DataSetInfo>();
-        }
-    }
-
     public boolean isTransitive() {
-        return (viaDataSets != null && !viaDataSets.isEmpty());
+        return false;
     }
 
     /**

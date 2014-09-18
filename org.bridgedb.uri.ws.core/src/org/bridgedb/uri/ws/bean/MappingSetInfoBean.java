@@ -36,8 +36,6 @@ public class MappingSetInfoBean {
     private String justification;
     private Integer symmetric;
     private Integer numberOfLinks;
-    private Set<DataSetInfoBean> viaDataSets;
-    private Set<Integer> chainId;
     private String mappingResource;
     private String mappingSource;    
     private Integer numberOfSources;
@@ -64,8 +62,6 @@ public class MappingSetInfoBean {
         mappingResource = info.getMappingResource();
         mappingSource = info.getMappingSource();
         symmetric = info.getSymmetric();
-        viaDataSets = DataSetInfoBean.asBeans(info.getViaDataSets());
-        chainId = info.getChainIds();
         numberOfLinks = info.getNumberOfLinks();
         numberOfSources= info.getNumberOfSources();
         numberOfTargets = info.getNumberOfTargets();
@@ -85,8 +81,6 @@ public class MappingSetInfoBean {
                getMappingResource(),
                getMappingSource(),
                getSymmetric(), 
-               DataSetInfoBean.asDataSetInfos(getViaDataSets()), 
-               getChainId(), 
                getNumberOfLinks(),
                getNumberOfSources(),
                getNumberOfTargets(),
@@ -154,20 +148,6 @@ public class MappingSetInfoBean {
     }
 
     /**
-     * @return the chainId
-     */
-    public Set<Integer> getChainId() {
-        return chainId;
-    }
-
-    /**
-     * @param chainId the chainId to set
-     */
-    public void setChainId(Set<Integer> chainId) {
-        this.chainId = chainId;
-    }
-
-    /**
      * @return the symmetric
      */
     public Integer getSymmetric() {
@@ -207,20 +187,6 @@ public class MappingSetInfoBean {
      */
     public void setTarget(DataSetInfoBean target) {
         this.target = target;
-    }
-
-    /**
-     * @return the viaDataSets
-     */
-    public Set<DataSetInfoBean> getViaDataSets() {
-        return viaDataSets;
-    }
-
-    /**
-     * @param viaDataSets the viaDataSets to set
-     */
-    public void setViaDataSets(Set<DataSetInfoBean> viaDataSets) {
-        this.viaDataSets = viaDataSets;
     }
 
     /**

@@ -47,6 +47,7 @@ public class LinksetListener {
         return handler.getMappingsetId();
     }
     
+    @Deprecated    
     public int parse(File file, Resource mappingResource, Resource mappingSource, URI linkPredicate, String justification, 
             Boolean symetric, Set<String> viaLabels, Set<Integer> chainedLinkSets) throws BridgeDBException{
         LinksetHandler handler = new LinksetHandler(uriListener, linkPredicate, justification, mappingResource, 

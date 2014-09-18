@@ -51,9 +51,6 @@ public class SourceTargetCounter implements Comparator<MappingSetInfo>{
             if (equals){
                 collectedInfo.combineIds(mappingSetInfo);
                 collectedInfo.setNumberOfLinks(collectedInfo.getNumberOfLinks() + mappingSetInfo.getNumberOfLinks());
-                if (mappingSetInfo.getViaDataSets() == null || mappingSetInfo.getViaDataSets().isEmpty()){
-                    collectedInfo.setViaDataSets(null);
-                }
                 return;
             }
         }
