@@ -96,9 +96,6 @@ public class Mapping {
     
     public void addSourceUris(Collection<String> sourceUris){
         getSourceUri().addAll(sourceUris);
-        if (mapToSelf()){
-            getTargetUri().addAll(sourceUris);
-        }
     }
     
     /**
