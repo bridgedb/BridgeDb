@@ -320,104 +320,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return uri.startsWith(pattern);
     }
 
-    @Override
-    public MappingsBySysCodeId mapUriBySysCodeId(Collection<String> sourceUris, String lensUri, String graph, String... tgtUriPatterns)
-            throws BridgeDBException {
-        if (sourceUris.size() == 1) {
-            return mapUriBySysCodeId(sourceUris.iterator().next(), lensUri, graph, tgtUriPatterns);
-        }
-        if (sourceUris.isEmpty()) {
-            return new MappingsBySysCodeId();
-        }
-        Iterator<String> iterator = sourceUris.iterator();
-        MappingsBySysCodeId result = mapUriBySysCodeId(iterator.next(), lensUri, graph, tgtUriPatterns);
-        while (iterator.hasNext()) {
-            result.merge(mapUriBySysCodeId(iterator.next(), lensUri, graph, tgtUriPatterns));
-        }
-        return result;
-    }
-
-    private void mapBySetX(IdSysCodePair sourceRef, String sourceUri, MappingsBySet mappingsBySet, String lensUri, RegexUriPattern tgtUriPattern) throws BridgeDBException {
-        if (tgtUriPattern != null) {
-            String tgtSysCode = tgtUriPattern.getSysCode();
-            Statement statement = null;
-            ResultSet rs = null;
-            try {
-                statement = this.createStatement();
-                rs = mapBySetOnlyX(statement, sourceRef, sourceUri, lensUri, tgtSysCode);
-                resultSetAddToMappingsBySet(rs, sourceUri, mappingsBySet, tgtUriPattern);
-            } catch (BridgeDBException ex) {
-                throw ex;
-            } finally {
-                close(statement, rs);
-            }
-            if (sourceRef.getSysCode().equals(tgtSysCode)) {
-                mappingsBySet.addMapping(sourceUri, tgtUriPattern.getUri(sourceRef.getId()));
-            }
-        }
-    }
-
-    public MappingsBySet mapBySetX(Set<String> sourceUris, String lensUri, String graph, String... tgtUriPatterns)
-            throws BridgeDBException {
-        MappingsBySet mappingsBySet = new MappingsBySet(lensUri);
-        for (String sourceUri : sourceUris) {
-            sourceUri = scrubUri(sourceUri);
-            IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
-            if (sourceRef == null) {
-                if (patternMatch(sourceUri, graph, tgtUriPatterns)) {
-                    mappingsBySet.addMapping(sourceUri, sourceUri);
-                }
-            } else {
-                Set<RegexUriPattern> targetUriPatterns = findRegexPatternsWithNulls(graph, tgtUriPatterns);
-                if (targetUriPatterns.isEmpty()) {
-                    mapBySetX(sourceUri, mappingsBySet, lensUri);
-                } else {
-                    for (RegexUriPattern tgtUriPattern : targetUriPatterns) {
-                        mapBySetX(sourceRef, sourceUri, mappingsBySet, lensUri, tgtUriPattern);
-                    }
-                }
-            }
-        }
-        return mappingsBySet;
-    }
-
-    private MappingsBySet mapBySetX(String sourceUri, MappingsBySet mappingsBySet, String lensUri)
-            throws BridgeDBException {
-        sourceUri = scrubUri(sourceUri);
-        IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
-        if (sourceRef != null) {
-            Statement statement = null;
-            ResultSet rs = null;
-            try {
-                statement = this.createStatement();
-                rs = mapBySetOnlyX(statement, sourceRef, sourceUri, lensUri, null);
-                resultSetAddToMappingsBySet(rs, sourceUri, mappingsBySet);
-                mappingsBySet.addMappings(sourceUri, toUris(sourceRef));
-            } catch (BridgeDBException ex) {
-                throw ex;
-            } finally {
-                close(statement, rs);
-            }
-        } else {
-            mappingsBySet.addMapping(sourceUri, sourceUri);
-        }
-        return mappingsBySet;
-    }
-
-    private ResultSet mapBySetOnlyX(Statement statement, IdSysCodePair sourceRef, String sourceUri, String lensUri, String tgtSysCode)
-            throws BridgeDBException {
-        StringBuilder query = startMappingsBySetQuery();
-        appendMappingFromAndWhere(query, sourceRef, lensUri, tgtSysCode);
-        ResultSet result = null;
-        try {
-            result = statement.executeQuery(query.toString());
-            return result;
-        } catch (SQLException ex) {
-            close(statement, result);
-            throw new BridgeDBException("Unable to run query. " + query, ex);
-        }
-    }
-
     private Set<Mapping> mapFull(IdSysCodePair sourceRef, String lensUri) throws BridgeDBException {
         if (sourceRef == null) {
             return new HashSet<Mapping>();
@@ -2704,8 +2606,42 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return results;
     }
 
-    //COMBINE the results of multiple calls into a single output
+    /*
+    These methods combone the results of various sources. 
+    Only make sense where the output includes a reference to the original source
+        If the collection of sources is empty 
+            Return empty results
+        ElseIF there is exactly 1 source
+            Call the method with a single source
+            Return result
+        Else
+            Set results null
+            For each result
+                get new result using method with a single source
+                Use this result or merge with a pervious omme
+    */
     
+    @Override
+    public MappingsBySysCodeId mapUriBySysCodeId(Collection<String> sourceUris, String lensUri, String graph, String... tgtUriPatterns)
+            throws BridgeDBException {
+        if (sourceUris.isEmpty()) {
+            return new MappingsBySysCodeId();
+        }
+        if (sourceUris.size() == 1) {
+            return mapUriBySysCodeId(sourceUris.iterator().next(), lensUri, graph, tgtUriPatterns);
+        }
+        MappingsBySysCodeId results = null;
+        for (String sourceUri:sourceUris){
+            MappingsBySysCodeId newSet = mapUriBySysCodeId(sourceUri, lensUri, graph, tgtUriPatterns);
+            if (results == null){
+                results = newSet;
+            } else {
+                results.merge(newSet);
+            }
+        }
+        return results;
+    }
+
     public MappingsBySet mapBySet(Set<String> sourceUris, String lensId, String graph, String... tgtUriPatterns)
             throws BridgeDBException {
         if (sourceUris == null || sourceUris.isEmpty()){
