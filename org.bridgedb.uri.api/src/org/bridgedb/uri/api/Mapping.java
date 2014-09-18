@@ -41,7 +41,7 @@ public class Mapping {
     
     private Set<String> sourceUri;
     private Set<String> targetUri;
-    private Integer mappingSetId;
+    private String mappingSetId;
     private String predicate;
     
     /**
@@ -52,7 +52,7 @@ public class Mapping {
         this.targetUri = new HashSet<String>();
     }
     
-    public Mapping (Xref source, String predicate, Xref target, Integer mappingSetId){
+    public Mapping (Xref source, String predicate, Xref target, String mappingSetId){
         this.sourceUri = new HashSet<String>();
         this.source = source;
         this.targetUri = new HashSet<String>();
@@ -159,7 +159,7 @@ public class Mapping {
     /**
      * @return the mappingSetId
      */
-    public Integer getMappingSetId() {
+    public String getMappingSetId() {
         return mappingSetId;
     }
 
@@ -263,7 +263,7 @@ public class Mapping {
     /**
      * @param mappingSetId the mappingSetId to set
      */
-    public void setMappingSetId(Integer mappingSetId) {
+    public void setMappingSetId(String mappingSetId) {
         this.mappingSetId = mappingSetId;
     }
 

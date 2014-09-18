@@ -43,7 +43,7 @@ public class MappingBean {
     // Singleton names look better in the xml Bean 
     private Set<String> sourceUri;
     private Set<String> targetUri;
-    private Integer mappingSetId;
+    private String mappingSetId;
     private String predicate;
     
     /**
@@ -130,14 +130,14 @@ public class MappingBean {
     /**
      * @return the mappingSetId
      */
-    public Integer getMappingSetId() {
+    public String getMappingSetId() {
         return mappingSetId;
     }
 
     /**
      * @param mappingSetId the mappingSetId to set
      */
-    public void setMappingSetId(Integer mappingSetId) {
+    public void setMappingSetId(String mappingSetId) {
         this.mappingSetId = mappingSetId;
     }
 

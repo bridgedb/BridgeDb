@@ -1529,7 +1529,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 String targetSysCode = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
                 IdSysCodePair targetPair = new IdSysCodePair(targetId, targetSysCode);
                 Xref target = codeMapper1.toXref(targetPair);
-                Integer mappingSetId = rs.getInt(MAPPING_SET_ID_COLUMN_NAME);
+                String mappingSetId = rs.getString(MAPPING_SET_ID_COLUMN_NAME);
                 String predicate = rs.getString(PREDICATE_COLUMN_NAME);
                 Xref source;
                 if (sourceRef == null) {
