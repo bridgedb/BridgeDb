@@ -32,7 +32,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
@@ -50,7 +49,6 @@ import org.bridgedb.sql.predicate.LoosePredicateMaker;
 import org.bridgedb.sql.predicate.PredicateMaker;
 import org.bridgedb.sql.transative.AbstractMapping;
 import org.bridgedb.sql.transative.DirectMapping;
-import org.bridgedb.sql.transative.ExtendableTransitiveChecker;
 import org.bridgedb.sql.transative.MappingsHandlers;
 import org.bridgedb.sql.transative.OpsTransitiveChecker;
 import org.bridgedb.sql.transative.TestTransitiveChecker;
@@ -90,12 +88,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private static final int PREFIX_LENGTH = 400;
     private static final int REGEX_LENGTH = 400;
 
-    public static final String CHAIN_TABLE_NAME = "chain";
-    private static final String VIA_TABLE_NAME = "via";
     private static final String MIMETYPE_TABLE_NAME = "mimeType";
     private static final String URI_TABLE_NAME = "uri";
 
-    public static final String CHAIN_ID_COLUMN_NAME = "chainId";
     private static final String CREATED_BY_COLUMN_NAME = "createdBy";
     private static final String CREATED_ON_COLUMN_NAME = "createdOn";
     private static final String DATASOURCE_COLUMN_NAME = "dataSource";
@@ -117,8 +112,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private static final String MIMETYPE_COLUMN_NAME = "mimetype";
     private static final String NAME_COLUMN_NAME = "name";
     private static final String REGEX_COLUMN_NAME = "regex";
-
-    static final String VIA_DATASOURCE_COLUMN_NAME = "viaDataSource";
 
     private static SQLUriMapper mapper = null;
     private final HashMap<Integer, RegexUriPattern> subjectUriPatterns;
@@ -188,10 +181,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         super.dropSQLTables();
         dropTable(URI_TABLE_NAME);
         dropTable(MIMETYPE_TABLE_NAME);
-        dropTable(VIA_TABLE_NAME);
-        dropTable(CHAIN_TABLE_NAME);
-// 		dropTable(LENS_TABLE_NAME);
-// 		dropTable(LENS_JUSTIFICATIONS_TABLE_NAME);
     }
 
     @Override
@@ -211,27 +200,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                     + "     " + POSTFIX_COLUMN_NAME + " VARCHAR(" + POSTFIX_LENGTH + ") NOT NULL, "
                     + "     mimeType VARCHAR(" + MIMETYPE_LENGTH + ") NOT NULL "
                     + "  ) " + SqlFactory.engineSetting());
-            sh.execute("CREATE TABLE " + VIA_TABLE_NAME
-                    + " (" + MAPPING_SET_ID_COLUMN_NAME + " INT NOT NULL, "
-                    + "     " + VIA_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ")  NOT NULL "
-                    + " ) " + SqlFactory.engineSetting());
-            sh.execute("CREATE TABLE " + CHAIN_TABLE_NAME
-                    + " (" + MAPPING_SET_ID_COLUMN_NAME + " INT NOT NULL, "
-                    + "     " + CHAIN_ID_COLUMN_NAME + " INT NOT NULL"
-                    + " ) " + SqlFactory.engineSetting());
-            /*            sh.execute("CREATE TABLE " + LENS_TABLE_NAME + " ( " 
-             + LENS_ID_COLUMN_NAME + " INT " + autoIncrement + " PRIMARY KEY, " 
-             + LENS_URI_COLUMN_NAME + " VARCHAR(" + LENS_URI_LENGTH + "), "
-             + NAME_COLUMN_NAME + " VARCHAR(" + FULLNAME_LENGTH + ") NOT NULL, " 
-             + CREATED_ON_COLUMN_NAME + " DATETIME, " 
-             + CREATED_BY_COLUMN_NAME + " VARCHAR(" + CREATED_BY_LENGTH + ") "
-             + ")");
-             sh.execute("CREATE TABLE " + LENS_JUSTIFICATIONS_TABLE_NAME + " ( " 
-             + LENS_URI_COLUMN_NAME + " VARCHAR(" + LENS_URI_LENGTH + ") NOT NULL, "
-             + JUSTIFICATION_COLUMN_NAME + " VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL " 
-             + ")");
-             */
-
         } catch (SQLException e) {
             throw new BridgeDBException("Error creating the tables ", e);
         } finally {
@@ -1073,77 +1041,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
 
-    private void registerChain(int mappingSetId, Set<Integer> chainedLinkSets) throws BridgeDBException {
-        if (chainedLinkSets == null || chainedLinkSets.isEmpty()) {
-            return;
-        }
-        Iterator<Integer> chainLinkSetId = chainedLinkSets.iterator();
-        StringBuilder insert = new StringBuilder("INSERT INTO ");
-        insert.append(CHAIN_TABLE_NAME);
-        insert.append(" (");
-        insert.append(MAPPING_SET_ID_COLUMN_NAME);
-        insert.append(", ");
-        insert.append(CHAIN_ID_COLUMN_NAME);
-        insert.append(") VALUES ");
-        insert.append("('");
-        insert.append(mappingSetId);
-        insert.append("', ");
-        insert.append(chainLinkSetId.next());
-        insert.append(")");
-        while (chainLinkSetId.hasNext()) {
-            insert.append(", ('");
-            insert.append(mappingSetId);
-            insert.append("', ");
-            insert.append(chainLinkSetId.next());
-            insert.append(")");
-        }
-        Statement statement = createStatement();
-        try {
-            statement.executeUpdate(insert.toString());
-        } catch (SQLException ex) {
-            throw new BridgeDBException("Error inserting via with " + insert, ex);
-        } finally {
-            close(statement, null);
-        }
-    }
-
-    private void registerVia(int mappingSetId, Set<String> viaLabels) throws BridgeDBException {
-        if (viaLabels == null || viaLabels.isEmpty()) {
-            processingRawLinkset = true;
-            return;
-        } else {
-            processingRawLinkset = false;
-        }
-        Iterator<String> labels = viaLabels.iterator();
-        StringBuilder insert = new StringBuilder("INSERT INTO ");
-        insert.append(VIA_TABLE_NAME);
-        insert.append(" (");
-        insert.append(MAPPING_SET_ID_COLUMN_NAME);
-        insert.append(", ");
-        insert.append(VIA_DATASOURCE_COLUMN_NAME);
-        insert.append(") VALUES ");
-        insert.append("('");
-        insert.append(mappingSetId);
-        insert.append("', '");
-        insert.append(labels.next());
-        insert.append("')");
-        while (labels.hasNext()) {
-            insert.append(", ('");
-            insert.append(mappingSetId);
-            insert.append("', '");
-            insert.append(labels.next());
-            insert.append("')");
-        }
-        Statement statement = createStatement();
-        try {
-            statement.executeUpdate(insert.toString());
-        } catch (SQLException ex) {
-            throw new BridgeDBException("Error inserting via with " + insert, ex);
-        } finally {
-            close(statement, null);
-        }
-    }
-
     //TODO check regex
     @Override
     public void insertUriMapping(String sourceUri, String targetUri, int mappingSetId, boolean symetric) throws BridgeDBException {
@@ -1235,76 +1132,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return prefix;
     }
 
-    /*    private Set<String> getViaCodes(int id) throws BridgeDBException {
-
-     /**
-     * Method to split a Uri into an URISpace and an ID.
-     *
-     * Based on OPENRDF version with ":" added as and extra splitter.
-     *
-     * Ideally this would be replaced by a method from Identifiers.org
-     *    based on their knowledge or ULI/URLs
-     * @param uri Uri to split
-     * @return The URISpace of the Uri
-     * /
-     public final static String splitId(String uri){
-     uri = uri.trim();
-     if (uri.contains("#")){
-     return uri.substring(uri.lastIndexOf("#")+1, uri.length());
-     } else if (uri.contains("=")){
-     return uri.substring(uri.lastIndexOf("=")+1, uri.length());
-     } else if (uri.contains("/")){
-     return uri.substring(uri.lastIndexOf("/")+1, uri.length());
-     } else if (uri.contains(":")){
-     return uri.substring(uri.lastIndexOf(":")+1, uri.length());
-     }
-     throw new IllegalArgumentException("Uri should have a '#', '/, or a ':' in it.");
-     }
-     */
-    private Set<DataSetInfo> getViaCodes(int id) throws BridgeDBException {
-        String query = ("SELECT " + VIA_DATASOURCE_COLUMN_NAME
-                + " FROM " + VIA_TABLE_NAME
-                + " WHERE " + MAPPING_SET_ID_COLUMN_NAME + " = \"" + id + "\"");
-        Statement statement = this.createStatement();
-        HashSet<DataSetInfo> results = new HashSet<DataSetInfo>();
-        ResultSet rs = null;
-        try {
-            rs = statement.executeQuery(query);
-            while (rs.next()) {
-                String sysCode = rs.getString(VIA_DATASOURCE_COLUMN_NAME);
-                results.add(findDataSetInfo(sysCode));
-            }
-        } catch (SQLException e) {
-            throw new BridgeDBException("Unable to retrieve lenses.", e);
-        } finally {
-            close(statement, rs);
-        }
-        return results;
-    }
-
     private DataSetInfo findDataSetInfo(String sysCode) throws BridgeDBException {
         DataSource ds = DataSource.getExistingBySystemCode(sysCode);
         return new DataSetInfo(sysCode, ds.getFullName());
-    }
-
-    private Set<Integer> getChainIds(int id) throws BridgeDBException {
-        String query = ("SELECT " + CHAIN_ID_COLUMN_NAME
-                + " FROM " + CHAIN_TABLE_NAME
-                + " WHERE " + MAPPING_SET_ID_COLUMN_NAME + " = \"" + id + "\"");
-        Statement statement = this.createStatement();
-        HashSet<Integer> results = new HashSet<Integer>();
-        ResultSet rs = null;
-        try {
-            rs = statement.executeQuery(query);
-            while (rs.next()) {
-                results.add(rs.getInt(CHAIN_ID_COLUMN_NAME));
-            }
-        } catch (SQLException e) {
-            throw new BridgeDBException("Unable to retrieve lenses.", e);
-        } finally {
-            close(statement, rs);
-        }
-        return results;
     }
 
     /**
@@ -1751,8 +1581,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         int max = getMaxCounted();
         deleteUncounted(MAPPING_TABLE_NAME, MAPPING_SET_ID_COLUMN_NAME, max);
         deleteUncounted(MAPPING_SET_TABLE_NAME, ID_COLUMN_NAME, max);
-        deleteUncounted(CHAIN_TABLE_NAME, MAPPING_SET_ID_COLUMN_NAME, max);
-        deleteUncounted(VIA_TABLE_NAME, MAPPING_SET_ID_COLUMN_NAME, max);
         resetAutoIncrement(max);
     }
 
