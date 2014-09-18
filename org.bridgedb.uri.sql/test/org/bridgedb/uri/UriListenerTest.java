@@ -233,7 +233,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         
         resource = new URIImpl("http://example.com/1to2Lensed");
         mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
-        		Lens.getTestJustifictaion(), Lens.getDefaultJustifictaionString(), regexUriPattern2, resource, resource);
+        		Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern2, resource, resource);
         listener.insertUriMapping(map1Uri1, map1AUri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2AUri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3AUri2, mappingSet, SYMETRIC);
@@ -243,7 +243,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
 
         resource = new URIImpl("http://example.com/2to3Lensed");
         mappingSet = listener.registerMappingSet(regexUriPattern2, TEST_PREDICATE, 
-        		Lens.getTestJustifictaion(), Lens.getDefaultJustifictaionString(), regexUriPattern3, resource, resource);
+        		Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern3, resource, resource);
         listener.insertUriMapping(map1Uri2, map1AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri2, map2AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri2, map3AUri3, mappingSet, SYMETRIC);

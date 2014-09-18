@@ -136,7 +136,7 @@ public class LinksetHandler extends RDFHandlerBase{
                 }
                 if (backwardJustification == null){
                     mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), justification, targetPattern, 
-                        mappingResource, mappingSource, symetric, this.viaLabels, this.chainedLinkSets);
+                        mappingResource, mappingSource, symetric);
                 } else {
                     mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), justification, backwardJustification, 
                         targetPattern, mappingResource, mappingSource);

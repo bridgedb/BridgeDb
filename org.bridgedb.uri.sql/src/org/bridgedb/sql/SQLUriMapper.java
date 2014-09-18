@@ -928,20 +928,41 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             throw new BridgeDBException("Error inserting prefix " + prefix + " and postfix " + postfix, ex, statement.toString());
         }
     }
-
+    
     @Override
-    public int registerMappingSet(RegexUriPattern sourceUriPattern, String predicate, String forwardJustification, String backwardJustification,
-            RegexUriPattern targetUriPattern, Resource mappingResource, Resource mappingSource) throws BridgeDBException {
+    public int registerMappingSet(RegexUriPattern sourceUriPattern, String predicate, String justification,
+            RegexUriPattern targetUriPattern, Resource mappingResource, Resource mappingSource, boolean symetric) throws BridgeDBException {
         checkUriPattern(sourceUriPattern);
         checkUriPattern(targetUriPattern);
         DataSource source = DataSource.getExistingBySystemCode(sourceUriPattern.getSysCode());
         DataSource target = DataSource.getExistingBySystemCode(targetUriPattern.getSysCode());
-        int mappingSetId = registerMappingSet(source, target, predicate, forwardJustification, mappingResource, mappingSource, 0);
-        int symetricId = registerMappingSet(target, source, predicate, backwardJustification, mappingResource, mappingSource, 0);
+        int mappingSetId = registerMappingSet(source, target, predicate, justification, mappingResource, mappingSource, 0);
+        if (symetric) {
+            int symetricId = registerMappingSet(target, source, predicate, justification, mappingResource, mappingSource, mappingSetId);
+            setSymmetric(mappingSetId, symetricId);
+        }
         subjectUriPatterns.put(mappingSetId, sourceUriPattern);
         targetUriPatterns.put(mappingSetId, targetUriPattern);
-        //Two linksets are NOT symmetric
         return mappingSetId;
+    }
+
+    @Override
+    public int registerMappingSet(RegexUriPattern sourceUriPattern, String predicate, String forwardJustification, String backwardJustification,
+            RegexUriPattern targetUriPattern, Resource mappingResource, Resource mappingSource) throws BridgeDBException {
+        if (forwardJustification.equals(backwardJustification)){
+            return registerMappingSet(sourceUriPattern, predicate, forwardJustification, targetUriPattern, mappingResource, mappingSource, true);
+        } else {
+            checkUriPattern(sourceUriPattern);
+            checkUriPattern(targetUriPattern);
+            DataSource source = DataSource.getExistingBySystemCode(sourceUriPattern.getSysCode());
+            DataSource target = DataSource.getExistingBySystemCode(targetUriPattern.getSysCode());
+            int mappingSetId = registerMappingSet(source, target, predicate, forwardJustification, mappingResource, mappingSource, 0);
+            int symetricId = registerMappingSet(target, source, predicate, backwardJustification, mappingResource, mappingSource, 0);
+            subjectUriPatterns.put(mappingSetId, sourceUriPattern);
+            targetUriPatterns.put(mappingSetId, targetUriPattern);
+            //Two linksets are NOT symmetric
+            return mappingSetId;
+        }
     }
 
     /**
