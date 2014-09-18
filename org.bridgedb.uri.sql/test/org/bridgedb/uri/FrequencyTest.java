@@ -86,7 +86,7 @@ public abstract class FrequencyTest extends IDMapperTestBase{
 
         Resource resource = new URIImpl("http://example.com/1to2");
         int mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
-                Lens.getDefaultJustifictaionString(), regexUriPattern2, resource, resource, SYMETRIC, NO_VIA, NO_CHAIN);
+                Lens.getDefaultJustifictaionString(), Lens.getDefaultJustifictaionString(), regexUriPattern2, resource, resource);
         int source = 0;
         for (int i = 0; i < counts.length; i++){
             for (int j = 0; j < counts[i]; j++){

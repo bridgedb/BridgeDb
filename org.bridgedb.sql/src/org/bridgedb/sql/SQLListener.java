@@ -38,7 +38,7 @@ import org.bridgedb.utils.BridgeDBException;
  */
 public class SQLListener extends SQLBase implements MappingListener{
 
-	public static final int SQL_COMPAT_VERSION = 26;
+    public static final int SQL_COMPAT_VERSION = 28;
   
     //Maximumn size in database
     protected static final int SYSCODE_LENGTH = 100;

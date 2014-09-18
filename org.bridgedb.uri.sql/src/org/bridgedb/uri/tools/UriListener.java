@@ -41,29 +41,6 @@ public interface UriListener {
      * In fact implementations are encouraged to obtain the DataSources and call the MappingListener method.
      * @param sourceUriPattern A registered UriPattern used by the source UriS
      * @param predicate The predicate to be associated. Can be null
-     * @param justification The URI that states why the link holds. Can be null
-     * @param targetUriPattern A registered UriPattern used by the source UriS
-     * @param mappingResource The RDF Resource/Context/Graph of the data
-     * @param mappingSource The File or URI the data was read from
-     * @param symetric Flag to say if mapping should be loaded one way of both ways. 
-     *     Creates two mapping sets this one and the inverse with one number higher.
-     * @param viaLabels the SysCodes of any DataSources this is Transitive Over 
-     * @param chainedLinkSets The ids of any MappingSets this is Transitive Over
-     * @return Id of the forward mappingSet.
-     * @throws BridgeDBException Thrown if either UriSpace has not previously been registered using registerUriSpace
-     */
-   public int registerMappingSet(RegexUriPattern sourceUriPattern, String predicate, String justification, 
-           RegexUriPattern targetUriPattern, Resource mappingResource, Resource mappingSource, boolean symetric, 
-           Set<String> viaLabels, Set<Integer> chainedLinkSets) throws  BridgeDBException;
-
-    /**
-     * Registers a mapping set using UriSpaces rather than DataSoucres.
-     * <p>
-     * Similar to MappingListener.registerMappingSet(DataSource source, String predicate, DataSource target, 
-     *    boolean symetric, boolean isTransitive)
-     * In fact implementations are encouraged to obtain the DataSources and call the MappingListener method.
-     * @param sourceUriPattern A registered UriPattern used by the source UriS
-     * @param predicate The predicate to be associated. Can be null
      * @param forwardJustification The URI that states why the link holds in the forward direction. Can not be null
      * @param backwardJustification The URI that states why the link holds in the reverse direction. Can not be null
      * @param targetUriPattern A registered UriPattern used by the source UriS
@@ -75,7 +52,7 @@ public interface UriListener {
     public int registerMappingSet(RegexUriPattern sourceUriPattern, String predicate, String forwardJustification, 
            String backwardJustification, RegexUriPattern targetUriPattern, Resource mappingResource, Resource mappingSource) throws  BridgeDBException;
 
-   public RegexUriPattern toUriPattern(String uri) throws BridgeDBException;
+    public RegexUriPattern toUriPattern(String uri) throws BridgeDBException;
             
     /**
      * Inserts a mapping into the system.

@@ -49,8 +49,6 @@ public abstract class UriListenerTest extends IDMapperTestBase{
     protected static final String TEST_PREDICATE = "http://www.w3.org/2004/02/skos/core#exactMatch";
         
     public static final boolean SYMETRIC = true;
-    public static final Set<String> NO_VIA = null;
-    public static final Set<Integer> NO_CHAIN = null;
 
     protected static final int mappingSet2_3 = 3;
  
@@ -220,14 +218,14 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         System.out.println("Load data " + loadTransitives);
         Resource resource = new URIImpl("http://example.com/1to2");
         int mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
-                Lens.getDefaultJustifictaionString(), regexUriPattern2, resource, resource, SYMETRIC, NO_VIA, NO_CHAIN);
+                Lens.getDefaultJustifictaionString(), Lens.getDefaultJustifictaionString(), regexUriPattern2, resource, resource);
         listener.insertUriMapping(map1Uri1, map1Uri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2Uri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3Uri2, mappingSet, SYMETRIC);
         
         resource = new URIImpl("http://example.com/2to3");
         mappingSet = listener.registerMappingSet(regexUriPattern2, TEST_PREDICATE, 
-                Lens.getDefaultJustifictaionString(), regexUriPattern3, resource, resource, SYMETRIC, NO_VIA, NO_CHAIN);
+                Lens.getDefaultJustifictaionString(), Lens.getDefaultJustifictaionString(), regexUriPattern3, resource, resource);
         assertEquals(mappingSet2_3, mappingSet);
         listener.insertUriMapping(map1Uri2, map1Uri3, mappingSet2_3, SYMETRIC);
         listener.insertUriMapping(map2Uri2, map2Uri3, mappingSet2_3, SYMETRIC);
@@ -236,7 +234,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         if (loadTransitives){
             resource = new URIImpl("http://example.com/1to3");
             mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
-                Lens.getDefaultJustifictaionString(), regexUriPattern3, resource, resource, SYMETRIC, NO_VIA, NO_CHAIN);
+                Lens.getDefaultJustifictaionString(), Lens.getDefaultJustifictaionString(), regexUriPattern3, resource, resource);
             listener.insertUriMapping(map1Uri1, map1Uri3, mappingSet, SYMETRIC);
             listener.insertUriMapping(map2Uri1, map2Uri3, mappingSet, SYMETRIC);
             listener.insertUriMapping(map3Uri1, map3Uri3, mappingSet, SYMETRIC);
@@ -245,7 +243,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         
         resource = new URIImpl("http://example.com/1to2Lensed");
         mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
-        		Lens.getTestJustifictaion(), regexUriPattern2, resource, resource, SYMETRIC, NO_VIA, NO_CHAIN);
+        		Lens.getTestJustifictaion(), Lens.getDefaultJustifictaionString(), regexUriPattern2, resource, resource);
         listener.insertUriMapping(map1Uri1, map1AUri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2AUri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3AUri2, mappingSet, SYMETRIC);
@@ -255,7 +253,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
 
         resource = new URIImpl("http://example.com/2to3Lensed");
         mappingSet = listener.registerMappingSet(regexUriPattern2, TEST_PREDICATE, 
-        		Lens.getTestJustifictaion(), regexUriPattern3, resource, resource, SYMETRIC, NO_VIA, NO_CHAIN);
+        		Lens.getTestJustifictaion(), Lens.getDefaultJustifictaionString(), regexUriPattern3, resource, resource);
         listener.insertUriMapping(map1Uri2, map1AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri2, map2AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri2, map3AUri3, mappingSet, SYMETRIC);
@@ -274,18 +272,13 @@ public abstract class UriListenerTest extends IDMapperTestBase{
      * 
      * @throws BridgeDBException
      */
+    @Deprecated
     public static void loadData(boolean loadTransitives) throws BridgeDBException{
-        loadDataPart1(loadTransitives);
-        
+        loadDataPart1(loadTransitives);        
         if (loadTransitives){
-            HashSet<String> via = new HashSet<String>();
-            via.add("test via");
-            HashSet<Integer> chain = new HashSet<Integer>();
-            chain.add(1);
-            chain.add(2);
             Resource resource = new URIImpl("http://example.com/1to3Lensed");
             int mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
-        		Lens.getTestJustifictaion(), regexUriPattern3, resource, resource, SYMETRIC, via, chain);
+        		Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern3, resource, resource);
             listener.insertUriMapping(map1Uri1, map1AUri3, mappingSet, SYMETRIC);
             listener.insertUriMapping(map2Uri1, map2AUri3, mappingSet, SYMETRIC);
             listener.insertUriMapping(map3Uri1, map3AUri3, mappingSet, SYMETRIC);

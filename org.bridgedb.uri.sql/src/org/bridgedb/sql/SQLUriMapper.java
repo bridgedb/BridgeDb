@@ -930,28 +930,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
 
     @Override
-    public int registerMappingSet(RegexUriPattern sourceUriPattern, String predicate, String justification,
-            RegexUriPattern targetUriPattern, Resource mappingResource, Resource mappingSource, boolean symetric, Set<String> viaLabels,
-            Set<Integer> chainedLinkSets) throws BridgeDBException {
-        checkUriPattern(sourceUriPattern);
-        checkUriPattern(targetUriPattern);
-        DataSource source = DataSource.getExistingBySystemCode(sourceUriPattern.getSysCode());
-        DataSource target = DataSource.getExistingBySystemCode(targetUriPattern.getSysCode());
-        int mappingSetId = registerMappingSet(source, target, predicate, justification, mappingResource, mappingSource, 0);
-        registerVia(mappingSetId, viaLabels);
-        registerChain(mappingSetId, chainedLinkSets);
-        if (symetric) {
-            int symetricId = registerMappingSet(target, source, predicate, justification, mappingResource, mappingSource, mappingSetId);
-            registerVia(symetricId, viaLabels);
-            registerChain(symetricId, chainedLinkSets);
-            setSymmetric(mappingSetId, symetricId);
-        }
-        subjectUriPatterns.put(mappingSetId, sourceUriPattern);
-        targetUriPatterns.put(mappingSetId, targetUriPattern);
-        return mappingSetId;
-    }
-
-    @Override
     public int registerMappingSet(RegexUriPattern sourceUriPattern, String predicate, String forwardJustification, String backwardJustification,
             RegexUriPattern targetUriPattern, Resource mappingResource, Resource mappingSource) throws BridgeDBException {
         checkUriPattern(sourceUriPattern);
