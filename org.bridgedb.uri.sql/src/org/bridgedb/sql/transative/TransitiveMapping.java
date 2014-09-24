@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
+import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
@@ -133,12 +134,12 @@ public class TransitiveMapping extends AbstractMapping {
 
     @Override
     public String getMappingSource() {
-        return "transitive";
+        return BridgeDBConstants.TRANSITIVE;
     }
 
     @Override
     public String getMappingResource() {
-        return "transitive";
+        return BridgeDBConstants.TRANSITIVE;
     }
 
 }

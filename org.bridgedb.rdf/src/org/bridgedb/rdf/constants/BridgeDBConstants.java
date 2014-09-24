@@ -109,5 +109,6 @@ public class BridgeDBConstants {
     public static final URI LINKSET_JUSTIFICATION = new URIImpl(PREFIX + "linksetJustification");
     
     public static final URI LENS_URI = new URIImpl(PREFIX + "lens");
-    
+    public static final String TRANSITIVE = PREFIX + "Transitive";
+    public static final URI TRANSITIVE_URI = new URIImpl(TRANSITIVE);
 }
