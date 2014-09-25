@@ -1297,46 +1297,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return results;
     }
 
-    private void resultSetAddToMappingsBySet(ResultSet rs, String sourceUri, MappingsBySet mappingsBySet)
-            throws BridgeDBException {
-        try {
-            while (rs.next()) {
-                String id = rs.getString(TARGET_ID_COLUMN_NAME);
-                String sysCode = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
-                IdSysCodePair pair = new IdSysCodePair(id, sysCode);
-                Set<String> targetUris = toUris(pair);
-                String mappingSetId = rs.getString(MAPPING_SET_ID_COLUMN_NAME);
-                String predicate = rs.getString(PREDICATE_COLUMN_NAME);
-                String justification = rs.getString(JUSTIFICATION_COLUMN_NAME);
-                String mappingSource = rs.getString(MAPPING_SOURCE_COLUMN_NAME);
-                String mappingResource = rs.getString(MAPPING_RESOURCE_COLUMN_NAME);
-                mappingsBySet.addMappings(mappingSetId, predicate, justification, mappingSource, mappingResource,
-                        sourceUri, targetUris);
-            }
-        } catch (SQLException ex) {
-            throw new BridgeDBException("Unable to parse results.", ex);
-        }
-    }
-
-    private void resultSetAddToMappingsBySet(ResultSet rs, String sourceUri, MappingsBySet mappingsBySet,
-            RegexUriPattern tgtUriPattern) throws BridgeDBException {
-        try {
-            while (rs.next()) {
-                String targetId = rs.getString(TARGET_ID_COLUMN_NAME);
-                String targetUri = tgtUriPattern.getUri(targetId);
-                String mappingSetId = rs.getString(MAPPING_SET_ID_COLUMN_NAME);
-                String predicate = rs.getString(PREDICATE_COLUMN_NAME);
-                String justification = rs.getString(JUSTIFICATION_COLUMN_NAME);
-                String mappingSource = rs.getString(MAPPING_SOURCE_COLUMN_NAME);
-                String mappingResource = rs.getString(MAPPING_RESOURCE_COLUMN_NAME);
-                mappingsBySet.addMapping(mappingSetId, predicate, justification, mappingSource, mappingResource,
-                        sourceUri, targetUri);
-            }
-        } catch (SQLException ex) {
-            throw new BridgeDBException("Unable to parse results.", ex);
-        }
-    }
-
     /**
      * Finds the SysCode of the DataSource which includes this prefix and
      * postfix
