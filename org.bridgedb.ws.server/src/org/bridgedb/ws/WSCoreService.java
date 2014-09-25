@@ -73,7 +73,7 @@ public class WSCoreService implements WSCoreInterface {
      * 
      * Super classes will have the responsibilities of setting up the idMapper.
      */
-    protected WSCoreService() throws BridgeDBException{
+    private WSCoreService() throws BridgeDBException{
         this(new SQLIdMapper(false, new SyscodeBasedCodeMapper()));
     }
     

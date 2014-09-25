@@ -41,9 +41,11 @@ import org.apache.velocity.VelocityContext;
 import org.bridgedb.DataSource;
 import org.bridgedb.rdf.BridgeDbRdfTools;
 import org.bridgedb.rdf.UriPattern;
+import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.SetMappings;
+import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.lens.LensTools;
 import org.bridgedb.uri.tools.GraphResolver;
@@ -69,7 +71,11 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
     static final Logger logger = Logger.getLogger(WSUriServer.class);
 
     public WSUriServer()  throws BridgeDBException   {
-        super();
+        this(SQLUriMapper.getExisting());
+    }
+
+    public WSUriServer(UriMapper uriMapper) throws BridgeDBException   {
+        super(uriMapper);
         logger.info("WsUriServer setup");        
     }
     
