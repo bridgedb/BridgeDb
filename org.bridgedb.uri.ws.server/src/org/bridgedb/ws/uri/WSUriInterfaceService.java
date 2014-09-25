@@ -80,7 +80,6 @@ import org.bridgedb.ws.templates.WebTemplates;
 public class WSUriInterfaceService extends WSCoreService implements WSUriInterface {
 
     protected UriMapper uriMapper;
-    protected UriListener uriListener;
 //    protected LinksetInterfaceMinimal linksetInterface;
 //    private String validationTypeString;
     public final String MIME_TYPE = "mimeType";
@@ -93,24 +92,10 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     protected final NumberFormat formatter;
     static final Logger logger = Logger.getLogger(WSUriInterfaceService.class);
 
-    /**
-     * Defuault constuctor for super classes.
-     * 
-     * Super classes will have the responsibilites of setting up the idMapper.
-     */
-    protected WSUriInterfaceService() throws BridgeDBException {
-        super();
-//        this.linksetInterface = new LinksetLoader();
-        uriMapper = SQLUriMapper.getExisting();
-        uriListener = SQLUriMapper.getExisting();
-        idMapper = uriMapper;
-        formatter = configFormatter();
-    }
-
     public WSUriInterfaceService(UriMapper uriMapper) throws BridgeDBException {
         super(uriMapper);
         this.uriMapper = uriMapper;
-        formatter = configFormatter();
+       formatter = configFormatter();
         logger.info("WS Service running using supplied uriMapper");
     }
 

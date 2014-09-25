@@ -36,9 +36,11 @@ import org.bridgedb.Xref;
 import org.bridgedb.rdf.BridgeDbRdfTools;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.SetMappings;
+import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.uri.tools.GraphResolver;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.tools.RegexUriPattern;
+import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.uri.ws.WsUriConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WsConstants;
@@ -63,14 +65,20 @@ public class WSAPI extends WSUriInterfaceService {
     private final static String TARGET_URI_PATTERN_PARAMETERX = "&" + WsUriConstants.TARGET_URI_PATTERN + "=";
     private final static String EXAMPLE_GRAPH = "ApiExampleGraph"; 
 
-    
+    protected UriListener uriListener;
+
     private HashMap<String,String> apiStrings = new HashMap<String,String>();
     
     static final Logger logger = Logger.getLogger(WSAPI.class);
 
-    public WSAPI()  throws BridgeDBException   {
-        super();
-    }
+    public WSAPI(UriMapper uriMapper)  throws BridgeDBException   {
+        super(uriMapper);
+        if (uriMapper instanceof UriListener){
+            uriListener = (UriListener)uriMapper;
+        } else {
+            uriListener = null;
+        }
+     }
         
     /**
      * API page for the IMS methods.
