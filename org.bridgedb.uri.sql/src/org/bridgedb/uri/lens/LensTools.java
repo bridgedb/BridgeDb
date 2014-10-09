@@ -55,6 +55,7 @@ public class LensTools {
     private static final String ID_PREFIX = "L";
     private static final String PROPERTY_PREFIX = "lens";
    
+    private static final String ALLOWED_MIDDLE_SOURCE = "allowedMiddleSource";
     private static final String CREATED_BY = "createdBy";
     private static final String CREATED_ON = "createdOn";
     private static final String DESCRIPTION = "description";
@@ -168,7 +169,9 @@ public class LensTools {
                 }                
             }
             Lens lens = findOrCreatedById(parts[1]);
-            if (parts[2].equals(CREATED_BY)){
+            if (parts[2].equals(ALLOWED_MIDDLE_SOURCE)){
+                lens.addAllowedMiddleSource(properties.getProperty(key));
+            } else if (parts[2].equals(CREATED_BY)){
                 lens.setCreatedBy(properties.getProperty(key));
             } else if (parts[2].equals(CREATED_ON)){
                 lens.setCreatedOn(properties.getProperty(key));
@@ -178,6 +181,7 @@ public class LensTools {
                 lens.setDescription(properties.getProperty(key));
             } else if (parts[2].equals(DEFAULT)){
                 Lens defaultLens = findOrCreatedById(Lens.DEFAULT_LENS_NAME);
+                lens.addAllowedMiddleSources(defaultLens.getAllowedMiddleSources());
                 lens.addJustifications(defaultLens.getJustifications());
             } else if (parts[2].equals(JUSTIFICATION)){
                 lens.addJustification(properties.getProperty(key));
@@ -223,6 +227,7 @@ public class LensTools {
                 defaultLens.addJustifications(all.getJustifications());
             }
             testLens.addJustification(getTestJustifictaion());
+            testLens.addAllowedMiddleSources(defaultLens.getAllowedMiddleSources());
             Lens.setDefaultBaseUri(properties.getProperty(DEFAULT_BAE_URI_KEY));
             for (String group:groups.keySet()){
                addToGroup(group,defaultLens);

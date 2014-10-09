@@ -13,6 +13,7 @@ public class WebTemplates
 
     public static final String BRIDGEDB_HOME = "bridgeDBHome.vm";
     public static final String FRAME = "frame.vm";
+    public static final String LENS = "lensTable.vm";
     public static final String LENS_GROUP = "lensGroup.vm";
     public static final String MAP_URI_FORM = "mapUriForm.vm";
     public static final String MAP_URI_RESULTS = "mapUriResults.vm";

@@ -52,6 +52,7 @@ import org.bridgedb.uri.tools.GraphResolver;
 import org.bridgedb.uri.tools.UriResultsAsRDF;
 import org.bridgedb.uri.ws.WsUriConstants;
 import org.bridgedb.utils.BridgeDBException;
+import org.bridgedb.ws.WsConstants;
 import org.bridgedb.ws.templates.WebTemplates;
 import org.openrdf.model.Statement;
 
@@ -344,27 +345,12 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         } else {
            sb.append("<h2>For the public lens </h2>");            
         }
-        sb.append("\n<table border=\"1\">");
-        sb.append("<tr>");
-        sb.append("<th>Name</th>");
-        sb.append("<th>URI</th>");
-        sb.append("<th>Description</th>\n");
-        sb.append("<th>Justifications</th></tr>\n");
-        for (Lens lens:lenses) {
-            sb.append("<tr><td>");
-            sb.append(lens.getName());
-            sb.append("</td><td><a href=\"");
-            sb.append(lens.toUri(httpServletRequest.getContextPath()));
-            sb.append("\">");
-            sb.append(lens.toUri(httpServletRequest.getContextPath()));
-            sb.append("</a></td><td>").append(lens.getDescription());
-            sb.append("</td><td nowrap=\"nowrap\"><ul style=\"list-style-type:none\">\n");
-            for (String justification: lens.getJustifications()){
-                sb.append("\t<li><a href=\"").append(justification).append("\">").append(justification).append("</a></li>\n");
-            }
-            sb.append("</td></tr>\n");        
-        }
-        sb.append("</table>");
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("lenses", lenses);
+        velocityContext.put("contextPath", httpServletRequest.getContextPath()); 
+        velocityContext.put("dataSourceMethod", httpServletRequest.getContextPath() + "/" 
+                + WsUriConstants.DATA_SOURCE + "?" + WsConstants.DATASOURCE_SYSTEM_CODE + "="); 
+        sb.append(WebTemplates.getForm(velocityContext, WebTemplates.LENS));
         sb.append("<p><a href=\"");
         sb.append(httpServletRequest.getContextPath());
         sb.append("/");

@@ -22,11 +22,14 @@ package org.bridgedb.uri.lens;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.log4j.Logger;
+import org.bridgedb.DataSource;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
 
@@ -42,6 +45,8 @@ public class Lens {
     private XMLGregorianCalendar createdOn;
     private String description;
     private final List<String> justifications;
+    private final Set<DataSource> allowedMiddleSources;
+    private final Set<String> allowedMiddleSysCodes;
         
     public static final String DEFAULT_LENS_NAME = "Default";
     public static final String TEST_LENS_NAME = "Test";
@@ -64,19 +69,25 @@ public class Lens {
      * @param createdBy
      * @param justifications 
      */
-    public Lens(String id, String name, String createdOn, String createdBy, String description, Collection<String> justifications) {
+    public Lens(String id, String name, String createdOn, String createdBy, String description,
+            Collection<String> justifications, Collection<DataSource> allowedMiddleSources) {
         this.id = id;
         this.name = name;
         this.createdBy = createdBy;
         this.setCreatedOn(createdOn);
         this.description = description;
-        this.justifications = new  ArrayList<String>(justifications);
+        this.justifications = new ArrayList<String>(justifications);
+        this.allowedMiddleSources = new HashSet<DataSource>();
+        allowedMiddleSysCodes = new HashSet<String>();
+        this.addAllowedMiddleSources(allowedMiddleSources);
     }
 
     protected Lens(String id, String name) throws BridgeDBException {
         this.name = name;
         this.id = id;
         this.justifications = new  ArrayList<String>();
+        this.allowedMiddleSources = new HashSet<DataSource>();
+        allowedMiddleSysCodes = new HashSet<String>();
         this.description = name + " lens";
         this.setCreatedOnNow();
         createdBy = "constructor";
@@ -127,6 +138,20 @@ public class Lens {
         return justifications;
     }
 
+    /**
+      * @return the Allowed Middle Sources
+      */
+    public Set<DataSource> getAllowedMiddleSources() {
+        return this.allowedMiddleSources;
+    }
+
+    /**
+      * @return the Allowed Middle Sources
+      */
+    public Set<String> getAllowedMiddleSysCodes() {
+        return this.allowedMiddleSysCodes;
+    }
+
     public static String getDefaultJustifictaionString() {
        return "http://semanticscience.org/resource/CHEMINF_000059"; 
     }
@@ -165,6 +190,22 @@ public class Lens {
     protected final void addJustifications(Collection<String> justifications) {
         for (String justification:justifications){
             addJustification(justification);
+        }
+    }
+
+    protected final void addAllowedMiddleSource(DataSource dataSource) {
+        allowedMiddleSources.add(dataSource);
+        allowedMiddleSysCodes.add(dataSource.getSystemCode());
+    }
+
+    protected final void addAllowedMiddleSource(String allowedMiddleSource) {
+        DataSource dataSource = DataSource.getExistingByFullName(allowedMiddleSource);
+        addAllowedMiddleSource(dataSource);
+    }
+
+    protected final void addAllowedMiddleSources(Collection<DataSource> dataSources) {
+        for (DataSource dataSource:dataSources){
+            addAllowedMiddleSource(dataSource);
         }
     }
 
