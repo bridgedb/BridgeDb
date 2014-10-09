@@ -76,8 +76,8 @@ public class LensTest extends org.bridgedb.uri.UriListenerTest {
     @Test
     public void testRDF() throws Exception {
         report("RDF");
-        Set<Statement> statements = LensTools.getLensAsRdf(null);
-        List<Lens> lens = LensTools.getLens();
+        Set<Statement> statements = LensTools.getLensAsRdf(null, LensTools.PUBLIC_GROUP_NAME);
+        List<Lens> lens = LensTools.getLens(LensTools.PUBLIC_GROUP_NAME);
         assertThat(statements.size(), greaterThanOrEqualTo(lens.size() * 6));
     }
  }

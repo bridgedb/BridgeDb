@@ -25,7 +25,7 @@ public abstract class UriMapperOtherTest extends UriListenerTest{
     @Test
     public void testGetLenss() throws Exception {
         report("getLenss");
-        List<Lens> results = LensTools.getLens();
+        List<Lens> results = LensTools.getLens(LensTools.PUBLIC_GROUP_NAME);
         assertThat(results.size(), greaterThanOrEqualTo(2));
      }
 

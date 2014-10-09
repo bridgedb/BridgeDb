@@ -39,6 +39,7 @@ import org.bridgedb.uri.api.SetMappings;
 import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.uri.tools.GraphResolver;
 import org.bridgedb.uri.lens.Lens;
+import org.bridgedb.uri.lens.LensTools;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.uri.ws.WsUriConstants;
@@ -304,7 +305,7 @@ public class WSAPI extends WSUriInterfaceService {
    private void describeUriParameter(StringBuilder sb, String contextPath) throws BridgeDBException {
         sb.append("<h3>Ops Exstension Parameters</h3>");
         sb.append("<ul>\n");
-        sb.append("<dt><a name=\"");
+            sb.append("<dt><a name=\"");
                 sb.append(WsUriConstants.URI);
                 sb.append("\">");
                 sb.append(WsUriConstants.URI);
@@ -323,18 +324,23 @@ public class WSAPI extends WSUriInterfaceService {
                 sb.append(WsUriConstants.LENS_URI);
                 sb.append("</a></dt>");
             sb.append("<ul>");
-            sb.append("<li>If not provided the default lens is used.</li>");
-            sb.append("<li>To See a list and description of all lenses visit.</li>");
-                sb.append("<ul>");
-                sb.append("<li><a href=\"");
-                    sb.append(contextPath);
-                    sb.append(Lens.METHOD_NAME);
-                    sb.append("\">");
-                    sb.append(Lens.METHOD_NAME);
-                    sb.append("</a></li>");    
-                sb.append("</ul>");
-            sb.append("<li>While the current API includes this parameter there is not yet any lens based data.</li>");
-            sb.append("<li>It it not recommended to use this parameter except for testing until farther notice.</li>");
+                sb.append("<li>If not provided the default lens is used. Except in the ");
+                    refLlens(sb);
+                    sb.append("</li>");
+                sb.append("<li> Use ");
+                    this.refLlens(sb);
+                    sb.append("  method to get a list of the Lens.<li>");
+            sb.append("</ul>\n");        
+        sb.append("<dt><a name=\"");
+                sb.append(WsUriConstants.LENS_GROUP);
+                sb.append("\">");
+                sb.append(WsUriConstants.LENS_GROUP);
+                sb.append("</a></dt>");
+            sb.append("<ul>");
+            sb.append("<li>If not provided the ");
+                sb.append(LensTools.PUBLIC_GROUP_NAME);
+                sb.append(" groups is used </li>");
+            sb.append("<li>Method to provide a list of groups is a TODO.</li>");
             sb.append("</ul>\n");        
         sb.append("<dt><a name=\"");
                 sb.append(WsUriConstants.GRAPH);
@@ -887,7 +893,7 @@ public class WSAPI extends WSUriInterfaceService {
                 sb.append("</ul>");
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
-                parameterLens(sb);
+                parameterLensUri(sb);
                 parameterGraph(sb);
                 parameterTargetPatternX(sb);
                 parameterTargetCode(sb);
@@ -922,7 +928,7 @@ public class WSAPI extends WSUriInterfaceService {
                 sb.append("<ul><li>In Contrast to other methods multiple values may be provided</li></ul>");  
                 sb.append("</ul>");
             sb.append("<li>Optional arguments</li><ul>");
-                parameterLens(sb);
+                parameterLensUri(sb);
                 parameterGraph(sb);
                 parameterTargetPatternX(sb);
                 sb.append("</ul>");
@@ -1058,7 +1064,7 @@ public class WSAPI extends WSUriInterfaceService {
         //        sb.append("</a></dt>");
         //sb.append("<dd>Brings up the getMappingInfo as graphviz input</dd>\n");           
         sb.append("<dt>");
-                lens(sb);
+                refLlens(sb);
                 sb.append("</dt>");
         sb.append("<dd>Brings up a list of the Supported Lens</dd>\n");           
         sb.append("<dt><a href=\"#");
@@ -1076,12 +1082,12 @@ public class WSAPI extends WSUriInterfaceService {
             sb.append(WsUriConstants.SOURCE_INFOS);
             sb.append("\">");
             sb.append(WsUriConstants.SOURCE_INFOS);
-            sb.append("</a></dt>");
+            sb.append("</a></h3></dt>");
         sb.append("<ul>");
             sb.append("<li>Brings up a table of all the Sources in the system.</li>");
              sb.append("<li>Optional arguments</li>");
             sb.append("<ul>");
-                parameterLens(sb);
+                parameterLensUri(sb);
             sb.append("</ul>");           
             addSourceExample(sb, contextPath, "Default Lens", false, false); 
             addSourceExample(sb, contextPath, "All Lens", false, true); 
@@ -1131,7 +1137,7 @@ public class WSAPI extends WSUriInterfaceService {
             sb.append(WsUriConstants.SOURCE_TARGET_INFOS);
             sb.append("\">");
             sb.append(WsUriConstants.SOURCE_TARGET_INFOS);
-            sb.append("</a></dt>");
+            sb.append("</a></h3></dt>");
         sb.append("<ul>");
             sb.append("<li>Brings up a table of all the Targets for a particular Source.</li>");
             sb.append("<li>Required arguement:</li>");
@@ -1140,7 +1146,7 @@ public class WSAPI extends WSUriInterfaceService {
             sb.append("</ul>");           
             sb.append("<li>Optional arguments</li>");
             sb.append("<ul>");
-                parameterLens(sb);
+                parameterLensUri(sb);
             sb.append("</ul>");           
             addSourceTargetExample(sb, contextPath, "Default Lens", false, false, sourceSysCode); 
             addSourceTargetExample(sb, contextPath, "All Lens", false, true, sourceSysCode); 
@@ -1211,7 +1217,7 @@ public class WSAPI extends WSUriInterfaceService {
                 sb.append("</ul>");           
                 sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
-                    parameterLens(sb);
+                    parameterLensUri(sb);
                 sb.append("</ul>");           
                 addMappingSetExample(sb, contextPath, "Default Lens", false, false, sourceSysCode, targetSysCode); 
                 addMappingSetExample(sb, contextPath, "All Lens", false, true, sourceSysCode, targetSysCode); 
@@ -1343,14 +1349,82 @@ public class WSAPI extends WSUriInterfaceService {
         sb.append("</a></h3>");
         sb.append("<ul>");
             sb.append("<li>Brings up a list of the Supported Lens");
-            sb.append("<li>Example: <a href=\"");
-                sb.append(contextPath);
-                sb.append(Lens.METHOD_NAME);
-                sb.append("\">");
-                sb.append(Lens.METHOD_NAME);
-                sb.append("</a></li>");    
+             sb.append("<li>Optional arguments</li><ul>");
+                parameterLensGroup(sb);
+                sb.append("<ul>");
+                    sb.append("<ll> If provided ");
+                    refLensUri(sb);
+                    sb.append(" is ignored.</li>");
+                sb.append("</ul>");
+                parameterLensUri(sb);
+                sb.append("<ul>");
+                    sb.append("<ll> If neither this nor ");
+                    refLensGroup(sb);
+                    sb.append(" is provided the group ");
+                    sb.append(LensTools.PUBLIC_GROUP_NAME);
+                    sb.append(" is used. </li>");
+                sb.append("</ul>");
+            sb.append("</ul>");
+            lensExamples(sb, Lens.METHOD_NAME,  contextPath, null);
         sb.append("</ul>\n");
     }        
+
+    private void lensExamples(StringBuilder sb, String method, String contextPath, String formatName){
+        sb.append("<li>");
+        if (formatName != null){
+            sb.append(formatName).append(" ");
+        }
+        sb.append("Examples: <ul>");
+        sb.append("<li>No Parameter call <a href=\"");
+            sb.append(contextPath);
+            sb.append(method);
+            addRdfFormat(sb,"?", formatName);
+            sb.append("\">");
+            sb.append(method);
+            addRdfFormat(sb,"?", formatName);
+            sb.append("</a></li>");    
+        sb.append("<li>Get all the Lenses <a href=\"");
+            sb.append(contextPath);
+            sb.append(method);
+            sb.append("?");
+            sb.append(WsUriConstants.LENS_GROUP);
+            sb.append("=");
+            sb.append(LensTools.ALL_GROUP_NAME);
+            addRdfFormat(sb,"&", formatName);
+            sb.append("\">");
+            sb.append(method);
+            sb.append("?");
+            sb.append(WsUriConstants.LENS_GROUP);
+            sb.append("=");
+            sb.append(LensTools.ALL_GROUP_NAME);
+            addRdfFormat(sb,"&", formatName);
+            sb.append("</a></li>");    
+        sb.append("<li>Get all the default Lens. <a href=\"");
+            sb.append(contextPath);
+            sb.append(method);
+            sb.append("?");
+            sb.append(WsUriConstants.LENS_URI);
+            sb.append("=");
+            sb.append(Lens.DEFAULT_LENS_NAME);
+            addRdfFormat(sb,"&", formatName);
+            sb.append("\">");
+            sb.append(method);
+            sb.append("?");
+            sb.append(WsUriConstants.LENS_URI);
+            sb.append("=");
+            sb.append(Lens.DEFAULT_LENS_NAME);
+            addRdfFormat(sb,"&", formatName);
+            sb.append("</a></li></ul>");    
+    }
+
+    private void addRdfFormat(StringBuilder sb, String prefix, String formatName){ 
+        if (formatName != null){
+            sb.append(prefix);
+            sb.append(WsUriConstants.RDF_FORMAT);
+            sb.append("=");
+            sb.append(formatName);
+        }
+    }
 
     private void describe_LensRdf(StringBuilder sb, String contextPath)
             throws UnsupportedEncodingException, BridgeDBException{
@@ -1361,26 +1435,21 @@ public class WSAPI extends WSUriInterfaceService {
         sb.append("</a></h3>");
         sb.append("<ul>");
             sb.append("<li>Same data as ");
-                lens(sb);
+                refLlens(sb);
                 sb.append(" but presented at RDF.</dd>");
             sb.append("<li>Argument</li><ul>");
                 parameterRdfFormat(sb);
                 sb.append("</li></ul>");
+             sb.append("<li>Optional arguments</li><ul>");
+                parameterLensUri(sb);
+                parameterLensGroup(sb);
+                sb.append("<li>See:");
+                    refLlens(sb);
+                   sb.append(" for argument behaviour and defaults</li><ul>");
+                sb.append("</ul>");
+            sb.append("</ul>");
             for (String formatName:BridgeDbRdfTools.getAvaiableWriters()){
-                sb.append("<li>Example: <a href=\"");
-                sb.append(contextPath);
-                sb.append(Lens.METHOD_NAME +  WsUriConstants.RDF);
-                sb.append("?");
-                sb.append(WsUriConstants.RDF_FORMAT);
-                sb.append("=");
-                sb.append(formatName);
-                sb.append("\">");
-                sb.append(Lens.METHOD_NAME+  WsUriConstants.RDF);
-                sb.append("?");
-                sb.append(WsUriConstants.RDF_FORMAT);
-                sb.append("=");
-                sb.append(formatName);                
-                sb.append("</a></li>");    
+                lensExamples(sb, Lens.METHOD_NAME + WsUriConstants.RDF,  contextPath, formatName);
             }
         sb.append("</ul>\n");
     }        
@@ -1422,12 +1491,16 @@ public class WSAPI extends WSUriInterfaceService {
         sb.append("</a></li>");
     }
 
-    private void parameterLens(StringBuilder sb){
-        sb.append("<li><a href=\"#");
-        sb.append(WsUriConstants.LENS_URI);
-        sb.append("\">");
-        sb.append(WsUriConstants.LENS_URI);
-        sb.append("</a></li> ");
+    private void parameterLensUri(StringBuilder sb){
+        sb.append("<li>");
+        this.refLensUri(sb);
+        sb.append("</li>");
+    }
+
+    private void parameterLensGroup(StringBuilder sb){
+        sb.append("<li>");
+        this.refLensGroup(sb);
+        sb.append("</li> ");
     }
 
     private void parameterGraph(StringBuilder sb){
@@ -1483,13 +1556,31 @@ public class WSAPI extends WSUriInterfaceService {
         sb.append("</a>");
     }
 
-    private void lens(StringBuilder sb){
+    private void refLlens(StringBuilder sb){
         sb.append("<a href=\"#");
         sb.append(Lens.METHOD_NAME);
         sb.append("\">");
         sb.append(Lens.METHOD_NAME);
         sb.append("</a>");
     }
+    
+    private void refLensUri(StringBuilder sb){
+        sb.append("<a href=\"#");
+        sb.append(WsUriConstants.LENS_URI);
+        sb.append("\">");
+        sb.append(WsUriConstants.LENS_URI);
+        sb.append("</a>");
+    }
+
+    private void refLensGroup(StringBuilder sb){
+        sb.append("<a href=\"#");
+        sb.append(WsUriConstants.LENS_GROUP);
+        sb.append("\">");
+        sb.append(WsUriConstants.LENS_GROUP);
+        sb.append("</a> ");
+    }
+
+
     
     private void mapExamplesXrefbased(StringBuilder sb, String contextPath, String methodName, Xref sourceXref1, String tragetSysCode1, Xref sourceXref2) 
             throws UnsupportedEncodingException, BridgeDBException{

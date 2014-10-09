@@ -699,13 +699,14 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @GET
     @Produces({MediaType.APPLICATION_XML})
     @Path("/" + Lens.METHOD_NAME + WsUriConstants.XML) 
-    public Response getLensesXML(@QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
-        return getLenses(lensUri);
+    public Response getLensesXML(@QueryParam(WsUriConstants.LENS_URI) String lensUri,
+                @QueryParam(WsUriConstants.LENS_GROUP) String lensGroup) throws BridgeDBException {
+        return getLenses(lensUri, lensGroup);
     }
 
-    protected List<Lens> getTheLens(String lensUri) throws BridgeDBException{
+    protected List<Lens> getTheLens(String lensUri, String lensGroup) throws BridgeDBException{
         if (lensUri == null || lensUri.isEmpty()){
-            return  LensTools.getLens();
+            return  LensTools.getLens(lensGroup);
         } else {
             Lens lens = LensTools.byId(lensUri);
             List<Lens> lenses = new ArrayList<Lens>();
@@ -718,8 +719,9 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_XML})
     @Path("/" + Lens.METHOD_NAME) 
     @Override
-	public Response getLenses(@QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
-        List<Lens> lenses = getTheLens(lensUri);
+    public Response getLenses(@QueryParam(WsUriConstants.LENS_URI) String lensUri,
+                @QueryParam(WsUriConstants.LENS_GROUP) String lensGroup) throws BridgeDBException {
+        List<Lens> lenses = getTheLens(lensUri, lensGroup);
 		LensesBean bean = new LensesBean(lenses, null);
         if (noConentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
@@ -730,8 +732,9 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/" + Lens.METHOD_NAME) 
- 	public Response getLensesJson(@QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
-        List<Lens> lenses = getTheLens(lensUri);
+ 	public Response getLensesJson(@QueryParam(WsUriConstants.LENS_URI) String lensUri,
+                @QueryParam(WsUriConstants.LENS_GROUP) String lensGroup) throws BridgeDBException {
+        List<Lens> lenses = getTheLens(lensUri, lensGroup);
 		LensesBean bean = new LensesBean(lenses, null);
         if (noConentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
@@ -743,8 +746,9 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_XML})
     @Path("/" + Lens.METHOD_NAME) 
  	public Response getLensesHtml(@QueryParam(WsUriConstants.LENS_URI) String lensUri,
+                @QueryParam(WsUriConstants.LENS_GROUP) String lensGroup,
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
-        List<Lens> lenses = getTheLens(lensUri);
+        List<Lens> lenses = getTheLens(lensUri, lensGroup);
 		LensesBean bean = new LensesBean(lenses, null);
         if (noConentOnEmpty & bean.isEmpty()){
             return noContentWrapper(httpServletRequest);
@@ -1069,8 +1073,8 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         sb.append("\n<div></body></html>");
     }
 
-	public void generateLensSelector(StringBuilder sb, HttpServletRequest httpServletRequest) throws BridgeDBException {
-		List<Lens> lenses = LensTools.getLens();
+    public void generateLensSelector(StringBuilder sb, HttpServletRequest httpServletRequest) throws BridgeDBException {
+        List<Lens> lenses = LensTools.getLens(LensTools.ALL_GROUP_NAME);
         sb.append("<p>");
     	sb.append(WsUriConstants.LENS_URI);
         sb.append("<select name=\"");

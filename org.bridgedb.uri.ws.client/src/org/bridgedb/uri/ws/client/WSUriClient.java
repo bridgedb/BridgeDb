@@ -374,10 +374,13 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
    }
 
     @Override
-    public Response getLenses(String lensUri) throws BridgeDBException {
+    public Response getLenses(String lensUri, String lensGroup) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         if (lensUri != null){
             params.add(WsUriConstants.LENS_URI, lensUri);        
+        }
+        if (lensGroup != null){
+            params.add(WsUriConstants.LENS_GROUP, lensGroup);        
         }
         try{
             //Make service call

@@ -158,7 +158,7 @@ public interface WSUriInterface extends WSCoreInterface{
      * @return A LensesBean wrapped in a Response
      * @throws BridgeDBException
      */
-    public Response getLenses(String lensUri) throws BridgeDBException;
+    public Response getLenses(String lensUri, String lensGroup) throws BridgeDBException;
 
 
  }

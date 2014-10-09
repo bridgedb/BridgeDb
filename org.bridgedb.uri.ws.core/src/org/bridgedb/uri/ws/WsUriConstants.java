@@ -39,6 +39,7 @@ public class WsUriConstants extends WsConstants{
     public static final String MAP_URI = "mapUri";
     public static final String MAP_BY_SET = "mapBySet";
     public static final String LENS_URI = "lensUri";
+    public static final String LENS_GROUP = "lensGroup";
     public static final String RDF = "RDF";
     public static final String RDF_FORMAT = "rdfFormat";
     public static final String SQL_COMPAT_VERSION = "SqlCompatVersion";
