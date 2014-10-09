@@ -340,7 +340,14 @@ public class WSAPI extends WSUriInterfaceService {
             sb.append("<li>If not provided the ");
                 sb.append(LensTools.PUBLIC_GROUP_NAME);
                 sb.append(" groups is used </li>");
-            sb.append("<li>Method to provide a list of groups is a TODO.</li>");
+            sb.append("<li>A list of the current groups is available from <a href=\"");
+                sb.append(contextPath);
+                sb.append(WsUriConstants.LENS_GROUP);
+                sb.append("\">");
+                sb.append(contextPath);
+                sb.append(WsUriConstants.LENS_GROUP);
+                sb.append("</a></li>");    
+                sb.append("</li>");
             sb.append("</ul>\n");        
         sb.append("<dt><a name=\"");
                 sb.append(WsUriConstants.GRAPH);
@@ -1349,17 +1356,17 @@ public class WSAPI extends WSUriInterfaceService {
         sb.append("</a></h3>");
         sb.append("<ul>");
             sb.append("<li>Brings up a list of the Supported Lens");
-             sb.append("<li>Optional arguments</li><ul>");
-                parameterLensGroup(sb);
-                sb.append("<ul>");
-                    sb.append("<ll> If provided ");
-                    refLensUri(sb);
-                    sb.append(" is ignored.</li>");
-                sb.append("</ul>");
+            sb.append("<li>Optional arguments</li><ul>");
                 parameterLensUri(sb);
                 sb.append("<ul>");
-                    sb.append("<ll> If neither this nor ");
+                    sb.append("<ll> If provided ");
                     refLensGroup(sb);
+                    sb.append(" is ignored.</li>");
+                sb.append("</ul>");
+                parameterLensGroup(sb);
+                sb.append("<ul>");
+                    sb.append("<ll> If neither this nor ");
+                    refLensUri(sb);
                     sb.append(" is provided the group ");
                     sb.append(LensTools.PUBLIC_GROUP_NAME);
                     sb.append(" is used. </li>");
@@ -1453,7 +1460,7 @@ public class WSAPI extends WSUriInterfaceService {
             }
         sb.append("</ul>\n");
     }        
-    
+            
     private void parameterID_CODE(StringBuilder sb){
         sb.append("<li><a href=\"#");
             sb.append(ID_CODE);

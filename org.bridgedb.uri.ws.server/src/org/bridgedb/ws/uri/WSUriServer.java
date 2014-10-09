@@ -332,7 +332,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/" + Lens.METHOD_NAME) 
-	public Response getLensesHtml(@QueryParam(WsUriConstants.LENS_URI)  String lensUri,
+    public Response getLensesHtml(@QueryParam(WsUriConstants.LENS_URI)  String lensUri,
                 @QueryParam(WsUriConstants.LENS_GROUP) String lensGroup,
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
         List<Lens> lenses = getTheLens(lensUri, lensGroup);
@@ -348,29 +348,66 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         sb.append("<tr>");
         sb.append("<th>Name</th>");
         sb.append("<th>URI</th>");
-        sb.append("<th>Description</th></tr>\n");
-		for (Lens lens:lenses) {
+        sb.append("<th>Description</th>\n");
+        sb.append("<th>Justifications</th></tr>\n");
+        for (Lens lens:lenses) {
             sb.append("<tr><td>");
             sb.append(lens.getName());
             sb.append("</td><td><a href=\"");
             sb.append(lens.toUri(httpServletRequest.getContextPath()));
             sb.append("\">");
             sb.append(lens.toUri(httpServletRequest.getContextPath()));
-            sb.append("</a></td><td>").append(lens.getDescription()).append("</td></tr>\n");        
-		}
+            sb.append("</a></td><td>").append(lens.getDescription());
+            sb.append("</td><td nowrap=\"nowrap\"><ul style=\"list-style-type:none\">\n");
+            for (String justification: lens.getJustifications()){
+                sb.append("\t<li><a href=\"").append(justification).append("\">").append(justification).append("</a></li>\n");
+            }
+            sb.append("</td></tr>\n");        
+        }
         sb.append("</table>");
         sb.append("<p><a href=\"");
         sb.append(httpServletRequest.getContextPath());
         sb.append("/");
         sb.append(Lens.METHOD_NAME);
         sb.append(WsUriConstants.XML);
+        if (lensUri != null && !lensUri.isEmpty()){
+            sb.append("?");
+            sb.append(WsUriConstants.LENS_URI);
+            sb.append("=");
+            sb.append(lensUri);
+        } else if (lensGroup != null && !lensGroup.isEmpty()){
+            sb.append("?");
+            sb.append(WsUriConstants.LENS_GROUP);
+            sb.append("=");
+            sb.append(lensGroup);
+        }
         sb.append("\">");
         sb.append("XML Format");
         sb.append("</a></p>\n");        
+        addLensGroups(sb, httpServletRequest);
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
-	}
+    }
     
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/" + WsUriConstants.LENS_GROUP) 
+    public Response getLensesHtml(@Context HttpServletRequest httpServletRequest) throws BridgeDBException {
+        StringBuilder sb = topAndSide("Lens Groups",  httpServletRequest);
+        addLensGroups(sb, httpServletRequest);
+        footerAndEnd(sb);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
+    private void addLensGroups(StringBuilder sb, HttpServletRequest httpServletRequest){
+        Set<String> lensGroups = LensTools.getLensGroups();
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("lensGroups", lensGroups);
+        velocityContext.put("lensCall", httpServletRequest.getContextPath() + "/" 
+                + Lens.METHOD_NAME + "?" + WsUriConstants.LENS_GROUP + "=");            
+        sb.append(WebTemplates.getForm(velocityContext, WebTemplates.LENS_GROUP));
+    }
+ 
     /**
      * Not longer works as it did not scale
      * @deprecated Will now always throw an Exception

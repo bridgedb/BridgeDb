@@ -10,7 +10,7 @@
         #top h1 { padding: .25em .5em .25em .5em; margin-left: 200px; margin-bottom: 0; margin-right: 0; margin-top: 0 }
         #top a { text-decoration: none; color: #ffffff; }
         #navBar { float: left; width: 200px; margin: 0em; padding: 5px; min-width: 200px; min-height: 100%} 
-        #content { margin-left: 210px; padding: 1em; min-height: 500px; min-width:40em;}
+        #content { margin-left: 210px; padding: 1em; min-height: 500px; min-width:80em;}
         #footer { clear:both; }
         fieldset {border: 1px solid #781351;width: 20em}
         legend { color: #fff; background: #ffa20c; border: 1px solid #781351; padding: 2px 6px }

@@ -296,6 +296,12 @@ public class LensTools {
         return results;
     }
 
+    public static Set<String> getLensGroups(){
+        HashSet<String> keys = new HashSet(groups.keySet());
+        keys.add(ALL_GROUP_NAME);
+        return keys;
+    }
+    
     private static String scrubGroup(String group) {
         if (group == null) {
             return PUBLIC_GROUP_NAME;
