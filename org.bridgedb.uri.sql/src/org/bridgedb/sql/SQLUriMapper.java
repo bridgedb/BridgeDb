@@ -1195,7 +1195,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 } else {
                     source = codeMapper1.toXref(sourceRef);
                 }
-                Mapping uriMapping = new Mapping(source, predicate, target, mappingSetId);
+                HashSet<String> mappingSetIds = new HashSet<String>();
+                mappingSetIds.add(mappingSetId);
+                Mapping uriMapping = new Mapping(source, predicate, target, mappingSetIds);
                 results.add(uriMapping);
             }
             return results;
@@ -2058,7 +2060,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             if (targetUriPattern != null){
                 for (AbstractMapping mapping : mappings) {
                     if (mapping.getTarget().getSysCode().equals(targetUriPattern.getSysCode())) {
-                        mappingsBySet.addMapping(mapping.getId(), mapping.getPredicate(), mapping.getJustification(), 
+                        mappingsBySet.addMapping(mapping.getIds(), mapping.getPredicate(), mapping.getJustification(), 
                             mapping.getMappingSource(), mapping.getMappingResource(), sourceUri, targetUriPattern.getUri(mapping.getTarget().getId()));
                     }
                 }
@@ -2115,7 +2117,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 for (AbstractMapping transitiveMapping : transitiveMappings) {
                     if (transitiveMapping.getTarget().getSysCode().equals(targetUriPattern.getSysCode())) {
                         Mapping mapping = new Mapping(sourceXref, transitiveMapping.getPredicate(), 
-                                codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getId());
+                                codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getIds());
                         mapping.addSourceUri(sourceUri);
                         mapping.addTargetUri(targetUriPattern.getUri(transitiveMapping.getTarget().getId()));
                         mapping.addTargetUris(toUris(transitiveMapping.getTarget()));
@@ -2142,7 +2144,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 for (AbstractMapping transitiveMapping : transitiveMappings) {
                     if (transitiveMapping.getTarget().getSysCode().equals(tgtDataSource.getSystemCode())) {
                         Mapping mapping = new Mapping(sourceXref, transitiveMapping.getPredicate(), 
-                                codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getId());
+                                codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getIds());
                         mapping.addSourceUri(sourceUri);
                         mapping.addTargetUris(toUris(transitiveMapping.getTarget()));
                         results.add(mapping);
@@ -2167,7 +2169,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 for (AbstractMapping transitiveMapping : transitiveMappings) {
                     if (transitiveMapping.getTarget().getSysCode().equals(tgtDataSource.getSystemCode())) {
                         Mapping mapping = new Mapping(sourceXref, transitiveMapping.getPredicate(), 
-                            codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getId());
+                            codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getIds());
                         mapping.addSourceUris(toUris(sourceRef));
                         mapping.addTargetUris(toUris(transitiveMapping.getTarget()));
                         results.add(mapping);
@@ -2192,7 +2194,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 for (AbstractMapping transitiveMapping : transitiveMappings) {
                     if (transitiveMapping.getTarget().getSysCode().equals(targetUriPattern.getSysCode())) {
                         Mapping mapping = new Mapping(sourceXref, transitiveMapping.getPredicate(), 
-                                codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getId());
+                                codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getIds());
                         mapping.addSourceUris(toUris(sourceRef));
                         mapping.addTargetUri(targetUriPattern.getUri(transitiveMapping.getTarget().getId()));
                         results.add(mapping);
@@ -2243,7 +2245,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         MappingsBySet mappingsBySet = new MappingsBySet(lensId);
         Set<AbstractMapping> mappings = getTransitiveMappings(sourceRef, lensId);
         for (AbstractMapping mapping : mappings) {
-            mappingsBySet.addMappings(mapping.getId(), mapping.getPredicate(), mapping.getJustification(), 
+            mappingsBySet.addMappings(mapping.getIds(), mapping.getPredicate(), mapping.getJustification(), 
                     mapping.getMappingSource(), mapping.getMappingResource(), sourceUri, toUris(mapping.getTarget()));
         }
         mappingsBySet.addMappings(sourceUri, toUris(sourceRef));
@@ -2266,7 +2268,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         HashSet<Mapping> results = new HashSet<Mapping>();
         for (AbstractMapping transitiveMapping : transitiveMappings) {
             Mapping mapping = new Mapping(sourceXref, transitiveMapping.getPredicate(), 
-                    codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getId());
+                    codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getIds());
             mapping.addSourceUri(sourceUri);
             mapping.addTargetUris(toUris(mapping.getTarget()));
             results.add(mapping);
@@ -2283,7 +2285,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         HashSet<Mapping> results = new HashSet<Mapping>();
         for (AbstractMapping transitiveMapping : transitiveMappings) {
             Mapping mapping = new Mapping(sourceXref, transitiveMapping.getPredicate(), 
-                    codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getId());
+                    codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getIds());
             mapping.addSourceUris(toUris(sourceRef));
             mapping.addTargetUris(toUris(mapping.getTarget()));
             results.add(mapping);

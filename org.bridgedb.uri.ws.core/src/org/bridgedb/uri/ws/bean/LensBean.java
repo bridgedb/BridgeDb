@@ -139,18 +139,25 @@ public class LensBean {
 		return justification;
 	}
 
-	/**
-	 * @return the justification
-	 */
-	public Set<DataSourceBean> getAllowedMiddleSource() {
-            return this.allowedMiddleSource;
-	}
-
         /**
 	 * @param justification the justification to set
 	 */
 	public void setJustification(Set<String> justification) {
 		this.justification = justification;
+	}
+
+	/**
+	 * @return the Allowed Middle Source
+	 */
+	public Set<DataSourceBean> getAllowedMiddleSource() {
+            return this.allowedMiddleSource;
+	}
+
+	/**
+	 * @return the Allowed Middle Source
+	 */
+	public void setAllowedMiddleSource(Set<DataSourceBean> allowedMiddleSource) {
+            this.allowedMiddleSource = allowedMiddleSource;
 	}
 
     /**

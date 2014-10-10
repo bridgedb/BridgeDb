@@ -124,12 +124,12 @@ public class TransitiveMapping extends AbstractMapping {
     }
 
     @Override
-    public String getId() {
-        StringBuilder id = new StringBuilder();
-        for (DirectMapping aVia:via){
-            id.append("_").append(aVia.getId());
+    public Set<String> getIds() {
+        HashSet<String> ids = new HashSet<String>();
+         for (DirectMapping aVia:via){
+            ids.add(aVia.getId());
         }
-        return id.substring(2);
+        return ids;
     }
 
     @Override

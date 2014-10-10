@@ -19,6 +19,7 @@
 //
 package org.bridgedb.uri.api;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.log4j.Logger;
@@ -46,11 +47,12 @@ public class MappingsBySet {
         this.mappings = new HashSet<UriMapping>();
     }
     
-    public void addMappings (String mappingSetId, String predicate, String justification, String mappingSource, 
+    public void addMappings (Set<String> mappingSetIds, String predicate, String justification, String mappingSource, 
             String mappingResource, String sourceUri, Set<String> targetUris){
-        SetMappings setMapping = setMappingById(mappingSetId);
+        String mappingId = sortAndString(mappingSetIds);
+        SetMappings setMapping = setMappingById(mappingId);
         if (setMapping == null){
-            setMapping = new SetMappings(mappingSetId, predicate, justification, mappingSource, mappingResource);
+            setMapping = new SetMappings(mappingId, predicate, justification, mappingSource, mappingResource);
             setMappings.add(setMapping);
         }
         for (String targetUri: targetUris){
@@ -62,8 +64,9 @@ public class MappingsBySet {
         setMappings.add(setMapping);
     }
     
-    public void addMapping (String mappingSetId, String predicate, String justification, String mappingSource, 
+    public void addMapping (Set<String> mappingSetIds, String predicate, String justification, String mappingSource, 
             String mappingResource, String sourceUri, String targetUri){
+        String mappingSetId = sortAndString(mappingSetIds);
         SetMappings setMapping = setMappingById(mappingSetId);
         if (setMapping == null){
             setMapping = new SetMappings(mappingSetId, predicate, justification, mappingSource, mappingResource);
@@ -149,5 +152,21 @@ public class MappingsBySet {
     
     public boolean isEmpty(){
         return mappings.isEmpty() && setMappings.isEmpty();
+    }
+
+    private String sortAndString(Set<String> mappingSetIds) {
+        if (mappingSetIds == null || mappingSetIds.isEmpty()){
+            return "";
+        }
+        if (mappingSetIds.size() == 1){
+            return mappingSetIds.iterator().next();
+        }
+        ArrayList<String> list = new ArrayList<String>(mappingSetIds);
+        java.util.Collections.sort(list);
+        StringBuilder sb = new StringBuilder(list.get(0));
+        for (int i = 1; i < list.size(); i++){
+            sb.append("_").append(list.get(i));
+        }
+        return sb.toString();
     }
 }

@@ -28,7 +28,7 @@ import org.bridgedb.pairs.IdSysCodePair;
  * @author christian
  */
 public class DirectMapping extends AbstractMapping{
-    private final int id;
+    private final String id;
     private final int originalId;
     private final String mappingSource;
     private final String mappingResource;
@@ -36,7 +36,7 @@ public class DirectMapping extends AbstractMapping{
     public DirectMapping (IdSysCodePair source, IdSysCodePair target, int id, int symmetric, String predicate, String justification, 
             String mappingSource, String mappingResource){
         super(source, target, predicate, justification);
-        this.id = id;
+        this.id = "" + id;
         if (symmetric < 0){
             this.originalId = 0 - symmetric;
         } else {
@@ -64,8 +64,14 @@ public class DirectMapping extends AbstractMapping{
     }
 
     @Override
+    public Set<String> getIds() {
+        HashSet<String> ids = new HashSet<String>();
+        ids.add(id);
+        return ids;
+    }
+
     public String getId() {
-        return "" + id;
+        return id;
     }
 
     @Override

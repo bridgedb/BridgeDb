@@ -72,7 +72,7 @@ public abstract class AbstractMapping {
         return justification;
     }
 
-    public abstract String getId();
+    public abstract Set<String> getIds();
 
     public abstract String getMappingSource();
 

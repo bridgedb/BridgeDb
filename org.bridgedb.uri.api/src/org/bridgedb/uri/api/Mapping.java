@@ -41,7 +41,7 @@ public class Mapping {
     
     private Set<String> sourceUri;
     private Set<String> targetUri;
-    private String mappingSetId;
+    private Set<String> mappingSetId;
     private String predicate;
     
     /**
@@ -52,12 +52,13 @@ public class Mapping {
         this.targetUri = new HashSet<String>();
     }
     
-    public Mapping (Xref source, String predicate, Xref target, String mappingSetId){
+    public Mapping (Xref source, String predicate, Xref target, Set<String> mappingSetIds){
         this.sourceUri = new HashSet<String>();
         this.source = source;
         this.targetUri = new HashSet<String>();
         this.target = target;
-        this.mappingSetId = mappingSetId;
+        this.mappingSetId = new HashSet<String>();
+        this.mappingSetId = mappingSetIds;
         this.predicate = predicate;
     }
 
@@ -156,7 +157,7 @@ public class Mapping {
     /**
      * @return the mappingSetId
      */
-    public String getMappingSetId() {
+    public Set<String> getMappingSetId() {
         return mappingSetId;
     }
 
@@ -182,68 +183,6 @@ public class Mapping {
     }
 
     /**
-     * @return the sourceId
-     * /
-    public String getSourceId() {
-        return sourceId;
-    }
-
-    /**
-     * @param sourceId the sourceId to set
-     * /
-    public void setSourceId(String sourceId) {
-        this.sourceId = sourceId;
-    }
-
-    /**
-     * @return the targetId
-     * /
-    public String getTargetId() {
-        return targetId;
-    }
-
-    /**
-     * @param targetId the targetId to set
-     * /
-    public void setTargetId(String targetId) {
-        this.targetId = targetId;
-    }
-
-    /**
-     * @return the targetSysCode
-     * / 
-    public String getTargetSysCode() {
-        return targetSysCode;
-    }
-
-    /**
-     * @param targetSysCode the targetSysCode to set
-     * /
-    public void setTargetSysCode(String targetSysCode) {
-        this.targetSysCode = targetSysCode;
-    }
-   */
-    
-    /**
-     * @return the sourceSysCode
-     * /
-    public String getSourceSysCode() {
-        return sourceSysCode;
-    }
-
-    /**
-     * @param sourceSysCode the sourceSysCode to set
-     * /
-    public void setSourceSysCode(String sourceSysCode) {
-        this.sourceSysCode = sourceSysCode;
-    }
-
-    public Xref getSourceXref(){
-        DataSource ds = DataSource.getBySystemCode(sourceSysCode);
-        return new Xref(sourceId, ds);
-    }
-
-    /**
      * @param sourceUris the sourceUris to set
      */
     public void setSourceUri(Set<String> sourceUris) {
@@ -255,13 +194,6 @@ public class Mapping {
      */
     public void setTargetUri(Set<String> targetUris) {
         this.targetUri = targetUris;
-    }
-
-    /**
-     * @param mappingSetId the mappingSetId to set
-     */
-    public void setMappingSetId(String mappingSetId) {
-        this.mappingSetId = mappingSetId;
     }
 
     /**
