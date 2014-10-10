@@ -20,14 +20,11 @@
 package org.bridgedb.sql.transative;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.sql.justification.JustificationMaker;
 import org.bridgedb.sql.predicate.PredicateMaker;
-import org.bridgedb.sql.transative.DirectMapping;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
@@ -40,16 +37,14 @@ public class MappingsHandlers {
     private final ArrayDeque<AbstractMapping> toCheck = new ArrayDeque<AbstractMapping>();
     private final Set<IdSysCodePair> checkedPairs = new HashSet<IdSysCodePair>();
     private final Set<AbstractMapping> mappings = new HashSet<AbstractMapping>();
-    private final TransitiveChecker transitiveChecker;  
     private final PredicateMaker predicateMaker;
     private final JustificationMaker justificationMaker;
     
     
-    public MappingsHandlers(IdSysCodePair sourceRef, TransitiveChecker transitiveChecker, 
-            PredicateMaker predicateMaker, JustificationMaker justificationMaker){
+    public MappingsHandlers(IdSysCodePair sourceRef, PredicateMaker predicateMaker, 
+            JustificationMaker justificationMaker){
         this.sourceRef = sourceRef;
         checkedPairs.add(sourceRef);
-        this.transitiveChecker = transitiveChecker;
         this.predicateMaker = predicateMaker;
         this.justificationMaker = justificationMaker;
     }
@@ -81,12 +76,6 @@ public class MappingsHandlers {
 
     public final void addMapping(AbstractMapping previous, DirectMapping newMapping) throws BridgeDBException {   
         IdSysCodePair targetRef = newMapping.getTarget();
-        if (!transitiveChecker.allowTransitive(previous, newMapping)){
-            System.out.println("Ignoring transative via " + newMapping.getSource().getSysCode());
-            return;
-        //}  else {
-            //ystem.out.println("OK transative via " + newMapping.getSource().getSysCode());                
-        }
         if (checkedPairs.contains(targetRef)){
             //ystem.out.println("Duplicate " + targetRef);
             return;

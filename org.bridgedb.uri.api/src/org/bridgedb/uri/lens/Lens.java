@@ -193,12 +193,12 @@ public class Lens {
         }
     }
 
-    protected final void addAllowedMiddleSource(DataSource dataSource) {
+    public final void addAllowedMiddleSource(DataSource dataSource) {
         allowedMiddleSources.add(dataSource);
         allowedMiddleSysCodes.add(dataSource.getSystemCode());
     }
 
-    protected final void addAllowedMiddleSource(String allowedMiddleSource) {
+    public final void addAllowedMiddleSource(String allowedMiddleSource) {
         DataSource dataSource = DataSource.getExistingByFullName(allowedMiddleSource);
         addAllowedMiddleSource(dataSource);
     }

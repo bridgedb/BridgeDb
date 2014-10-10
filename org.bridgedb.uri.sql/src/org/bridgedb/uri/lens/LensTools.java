@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import org.apache.log4j.Logger;
+import org.bridgedb.rdf.BridgeDBRdfHandler;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.DCTermsConstants;
 import org.bridgedb.rdf.constants.PavConstants;
@@ -146,9 +147,7 @@ public class LensTools {
     }
 
     private static Lens lookupById(String id) throws BridgeDBException {
-        if (register.isEmpty()){
-            init();
-        }
+        init();
         return register.get(id.toLowerCase());
     }
     
@@ -198,6 +197,7 @@ public class LensTools {
     public static void init() throws BridgeDBException {
         if (register == null){
             logger.info("init");
+            BridgeDBRdfHandler.init();
             register = new HashMap<String,Lens>();
             groups = new HashMap<String,List<Lens>>(); 
             //Create the all, default and test lens
@@ -217,6 +217,7 @@ public class LensTools {
             }
             for (Lens lens:getAllLens()){
                 all.addJustifications(lens.getJustifications());
+                all.addAllowedMiddleSources(lens.getAllowedMiddleSources());
             }
             all.addJustification(getDefaultJustifictaionString());
             all.addJustification(getTestJustifictaion());

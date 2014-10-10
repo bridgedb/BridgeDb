@@ -348,8 +348,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("lenses", lenses);
         velocityContext.put("contextPath", httpServletRequest.getContextPath()); 
-        velocityContext.put("dataSourceMethod", httpServletRequest.getContextPath() + "/" 
-                + WsUriConstants.DATA_SOURCE + "?" + WsConstants.DATASOURCE_SYSTEM_CODE + "="); 
+        velocityContext.put("dataSourceMethod", WsUriConstants.DATA_SOURCE + "/"); 
         sb.append(WebTemplates.getForm(velocityContext, WebTemplates.LENS));
         sb.append("<p><a href=\"");
         sb.append(httpServletRequest.getContextPath());
@@ -378,7 +377,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/" + WsUriConstants.LENS_GROUP) 
-    public Response getLensesHtml(@Context HttpServletRequest httpServletRequest) throws BridgeDBException {
+    public Response getLensGroup(@Context HttpServletRequest httpServletRequest) throws BridgeDBException {
         StringBuilder sb = topAndSide("Lens Groups",  httpServletRequest);
         addLensGroups(sb, httpServletRequest);
         footerAndEnd(sb);

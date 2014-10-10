@@ -19,7 +19,6 @@
 //
 package org.bridgedb.sql;
 
-import java.lang.ref.WeakReference;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -50,9 +49,6 @@ import org.bridgedb.sql.predicate.PredicateMaker;
 import org.bridgedb.sql.transative.AbstractMapping;
 import org.bridgedb.sql.transative.DirectMapping;
 import org.bridgedb.sql.transative.MappingsHandlers;
-import org.bridgedb.sql.transative.OpsTransitiveChecker;
-import org.bridgedb.sql.transative.TestTransitiveChecker;
-import org.bridgedb.sql.transative.TransitiveChecker;
 import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
@@ -119,7 +115,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private boolean processingRawLinkset = true;
 
     //Currently there is only one of each of these but could be lens dependent
-    private final TransitiveChecker transitiveChecker;
     private final PredicateMaker predicateMaker;
     private final JustificationMaker justificationMaker;
 
@@ -163,13 +158,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         subjectUriPatterns = new HashMap<Integer, RegexUriPattern>();
         targetUriPatterns = new HashMap<Integer, RegexUriPattern>();
         LensTools.init(this);
-        if (ConfigReader.inTestMode()) {
-            TestTransitiveChecker.init();
-            transitiveChecker = TestTransitiveChecker.getInstance();
-        } else {
-            OpsTransitiveChecker.init();
-            transitiveChecker = OpsTransitiveChecker.getInstance();
-        }
         LoosePredicateMaker.init();
         predicateMaker = LoosePredicateMaker.getInstance();
         OpsJustificationMaker.init();
@@ -1991,14 +1979,20 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     public Set<AbstractMapping> getTransitiveMappings(IdSysCodePair sourceRef, String lensId) throws BridgeDBException {
         PreparedStatement statement = null;
         try {
+            if (lensId == null || lensId.isEmpty()){
+                lensId = Lens.DEFAULT_LENS_NAME;
+            }
+            Lens lens = LensTools.byId(lensId);
             statement = createPreparedStatement(directQuery(lensId));
-            MappingsHandlers mappingsHandler = new MappingsHandlers(sourceRef, transitiveChecker, predicateMaker, justificationMaker);
+            MappingsHandlers mappingsHandler = new MappingsHandlers(sourceRef, predicateMaker, justificationMaker);
             Set<DirectMapping> direct = getDirectMappings(sourceRef, statement);
             mappingsHandler.addMappings(direct);
             while (mappingsHandler.moreToCheck()) {
                 AbstractMapping toCheck = mappingsHandler.nextToCheck();
-                Set<DirectMapping> transitives = getDirectMappings(toCheck.getTarget(), statement);
-                mappingsHandler.addMappings(toCheck, transitives);
+                if (lens.getAllowedMiddleSysCodes().contains(toCheck.getTarget().getSysCode())){
+                    Set<DirectMapping> transitives = getDirectMappings(toCheck.getTarget(), statement);
+                    mappingsHandler.addMappings(toCheck, transitives);
+                }
             }
             return mappingsHandler.getMappings();
         } catch (BridgeDBException ex) {
