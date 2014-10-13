@@ -37,7 +37,7 @@ public class XrefExistsBean {
         
     public XrefExistsBean(Xref xref, boolean exists){
         this.exists = exists;
-        Xref = new XrefBean(xref);
+        Xref = XrefBean.asBean(xref);
     }
     
     public XrefExistsBean(String id, String scrCode, boolean exists){

@@ -206,7 +206,6 @@ public class OpsJustificationMaker implements JustificationMaker{
                 return null;
             }
         }
-        System.out.println("not found " + left);
         return null;
     }
     

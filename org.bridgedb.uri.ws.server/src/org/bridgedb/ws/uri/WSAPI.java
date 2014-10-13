@@ -415,6 +415,45 @@ public class WSAPI extends WSUriInterfaceService {
             sb.append("<li>Only one format can be specified.</li>");
             sb.append("</ul>\n");
          sb.append("</ul>\n");
+        sb.append("<dt><a name=\"");
+                sb.append(WsUriConstants.INCLUDE_XREF_RESULTS);
+                sb.append("\">");
+                sb.append(WsUriConstants.INCLUDE_XREF_RESULTS);
+                sb.append("</a></dt>");
+            sb.append("<ul>");
+            sb.append("<li>Ask for the results to include Bridgb Xref results.</li>");
+            sb.append("<li>Only effects calls that would not naturally return Xref results</li>");
+            sb.append("<ul>");
+                sb.append("<li>Always considered true for any call with ");
+                    parameterID_CODE(sb);
+                    sb.append(" paramtered set");
+                sb.append("<li>Always considered true for any call with ");
+                    parameterTargetCode(sb);
+                    sb.append(" paramters set");
+            sb.append("</ul>");
+            sb.append("<li>In all other cases defaults to false.</li>");
+            sb.append("</ul>\n");
+        sb.append("<dt><a name=\"");
+                sb.append(WsUriConstants.INCLUDE_URI_RESULTS);
+                sb.append("\">");
+                sb.append(WsUriConstants.INCLUDE_URI_RESULTS);
+                sb.append("</a></dt>");
+            sb.append("<ul>");
+            sb.append("<li>Ask for the results to include URI results.</li>");
+            sb.append("<li>Only effects calls that would not naturally return URI results</li>");
+            sb.append("<ul>");
+                sb.append("<li>Always considered true for any call with ");
+                    parameterUri(sb);
+                    sb.append(" paramter set");
+                sb.append("<li>Always considered true for any call with ");
+                    parameterGraph(sb);
+                    sb.append(" paramters set");
+                sb.append("<li>Always considered true for any call with ");
+                    parameterTargetPattern(sb);
+                    sb.append(" paramters set");
+            sb.append("</ul>");
+            sb.append("<li>In all other cases defaults to false.</li>");
+            sb.append("</ul>\n");
    }
 
    protected final void introduce_IDMapper(StringBuilder sb, boolean freeSearchSupported) {
@@ -901,8 +940,10 @@ public class WSAPI extends WSUriInterfaceService {
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
                 parameterLensUri(sb);
+                parameterIncludeXrefResults(sb);
+                parameterIncludeUriResults(sb);
                 parameterGraph(sb);
-                parameterTargetPatternX(sb);
+                parameterTargetPattern(sb);
                 parameterTargetCode(sb);
                 sb.append("</ul>");
         mapExamplesXrefbased(sb, contextPath, WsUriConstants.MAP, sourceXref1, tragetSysCode1, sourceXref2);
@@ -937,7 +978,7 @@ public class WSAPI extends WSUriInterfaceService {
             sb.append("<li>Optional arguments</li><ul>");
                 parameterLensUri(sb);
                 parameterGraph(sb);
-                parameterTargetPatternX(sb);
+                parameterTargetPattern(sb);
                 sb.append("</ul>");
             mapExamplesUriBased(sb, contextPath, WsUriConstants.MAP_URI, sourceUri1, sourceUri2, targetUriSpace2);
             sb.append("</ul>\n");
@@ -1518,7 +1559,23 @@ public class WSAPI extends WSUriInterfaceService {
         sb.append("</a></li> ");
     }
 
-    private void parameterTargetPatternX(StringBuilder sb){
+    private void parameterIncludeXrefResults(StringBuilder sb){
+        sb.append("<li><a href=\"#");
+        sb.append(WsUriConstants.INCLUDE_XREF_RESULTS);
+        sb.append("\">");
+        sb.append(WsUriConstants.INCLUDE_XREF_RESULTS);
+        sb.append("</a></li> ");
+    }
+
+    private void parameterIncludeUriResults(StringBuilder sb){
+        sb.append("<li><a href=\"#");
+        sb.append(WsUriConstants.INCLUDE_URI_RESULTS);
+        sb.append("\">");
+        sb.append(WsUriConstants.INCLUDE_URI_RESULTS);
+        sb.append("</a></li> ");
+    }
+
+    private void parameterTargetPattern(StringBuilder sb){
         sb.append("<li><a href=\"#");
         sb.append(WsUriConstants.TARGET_URI_PATTERN);
         sb.append("\">");
@@ -1587,8 +1644,6 @@ public class WSAPI extends WSUriInterfaceService {
         sb.append("</a> ");
     }
 
-
-    
     private void mapExamplesXrefbased(StringBuilder sb, String contextPath, String methodName, Xref sourceXref1, String tragetSysCode1, Xref sourceXref2) 
             throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<li>Example: <a href=\"");
@@ -1741,7 +1796,6 @@ public class WSAPI extends WSUriInterfaceService {
         sb.append(FIRST_URI_PARAMETER);
         sb.append(sourceUri1);
         addDefaultLens(sb);
-        sb.append(">");
         sb.append("</a></li>");    
     }           
 

@@ -43,8 +43,9 @@ public interface WSUriInterface extends WSCoreInterface{
      * @return A MappingsBean wrapped in a Response
      * @throws BridgeDBException
      */
-    public Response map(String id, String scrCode, String uri, String lensUri, List<String> targetCodes, 
-            String graph, List<String> targetUriPattern) throws BridgeDBException;
+    public Response map(String id, String scrCode, String uri, String lensUri, 
+            Boolean includeXrefResults, Boolean includeUriResults,
+            List<String> targetCodes, String graph, List<String> targetUriPattern) throws BridgeDBException;
 
     /**
      *

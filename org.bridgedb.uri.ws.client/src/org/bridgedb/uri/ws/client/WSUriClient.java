@@ -62,8 +62,9 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
     
     @Override
-    public Response map(String id, String scrCode, String uri, String lensUri, List<String> targetCodes, 
-        String graph, List<String> targetUriPattern) throws BridgeDBException {
+    public Response map(String id, String scrCode, String uri, String lensUri, 
+            Boolean includeXrefResults, Boolean includeUriResults,
+            List<String> targetCodes, String graph, List<String> targetUriPattern) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         if (id != null){
             params.add(WsConstants.ID, id);
@@ -76,6 +77,12 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
         }
         if (lensUri != null){
             params.add(WsUriConstants.LENS_URI, lensUri);        
+        }
+        if (includeXrefResults != null){
+            params.add(WsUriConstants.INCLUDE_XREF_RESULTS, includeXrefResults.toString());        
+        }
+        if (includeUriResults != null){
+            params.add(WsUriConstants.INCLUDE_URI_RESULTS, includeUriResults.toString());        
         }
         if (targetCodes != null){
             for (String target:targetCodes){

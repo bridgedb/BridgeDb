@@ -57,7 +57,16 @@ public class Mapping {
         this.source = source;
         this.targetUri = new HashSet<String>();
         this.target = target;
-        this.mappingSetId = new HashSet<String>();
+        this.mappingSetId = mappingSetIds;
+        this.predicate = predicate;
+    }
+
+    public Mapping (String sourceUri, String predicate, Set<String> mappingSetIds){
+        this.sourceUri = new HashSet<String>();
+        this.sourceUri.add(sourceUri);
+        this.source = null;
+        this.targetUri = new HashSet<String>();
+        this.target = null;
         this.mappingSetId = mappingSetIds;
         this.predicate = predicate;
     }
@@ -65,8 +74,7 @@ public class Mapping {
     /**
      * This is the constructor for a mapping to self.
      * 
-     * @param id
-     * @param sysCode 
+     * @param xref
      */
     public Mapping (Xref xref){
         this.sourceUri = new HashSet<String>();
@@ -77,6 +85,16 @@ public class Mapping {
         this.predicate = null;
     }
 
+    public Mapping (String sourceUri){
+        this.sourceUri = new HashSet<String>();
+        this.sourceUri.add(sourceUri);
+        this.source = null;
+        this.targetUri = new HashSet<String>();
+        this.target = null;
+        this.mappingSetId = null;
+        this.predicate = null;
+    }
+    
     private boolean mapToSelf(){
         return source == target;
     }

@@ -75,7 +75,6 @@ public class SQLUriMapperTest extends UriListenerTest{
     public void testBugDrugbank() throws Exception {
         report("BugDrugbank");
         RegexUriPattern pattern = sqlUriMapper.toUriPattern("http://drugbank.ca/drugs/DB01269");
-        System.out.println(pattern);
         assertNotNull(pattern);
     }
     

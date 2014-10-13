@@ -55,17 +55,23 @@ public class MappingBean {
     public static MappingBean asBean(Mapping mapping){
         MappingBean bean = new MappingBean();
         bean.setSourceUri(mapping.getSourceUri());
-        bean.setSource(new XrefBean(mapping.getSource()));
+        bean.setSource(XrefBean.asBean(mapping.getSource()));
         bean.setTargetUri(mapping.getTargetUri());
-        bean.setTarget(new XrefBean(mapping.getTarget()));
+        bean.setTarget(XrefBean.asBean(mapping.getTarget()));
         bean.setMappingSetId(mapping.getMappingSetId());
         bean.setPredicate(mapping.getPredicate());
         return bean;
     }
 
     public static Mapping asMapping (MappingBean bean){
-        Mapping result = new Mapping (bean.getSource().asXref(), bean.getPredicate(),
+        Mapping result;
+        if (bean.source == null){
+            String sourceUri = bean.getSourceUri().iterator().next();
+            result = new Mapping (sourceUri, bean.getPredicate(), bean.getMappingSetId());
+        } else {
+            result = new Mapping (bean.getSource().asXref(), bean.getPredicate(),
                 bean.getTarget().asXref(), bean.getMappingSetId());
+        }
         result.setSourceUri(bean.getSourceUri());
         result.setTargetUri(bean.getTargetUri());
         return result;

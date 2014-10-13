@@ -220,7 +220,7 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
         Xref sourceXref = map3xref2;
         String lensUri = Lens.TEST_LENS_NAME;
         DataSource[] tgtDataSources = null;
-        Set<Mapping> results = uriMapper.mapFull(sourceXref, lensUri, DataSource2, DataSource3);
+        Set<Mapping> results = uriMapper.mapFull(sourceXref, lensUri, true, DataSource2, DataSource3);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         for (Mapping mapping:results){
@@ -263,7 +263,7 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
         Xref sourceXref = map3xref2;
         String lensUri = Lens.TEST_LENS_NAME;
         DataSource tgtDataSource = DataSource3;
-        Set<Mapping> results = uriMapper.mapFull(sourceXref, lensUri, tgtDataSource);
+        Set<Mapping> results = uriMapper.mapFull(sourceXref, lensUri, true, tgtDataSource);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
@@ -307,7 +307,7 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
         report("MapFull_sourceXref_lensUri_tgtDataSources");
         Xref sourceXref = map3xref2;
         String lensUri = Lens.TEST_LENS_NAME;
-        Set<Mapping> results = uriMapper.mapFull(sourceXref, lensUri);
+        Set<Mapping> results = uriMapper.mapFull(sourceXref, lensUri, true);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
@@ -530,7 +530,9 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
         String lensUri = Lens.TEST_LENS_NAME;
-        Set<Mapping> results = uriMapper.mapFull(sourceUri, lensUri);
+        //To set includeXrefUri we have to use the call which would included graph 
+        //therefor the extra null;
+        Set<Mapping> results = uriMapper.mapFull(sourceUri, lensUri, true, null);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         for (Mapping mapping:results){
@@ -575,7 +577,7 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
         String lensUri = Lens.TEST_LENS_NAME;
-        Set<Mapping> results = uriMapper.mapFull(sourceUri, lensUri, NULL_GRAPH, stringPattern3);
+        Set<Mapping> results = uriMapper.mapFull(sourceUri, lensUri, true, NULL_GRAPH, stringPattern3);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         for (Mapping mapping:results){
@@ -621,7 +623,7 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
         Xref sourceXref = map3xref2;
         String lensUri = Lens.TEST_LENS_NAME;
         UriPattern[] tgtUriPatterns = null;
-        Set<Mapping> results = uriMapper.mapFull(sourceUri, lensUri, NULL_GRAPH, stringPattern2, stringPattern3);
+        Set<Mapping> results = uriMapper.mapFull(sourceUri, lensUri, true, NULL_GRAPH, stringPattern2, stringPattern3);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         for (Mapping mapping:results){

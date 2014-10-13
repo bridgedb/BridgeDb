@@ -32,8 +32,13 @@ public class XrefBean {
         id = null;
         dataSource = null;
     }
-        
-    public XrefBean (Xref xref){
+      
+    /**
+     * Private Constructor so that static asBean method can handle null Xrefs.
+     * 
+     * @param xref 
+     */
+    private XrefBean (Xref xref){
         id = xref.getId();
         dataSource = new DataSourceBean(xref.getDataSource());
     }
@@ -43,6 +48,14 @@ public class XrefBean {
         this.dataSource = DataSourceBean.asBean(scrCode);
     }
 
+    public static XrefBean asBean(Xref xref){
+        if (xref != null){
+            return new XrefBean(xref);
+        } else {
+            return null;
+        }
+    }
+    
     public String getId() {
         return id;
     }
