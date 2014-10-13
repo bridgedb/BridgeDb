@@ -39,12 +39,13 @@ public class MappingBean {
  
     private XrefBean source;
     private XrefBean target;
-    
+
     // Singleton names look better in the xml Bean 
     private Set<String> sourceUri;
     private Set<String> targetUri;
     private Set<String> mappingSetId;
     private String predicate;
+    private String lens;
     
     /**
      * Default constructor for webService
@@ -60,6 +61,7 @@ public class MappingBean {
         bean.setTarget(XrefBean.asBean(mapping.getTarget()));
         bean.setMappingSetId(mapping.getMappingSetId());
         bean.setPredicate(mapping.getPredicate());
+        bean.setLens(mapping.getLens());
         return bean;
     }
 
@@ -67,10 +69,11 @@ public class MappingBean {
         Mapping result;
         if (bean.source == null){
             String sourceUri = bean.getSourceUri().iterator().next();
-            result = new Mapping (sourceUri, bean.getPredicate(), bean.getMappingSetId());
+            result = new Mapping (sourceUri, bean.getPredicate(), 
+                    bean.getMappingSetId(), bean.getLens());
         } else {
             result = new Mapping (bean.getSource().asXref(), bean.getPredicate(),
-                bean.getTarget().asXref(), bean.getMappingSetId());
+                bean.getTarget().asXref(), bean.getMappingSetId(), bean.getLens());
         }
         result.setSourceUri(bean.getSourceUri());
         result.setTargetUri(bean.getTargetUri());
@@ -161,6 +164,18 @@ public class MappingBean {
         this.predicate = predicate;
     }
 
+    /**
+     * @return the lens
+     */
+    public String getLens() {
+        return lens;
+    }
 
+    /**
+     * @param lens the lens to set
+     */
+    public void setLens(String lens) {
+        this.lens = lens;
+    }
  
  }

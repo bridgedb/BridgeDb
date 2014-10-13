@@ -219,7 +219,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     
     private Set<Mapping> mapFull(String id, String scrCode, String uri, String lensUri, 
             boolean includeXrefResults, boolean includeUriResults,
-            List<String> targetCodes, String graph, List<String> targetUriPattern) throws BridgeDBException{        System.out.println("inner mapFull " + includeUriResults);
+            List<String> targetCodes, String graph, List<String> targetUriPattern) throws BridgeDBException{ 
         Response response = uriService.map(id, scrCode, uri, lensUri, 
                 includeXrefResults, includeUriResults, 
                 targetCodes, graph, targetUriPattern);

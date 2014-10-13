@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.Xref;
+import org.bridgedb.pairs.IdSysCodePair;
 
 /**
  * Contains the information held for a particular mapping.
@@ -36,32 +37,28 @@ import org.bridgedb.Xref;
  */
 public class Mapping {
  
-    private Xref source;
-    private Xref target;
+    private final Xref source;
+    private final Xref target;
     
     private Set<String> sourceUri;
     private Set<String> targetUri;
-    private Set<String> mappingSetId;
-    private String predicate;
+    private final Set<String> mappingSetId;
+    private final String predicate;
     
-    /**
-     * Default constructor for webService
-     */
-    public Mapping(){
-        this.sourceUri = new HashSet<String>();
-        this.targetUri = new HashSet<String>();
-    }
+    private final String lens;
     
-    public Mapping (Xref source, String predicate, Xref target, Set<String> mappingSetIds){
+    public Mapping (Xref source, String predicate, Xref target, 
+            Set<String> mappingSetIds, String lens){
         this.sourceUri = new HashSet<String>();
         this.source = source;
         this.targetUri = new HashSet<String>();
         this.target = target;
         this.mappingSetId = mappingSetIds;
         this.predicate = predicate;
+        this.lens = lens;
     }
 
-    public Mapping (String sourceUri, String predicate, Set<String> mappingSetIds){
+    public Mapping (String sourceUri, String predicate, Set<String> mappingSetIds, String lens){
         this.sourceUri = new HashSet<String>();
         this.sourceUri.add(sourceUri);
         this.source = null;
@@ -69,6 +66,7 @@ public class Mapping {
         this.target = null;
         this.mappingSetId = mappingSetIds;
         this.predicate = predicate;
+        this.lens = lens;
     }
 
     /**
@@ -76,16 +74,17 @@ public class Mapping {
      * 
      * @param xref
      */
-    public Mapping (Xref xref){
+    public Mapping (Xref xref, String lens){
         this.sourceUri = new HashSet<String>();
         this.source = xref;
         this.targetUri = new HashSet<String>();
         this.target = xref;
         this.mappingSetId = null;
         this.predicate = null;
+        this.lens = lens;
     }
 
-    public Mapping (String sourceUri){
+    public Mapping (String sourceUri, String lens){
         this.sourceUri = new HashSet<String>();
         this.sourceUri.add(sourceUri);
         this.source = null;
@@ -93,6 +92,7 @@ public class Mapping {
         this.target = null;
         this.mappingSetId = null;
         this.predicate = null;
+        this.lens = lens;
     }
     
     private boolean mapToSelf(){
@@ -199,7 +199,7 @@ public class Mapping {
     public Xref getTarget() {
         return target;
     }
-
+    
     /**
      * @param sourceUris the sourceUris to set
      */
@@ -214,11 +214,15 @@ public class Mapping {
         this.targetUri = targetUris;
     }
 
+    public String getLens() {
+        return lens;
+    }
+
     /**
      * @param predicate the predicate to set
-     */
+     * /
     public void setPredicate(String predicate) {
         this.predicate = predicate;
     }
-
+    /**/
  }

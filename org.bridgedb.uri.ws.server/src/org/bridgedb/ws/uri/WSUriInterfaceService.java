@@ -134,7 +134,6 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         }
         DataSource[] targetDataSources = getDataSources(targetCodes);
         String[] targetPatterns = getUriPatterns(targetUriPatterns);
-        System.out.println("WSUriInterfaceService mapFull");
         if (id == null){
             if (scrCode != null) {
                 throw new BridgeDBException (WsConstants.DATASOURCE_SYSTEM_CODE + " parameter " + scrCode 
@@ -144,7 +143,6 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
                 throw new BridgeDBException ("Please provide either a " + WsConstants.ID + " or a "
                         + WsUriConstants.URI + " parameter.");                 
             }  
-            System.out.println("uri call " + includeXrefResults);
             return mapFull(uri, lensUri, includeXrefResults, targetDataSources, graph, targetPatterns);
         } else {
             if (uri != null){
@@ -156,7 +154,6 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
                         + WsConstants.DATASOURCE_SYSTEM_CODE + " parameter."); 
             }
         }
-            System.out.println("id call " + includeUriResults);
         return mapFull(id, scrCode, lensUri, includeUriResults, targetDataSources, graph, targetPatterns);
     }
 
