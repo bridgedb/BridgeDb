@@ -1079,6 +1079,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         //addSideBarItem(sb, allGraphwiz, "All Mappings Graphviz",  httpServletRequest);
         //addSideBarItem(sb, WsUriConstants.GRAPHVIZ, "Default Mappings Graphviz",  httpServletRequest);
         addSideBarItem(sb, Lens.METHOD_NAME, Lens.METHOD_NAME,  httpServletRequest);
+        addSideBarItem(sb, WsUriConstants.URI_SPACES_PER_GRAPH, "UriSpace(s) per Graph", httpServletRequest);
         addSideBarItem(sb, WsUriConstants.BRIDGEDB_API, "Api", httpServletRequest);
     }
 

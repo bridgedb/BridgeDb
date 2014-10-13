@@ -21,14 +21,18 @@ package org.bridgedb.ws.uri;
 
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -43,14 +47,17 @@ import org.bridgedb.rdf.BridgeDbRdfTools;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.statistics.MappingSetInfo;
+import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.SetMappings;
 import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.lens.LensTools;
 import org.bridgedb.uri.tools.GraphResolver;
+import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriResultsAsRDF;
 import org.bridgedb.uri.ws.WsUriConstants;
+import org.bridgedb.uri.ws.bean.URISpacesInGraphBean;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WsConstants;
 import org.bridgedb.ws.templates.WebTemplates;
@@ -549,6 +556,80 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
     private String getBaseUri(HttpServletRequest httpServletRequest) {
         return httpServletRequest.getScheme() + "://" + httpServletRequest.getServerName() + ":" + httpServletRequest.getServerPort() + httpServletRequest.getRequestURI();
     }
+    
+    @POST
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("/" + WsUriConstants.URI_SPACES_PER_GRAPH) 
+    public List<URISpacesInGraphBean> URISpacesPerGraphAsXML() throws BridgeDBException {
+        Map<String, Set<RegexUriPattern>> mappings = 
+                GraphResolver.getInstance().getAllowedUriPatterns();
+        ArrayList<URISpacesInGraphBean> results = new ArrayList<URISpacesInGraphBean>();
+        for (String graph:mappings.keySet()){
+           Set<String> patternStrings = new HashSet<String>();
+           for (RegexUriPattern pattern:mappings.get(graph)){
+               patternStrings.add(pattern.getUriPattern());
+           }
+           results.add(new URISpacesInGraphBean(graph, patternStrings));
+        }
+        return results;
+    }
+    
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("/" + WsUriConstants.URI_SPACES_PER_GRAPH) 
+    public List<URISpacesInGraphBean> URISpacesPerGraphAsXMLGet() throws BridgeDBException {
+        return URISpacesPerGraphAsXML();
+    }
+
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/" + WsUriConstants.URI_SPACES_PER_GRAPH) 
+    public Response URISpacesPerGraphAsHtml(@Context HttpServletRequest httpServletRequest) 
+            throws BridgeDBException {
+//        Map<String, Set<RegexUriPattern>> mappings = 
+//                GraphResolver.getInstance().getAllowedUriPatterns();  
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("mappings", GraphResolver.getInstance().getAllowedUriPatterns());
+        String graphInfo = WebTemplates.getForm(velocityContext, WebTemplates.GRAPH_INFO_SCRIPT);
+        StringBuilder sb = topAndSide ("\"URI Spaces per Graph", httpServletRequest);
+        sb.append(graphInfo);
+        footerAndEnd(sb);
+
+/*        StringBuilder sb = topAndSide("URI Spaces per Graph", httpServletRequest);
+        sb.append("<h2>URISpaces Per Graph</H2>\n"); 
+        sb.append("<p>");
+        sb.append("<table border=\"1\">");
+        sb.append("<tr>");
+        sb.append("<th>Graph</th>");
+        sb.append("<th>NameSpace</th>");
+        sb.append("</tr>");
+        for (String graph:mappings.keySet()){
+           for (RegexUriPattern pattern:mappings.get(graph)){
+                sb.append("<tr>");
+                sb.append("<td>");
+                sb.append(graph);
+                sb.append("</td>");
+                sb.append("<td>");
+                sb.append(pattern.getUriPattern());
+                sb.append("</td>");
+                sb.append("</tr>");
+             }
+            sb.append("<tr>");
+            sb.append("</tr>");
+        }
+        footerAndEnd(sb);
+*/
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+    
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/" + WsUriConstants.URI_SPACES_PER_GRAPH) 
+    public Response URISpacesPerGraphAsHtmlGet(@Context HttpServletRequest httpServletRequest) 
+            throws BridgeDBException {
+       return URISpacesPerGraphAsHtml(httpServletRequest); 
+    }
+
 }
 
 

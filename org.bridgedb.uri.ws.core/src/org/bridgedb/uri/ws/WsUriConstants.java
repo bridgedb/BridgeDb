@@ -56,5 +56,6 @@ public class WsUriConstants extends WsConstants{
     
     public static final String SOURCE_INFOS = "SourceInfos";
     public static final String SOURCE_TARGET_INFOS = "SourceTargetInfos";
+    public static final String URI_SPACES_PER_GRAPH = "URISpacesPerGraph";
     
 }
