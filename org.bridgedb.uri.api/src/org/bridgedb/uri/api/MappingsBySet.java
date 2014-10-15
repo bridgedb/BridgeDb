@@ -93,6 +93,9 @@ public class MappingsBySet {
         for (UriMapping uriMapping: other.getMappings()){
             addMapping(uriMapping);
         }
+        for (SetMappings setMapping: other.getSetMappings()){
+            addSetMapping(setMapping);
+        }
     }
     
     private SetMappings setMappingById(String id) {
