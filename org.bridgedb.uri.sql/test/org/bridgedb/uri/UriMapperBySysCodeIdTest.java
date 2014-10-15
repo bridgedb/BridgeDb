@@ -30,8 +30,10 @@ public abstract class UriMapperBySysCodeIdTest extends UriListenerTest{
         report("MapUri_sourceUri_lensId_tgtUriPatterns");
         String sourceUri = map3Uri3;
         String lensId = null;
-        UriPattern[] tgtUriPatterns = null;
-        MappingsBySysCodeId results = uriMapper.mapUriBySysCodeId(sourceUri, lensId, EMPTY_GRAPH, stringPattern2, stringPattern3);
+        Set<String> tgtUriPatterns = new HashSet<String>();
+        tgtUriPatterns.add(stringPattern2);
+        tgtUriPatterns.add(stringPattern3);
+        MappingsBySysCodeId results = uriMapper.mapUriBySysCodeId(sourceUri, lensId, EMPTY_GRAPH, tgtUriPatterns);
 
         Set<String> sysCodes = results.getSysCodes();
         assertThat(sysCodes, not(hasItem(DataSource1.getSystemCode())));
@@ -62,8 +64,9 @@ public abstract class UriMapperBySysCodeIdTest extends UriListenerTest{
         sourceUris.add(map3Uri3);
         sourceUris.add(map1Uri3);
         String lensId = null;
-        UriPattern[] tgtUriPatterns = null;
-        MappingsBySysCodeId results = uriMapper.mapUriBySysCodeId(sourceUris, lensId, EMPTY_GRAPH, stringPattern2);
+        Set<String> tgtUriPatterns = new HashSet<String>();
+        tgtUriPatterns.add(stringPattern2);
+        MappingsBySysCodeId results = uriMapper.mapUriBySysCodeId(sourceUris, lensId, EMPTY_GRAPH, tgtUriPatterns);
 
         Set<String> sysCodes = results.getSysCodes();
         assertThat(sysCodes, not(hasItem(DataSource1.getSystemCode())));

@@ -69,7 +69,7 @@ import org.bridgedb.utils.BridgeDBException;
  * See below of action on nulls and empty arrays.
  * 
  * <p>
- * The parameters UriPattern... tgtUriPatterns and UriPattern tgtUriPattern refer to the target pattern. 
+ * The parameters Set<String> tgtUriPattern refer to the target pattern. 
  * Only Uris with this/these Patterns are returned.
  * See below of action on nulls and empty arrays.
  *
@@ -78,46 +78,57 @@ import org.bridgedb.utils.BridgeDBException;
  * Instead of suppling the UriPatterns the OpenRdf context/graph name is supplied instead.
  * The UriPatterns specified in graph.properties are then used.
  * 
- * <p> Setting the optional array parameters DataSource... tgtDataSources and UriPattern... tgtUriPatterns to null
- *     is the same as calling the method which does not include this parameter.
- *     This will result in all mappings being returned, (depending only on the other parameters)
- * <br>
- * A non null empty array returns an empty set. 
+ * <p> Setting the parameters tgtDataSources or graph and tgtUriPatterns to null
+ *     will result in all mappings being returned, (depending only on the other parameters)
+ *     A empty set (for tgtDataSources or tgtUriPatterns) is also ignored.
+ * 
  * <br>
  * Individual nulls in the array are ignored. 
  * In other words the same result is returned as if the array did not have the null value.
- * A non null array with just nulls returns an empty set.
+ * However, A non null Set with just one or more null returns an empty set.
  * 
  *<p>
  * The parameter includeXrefResults will determine if the mapping result will include Xrefs
- * By Default if the source is a Xref or if the target DataSources are provided 
- *    the result will include Xref information. 
- * However for pure Uri and UriPattern based calls the Xref information is not added. 
+ * If the source is a Xref or if the target DataSources are provided 
+ *    the result will always include Xref information. 
+ * However for pure Uri and UriPattern based calls the Xref information 
+ *    is only added if specifically requested.
+ * If null includeXrefResults will be assumed as false,
  *
- * The Parameter includeUriResults ill determine if the mapping result will include Uris.
- * By Default if the source is an URI or if the target UriPattern are provided 
- *    the result will include URI information. 
- * However for pure Xref target DataSources based calls the URI information is not added. 
+ * <p>
+ * The Parameter includeUriResults will determine if the mapping result will include Uris.
+ * If the source is an URI or if the target UriPatterns or graph are provided 
+ *    the result will always include URI information. 
+ * However for pure Xref target DataSources based calls the URI information 
+ *    is only added if specifically requested. 
+ * If null includeUriResults will be assumed as false,
  *
- * <p> Specifically setting the single parameters DataSource tgtDataSource and UriPattern tgtUriPattern to null
- * In such a way that the method with the single parameter (and not the one without or the ... method is called)
- * results in an empty set being returned.
+ * <p>
+ * The Parameter allRoutes will instruct the mapper to find all routes between A and B
+ * The default behaviour is to stop as soon as a single route to a target has been found,
+ *     ignoring any farther routes (which will normally be of the same length or longer)
+ * However setting allRoutes will cause the mapper to include all routes, 
+ *     this could slow the call down and add extra near duplicate mappings.
+ * If null allRoutes will be assumed as false, even if showVias is set.
+ * 
+ * @param showVias @see Class java docs
+
  */
 public interface UriMapper extends IDMapper{
     
     /**
-	 * Get all cross-references for the given entity, restricting the
-	 * result to contain only references from the given Lens and set of data sources,
-     * and only results which match the given Lens.
-	 * @param sourceXref @see Class java docs. 
+     * Get all cross-references for the given entity, restricting the
+     * result to contain only references from the given Lens and set of data sources,
+     * and only results which match the given Lens. 
+     * @param sourceXref @see Class java docs. 
      * @param lensUri @see Class java docs. 
      * @param tgtDataSources @see Class java docs. 
      *    
-	 * @return A Set containing the cross references, or an empty
-	 * Set when no cross references could be found. This method does not return null.
-	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
-	 */
-	public Set<Xref> mapID(Xref sourceXref, String lensUri, DataSource... tgtDataSources) throws BridgeDBException;
+     * @return A Set containing the cross references, or an empty
+     * Set when no cross references could be found. This method does not return null.
+     * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+     */
+    public Set<Xref> mapID(Xref sourceXref, String lensUri, Collection<DataSource> tgtDataSources) throws BridgeDBException;
 
      /**
 	 * Get all Uris mapped to the given Uri, restricting the
@@ -131,7 +142,7 @@ public interface UriMapper extends IDMapper{
 	 * Set when no cross references could be found. This method does not return null.
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
      */
-    public Set<String> mapUri(String sourceUri, String lensUri, String graph, String... tgtUriPatterns) 
+    public Set<String> mapUri(String sourceUri, String lensUri, String graph, Collection<String> tgtUriPatterns) 
             throws BridgeDBException;
 
     /**
@@ -146,16 +157,16 @@ public interface UriMapper extends IDMapper{
 	 * Set when no cross references could be found. This method does not return null.
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
      */
-    public Set<String> mapUri(Xref sourceXref, String lensUri, String graph, String... tgtUriPatterns) 
+    public Set<String> mapUri(Xref sourceXref, String lensUri, String graph, Collection<String> tgtUriPatterns) 
             throws BridgeDBException;
 
-    public MappingsBySysCodeId mapUriBySysCodeId (String sourceUri, String lensUri, String graph, String... tgtUriPatterns) 
+    public MappingsBySysCodeId mapUriBySysCodeId (String sourceUri, String lensUri, String graph, Collection<String> tgtUriPatterns) 
             throws BridgeDBException;
 
-    public MappingsBySysCodeId mapUriBySysCodeId (Collection<String> sourceUri, String lensUri, String graph, String... tgtUriPatterns) 
+    public MappingsBySysCodeId mapUriBySysCodeId (Collection<String> sourceUri, String lensUri, String graph, Collection<String> tgtUriPatterns) 
             throws BridgeDBException;
 
-    public MappingsBySet mapBySet(Set<String> sourceUris, String lensUri, String graph, String... tgtUriPatterns) 
+    public MappingsBySet mapBySet(Collection<String> sourceUris, String lensUri, String graph, Collection<String> tgtUriPatterns) 
            throws BridgeDBException;
 
     /**
@@ -163,31 +174,18 @@ public interface UriMapper extends IDMapper{
     * 
     * @param sourceXref @see Class java docs. 
     * @param lensUri @see Class java docs. 
-    * @param tgtDataSources @see Class java docs. 
-    *    
-    * @return A Set containing the mappings or an empty et when no cross references could be found. 
-    *    This method does not return null.
-    * @throws IDMapperException if the mapping service is (temporarily) unavailable 
-    */
-    public Set<Mapping> mapFull(Xref sourceXref, String lensUri, 
-            DataSource... tgtDataSources) 
-            throws BridgeDBException;
-
-    /**
-    * Get the set of mappings based the parameters supplied.
-    * 
-    * @param sourceXref @see Class java docs. 
-    * @param lensUri @see Class java docs. 
     * @param includeUriResults @see Class java docs
+    * @param allRoutes @see Class java docs.
+    * @param showVias @see Class java docs
     * @param tgtDataSources @see Class java docs. 
     *    
     * @return A Set containing the mappings or an empty et when no cross references could be found. 
     *    This method does not return null.
     * @throws IDMapperException if the mapping service is (temporarily) unavailable 
-    */
+    *///Boolean allRoutes, boolean showVias, 
     public Set<Mapping> mapFull(Xref sourceXref, String lensUri, 
-            boolean includeUriResults,
-            DataSource... tgtDataSources) 
+            Boolean includeUriResults, 
+            Collection<DataSource> tgtDataSources) 
             throws BridgeDBException;
 
     /**
@@ -195,6 +193,8 @@ public interface UriMapper extends IDMapper{
      * 
      * @param sourceXref @see Class java docs. 
      * @param lensUri @see Class java docs. 
+     * @param allRoutes @see Class java docs.
+     * @param showVias @see Class java docs
      * @param graph  @see Class java docs. 
      * @param tgtUriPatterns @see Class java docs. 
      *    
@@ -203,7 +203,8 @@ public interface UriMapper extends IDMapper{
      * @throws IDMapperException if the mapping service is (temporarily) unavailable 
      */
     public Set<Mapping> mapFull(Xref sourceXref, String lensUri,
-            String graph, String... tgtUriPatterns) 
+            //Boolean allRoutes, Boolean showVias, 
+            String graph, Collection<String> tgtUriPatterns) 
             throws BridgeDBException;
 
     /**
@@ -211,28 +212,17 @@ public interface UriMapper extends IDMapper{
      * 
      * @param sourceUri @see Class java docs. 
      * @param lensUri @see Class java docs. 
+     * @param allRoutes @see Class java docs.
+     * @param showVias @see Class java docs
      * @param tgtDataSources @see Class java docs. 
      *    
      * @return A Set containing the mappings or an empty et when no cross references could be found. 
      *    This method does not return null.
      * @throws IDMapperException if the mapping service is (temporarily) unavailable 
      */
-    public Set<Mapping> mapFull(String sourceUri, String lensUri, DataSource... tgtDataSources) 
-            throws BridgeDBException;
-
-    /**
-     * Get the set of mappings based the parameters supplied.
-     * 
-     * @param sourceUri @see Class java docs. 
-     * @param lensUri @see Class java docs. 
-     * @param graph  @see Class java docs. 
-     * @param tgtUriPatterns @see Class java docs. 
-     *    
-     * @return A Set containing the mappings or an empty et when no cross references could be found. 
-     *    This method does not return null.
-     * @throws IDMapperException if the mapping service is (temporarily) unavailable 
-     */
-    public Set<Mapping> mapFull(String sourceUri, String lensUri, String graph, String... tgtUriPatterns)
+    public Set<Mapping> mapFull(String sourceUri, String lensUri, 
+            //Boolean allRoutes, Boolean showVias, 
+            Collection<DataSource> tgtDataSources) 
             throws BridgeDBException;
 
     /**
@@ -241,16 +231,18 @@ public interface UriMapper extends IDMapper{
      * @param sourceUri @see Class java docs. 
      * @param lensUri @see Class java docs. 
      * @param includeXrefResults @see Class java docs.
+     * @param allRoutes @see Class java docs.
+     * @param showVias @see Class java docs
      * @param graph  @see Class java docs. 
      * @param tgtUriPatterns @see Class java docs. 
      *    
      * @return A Set containing the mappings or an empty et when no cross references could be found. 
      *    This method does not return null.
      * @throws IDMapperException if the mapping service is (temporarily) unavailable 
-     */
+     *///Boolean allRoutes, Boolean showVias,
     public Set<Mapping> mapFull(String sourceUri, String lensUri, 
-            boolean includeXrefResults, 
-            String graph, String... tgtUriPatterns)
+            Boolean includeXrefResults,  
+            String graph, Collection<String> tgtUriPatterns)
             throws BridgeDBException;
 
     /**

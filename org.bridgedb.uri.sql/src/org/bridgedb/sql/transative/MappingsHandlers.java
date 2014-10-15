@@ -40,7 +40,6 @@ public class MappingsHandlers {
     private final PredicateMaker predicateMaker;
     private final JustificationMaker justificationMaker;
     
-    
     public MappingsHandlers(IdSysCodePair sourceRef, PredicateMaker predicateMaker, 
             JustificationMaker justificationMaker){
         this.sourceRef = sourceRef;

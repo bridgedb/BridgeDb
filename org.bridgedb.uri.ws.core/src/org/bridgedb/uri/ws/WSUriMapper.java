@@ -37,7 +37,6 @@ import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.MappingsBySysCodeId;
 import org.bridgedb.uri.api.UriMapper;
-import org.bridgedb.uri.api.UriMapping;
 import org.bridgedb.uri.ws.bean.*;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WSCoreMapper;
@@ -57,10 +56,10 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     private static final ArrayList<String> NO_SYSCODES = null;
     private static final ArrayList<String> NO_URI_PATTERNS = null;
     
-    private static final boolean INCLUDE_XREF_RESULTS = true;
-    private static final boolean EXCLUDE_XREF_RESULTS = false;
-    private static final boolean INCLUDE_URI_RESULTS = true;
-    private static final boolean EXCLUDE_URI_RESULTS = false;
+    private static final Boolean INCLUDE_XREF_RESULTS = true;
+    private static final Boolean EXCLUDE_XREF_RESULTS = false;
+    private static final Boolean INCLUDE_URI_RESULTS = true;
+    private static final Boolean EXCLUDE_URI_RESULTS = false;
    
     public WSUriMapper(WSUriInterface uriService){
         super(uriService);
@@ -68,8 +67,8 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     }
 
     @Override
-    public Set<Xref> mapID(Xref sourceXref, String lensUri, DataSource... tgtDataSources) throws BridgeDBException {
-        Collection<Mapping> beans = mapFull(sourceXref, lensUri, tgtDataSources);
+    public Set<Xref> mapID(Xref sourceXref, String lensUri, Collection<DataSource> tgtDataSources) throws BridgeDBException {
+        Set<Mapping> beans = mapFull(sourceXref, lensUri, INCLUDE_XREF_RESULTS, tgtDataSources);
         return extractXref(beans);
     }
     
@@ -83,15 +82,10 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     }
     
     @Override
-    public Set<String> mapUri(String sourceUri, String lensUri, String graph, String... tgtUriPatterns) throws BridgeDBException {
+    public Set<String> mapUri(String sourceUri, String lensUri, String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
         List<String> uris = new ArrayList<String>();
         uris.add(sourceUri);
-        List<String> targetUriPatterns  = new ArrayList<String>();
-        if (tgtUriPatterns != null){
-            for (String tgtUriPattern:tgtUriPatterns){
-                targetUriPatterns.add(tgtUriPattern);
-            }
-        }
+        List<String> targetUriPatterns = toList(tgtUriPatterns);
         Response response = uriService.mapUri(uris, lensUri, graph, targetUriPatterns);
         if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()){
             return new HashSet<String> ();
@@ -110,13 +104,13 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     }
     
     @Override
-    public MappingsBySysCodeId mapUriBySysCodeId(String sourceUri, String lensUri, String graph, String... tgtUriPatterns) throws BridgeDBException {
-        Collection<Mapping> beans = mapFull(sourceUri, lensUri, graph, tgtUriPatterns);
+    public MappingsBySysCodeId mapUriBySysCodeId(String sourceUri, String lensUri, String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
+        Set<Mapping> beans = mapFull(sourceUri, lensUri, INCLUDE_XREF_RESULTS, graph, tgtUriPatterns);
         return extractMappingsBySysCodeId(beans);
     }
 
     @Override
-    public MappingsBySysCodeId mapUriBySysCodeId(Collection<String> sourceUris, String lensUri, String graph, String... tgtUriPatterns) throws BridgeDBException {
+    public MappingsBySysCodeId mapUriBySysCodeId(Collection<String> sourceUris, String lensUri, String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
         if (sourceUris.size() == 1){
             return mapUriBySysCodeId(sourceUris.iterator().next(), lensUri, graph, tgtUriPatterns);
         } 
@@ -140,20 +134,15 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     }
 
     @Override
-    public Set<String> mapUri(Xref sourceXref, String lensUri, String graph, String... tgtUriPatterns) throws BridgeDBException {
-        Collection<Mapping> beans = mapFull(sourceXref, lensUri, graph, tgtUriPatterns);
+    public Set<String> mapUri(Xref sourceXref, String lensUri, String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
+        Set<Mapping> beans = mapFull(sourceXref, lensUri, graph, tgtUriPatterns);
         return extractUris(beans);
     }
 
     @Override
-    public MappingsBySet mapBySet(Set<String> sourceUris, String lensUri, String graph, String... tgtUriPatterns) throws BridgeDBException {
+    public MappingsBySet mapBySet(Collection<String> sourceUris, String lensUri, String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
         ArrayList<String> soureUrisList = new ArrayList(sourceUris);
-        ArrayList<String> tgtUriPatternStrings = new ArrayList<String>();
-        for (String tgtUriPattern:tgtUriPatterns){
-            if (tgtUriPattern != null){
-                tgtUriPatternStrings.add(tgtUriPattern);
-            }
-        }
+        List<String> tgtUriPatternStrings = toList(tgtUriPatterns);
         Response response =  uriService.mapBySet(soureUrisList, lensUri, graph,  tgtUriPatternStrings);
         if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()){
             return new MappingsBySet(null);
@@ -163,26 +152,11 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     }
 
     @Override
-    public Set<Mapping> mapFull(Xref sourceXref, String lensUri, DataSource... tgtDataSources) 
-            throws BridgeDBException {
-        return mapFull(sourceXref, lensUri, false, tgtDataSources);
-    }
- 
-    @Override
-    public Set<Mapping> mapFull(Xref sourceXref, String lensUri, boolean includeUriResults, DataSource... tgtDataSources) throws BridgeDBException {
+    public Set<Mapping> mapFull(Xref sourceXref, String lensUri, Boolean includeUriResults, Collection<DataSource> tgtDataSources) throws BridgeDBException {
         if (sourceXref == null){
             return new HashSet<Mapping>();
         }
-        ArrayList<String> tgtSysCodes = new ArrayList<String>();
-        if (tgtDataSources != null){
-            for (int i = 0 ; i < tgtDataSources.length; i++){
-                if (tgtDataSources[i] != null){
-                    tgtSysCodes.add(tgtDataSources[i].getSystemCode());
-                } else {
-                    tgtSysCodes.add(null);
-                }
-            }
-        }
+        List<String> tgtSysCodes = this.toSysCodeList(tgtDataSources);
         return mapFull(sourceXref.getId(), sourceXref.getDataSource().getSystemCode(), 
                 NO_URI, lensUri, 
                 INCLUDE_XREF_RESULTS, includeUriResults,
@@ -190,36 +164,22 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     }
  
     @Override
-    public Set<Mapping> mapFull(Xref sourceXref, String lensUri, String graph, String... tgtUriPatterns)
-            throws BridgeDBException {
+    public Set<Mapping> mapFull(Xref sourceXref, String lensUri, String graph, 
+            Collection<String> tgtUriPatterns) throws BridgeDBException {
         if (sourceXref == null){
             return new HashSet<Mapping>();
         }
-        if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
-            return mapFull(sourceXref.getId(), sourceXref.getDataSource().getSystemCode(), 
-                    NO_URI, lensUri, 
-                    INCLUDE_XREF_RESULTS, INCLUDE_URI_RESULTS,
-                    NO_SYSCODES, graph, NO_URI_PATTERNS);
-        }
-        ArrayList<String> tgtUriPatternStrings = new ArrayList<String>();
-        for (String tgtUriPattern:tgtUriPatterns){
-            if (tgtUriPattern != null){
-                tgtUriPatternStrings.add(tgtUriPattern);
-            }
-        }
-        if (tgtUriPatternStrings.isEmpty()){
-            return new HashSet<Mapping>();
-        }
+        List<String> tgtUriPatternStrings = toList(tgtUriPatterns);
         return mapFull(sourceXref.getId(), sourceXref.getDataSource().getSystemCode(), 
                 NO_URI, lensUri, 
                 INCLUDE_XREF_RESULTS, INCLUDE_URI_RESULTS,
                 NO_SYSCODES, graph, tgtUriPatternStrings);
     }
- 
-    
+     
     private Set<Mapping> mapFull(String id, String scrCode, String uri, String lensUri, 
-            boolean includeXrefResults, boolean includeUriResults,
+            Boolean includeXrefResults, Boolean includeUriResults,
             List<String> targetCodes, String graph, List<String> targetUriPattern) throws BridgeDBException{ 
+        System.out.println("includeUriResults=" + includeUriResults);
         Response response = uriService.map(id, scrCode, uri, lensUri, 
                 includeXrefResults, includeUriResults, 
                 targetCodes, graph, targetUriPattern);
@@ -243,49 +203,23 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     }
     
     @Override
-    public Set<Mapping> mapFull(String sourceUri, String lensUri, DataSource... tgtDataSources) throws BridgeDBException {
+    public Set<Mapping> mapFull(String sourceUri, String lensUri, Collection<DataSource> tgtDataSources) throws BridgeDBException {
         if (sourceUri == null){
             return new HashSet<Mapping>();
         }
-        ArrayList<String> tgtSysCodes = new ArrayList<String>();
-        if (tgtDataSources != null){
-            for (int i = 0 ; i < tgtDataSources.length; i++){
-                if (tgtDataSources[i] != null){
-                    tgtSysCodes.add(tgtDataSources[i].getSystemCode());
-                } else {
-                    tgtSysCodes.add(null);
-                }
-            }
-        }
+        List<String> tgtSysCodes = toSysCodeList(tgtDataSources);
         return mapFull(NO_ID, NO_SYSCODE, sourceUri, lensUri, 
                 INCLUDE_XREF_RESULTS, INCLUDE_URI_RESULTS,
                 tgtSysCodes, NULL_GRAPH, NO_URI_PATTERNS);
     }
 
     @Override
-    public Set<Mapping> mapFull(String sourceUri, String lensUri, String graph, String... tgtUriPatterns) throws BridgeDBException {
-        return  mapFull(sourceUri, lensUri, EXCLUDE_XREF_RESULTS, graph, tgtUriPatterns);
-    }
-    
-    @Override
-    public Set<Mapping> mapFull(String sourceUri, String lensUri, boolean includeXrefResults, String graph, String... tgtUriPatterns) throws BridgeDBException {
+    public Set<Mapping> mapFull(String sourceUri, String lensUri, Boolean includeXrefResults, 
+            String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
         if (sourceUri == null){
             return new HashSet<Mapping>();
         }
-        if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
-            return mapFull(NO_ID, NO_SYSCODE, sourceUri, lensUri, 
-                    includeXrefResults, INCLUDE_URI_RESULTS,
-                    NO_SYSCODES, graph, NO_URI_PATTERNS);
-        }
-        ArrayList<String> tgtUriPatternStrings = new ArrayList<String>();
-        for (String tgtUriPattern:tgtUriPatterns){
-            if (tgtUriPattern != null){
-                tgtUriPatternStrings.add(tgtUriPattern);
-            }
-        }
-        if (tgtUriPatternStrings.isEmpty()){
-            return new HashSet<Mapping>();
-        }
+        List<String> tgtUriPatternStrings = toList(tgtUriPatterns);
         return mapFull(NO_ID, NO_SYSCODE, sourceUri, lensUri, 
                 includeXrefResults, INCLUDE_URI_RESULTS,
                 NO_SYSCODES, graph, tgtUriPatternStrings);
@@ -420,6 +354,28 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     @Override
     public Set<String> getJustifications() throws BridgeDBException {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    private List<String> toList(Collection<String> collectionOrNull){
+        if (collectionOrNull == null){
+            return new ArrayList<String>();
+        } else {
+            return new ArrayList<String>(collectionOrNull);            
+        }
+    }
+ 
+    private List<String> toSysCodeList(Collection<DataSource> collectionOrNull){
+        ArrayList<String> tgtSysCodes = new ArrayList<String>();
+        if (collectionOrNull != null){
+            for (DataSource tgtDataSource:collectionOrNull){
+                if (tgtDataSource != null){
+                    tgtSysCodes.add(tgtDataSource.getSystemCode());
+                } else {
+                    tgtSysCodes.add(null);
+                }
+            }
+        }
+        return tgtSysCodes;
     }
 
 }
