@@ -33,16 +33,17 @@ import org.bridgedb.utils.BridgeDBException;
  *
  * @author christian
  */
-public class TransitiveMapping extends Mapping implements IDSysCodePairMapping {
+public class TransitiveMapping extends IDSysCodePairMapping {
     private final List<DirectMapping> via;
     private static final String NEW_LINE = System.getProperty("line.separator");
     
     private final Set<String> sysCodesToCheck;
     private boolean includesMappingToSelf = false;
-    
+
     public TransitiveMapping (IDSysCodePairMapping previous, DirectMapping newMapping, String predicate, String justification) throws BridgeDBException{
         super(previous.getIdSysCodePairSource(), newMapping.getIdSysCodePairTarget(), 
-                predicate, justification, mergeIds(previous, newMapping), newMapping.getLens());
+                predicate, justification, mergeIds(previous, newMapping), 
+                BridgeDBConstants.TRANSITIVE, BridgeDBConstants.TRANSITIVE, newMapping.getLens());
         //Never expected but just in case
         if (!previous.getIdSysCodePairTarget().equals(newMapping.getIdSysCodePairSource())){
             throw new BridgeDBException ("Unexpected broken mapping chain");
@@ -52,7 +53,7 @@ public class TransitiveMapping extends Mapping implements IDSysCodePairMapping {
     }
     
     private static Set<String> mergeIds(IDSysCodePairMapping previous, DirectMapping newMapping){
-        Set<String> results = new HashSet<String>(previous.getIds());
+        Set<String> results = new HashSet<String>(previous.getMappingSetId());
         results.add(newMapping.getId());
         return results;
     } 
@@ -132,22 +133,12 @@ public class TransitiveMapping extends Mapping implements IDSysCodePairMapping {
     }
 
     @Override
-    public Set<String> getIds() {
+    public Set<String> getMappingSetId() {
         HashSet<String> ids = new HashSet<String>();
          for (DirectMapping aVia:via){
             ids.add(aVia.getId());
         }
         return ids;
-    }
-
-    @Override
-    public String getMappingSource() {
-        return BridgeDBConstants.TRANSITIVE;
-    }
-
-    @Override
-    public String getMappingResource() {
-        return BridgeDBConstants.TRANSITIVE;
     }
 
 }

@@ -165,15 +165,6 @@ public class RegexUriPattern {
         return results;
     }
 
-    public static Set<RegexUriPattern> byPatternOrEmpty(String pattern) throws BridgeDBException {
-        //todo regex in pattern
-        UriPattern uriPattern = UriPattern.byPattern(pattern);
-        if (uriPattern == null){
-            return new HashSet<RegexUriPattern>();
-        }
-        return byPattern(uriPattern);
-    }
-
     public static Set<RegexUriPattern> existingByPattern(String pattern) throws BridgeDBException {
         //todo regex in pattern
         UriPattern uriPattern = UriPattern.existingByPattern(pattern);

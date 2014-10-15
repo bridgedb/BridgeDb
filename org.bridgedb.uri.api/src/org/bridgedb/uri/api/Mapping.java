@@ -43,7 +43,10 @@ public class Mapping {
     private final String lens;
     private final Set<String> mappingSetId;
     private final String predicate;
-            
+    private final String mappingSource;
+    private final String mappingResource;
+        
+    
     //These are set later if required        
     private Xref source = null;
     private Xref target = null;
@@ -51,7 +54,8 @@ public class Mapping {
     private Set<String> targetUri = new HashSet<String>();
     
     public Mapping(IdSysCodePair idSysCodePairSource, IdSysCodePair idSysCodePairTarget, 
-            String predicate, String justification, int mappingSetId, String lens){
+            String predicate, String justification, int mappingSetId, 
+            String mappingSource, String mappingResource, String lens){
         this.idSysCodePairSource = idSysCodePairSource;
         this.idSysCodePairTarget = idSysCodePairTarget;
         this.predicate = predicate;
@@ -59,22 +63,39 @@ public class Mapping {
         this.mappingSetId = new HashSet<String>();
         this.mappingSetId.add(""+mappingSetId);
         this.lens = lens;     
+        this.mappingSource = mappingSource;
+        this.mappingResource = mappingResource;
     }
     
     public Mapping(IdSysCodePair idSysCodePairSource, IdSysCodePair idSysCodePairTarget, 
-            String predicate, String justification, Set<String> mappingSetIds, String lens){
+            String predicate, String justification, Set<String> mappingSetIds, 
+            String mappingSource, String mappingResource, String lens){
         this.idSysCodePairSource = idSysCodePairSource;
         this.idSysCodePairTarget = idSysCodePairTarget;
         this.predicate = predicate;
         this.justification = justification;
         this.mappingSetId = mappingSetIds;
         this.lens = lens;
+        this.mappingSource = mappingSource;
+        this.mappingResource = mappingResource;
     }
     
-    public Mapping (Xref source, String predicate, Xref target, 
+    public Mapping(IdSysCodePair pair){
+        this.idSysCodePairSource = pair;
+        this.idSysCodePairTarget = pair;
+        this.predicate = null;
+        this.justification = null;
+        this.mappingSetId = new HashSet<String>();
+        this.lens = null;     
+        this.mappingSource = null;
+        this.mappingResource = null;
+    }
+
+    public Mapping (IdSysCodePair idSysCodePairSource, Xref source, String predicate,
+             IdSysCodePair idSysCodePairTarget, Xref target, 
             Set<String> mappingSetIds, String lens){
-        this.idSysCodePairSource = null;
-        this.idSysCodePairTarget = null;
+        this.idSysCodePairSource = idSysCodePairSource;
+        this.idSysCodePairTarget = idSysCodePairTarget;
         this.justification = null;
         this.sourceUri = new HashSet<String>();
         this.source = source;
@@ -83,6 +104,8 @@ public class Mapping {
         this.mappingSetId = mappingSetIds;
         this.predicate = predicate;
         this.lens = lens;
+        this.mappingSource = null;
+        this.mappingResource = null;
     }
 
     public Mapping (String sourceUri, String predicate, Set<String> mappingSetIds, String lens){
@@ -97,6 +120,8 @@ public class Mapping {
         this.mappingSetId = mappingSetIds;
         this.predicate = predicate;
         this.lens = lens;
+        this.mappingSource = null;
+        this.mappingResource = null;
     }
 
     /**
@@ -115,26 +140,27 @@ public class Mapping {
         this.mappingSetId = null;
         this.predicate = null;
         this.lens = lens;
+        this.mappingSource = null;
+        this.mappingResource = null;
     }
 
-    public Mapping (String sourceUri, String lens){
-        this.idSysCodePairSource = null;
-        this.idSysCodePairTarget = null;
+    public Mapping (String uri, IdSysCodePair pair){
+        this.idSysCodePairSource = pair;
+        this.idSysCodePairTarget = pair;
         this.justification = null;
         this.sourceUri = new HashSet<String>();
-        this.sourceUri.add(sourceUri);
+        this.sourceUri.add(uri);
         this.source = null;
         this.targetUri = new HashSet<String>();
+        this.targetUri.add(uri);
         this.target = null;
         this.mappingSetId = null;
         this.predicate = null;
-        this.lens = lens;
+        this.lens = null;
+        this.mappingSource = null;
+        this.mappingResource = null;
     }
     
-    private boolean mapToSelf(){
-        return source == target;
-    }
-
     /**
      * @return the sourceUris
      */
@@ -144,9 +170,6 @@ public class Mapping {
  
     public void addSourceUri(String sourceUri){
         getSourceUri().add(sourceUri);
-        if (mapToSelf()){
-            getTargetUri().add(sourceUri);
-        }
     }
     
     public void addSourceUris(Collection<String> sourceUris){
@@ -174,9 +197,11 @@ public class Mapping {
             output.append("\n\tSourceUri: ");
             output.append(sourceUri);
         }
+        output.append("\n\tSource: ");
         if (getSource() != null){
-            output.append("\n\tSource: ");
             output.append(getSource());
+        } else {
+            output.append(this.idSysCodePairSource);            
         }
         output.append("\n\tPredicate(): ");
         output.append(getPredicate());
@@ -184,12 +209,16 @@ public class Mapping {
             output.append("\n\tTargetUri: ");
             output.append(targetUri);
         }
+        output.append("\n\tTarget: ");
         if (getTarget() != null){
-            output.append("\n\tTarget: ");
             output.append(getTarget()); 
+        } else {
+            output.append(this.idSysCodePairTarget); 
+            
         }
         output.append("\n\tMappingSet(id): ");
         output.append(getMappingSetId());
+        output.append("\n");
         return output.toString();
     }
    
@@ -273,6 +302,34 @@ public class Mapping {
      */
     public String getJustification() {
         return justification;
+    }
+
+    /**
+     * @param source the source to set
+     */
+    public void setSource(Xref source) {
+        this.source = source;
+    }
+
+    /**
+     * @param target the target to set
+     */
+    public void setTarget(Xref target) {
+        this.target = target;
+    }
+
+    /**
+     * @return the mappingSource
+     */
+    public String getMappingSource() {
+        return mappingSource;
+    }
+
+    /**
+     * @return the mappingResource
+     */
+    public String getMappingResource() {
+        return mappingResource;
     }
 
     /**

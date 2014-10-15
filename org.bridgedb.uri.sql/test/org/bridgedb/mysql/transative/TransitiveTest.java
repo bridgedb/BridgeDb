@@ -26,9 +26,9 @@ import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.UriPatternType;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
-import org.bridgedb.sql.transative.IDSysCodePairMapping;
 import org.bridgedb.sql.transative.DirectMapping;
 import static org.bridgedb.uri.UriListenerTest.SYMETRIC;
+import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.lens.LensTools;
 import org.bridgedb.uri.tools.RegexUriPattern;
@@ -439,7 +439,7 @@ public class TransitiveTest {
     public void testTransitiveMappings1A() throws Exception{
         Reporter.println("TransitiveMappings1A");
         IdSysCodePair source = new IdSysCodePair("1", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(3, mappings.size());
     }
 
@@ -447,7 +447,7 @@ public class TransitiveTest {
     public void testTransitiveMappings1C() throws Exception{
         Reporter.println("TransitiveMappings1C");
         IdSysCodePair source = new IdSysCodePair("1", sysCodeC);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(3, mappings.size());
     }
 
@@ -455,7 +455,7 @@ public class TransitiveTest {
     public void testTransitiveMappings2A() throws Exception{
         Reporter.println("TransitiveMappings2A");
         IdSysCodePair source = new IdSysCodePair("2", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(3, mappings.size());
     }
 
@@ -463,7 +463,7 @@ public class TransitiveTest {
     public void testTransitiveMappings2C() throws Exception{
         Reporter.println("TransitiveMappings2C");
         IdSysCodePair source = new IdSysCodePair("2", sysCodeC);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(3, mappings.size());
     }
 
@@ -471,7 +471,7 @@ public class TransitiveTest {
     public void testTransitiveMappings3A() throws Exception{
         Reporter.println("TransitiveMappings3A");
         IdSysCodePair source = new IdSysCodePair("3a", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(3, mappings.size()); //B3, C3, D3
     }
 
@@ -479,7 +479,7 @@ public class TransitiveTest {
     public void testTransitiveMappings3C() throws Exception{
         Reporter.println("TransitiveMappings3C");
         IdSysCodePair source = new IdSysCodePair("3", sysCodeC);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(4, mappings.size()); //A3a, A3b, B3, C3, D3
     }
 
@@ -487,7 +487,7 @@ public class TransitiveTest {
     public void testTransitiveMappings4A() throws Exception{
         Reporter.println("TransitiveMappings4A");
         IdSysCodePair source = new IdSysCodePair("4", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(3, mappings.size()); //B4, C4, D4
     }
 
@@ -495,7 +495,7 @@ public class TransitiveTest {
     public void testTransitiveMappings4C() throws Exception{
         Reporter.println("TransitiveMappings4C");
         IdSysCodePair source = new IdSysCodePair("4", sysCodeC);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(3, mappings.size()); //A4, B4, D4
     }
 
@@ -504,7 +504,7 @@ public class TransitiveTest {
     public void testTransitiveMappings6A() throws Exception{
         Reporter.println("TransitiveMappings6A");
         IdSysCodePair source = new IdSysCodePair("6a", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //B6a, C6
     }
 
@@ -512,7 +512,7 @@ public class TransitiveTest {
     public void testTransitiveMappings6B() throws Exception{
         Reporter.println("TransitiveMappings6B");
         IdSysCodePair source = new IdSysCodePair("6a", sysCodeB);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //A6a, C6
     }
 
@@ -520,7 +520,7 @@ public class TransitiveTest {
     public void testTransitiveMappings6C() throws Exception{
         Reporter.println("TransitiveMappings6C");
         IdSysCodePair source = new IdSysCodePair("6", sysCodeC);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(4, mappings.size()); //A6a, A6b, B6a, B6b
     }
 
@@ -528,7 +528,7 @@ public class TransitiveTest {
     public void testTransitiveMappings7A() throws Exception{
         Reporter.println("TransitiveMappings7A");
         IdSysCodePair source = new IdSysCodePair("7a", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(1, mappings.size()); //B7
     }
 
@@ -536,7 +536,7 @@ public class TransitiveTest {
     public void testTransitiveMappings7B() throws Exception{
         Reporter.println("TransitiveMappings6B");
         IdSysCodePair source = new IdSysCodePair("7", sysCodeB);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //A7a, A7b
     }
 
@@ -544,7 +544,7 @@ public class TransitiveTest {
     public void testTransitiveMappings8A() throws Exception{
         Reporter.println("TransitiveMappings8A");
         IdSysCodePair source = new IdSysCodePair("8", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //8E1, 8E2
     }
 
@@ -552,7 +552,7 @@ public class TransitiveTest {
     public void testTransitiveMappings8Ea() throws Exception{
         Reporter.println("TransitiveMappings8E1");
         IdSysCodePair source = new IdSysCodePair("8a", sysCodeE);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //A8, E8b
     }
     
@@ -560,7 +560,7 @@ public class TransitiveTest {
     public void testTransitiveMappings8Eb() throws Exception{
         Reporter.println("TransitiveMappings8E1");
         IdSysCodePair source = new IdSysCodePair("8b", sysCodeE);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //A8, E8a
     }
 
@@ -568,7 +568,7 @@ public class TransitiveTest {
     public void testTransitiveMappings9A() throws Exception{
         Reporter.println("TransitiveMappings9A");
         IdSysCodePair source = new IdSysCodePair("9a", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(3, mappings.size()); //9Ab, 9E1, 9E2
     }
 
@@ -576,7 +576,7 @@ public class TransitiveTest {
     public void testTransitiveMappings9E() throws Exception{
         Reporter.println("TransitiveMappings9E");
         IdSysCodePair source = new IdSysCodePair("9a", sysCodeE);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(3, mappings.size()); //A9a, A9b,, E8b
     }
     
@@ -584,7 +584,7 @@ public class TransitiveTest {
     public void testTransitiveMappings10A() throws Exception{
         Reporter.println("TransitiveMappings10A");
         IdSysCodePair source = new IdSysCodePair("10", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //10E1, 10E2
     }
 
@@ -592,7 +592,7 @@ public class TransitiveTest {
     public void testTransitiveMappings10E() throws Exception{
         Reporter.println("TransitiveMappings10E");
         IdSysCodePair source = new IdSysCodePair("10a", sysCodeE);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //A10, E8b
     }
 
@@ -601,7 +601,7 @@ public class TransitiveTest {
     public void testTransitiveMappings11A() throws Exception{
         Reporter.println("TransitiveMappings11A");
         IdSysCodePair source = new IdSysCodePair("11", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(3, mappings.size()); //B11 E11a, E11b
     }
 
@@ -609,7 +609,7 @@ public class TransitiveTest {
     public void testTransitiveMappings11E() throws Exception{
         Reporter.println("TransitiveMappings11E");
         IdSysCodePair source = new IdSysCodePair("11a", sysCodeE);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(3, mappings.size()); // A11, B11, E11b
     }
 
@@ -618,7 +618,7 @@ public class TransitiveTest {
     public void testTransitiveMappings12A() throws Exception{
         Reporter.println("TransitiveMappings12A");
         IdSysCodePair source = new IdSysCodePair("12a", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //E12a, E12b
     }
 
@@ -626,7 +626,7 @@ public class TransitiveTest {
     public void testTransitiveMappings12E() throws Exception{
         Reporter.println("TransitiveMappings12E");
         IdSysCodePair source = new IdSysCodePair("12a", sysCodeE);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(3, mappings.size()); // A12a, A12b, E12b
     }
     
@@ -635,7 +635,7 @@ public class TransitiveTest {
     public void testTransitiveMappings13A() throws Exception{
         Reporter.println("TransitiveMappings13A");
         IdSysCodePair source = new IdSysCodePair("13a", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(4, mappings.size()); //E13a, E13b B13a B13b
     }
 
@@ -643,7 +643,7 @@ public class TransitiveTest {
     public void testTransitiveMappings13E() throws Exception{
         Reporter.println("TransitiveMappings13E");
         IdSysCodePair source = new IdSysCodePair("13a", sysCodeE);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(5, mappings.size()); //A13b A13b, E13b B13a B13bb
     }
     
@@ -652,7 +652,7 @@ public class TransitiveTest {
     public void testTransitiveMappings14A() throws Exception{
         Reporter.println("TransitiveMappings14A");
         IdSysCodePair source = new IdSysCodePair("14a", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(5, mappings.size()); //E14a, E14b E14c B13a B13b
     }
 
@@ -660,7 +660,7 @@ public class TransitiveTest {
     public void testTransitiveMappings14Ea() throws Exception{
         Reporter.println("TransitiveMappings14Ea");
         IdSysCodePair source = new IdSysCodePair("14a", sysCodeE);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(6, mappings.size()); //A13b A13b, E13b E13b B13a B13bb
     }
 
@@ -668,7 +668,7 @@ public class TransitiveTest {
     public void testTransitiveMappings14Eb() throws Exception{
         Reporter.println("TransitiveMappings14Eb");
         IdSysCodePair source = new IdSysCodePair("14b", sysCodeE);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(4, mappings.size()); //A13b A13b, E13a B13a 
     }
 
@@ -676,7 +676,7 @@ public class TransitiveTest {
     public void testTransitiveMappings14B() throws Exception{
         Reporter.println("TransitiveMappings14B");
         IdSysCodePair source = new IdSysCodePair("14a", sysCodeB);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(4, mappings.size()); //A13b A13b, E13a E13b 
     }
     
@@ -685,7 +685,7 @@ public class TransitiveTest {
     public void testTransitiveMappings15A() throws Exception{
         Reporter.println("TransitiveMappings15A");
         IdSysCodePair source = new IdSysCodePair("15a", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(5, mappings.size()); //E14a, E14b E14d B13a B13b
     }
 
@@ -693,7 +693,7 @@ public class TransitiveTest {
     public void testTransitiveMappings15Ea() throws Exception{
         Reporter.println("TransitiveMappings15Ea");
         IdSysCodePair source = new IdSysCodePair("15a", sysCodeE);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(5, mappings.size()); //A15a E13b E15b B15a B15b
     }
     
@@ -702,7 +702,7 @@ public class TransitiveTest {
     public void testTransitiveMappings16A() throws Exception{
         Reporter.println("TransitiveMappings16A");
         IdSysCodePair source = new IdSysCodePair("16a", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(7, mappings.size()); //C16a E16a, E16b E16d B16a B16b D16
     }
 
@@ -710,7 +710,7 @@ public class TransitiveTest {
     public void testTransitiveMappings16E() throws Exception{
         Reporter.println("TransitiveMappings16E");
         IdSysCodePair source = new IdSysCodePair("16a", sysCodeE);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(7, mappings.size()); //C16a A16b E16b E16b B16a B16b D16
     }
 
@@ -718,7 +718,7 @@ public class TransitiveTest {
     public void testTransitiveMappings16C() throws Exception{
         Reporter.println("TransitiveMappings16C");
         IdSysCodePair source = new IdSysCodePair("16a", sysCodeC);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(7, mappings.size()); //A16a, E16a E16b E16d B16a B16b D16
     }
 
@@ -726,7 +726,7 @@ public class TransitiveTest {
     public void testTransitiveMappings16D() throws Exception{
         Reporter.println("TransitiveMappings16D");
         IdSysCodePair source = new IdSysCodePair("16", sysCodeD);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(10, mappings.size()); //C16a C16b A16a A16b E16a E16b E16c E16d B16a B16b 
     }
  
@@ -735,7 +735,7 @@ public class TransitiveTest {
     public void testTransitiveMappings17A() throws Exception{
         Reporter.println("TransitiveMappings17A");
         IdSysCodePair source = new IdSysCodePair("17", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(5, mappings.size()); //C17 E17a E17b B17 D17
     }
   
@@ -743,7 +743,7 @@ public class TransitiveTest {
     public void testTransitiveMappings17C() throws Exception{
         Reporter.println("TransitiveMappings17C");
         IdSysCodePair source = new IdSysCodePair("17", sysCodeC);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(5, mappings.size()); //CA7 E17a E17b B17 D17
     }
     
@@ -752,7 +752,7 @@ public class TransitiveTest {
     public void testTransitiveMappings18A() throws Exception{
         Reporter.println("TransitiveMappings18A");
         IdSysCodePair source = new IdSysCodePair("18", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(1, mappings.size()); //X18 ONLY
     }
 
@@ -761,7 +761,7 @@ public class TransitiveTest {
     public void testTransitiveMappings19A() throws Exception{
         Reporter.println("TransitiveMappings19A");
         IdSysCodePair source = new IdSysCodePair("19", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //X19 and Y19 ONLY
     }
 
@@ -770,7 +770,7 @@ public class TransitiveTest {
     public void testTransitiveMappings20A() throws Exception{
         Reporter.println("TransitiveMappings20A");
         IdSysCodePair source = new IdSysCodePair("20", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(3, mappings.size()); //B20 C20 X20
     }
 
@@ -779,7 +779,7 @@ public class TransitiveTest {
     public void testTransitiveMappings21A() throws Exception{
         Reporter.println("TransitiveMappings21A");
         IdSysCodePair source = new IdSysCodePair("21", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //B21 C21
     }
 
@@ -787,7 +787,7 @@ public class TransitiveTest {
     public void testTransitiveMappings21B() throws Exception{
         Reporter.println("TransitiveMappings21B");
         IdSysCodePair source = new IdSysCodePair("21", sysCodeB);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //A21 C21
     }
 
@@ -795,7 +795,7 @@ public class TransitiveTest {
     public void testTransitiveMappings21C() throws Exception{
         Reporter.println("TransitiveMappings21C");
         IdSysCodePair source = new IdSysCodePair("21", sysCodeC);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(3, mappings.size()); //A21 B21 C21
     }
 
@@ -803,7 +803,7 @@ public class TransitiveTest {
     public void testTransitiveMappings21D() throws Exception{
         Reporter.println("TransitiveMappings21D");
         IdSysCodePair source = new IdSysCodePair("21", sysCodeD);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(1, mappings.size()); //C21
     }
 
@@ -812,7 +812,7 @@ public class TransitiveTest {
     public void testTransitiveMappings22A() throws Exception{
         Reporter.println("TransitiveMappings22A");
         IdSysCodePair source = new IdSysCodePair("22", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(1, mappings.size()); //B22
     }
 
@@ -820,7 +820,7 @@ public class TransitiveTest {
     public void testTransitiveMappings22B() throws Exception{
         Reporter.println("TransitiveMappings22B");
         IdSysCodePair source = new IdSysCodePair("22", sysCodeB);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(3, mappings.size()); //A22 C22 D22
     }
 
@@ -828,7 +828,7 @@ public class TransitiveTest {
     public void testTransitiveMappings22C() throws Exception{
         Reporter.println("TransitiveMappings22C");
         IdSysCodePair source = new IdSysCodePair("22", sysCodeC);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //B21 D21
     }
 
@@ -836,7 +836,7 @@ public class TransitiveTest {
     public void testTransitiveMappings22D() throws Exception{
         Reporter.println("TransitiveMappings22D");
         IdSysCodePair source = new IdSysCodePair("22", sysCodeD);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //B22 C22
     }
 
@@ -845,7 +845,7 @@ public class TransitiveTest {
     public void testTransitiveMappings23A() throws Exception{
         Reporter.println("TransitiveMappings23A");
         IdSysCodePair source = new IdSysCodePair("23", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //B23 C23
     }
 
@@ -853,7 +853,7 @@ public class TransitiveTest {
     public void testTransitiveMappings23B() throws Exception{
         Reporter.println("TransitiveMappings23B");
         IdSysCodePair source = new IdSysCodePair("23", sysCodeB);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //A23 C23
     }
 
@@ -861,7 +861,7 @@ public class TransitiveTest {
     public void testTransitiveMappings23C() throws Exception{
         Reporter.println("TransitiveMappings23C");
         IdSysCodePair source = new IdSysCodePair("23", sysCodeC);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //A23 B23 
     }
 
@@ -869,7 +869,7 @@ public class TransitiveTest {
     public void testTransitiveMappings23D() throws Exception{
         Reporter.println("TransitiveMappings23D");
         IdSysCodePair source = new IdSysCodePair("23", sysCodeD);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(0, mappings.size()); //None due to Lens
     }
 
@@ -878,7 +878,7 @@ public class TransitiveTest {
     public void testTransitiveMappings24A() throws Exception{
         Reporter.println("TransitiveMappings24A");
         IdSysCodePair source = new IdSysCodePair("24", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(1, mappings.size()); //B24
     }
 
@@ -886,7 +886,7 @@ public class TransitiveTest {
     public void testTransitiveMappings24B() throws Exception{
         Reporter.println("TransitiveMappings24B");
         IdSysCodePair source = new IdSysCodePair("24", sysCodeB);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(1, mappings.size()); //A24 
     }
 
@@ -894,7 +894,7 @@ public class TransitiveTest {
     public void testTransitiveMappings24C() throws Exception{
         Reporter.println("TransitiveMappings24C");
         IdSysCodePair source = new IdSysCodePair("24", sysCodeC);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(0, mappings.size()); //None due to Lens
     }
 
@@ -902,7 +902,7 @@ public class TransitiveTest {
     public void testTransitiveMappings24D() throws Exception{
         Reporter.println("TransitiveMappings24D");
         IdSysCodePair source = new IdSysCodePair("24", sysCodeD);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(0, mappings.size()); //None due to Lens
     }
 
@@ -911,7 +911,7 @@ public class TransitiveTest {
     public void testTransitiveMappings25A() throws Exception{
         Reporter.println("TransitiveMappings25A");
         IdSysCodePair source = new IdSysCodePair("25", sysCodeA);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(1, mappings.size()); //B25
     }
 
@@ -919,7 +919,7 @@ public class TransitiveTest {
     public void testTransitiveMappings25B() throws Exception{
         Reporter.println("TransitiveMappings25B");
         IdSysCodePair source = new IdSysCodePair("25", sysCodeB);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(2, mappings.size()); //A24 C24 
     }
 
@@ -927,7 +927,7 @@ public class TransitiveTest {
     public void testTransitiveMappings25CAll() throws Exception{
         Reporter.println("TransitiveMappings25CAll");
         IdSysCodePair source = new IdSysCodePair("25", sysCodeC);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.ALL_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.ALL_LENS_NAME);
         assertEquals(2, mappings.size()); //B24 D24
     }
 
@@ -935,7 +935,7 @@ public class TransitiveTest {
     public void testTransitiveMappings25C() throws Exception{
         Reporter.println("TransitiveMappings25C");
         IdSysCodePair source = new IdSysCodePair("25", sysCodeC);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(1, mappings.size()); //B24 
     }
 
@@ -943,7 +943,7 @@ public class TransitiveTest {
     public void testTransitiveMappings25DAll() throws Exception{
         Reporter.println("TransitiveMappings25DAll");
         IdSysCodePair source = new IdSysCodePair("25", sysCodeD);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.ALL_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.ALL_LENS_NAME);
         assertEquals(1, mappings.size()); //C25
     }
 
@@ -951,7 +951,7 @@ public class TransitiveTest {
     public void testTransitiveMappings25D() throws Exception{
         Reporter.println("TransitiveMappings25D");
         IdSysCodePair source = new IdSysCodePair("25", sysCodeD);
-        Set<IDSysCodePairMapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
+        Set<Mapping> mappings = sqlUriMapper.getTransitiveMappings(source, Lens.TEST_LENS_NAME);
         assertEquals(0, mappings.size());  //None due to Lens
     }
 

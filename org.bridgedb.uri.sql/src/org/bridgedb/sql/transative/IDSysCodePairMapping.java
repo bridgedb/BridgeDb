@@ -22,36 +22,37 @@ package org.bridgedb.sql.transative;
 import java.util.List;
 import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
+import org.bridgedb.rdf.constants.BridgeDBConstants;
+import org.bridgedb.uri.api.Mapping;
 
 /**
  *
  * @author christian
  */
-public interface IDSysCodePairMapping {
+public abstract class IDSysCodePairMapping extends Mapping{
 
-    public IdSysCodePair getIdSysCodePairTarget();
+    public IDSysCodePairMapping(IdSysCodePair idSysCodePairSource, IdSysCodePair idSysCodePairTarget, 
+            String predicate, String justification, int mappingSetId, 
+            String mappingSource, String mappingResource, String lens){
+        super(idSysCodePairSource, idSysCodePairTarget, predicate, justification, mappingSetId, 
+                mappingSource, mappingResource, lens);
+    }
+    
+    public IDSysCodePairMapping(IdSysCodePair idSysCodePairSource, IdSysCodePair idSysCodePairTarget, 
+            String predicate, String justification, Set<String> mappingSetIds, 
+            String mappingSource, String mappingResource, String lens){
+        super(idSysCodePairSource, idSysCodePairTarget, predicate, justification, mappingSetIds, 
+                mappingSource, mappingResource, lens);
+    }
 
-    public IdSysCodePair getIdSysCodePairSource();
+    public IDSysCodePairMapping(IdSysCodePair pair){
+        super(pair);
+    }
 
-    public boolean createsLoop(IdSysCodePair targetRef);
+    public abstract boolean createsLoop(IdSysCodePair targetRef);
 
-    public boolean hasMappingToSelf();
+    public abstract boolean hasMappingToSelf();
 
-    public Set<String> getSysCodesToCheck();
+    public abstract Set<String> getSysCodesToCheck();
 
-    /**
-     * @return the predicate
-     */
-    public String getPredicate();
-
-    /**
-     * @return the justification
-     */
-    public String getJustification();
-
-    public Set<String> getIds();
-
-    public String getMappingSource();
-
-    public String getMappingResource();
 }

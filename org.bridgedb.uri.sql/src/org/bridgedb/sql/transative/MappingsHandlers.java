@@ -25,6 +25,7 @@ import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.sql.justification.JustificationMaker;
 import org.bridgedb.sql.predicate.PredicateMaker;
+import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
@@ -36,7 +37,7 @@ public class MappingsHandlers {
     private final IdSysCodePair sourceRef;
     private final ArrayDeque<IDSysCodePairMapping> toCheck = new ArrayDeque<IDSysCodePairMapping>();
     private final Set<IdSysCodePair> checkedPairs = new HashSet<IdSysCodePair>();
-    private final Set<IDSysCodePairMapping> mappings = new HashSet<IDSysCodePairMapping>();
+    private final Set<Mapping> mappings = new HashSet<Mapping>();
     private final PredicateMaker predicateMaker;
     private final JustificationMaker justificationMaker;
     
@@ -104,7 +105,7 @@ public class MappingsHandlers {
         }
     }
     
-    public final Set<IDSysCodePairMapping> getMappings() {
+    public final Set<Mapping> getMappings() {
         return mappings;
     }
 }

@@ -433,7 +433,8 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         Set<String> tgtUriPatterns = new HashSet<String>();
         tgtUriPatterns.add("http://www.example.com/protclass/");
         Set<String> results = uriMapper.mapUri(uri, NULL_LENS, 
-                NULL_GRAPH, tgtUriPatterns);        
+                NULL_GRAPH, tgtUriPatterns);   
+        System.out.println("test "+ results);
         assertEquals (0, results.size());
     }
     

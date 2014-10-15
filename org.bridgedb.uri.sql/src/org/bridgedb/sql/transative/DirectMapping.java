@@ -22,29 +22,24 @@ package org.bridgedb.sql.transative;
 import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
-import org.bridgedb.uri.api.Mapping;
 
 /**
  *
  * @author christian
  */
-public class DirectMapping extends Mapping implements IDSysCodePairMapping {
+public class DirectMapping extends IDSysCodePairMapping {
     private final String id;
     private final int originalId;
-    private final String mappingSource;
-    private final String mappingResource;
 
     public DirectMapping (IdSysCodePair source, IdSysCodePair target, int id, int symmetric, String predicate, String justification, 
             String mappingSource, String mappingResource, String lens){
-        super(source, target, predicate, justification, id, lens);
+        super(source, target, predicate, justification, id, mappingSource, mappingResource, lens);
         this.id = "" + id;
         if (symmetric < 0){
             this.originalId = 0 - symmetric;
         } else {
             this.originalId = id;
         }
-        this.mappingSource = mappingSource;
-        this.mappingResource = mappingResource;
     }
 
     @Override
@@ -66,7 +61,7 @@ public class DirectMapping extends Mapping implements IDSysCodePairMapping {
     }
 
     @Override
-    public Set<String> getIds() {
+    public Set<String> getMappingSetId() {
         HashSet<String> ids = new HashSet<String>();
         ids.add(id);
         return ids;
@@ -74,16 +69,6 @@ public class DirectMapping extends Mapping implements IDSysCodePairMapping {
 
     public String getId() {
         return id;
-    }
-
-    @Override
-    public String getMappingSource() {
-        return mappingSource;
-    }
-
-    @Override
-    public String getMappingResource() {
-        return this.mappingResource;
     }
 
 }
