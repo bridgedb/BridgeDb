@@ -46,8 +46,8 @@ import org.bridgedb.sql.justification.JustificationMaker;
 import org.bridgedb.sql.justification.OpsJustificationMaker;
 import org.bridgedb.sql.predicate.LoosePredicateMaker;
 import org.bridgedb.sql.predicate.PredicateMaker;
-import org.bridgedb.sql.transative.AbstractMapping;
 import org.bridgedb.sql.transative.DirectMapping;
+import org.bridgedb.sql.transative.IDSysCodePairMapping;
 import org.bridgedb.sql.transative.MappingsHandlers;
 import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
@@ -1886,7 +1886,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     //***************
     
-    private Set<DirectMapping> getDirectMappings(IdSysCodePair sourceRef, PreparedStatement statement) throws BridgeDBException {
+    private Set<DirectMapping> getDirectMappings(IdSysCodePair sourceRef, PreparedStatement statement, String lensId) throws BridgeDBException {
 //        if (sourceRef == null){
 //            return new HashSet<DirectMapping>();
 //        }
@@ -1907,7 +1907,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 String justification = rs.getString(JUSTIFICATION_COLUMN_NAME);
                 String mappingSource = rs.getString(MAPPING_SOURCE_COLUMN_NAME);
                 String mappingResource = rs.getString(MAPPING_RESOURCE_COLUMN_NAME);
-                DirectMapping mapping = new DirectMapping(sourceRef, targetRef, mappingSetId, symmetric, predicate, justification, mappingSource, mappingResource);
+                DirectMapping mapping = 
+                        new DirectMapping(sourceRef, targetRef, mappingSetId, 
+                                symmetric, predicate, justification,
+                                mappingSource, mappingResource, lensId);
                 results.add(mapping);
             }
             return results;
@@ -1974,7 +1977,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         PreparedStatement statement = null;
         try {
             statement = createPreparedStatement(directQuery(lensId));
-            Set<DirectMapping> results = getDirectMappings(sourceRef, statement);
+            Set<DirectMapping> results = getDirectMappings(sourceRef, statement, lensId);
             return results;
         } catch (BridgeDBException ex) {
             throw ex;
@@ -1983,7 +1986,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
 
-    public Set<AbstractMapping> getTransitiveMappings(IdSysCodePair sourceRef, String lensId) throws BridgeDBException {
+    public Set<IDSysCodePairMapping> getTransitiveMappings(IdSysCodePair sourceRef, String lensId) throws BridgeDBException {
         PreparedStatement statement = null;
         try {
             if (lensId == null || lensId.isEmpty()){
@@ -1992,12 +1995,12 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             Lens lens = LensTools.byId(lensId);
             statement = createPreparedStatement(directQuery(lensId));
             MappingsHandlers mappingsHandler = new MappingsHandlers(sourceRef, predicateMaker, justificationMaker);
-            Set<DirectMapping> direct = getDirectMappings(sourceRef, statement);
+            Set<DirectMapping> direct = getDirectMappings(sourceRef, statement, lensId);
             mappingsHandler.addMappings(direct);
             while (mappingsHandler.moreToCheck()) {
-                AbstractMapping toCheck = mappingsHandler.nextToCheck();
-                if (lens.getAllowedMiddleSysCodes().contains(toCheck.getTarget().getSysCode())){
-                    Set<DirectMapping> transitives = getDirectMappings(toCheck.getTarget(), statement);
+                IDSysCodePairMapping toCheck = mappingsHandler.nextToCheck();
+                if (lens.getAllowedMiddleSysCodes().contains(toCheck.getIdSysCodePairTarget().getSysCode())){
+                    Set<DirectMapping> transitives = getDirectMappings(toCheck.getIdSysCodePairTarget(), statement, lensId);
                     mappingsHandler.addMappings(toCheck, transitives);
                 }
             }
@@ -2022,13 +2025,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     */
     
     private Set<String> getTransitiveByPatternAsUri(IdSysCodePair sourceRef, String lensId, Set<RegexUriPattern> targetUriPatterns) throws BridgeDBException {
-        Set<AbstractMapping> mappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> mappings = getTransitiveMappings(sourceRef, lensId);
         HashSet<String> results = new HashSet<String>();
         for (RegexUriPattern targetUriPattern : targetUriPatterns) {
             if (targetUriPattern != null){
-                for (AbstractMapping mapping : mappings) {
-                    if (mapping.getTarget().getSysCode().equals(targetUriPattern.getSysCode())) {
-                        results.add(targetUriPattern.getUri(mapping.getTarget().getId()));
+                for (IDSysCodePairMapping mapping : mappings) {
+                    if (mapping.getIdSysCodePairTarget().getSysCode().equals(targetUriPattern.getSysCode())) {
+                        results.add(targetUriPattern.getUri(mapping.getIdSysCodePairTarget().getId()));
                     }
                 }
                 if (targetUriPattern.getSysCode().equals(sourceRef.getSysCode())) {
@@ -2040,13 +2043,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
 
     private MappingsBySysCodeId getTransitiveByPatternAsMappingBySysCodeId(IdSysCodePair sourceRef, String lensId, Set<RegexUriPattern> targetUriPatterns) throws BridgeDBException {
-        Set<AbstractMapping> mappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> mappings = getTransitiveMappings(sourceRef, lensId);
         MappingsBySysCodeId results = new MappingsBySysCodeId();
         for (RegexUriPattern targetUriPattern : targetUriPatterns) {
             if (targetUriPattern != null){
-                for (AbstractMapping mapping : mappings) {
-                    if (mapping.getTarget().getSysCode().equals(targetUriPattern.getSysCode())) {
-                        results.addMapping(mapping.getTarget(), targetUriPattern.getUri(mapping.getTarget().getId()));
+                for (IDSysCodePairMapping mapping : mappings) {
+                    if (mapping.getIdSysCodePairTarget().getSysCode().equals(targetUriPattern.getSysCode())) {
+                        results.addMapping(mapping.getIdSysCodePairTarget(), targetUriPattern.getUri(mapping.getIdSysCodePairTarget().getId()));
                     }
                 }
                 if (targetUriPattern.getSysCode().equals(sourceRef.getSysCode())) {
@@ -2060,13 +2063,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private MappingsBySet getTransitiveByPatternAsMappingBySet(String sourceUri, IdSysCodePair sourceRef, 
             String lensId, Set<RegexUriPattern> targetUriPatterns) throws BridgeDBException {
         MappingsBySet mappingsBySet = new MappingsBySet(lensId);
-        Set<AbstractMapping> mappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> mappings = getTransitiveMappings(sourceRef, lensId);
         for (RegexUriPattern targetUriPattern : targetUriPatterns) {
             if (targetUriPattern != null){
-                for (AbstractMapping mapping : mappings) {
-                    if (mapping.getTarget().getSysCode().equals(targetUriPattern.getSysCode())) {
+                for (IDSysCodePairMapping mapping : mappings) {
+                    if (mapping.getIdSysCodePairTarget().getSysCode().equals(targetUriPattern.getSysCode())) {
                         mappingsBySet.addMapping(mapping.getIds(), mapping.getPredicate(), mapping.getJustification(), 
-                            mapping.getMappingSource(), mapping.getMappingResource(), sourceUri, targetUriPattern.getUri(mapping.getTarget().getId()));
+                            mapping.getMappingSource(), mapping.getMappingResource(), sourceUri, targetUriPattern.getUri(mapping.getIdSysCodePairTarget().getId()));
                     }
                 }
                 if (targetUriPattern.getSysCode().equals(sourceRef.getSysCode())) {
@@ -2087,11 +2090,11 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      */
     private Set<Xref> getTransitiveByPatternAsXref(Xref sourceXref, IdSysCodePair sourceRef, String lensId, Set<RegexUriPattern> targetUriPatterns) throws BridgeDBException {
         HashSet<Xref> results = new HashSet<Xref>();
-        Set<AbstractMapping> mappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> mappings = getTransitiveMappings(sourceRef, lensId);
         for (RegexUriPattern targetUriPattern : targetUriPatterns) {
             if (targetUriPattern != null){
-                for (AbstractMapping mapping : mappings) {
-                    if (mapping.getTarget().getSysCode().equals(targetUriPattern.getSysCode())) {
+                for (IDSysCodePairMapping mapping : mappings) {
+                    if (mapping.getIdSysCodePairTarget().getSysCode().equals(targetUriPattern.getSysCode())) {
                         results.add(sourceXref);
                     }
                 }
@@ -2115,14 +2118,14 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private Set<Mapping> getTransitiveByPatternAsMapping(String sourceUri, IdSysCodePair sourceRef, 
             String lensId, Set<RegexUriPattern> targetUriPatterns) throws BridgeDBException {
         HashSet<Mapping> results = new HashSet<Mapping>();
-        Set<AbstractMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
         for (RegexUriPattern targetUriPattern : targetUriPatterns) {
             if (targetUriPattern != null){
-                for (AbstractMapping transitiveMapping : transitiveMappings) {
-                    if (transitiveMapping.getTarget().getSysCode().equals(targetUriPattern.getSysCode())) {
+                for (IDSysCodePairMapping transitiveMapping : transitiveMappings) {
+                    if (transitiveMapping.getIdSysCodePairTarget().getSysCode().equals(targetUriPattern.getSysCode())) {
                         Mapping mapping = new Mapping(sourceUri, transitiveMapping.getPredicate(), 
                                 transitiveMapping.getIds(), lensId);
-                        mapping.addTargetUri(targetUriPattern.getUri(transitiveMapping.getTarget().getId()));
+                        mapping.addTargetUri(targetUriPattern.getUri(transitiveMapping.getIdSysCodePairTarget().getId()));
                         results.add(mapping);
                     }
                 }
@@ -2139,12 +2142,12 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private Set<Xref> getTransitiveByDataSourceAsXref(Xref sourceXref, IdSysCodePair sourceRef, 
             String lensId, Collection<DataSource> tgtDataSources) throws BridgeDBException {
         HashSet<Xref> results = new HashSet<Xref>();
-        Set<AbstractMapping> mappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> mappings = getTransitiveMappings(sourceRef, lensId);
         for (DataSource tgtDataSource : tgtDataSources) {
             if (tgtDataSource != null){
-                for (AbstractMapping mapping : mappings) {
-                    if (mapping.getTarget().getSysCode().equals(tgtDataSource.getSystemCode())) {
-                        results.add(codeMapper1.toXref(mapping.getTarget()));
+                for (IDSysCodePairMapping mapping : mappings) {
+                    if (mapping.getIdSysCodePairTarget().getSysCode().equals(tgtDataSource.getSystemCode())) {
+                        results.add(codeMapper1.toXref(mapping.getIdSysCodePairTarget()));
                     }
                 }
                 if (tgtDataSource.getSystemCode().equals(sourceRef.getSysCode())) {
@@ -2170,16 +2173,16 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             String lensId, Set<RegexUriPattern> targetUriPatterns) throws BridgeDBException {
         Xref sourceXref = codeMapper1.toXref(sourceRef);
         HashSet<Mapping> results = new HashSet<Mapping>();
-        Set<AbstractMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
         for (RegexUriPattern targetUriPattern : targetUriPatterns) {
             if (targetUriPattern != null){
-                for (AbstractMapping transitiveMapping : transitiveMappings) {
-                    if (transitiveMapping.getTarget().getSysCode().equals(targetUriPattern.getSysCode())) {
+                for (IDSysCodePairMapping transitiveMapping : transitiveMappings) {
+                    if (transitiveMapping.getIdSysCodePairTarget().getSysCode().equals(targetUriPattern.getSysCode())) {
                         Mapping mapping = new Mapping(sourceXref, transitiveMapping.getPredicate(), 
-                                codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getIds(), lensId);
+                                codeMapper1.toXref(transitiveMapping.getIdSysCodePairTarget()), transitiveMapping.getIds(), lensId);
                         mapping.addSourceUri(sourceUri);
-                        mapping.addTargetUri(targetUriPattern.getUri(transitiveMapping.getTarget().getId()));
-                        mapping.addTargetUris(toUris(transitiveMapping.getTarget()));
+                        mapping.addTargetUri(targetUriPattern.getUri(transitiveMapping.getIdSysCodePairTarget().getId()));
+                        mapping.addTargetUris(toUris(transitiveMapping.getIdSysCodePairTarget()));
                         results.add(mapping);
                     }
                 }
@@ -2207,15 +2210,15 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             String lensId, Collection<DataSource> tgtDataSources) throws BridgeDBException {
         Xref sourceXref = codeMapper1.toXref(sourceRef);
         HashSet<Mapping> results = new HashSet<Mapping>();
-        Set<AbstractMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
         for (DataSource tgtDataSource : tgtDataSources) {
             if (tgtDataSource != null){
-                for (AbstractMapping transitiveMapping : transitiveMappings) {
-                    if (transitiveMapping.getTarget().getSysCode().equals(tgtDataSource.getSystemCode())) {
+                for (IDSysCodePairMapping transitiveMapping : transitiveMappings) {
+                    if (transitiveMapping.getIdSysCodePairTarget().getSysCode().equals(tgtDataSource.getSystemCode())) {
                         Mapping mapping = new Mapping(sourceXref, transitiveMapping.getPredicate(), 
-                                codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getIds(), lensId);
+                                codeMapper1.toXref(transitiveMapping.getIdSysCodePairTarget()), transitiveMapping.getIds(), lensId);
                         mapping.addSourceUri(sourceUri);
-                        mapping.addTargetUris(toUris(transitiveMapping.getTarget()));
+                        mapping.addTargetUris(toUris(transitiveMapping.getIdSysCodePairTarget()));
                         results.add(mapping);
                     }
                 }
@@ -2243,13 +2246,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private Set<Mapping> getTransitiveByDataSourceAsMapping(Xref sourceXref, IdSysCodePair sourceRef, 
             String lensId, Collection<DataSource> tgtDataSources) throws BridgeDBException {
         HashSet<Mapping> results = new HashSet<Mapping>();
-        Set<AbstractMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
         for (DataSource tgtDataSource : tgtDataSources) {
             if (tgtDataSource != null){
-                for (AbstractMapping transitiveMapping : transitiveMappings) {
-                    if (transitiveMapping.getTarget().getSysCode().equals(tgtDataSource.getSystemCode())) {
+                for (IDSysCodePairMapping transitiveMapping : transitiveMappings) {
+                    if (transitiveMapping.getIdSysCodePairTarget().getSysCode().equals(tgtDataSource.getSystemCode())) {
                         Mapping mapping = new Mapping(sourceXref, transitiveMapping.getPredicate(), 
-                            codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getIds(), lensId);
+                            codeMapper1.toXref(transitiveMapping.getIdSysCodePairTarget()), transitiveMapping.getIds(), lensId);
                         results.add(mapping);
                     }
                 }
@@ -2275,15 +2278,15 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private Set<Mapping> getTransitiveByDataSourceAsMappingWithUris(Xref sourceXref, IdSysCodePair sourceRef, 
             String lensId, Collection<DataSource> tgtDataSources) throws BridgeDBException {
         HashSet<Mapping> results = new HashSet<Mapping>();
-        Set<AbstractMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
         for (DataSource tgtDataSource : tgtDataSources) {
             if (tgtDataSource != null){
-                for (AbstractMapping transitiveMapping : transitiveMappings) {
-                    if (transitiveMapping.getTarget().getSysCode().equals(tgtDataSource.getSystemCode())) {
+                for (IDSysCodePairMapping transitiveMapping : transitiveMappings) {
+                    if (transitiveMapping.getIdSysCodePairTarget().getSysCode().equals(tgtDataSource.getSystemCode())) {
                         Mapping mapping = new Mapping(sourceXref, transitiveMapping.getPredicate(), 
-                            codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getIds(), lensId);
+                            codeMapper1.toXref(transitiveMapping.getIdSysCodePairTarget()), transitiveMapping.getIds(), lensId);
                         mapping.addSourceUris(toUris(sourceRef));
-                        mapping.addTargetUris(toUris(transitiveMapping.getTarget()));
+                        mapping.addTargetUris(toUris(transitiveMapping.getIdSysCodePairTarget()));
                         results.add(mapping);
                     }
                 }
@@ -2311,15 +2314,15 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private Set<Mapping> getTransitiveByPatternAsMapping(Xref sourceXref, IdSysCodePair sourceRef, 
             String lensId, Set<RegexUriPattern> targetUriPatterns) throws BridgeDBException {
         HashSet<Mapping> results = new HashSet<Mapping>();
-        Set<AbstractMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
         for (RegexUriPattern targetUriPattern : targetUriPatterns) {
             if (targetUriPattern != null){
-                for (AbstractMapping transitiveMapping : transitiveMappings) {
-                    if (transitiveMapping.getTarget().getSysCode().equals(targetUriPattern.getSysCode())) {
+                for (IDSysCodePairMapping transitiveMapping : transitiveMappings) {
+                    if (transitiveMapping.getIdSysCodePairTarget().getSysCode().equals(targetUriPattern.getSysCode())) {
                         Mapping mapping = new Mapping(sourceXref, transitiveMapping.getPredicate(), 
-                                codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getIds(), lensId);
+                                codeMapper1.toXref(transitiveMapping.getIdSysCodePairTarget()), transitiveMapping.getIds(), lensId);
                         mapping.addSourceUris(toUris(sourceRef));
-                        mapping.addTargetUri(targetUriPattern.getUri(transitiveMapping.getTarget().getId()));
+                        mapping.addTargetUri(targetUriPattern.getUri(transitiveMapping.getIdSysCodePairTarget().getId()));
                         results.add(mapping);
                     }
                 }
@@ -2345,20 +2348,20 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     */
     
     private Set<String> getTransitiveAsUri(IdSysCodePair sourceRef, String lensId) throws BridgeDBException {
-        Set<AbstractMapping> mappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> mappings = getTransitiveMappings(sourceRef, lensId);
         HashSet<String> results = new HashSet<String>();
-        for (AbstractMapping mapping : mappings) {
-            results.addAll(toUris(mapping.getTarget()));
+        for (IDSysCodePairMapping mapping : mappings) {
+            results.addAll(toUris(mapping.getIdSysCodePairTarget()));
         }
         results.addAll(toUris(sourceRef));
         return results;
     }
 
     private MappingsBySysCodeId getTransitiveAsMappingBySysCodeId(IdSysCodePair sourceRef, String lensId) throws BridgeDBException {
-        Set<AbstractMapping> mappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> mappings = getTransitiveMappings(sourceRef, lensId);
         MappingsBySysCodeId results = new MappingsBySysCodeId();
-        for (AbstractMapping mapping : mappings) {
-            results.addMappings(mapping.getTarget(), toUris(mapping.getTarget()));
+        for (IDSysCodePairMapping mapping : mappings) {
+            results.addMappings(mapping.getIdSysCodePairTarget(), toUris(mapping.getIdSysCodePairTarget()));
         }
         results.addMappings(sourceRef, toUris(sourceRef));
         return results;
@@ -2366,20 +2369,20 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     private MappingsBySet getTransitiveAsMappingBySet(String sourceUri, IdSysCodePair sourceRef, String lensId) throws BridgeDBException {
         MappingsBySet mappingsBySet = new MappingsBySet(lensId);
-        Set<AbstractMapping> mappings = getTransitiveMappings(sourceRef, lensId);
-        for (AbstractMapping mapping : mappings) {
+        Set<IDSysCodePairMapping> mappings = getTransitiveMappings(sourceRef, lensId);
+        for (IDSysCodePairMapping mapping : mappings) {
             mappingsBySet.addMappings(mapping.getIds(), mapping.getPredicate(), mapping.getJustification(), 
-                    mapping.getMappingSource(), mapping.getMappingResource(), sourceUri, toUris(mapping.getTarget()));
+                    mapping.getMappingSource(), mapping.getMappingResource(), sourceUri, toUris(mapping.getIdSysCodePairTarget()));
         }
         mappingsBySet.addMappings(sourceUri, toUris(sourceRef));
         return mappingsBySet;
     }
 
     private Set<Xref> getTransitiveAsXref(IdSysCodePair sourceRef, String lensId) throws BridgeDBException {
-        Set<AbstractMapping> mappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> mappings = getTransitiveMappings(sourceRef, lensId);
         HashSet<Xref> results = new HashSet<Xref>();
-        for (AbstractMapping mapping : mappings) {
-            results.add(codeMapper1.toXref(mapping.getTarget()));
+        for (IDSysCodePairMapping mapping : mappings) {
+            results.add(codeMapper1.toXref(mapping.getIdSysCodePairTarget()));
         }
         results.add(codeMapper1.toXref(sourceRef));
         return results;
@@ -2396,12 +2399,12 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      */
     private Set<Mapping> getTransitiveAsMapping(String sourceUri, IdSysCodePair sourceRef, 
             String lensId) throws BridgeDBException {
-        Set<AbstractMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
         HashSet<Mapping> results = new HashSet<Mapping>();
-        for (AbstractMapping transitiveMapping : transitiveMappings) {
+        for (IDSysCodePairMapping transitiveMapping : transitiveMappings) {
             Mapping mapping = new Mapping(sourceUri, transitiveMapping.getPredicate(), 
                     transitiveMapping.getIds(), lensId);
-            mapping.addTargetUris(toUris(transitiveMapping.getTarget()));
+            mapping.addTargetUris(toUris(transitiveMapping.getIdSysCodePairTarget()));
             results.add(mapping);
         }
         Mapping mapping = new Mapping(sourceUri, lensId);
@@ -2421,12 +2424,12 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      */
     private Set<Mapping> getTransitiveAsMappingWithXrefs(String sourceUri, IdSysCodePair sourceRef, 
             String lensId) throws BridgeDBException {
-        Set<AbstractMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
         HashSet<Mapping> results = new HashSet<Mapping>();
         Xref sourceXref = codeMapper1.toXref(sourceRef);
-        for (AbstractMapping transitiveMapping : transitiveMappings) {
+        for (IDSysCodePairMapping transitiveMapping : transitiveMappings) {
             Mapping mapping = new Mapping(sourceXref, transitiveMapping.getPredicate(), 
-                        codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getIds(), lensId);
+                        codeMapper1.toXref(transitiveMapping.getIdSysCodePairTarget()), transitiveMapping.getIds(), lensId);
                 mapping.addSourceUri(sourceUri);
             mapping.addTargetUris(toUris(mapping.getTarget()));
             results.add(mapping);
@@ -2448,11 +2451,11 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * @throws BridgeDBException 
      */
     private Set<Mapping> getTransitiveAsMapping(Xref sourceXref, IdSysCodePair sourceRef, String lensId) throws BridgeDBException {
-        Set<AbstractMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
         HashSet<Mapping> results = new HashSet<Mapping>();
-        for (AbstractMapping transitiveMapping : transitiveMappings) {
+        for (IDSysCodePairMapping transitiveMapping : transitiveMappings) {
             Mapping mapping = new Mapping(sourceXref, transitiveMapping.getPredicate(), 
-                    codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getIds(), lensId);
+                    codeMapper1.toXref(transitiveMapping.getIdSysCodePairTarget()), transitiveMapping.getIds(), lensId);
             results.add(mapping);
         }
         Mapping mapping = new Mapping(sourceXref, lensId);
@@ -2470,11 +2473,11 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * @throws BridgeDBException 
      */
     private Set<Mapping> getTransitiveAsMappingWithUris(Xref sourceXref, IdSysCodePair sourceRef, String lensId) throws BridgeDBException {
-        Set<AbstractMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
+        Set<IDSysCodePairMapping> transitiveMappings = getTransitiveMappings(sourceRef, lensId);
         HashSet<Mapping> results = new HashSet<Mapping>();
-        for (AbstractMapping transitiveMapping : transitiveMappings) {
+        for (IDSysCodePairMapping transitiveMapping : transitiveMappings) {
             Mapping mapping = new Mapping(sourceXref, transitiveMapping.getPredicate(), 
-                    codeMapper1.toXref(transitiveMapping.getTarget()), transitiveMapping.getIds(), lensId);
+                    codeMapper1.toXref(transitiveMapping.getIdSysCodePairTarget()), transitiveMapping.getIds(), lensId);
             mapping.addSourceUris(toUris(sourceRef));
             mapping.addTargetUris(toUris(mapping.getTarget()));
             results.add(mapping);

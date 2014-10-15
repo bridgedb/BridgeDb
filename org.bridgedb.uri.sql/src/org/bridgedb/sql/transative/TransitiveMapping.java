@@ -26,30 +26,38 @@ import java.util.List;
 import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
+import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
  *
  * @author christian
  */
-public class TransitiveMapping extends AbstractMapping {
+public class TransitiveMapping extends Mapping implements IDSysCodePairMapping {
     private final List<DirectMapping> via;
     private static final String NEW_LINE = System.getProperty("line.separator");
     
     private final Set<String> sysCodesToCheck;
     private boolean includesMappingToSelf = false;
     
-    public TransitiveMapping (AbstractMapping previous, DirectMapping newMapping, String predicate, String justification) throws BridgeDBException{
-        super(previous.getSource(), newMapping.getTarget(), predicate, justification);
+    public TransitiveMapping (IDSysCodePairMapping previous, DirectMapping newMapping, String predicate, String justification) throws BridgeDBException{
+        super(previous.getIdSysCodePairSource(), newMapping.getIdSysCodePairTarget(), 
+                predicate, justification, mergeIds(previous, newMapping), newMapping.getLens());
         //Never expected but just in case
-        if (!previous.getTarget().equals(newMapping.getSource())){
+        if (!previous.getIdSysCodePairTarget().equals(newMapping.getIdSysCodePairSource())){
             throw new BridgeDBException ("Unexpected broken mapping chain");
         }
         via = createVia(previous, newMapping);
         sysCodesToCheck = recordSysCodes(previous, newMapping);
     }
     
-    private List<DirectMapping> createVia(AbstractMapping previous, DirectMapping newMapping){
+    private static Set<String> mergeIds(IDSysCodePairMapping previous, DirectMapping newMapping){
+        Set<String> results = new HashSet<String>(previous.getIds());
+        results.add(newMapping.getId());
+        return results;
+    } 
+            
+    private List<DirectMapping> createVia(IDSysCodePairMapping previous, DirectMapping newMapping){
         List<DirectMapping> newVia;
         if (previous instanceof DirectMapping ){
             newVia = new ArrayList<DirectMapping>();
@@ -62,13 +70,13 @@ public class TransitiveMapping extends AbstractMapping {
         return newVia;
     }
 
-    private Set<String> recordSysCodes(AbstractMapping previous, DirectMapping newMapping) throws BridgeDBException {
+    private Set<String> recordSysCodes(IDSysCodePairMapping previous, DirectMapping newMapping) throws BridgeDBException {
         //Check if new mapping is mapping to self.
         //stem.out.println("recording System codes");
         //ystem.out.println(previous);
         //ystem.out.println(newMapping);
         Set<String> syscodes;
-        if (newMapping.getSource().getSysCode().equals(newMapping.getTarget().getSysCode())){
+        if (newMapping.getIdSysCodePairSource().getSysCode().equals(newMapping.getIdSysCodePairTarget().getSysCode())){
             if (previous.hasMappingToSelf()){
                 throw new BridgeDBException("Two mappings to self in same chain.");
             } else {
@@ -80,7 +88,7 @@ public class TransitiveMapping extends AbstractMapping {
             includesMappingToSelf = previous.hasMappingToSelf();
             syscodes = new HashSet<String>(previous.getSysCodesToCheck());  
         }
-        syscodes.add(newMapping.getTarget().getSysCode());
+        syscodes.add(newMapping.getIdSysCodePairTarget().getSysCode());
         //ystem.out.println("==" + syscodes + "==");
         return syscodes;
     }
@@ -90,16 +98,16 @@ public class TransitiveMapping extends AbstractMapping {
         return via;
     }
     
-    boolean createsLoop(IdSysCodePair targetRef){
+    public boolean createsLoop(IdSysCodePair targetRef){
         //ystem.out.println ("c " + this);
         //ystem.out.println (targetRef);
         //Check if incoming is a mapping to self (Same syscode)
-        if (getTarget().getSysCode().equals(targetRef.getSysCode())){
+        if (getIdSysCodePairTarget().getSysCode().equals(targetRef.getSysCode())){
             //Only allow one per transitive
             //ystem.out.println("mapping to self");
             return includesMappingToSelf;
         }
-        //ystem.out.println ("!= " + getTarget().getSysCode());
+        //ystem.out.println ("!= " + getIdSysCodePairTarget().getSysCode());
         //ystem.out.println(sysCodesToCheck);
         //The target must be a new one
         return sysCodesToCheck.contains(targetRef.getSysCode());
@@ -114,12 +122,12 @@ public class TransitiveMapping extends AbstractMapping {
     }
 
     @Override
-    boolean hasMappingToSelf() {
+    public boolean hasMappingToSelf() {
         return includesMappingToSelf;
     }
 
     @Override
-    Set<String> getSysCodesToCheck() {
+    public Set<String> getSysCodesToCheck() {
         return sysCodesToCheck;
     }
 
@@ -143,21 +151,3 @@ public class TransitiveMapping extends AbstractMapping {
     }
 
 }
-/*
-//Assume it is just adding
-    private void addSysCode(DirectMapping newMapping) throws BridgeDBException {
-        if (newMapping.getSource().getSysCode().equals(newMapping.getTarget().getSysCode())){
-            if (includesMappingToSelf){
-                throw new BridgeDBException("Unexpected seond mapping to self");
-            }
-            includesMappingToSelf = true;
-            inboundSyscodes.add(newMapping.getTarget().getSysCode());
-        } else if (includesMappingToSelf){
-            outboundSyscodes.add(newMapping.getTarget().getSysCode());
-        } else {
-            inboundSyscodes.add(newMapping.getTarget().getSysCode());
-        }
-    }
-
-
-*/

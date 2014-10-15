@@ -22,20 +22,21 @@ package org.bridgedb.sql.transative;
 import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
+import org.bridgedb.uri.api.Mapping;
 
 /**
  *
  * @author christian
  */
-public class DirectMapping extends AbstractMapping{
+public class DirectMapping extends Mapping implements IDSysCodePairMapping {
     private final String id;
     private final int originalId;
     private final String mappingSource;
     private final String mappingResource;
-    
+
     public DirectMapping (IdSysCodePair source, IdSysCodePair target, int id, int symmetric, String predicate, String justification, 
-            String mappingSource, String mappingResource){
-        super(source, target, predicate, justification);
+            String mappingSource, String mappingResource, String lens){
+        super(source, target, predicate, justification, id, lens);
         this.id = "" + id;
         if (symmetric < 0){
             this.originalId = 0 - symmetric;
@@ -46,20 +47,21 @@ public class DirectMapping extends AbstractMapping{
         this.mappingResource = mappingResource;
     }
 
-    boolean createsLoop(IdSysCodePair targetRef){
-        return getSource().getSysCode().equals(targetRef.getSysCode());
+    @Override
+    public boolean createsLoop(IdSysCodePair targetRef){
+        return getIdSysCodePairSource().getSysCode().equals(targetRef.getSysCode());
     }
 
     @Override
-    boolean hasMappingToSelf() {
-        return getSource().getSysCode().equals(getTarget().getSysCode());
+    public boolean hasMappingToSelf() {
+        return getIdSysCodePairSource().getSysCode().equals(getIdSysCodePairTarget().getSysCode());
     }
 
     @Override
-    Set<String> getSysCodesToCheck() {
+    public Set<String> getSysCodesToCheck() {
         Set<String> sysCodes = new HashSet<String>();
-        sysCodes.add(getSource().getSysCode());
-        sysCodes.add(getTarget().getSysCode());
+        sysCodes.add(getIdSysCodePairSource().getSysCode());
+        sysCodes.add(getIdSysCodePairTarget().getSysCode());
         return sysCodes;
     }
 

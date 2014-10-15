@@ -37,18 +37,45 @@ import org.bridgedb.pairs.IdSysCodePair;
  */
 public class Mapping {
  
-    private final Xref source;
-    private final Xref target;
-    
-    private Set<String> sourceUri;
-    private Set<String> targetUri;
+    private final IdSysCodePair idSysCodePairSource;
+    private final IdSysCodePair idSysCodePairTarget;
+    private final String justification;
+    private final String lens;
     private final Set<String> mappingSetId;
     private final String predicate;
+            
+    //These are set later if required        
+    private Xref source = null;
+    private Xref target = null;
+    private Set<String> sourceUri = new HashSet<String>();
+    private Set<String> targetUri = new HashSet<String>();
     
-    private final String lens;
+    public Mapping(IdSysCodePair idSysCodePairSource, IdSysCodePair idSysCodePairTarget, 
+            String predicate, String justification, int mappingSetId, String lens){
+        this.idSysCodePairSource = idSysCodePairSource;
+        this.idSysCodePairTarget = idSysCodePairTarget;
+        this.predicate = predicate;
+        this.justification = justification;
+        this.mappingSetId = new HashSet<String>();
+        this.mappingSetId.add(""+mappingSetId);
+        this.lens = lens;     
+    }
+    
+    public Mapping(IdSysCodePair idSysCodePairSource, IdSysCodePair idSysCodePairTarget, 
+            String predicate, String justification, Set<String> mappingSetIds, String lens){
+        this.idSysCodePairSource = idSysCodePairSource;
+        this.idSysCodePairTarget = idSysCodePairTarget;
+        this.predicate = predicate;
+        this.justification = justification;
+        this.mappingSetId = mappingSetIds;
+        this.lens = lens;
+    }
     
     public Mapping (Xref source, String predicate, Xref target, 
             Set<String> mappingSetIds, String lens){
+        this.idSysCodePairSource = null;
+        this.idSysCodePairTarget = null;
+        this.justification = null;
         this.sourceUri = new HashSet<String>();
         this.source = source;
         this.targetUri = new HashSet<String>();
@@ -59,6 +86,9 @@ public class Mapping {
     }
 
     public Mapping (String sourceUri, String predicate, Set<String> mappingSetIds, String lens){
+        this.idSysCodePairSource = null;
+        this.idSysCodePairTarget = null;
+        this.justification = null;
         this.sourceUri = new HashSet<String>();
         this.sourceUri.add(sourceUri);
         this.source = null;
@@ -75,6 +105,9 @@ public class Mapping {
      * @param xref
      */
     public Mapping (Xref xref, String lens){
+        this.idSysCodePairSource = null;
+        this.idSysCodePairTarget = null;
+        this.justification = null;
         this.sourceUri = new HashSet<String>();
         this.source = xref;
         this.targetUri = new HashSet<String>();
@@ -85,6 +118,9 @@ public class Mapping {
     }
 
     public Mapping (String sourceUri, String lens){
+        this.idSysCodePairSource = null;
+        this.idSysCodePairTarget = null;
+        this.justification = null;
         this.sourceUri = new HashSet<String>();
         this.sourceUri.add(sourceUri);
         this.source = null;
@@ -216,6 +252,27 @@ public class Mapping {
 
     public String getLens() {
         return lens;
+    }
+
+    /**
+     * @return the idSysCodePairSource
+     */
+    public IdSysCodePair getIdSysCodePairSource() {
+        return idSysCodePairSource;
+    }
+
+    /**
+     * @return the idSysCodePairTarget
+     */
+    public IdSysCodePair getIdSysCodePairTarget() {
+        return idSysCodePairTarget;
+    }
+
+    /**
+     * @return the justification
+     */
+    public String getJustification() {
+        return justification;
     }
 
     /**

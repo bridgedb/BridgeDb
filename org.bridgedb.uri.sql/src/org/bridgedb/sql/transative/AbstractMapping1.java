@@ -27,13 +27,13 @@ import org.bridgedb.pairs.IdSysCodePair;
  *
  * @author christian
  */
-public abstract class AbstractMapping {
+public abstract class AbstractMapping1 {
     private final IdSysCodePair source;
     private final IdSysCodePair target;
     private final String predicate;
     private final String justification;
 
-    public AbstractMapping (IdSysCodePair source, IdSysCodePair target, String predicate, String justification){
+    public AbstractMapping1 (IdSysCodePair source, IdSysCodePair target, String predicate, String justification){
         this.source = source;
         this.target = target;
         this.predicate = predicate;
@@ -44,11 +44,11 @@ public abstract class AbstractMapping {
         return source + " -> " + target;
     }
 
-    public final IdSysCodePair getTarget() {
+    public final IdSysCodePair getIdSysCodePairTarget() {
         return target;
     }
 
-    public final IdSysCodePair getSource() {
+    public final IdSysCodePair getIdSysCodePairSource() {
         return source;
     }
 
