@@ -108,6 +108,22 @@ public class Mapping {
         this.mappingResource = null;
     }
 
+    public Mapping (Xref source, String predicate, Xref target, 
+            Set<String> mappingSetIds, String lens){
+        this.idSysCodePairSource = null;
+        this.idSysCodePairTarget = null;
+        this.justification = null;
+        this.sourceUri = new HashSet<String>();
+        this.source = source;
+        this.targetUri = new HashSet<String>();
+        this.target = target;
+        this.mappingSetId = mappingSetIds;
+        this.predicate = predicate;
+        this.lens = lens;
+        this.mappingSource = null;
+        this.mappingResource = null;
+    }
+
     public Mapping (String sourceUri, String predicate, Set<String> mappingSetIds, String lens){
         this.idSysCodePairSource = null;
         this.idSysCodePairTarget = null;

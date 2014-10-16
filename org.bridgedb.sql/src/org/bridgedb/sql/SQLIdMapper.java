@@ -63,7 +63,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
     /**
      * Map between IdSysCodePair and Xref or DataSources 
      */
-    protected final CodeMapper codeMapper1;
+    protected final CodeMapper codeMapper;
     
     private static final Logger logger = Logger.getLogger(SQLIdMapper.class);
 
@@ -71,7 +71,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         super(dropTables);
         useLimit = SqlFactory.supportsLimit();
         useTop = SqlFactory.supportsTop();
-        this.codeMapper1 = codeMapper;
+        this.codeMapper = codeMapper;
      }   
 
     //*** IDMapper Methods 
@@ -639,13 +639,13 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         if (xref == null || xref.getId() == null || xref.getDataSource() == null){
             return null;
         }
-        return codeMapper1.toIdSysCodePair(xref);
+        return codeMapper.toIdSysCodePair(xref);
     }
 
     protected final Set<Xref> toXrefs(Set<IdSysCodePair> pairs) throws BridgeDBException {
         HashSet<Xref> results = new HashSet<Xref>();
         for (IdSysCodePair pair:pairs){
-            results.add(codeMapper1.toXref(pair));
+            results.add(codeMapper.toXref(pair));
         }
         return results;
     }

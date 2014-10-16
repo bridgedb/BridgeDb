@@ -433,7 +433,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         if (pair == null) {
             return null;
         }
-        return codeMapper1.toXref(pair);
+        return codeMapper.toXref(pair);
     }
 
     private IdSysCodePair getValidPair(String uri, String sysCode, String prefix, String postfix, String regex) {
@@ -1188,14 +1188,14 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 String targetId = rs.getString(TARGET_ID_COLUMN_NAME);
                 String targetSysCode = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
                 IdSysCodePair targetPair = new IdSysCodePair(targetId, targetSysCode);
-                Xref target = codeMapper1.toXref(targetPair);
+                Xref target = codeMapper.toXref(targetPair);
                 String mappingSetId = rs.getString(MAPPING_SET_ID_COLUMN_NAME);
                 String predicate = rs.getString(PREDICATE_COLUMN_NAME);
                 Xref source;
                 String sourceId = rs.getString(SOURCE_ID_COLUMN_NAME);
                 String sourceSysCode = rs.getString(SOURCE_DATASOURCE_COLUMN_NAME);
                 IdSysCodePair sourcePair = new IdSysCodePair(sourceId, sourceSysCode);
-                source = codeMapper1.toXref(sourcePair);
+                source = codeMapper.toXref(sourcePair);
                 HashSet<String> mappingSetIds = new HashSet<String>();
                 mappingSetIds.add(mappingSetId);
                 Mapping uriMapping = new Mapping(sourcePair, source, predicate, 
@@ -2172,7 +2172,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private Set<Xref> convertToXref(Set<Mapping> mappings) throws BridgeDBException {
         HashSet<Xref> results = new HashSet<Xref>();
         for (Mapping mapping : mappings) {
-            results.add(codeMapper1.toXref(mapping.getIdSysCodePairTarget()));
+            results.add(codeMapper.toXref(mapping.getIdSysCodePairTarget()));
         }    
         return results;
     }
@@ -2218,8 +2218,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     private void addXrefs(Set<Mapping> mappings) throws BridgeDBException {
         for (Mapping mapping : mappings) {
-            mapping.setSource(codeMapper1.toXref(mapping.getIdSysCodePairSource()));
-            mapping.setTarget(codeMapper1.toXref(mapping.getIdSysCodePairTarget()));
+            mapping.setSource(codeMapper.toXref(mapping.getIdSysCodePairSource()));
+            mapping.setTarget(codeMapper.toXref(mapping.getIdSysCodePairTarget()));
         }    
     }
 
@@ -2286,9 +2286,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         Set<Mapping> mappings = getTransitiveMappings(sourceRef, lensId);
         HashSet<Xref> results = new HashSet<Xref>();
         for (Mapping mapping : mappings) {
-            results.add(codeMapper1.toXref(mapping.getIdSysCodePairTarget()));
+            results.add(codeMapper.toXref(mapping.getIdSysCodePairTarget()));
         }
-        results.add(codeMapper1.toXref(sourceRef));
+        results.add(codeMapper.toXref(sourceRef));
         return results;
     }
 */
