@@ -19,8 +19,12 @@
 //
 package org.bridgedb.uri.api;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import org.bridgedb.Xref;
 import org.bridgedb.pairs.IdSysCodePair;
@@ -35,7 +39,7 @@ import org.bridgedb.pairs.IdSysCodePair;
  * <li>UriSpace: 
  * @author Christian
  */
-public class Mapping {
+public class Mapping implements Comparable<Mapping>{
 
     private final IdSysCodePair idSysCodePairSource;
     private final IdSysCodePair idSysCodePairTarget;
@@ -218,21 +222,6 @@ public class Mapping {
         return output.toString();
     }
    
-    @Override
-    public final boolean equals(Object other){
-        if (other == null) return false;
-        if (other instanceof Mapping){
-            Mapping otherMapping = (Mapping)other;
-           if (!otherMapping.sourceUri.equals(sourceUri)) return false;
-            if (!otherMapping.targetUri.equals(targetUri)) return false;
-            if (!otherMapping.getMappingSetId().equals(getMappingSetId())) return false;
-            //No need to check predicate as by defintion one id has one predicate
-            return true;
-         } else {
-            return false;
-        }
-    }
-
     /**
      * @return the mappingSetId
      */
@@ -317,32 +306,50 @@ public class Mapping {
     public final String getSourceSysCode() {
         if (idSysCodePairSource != null){
             return idSysCodePairSource.getSysCode();
-        } else {
+        } else if (source != null) {
             return source.getDataSource().getSystemCode();
+        } else {
+            return sourceUri.iterator().next();
         }
     }
 
     public final String getSourceId() {
         if (idSysCodePairSource != null){
             return idSysCodePairSource.getId();
-        } else {
+        } else if (source != null) {
             return source.getId();
+        } else {
+            return sourceUri.iterator().next();
         }
     }
     
     public final IdSysCodePair getSourcePair() {
         if (idSysCodePairSource != null){
             return idSysCodePairSource;
-        } else {
+        } else if (source != null) {
             return new IdSysCodePair(source.getId(), source.getDataSource().getSystemCode());
+        } else {
+            return null;
         }
     }
     
     public final String getTargetSysCode() {
         if (idSysCodePairTarget != null){
             return idSysCodePairTarget.getSysCode();
-        } else {
+        } else if (target != null) {
             return target.getDataSource().getSystemCode();
+        } else {
+            return targetUri.iterator().next();            
+        }
+    }
+    
+    public final String getTargetName(){
+        if (target != null){
+            return target.getDataSource().getFullName();
+        } else if (idSysCodePairTarget != null) {
+            return idSysCodePairTarget.getSysCode();
+        } else {
+            return targetUri.iterator().next();            
         }
     }
     
@@ -361,4 +368,50 @@ public class Mapping {
             return new IdSysCodePair(source.getId(), target.getDataSource().getSystemCode());
         }
     }
- }
+
+    @Override
+    public int compareTo(Mapping mapping) {
+        if (this.getTargetName().compareTo(mapping.getTargetName()) != 0){
+            return this.getTargetName().compareTo(mapping.getTargetName());
+        }
+        if (this.getTargetId().compareTo(mapping.getTargetId()) != 0){
+            return this.getTargetId().compareTo(mapping.getTargetId());
+        }
+        if (this.getSourceSysCode().compareTo(mapping.getSourceSysCode()) != 0){
+            return this.getTargetId().compareTo(mapping.getTargetId());
+        }
+        if (this.getSourceId().compareTo(mapping.getSourceId()) != 0){
+            return this.getTargetId().compareTo(mapping.getTargetId());
+        }
+        ArrayList myIds = new ArrayList(getMappingSetId());
+        Collections.sort(myIds);
+        List otherIds = new ArrayList(mapping.getMappingSetId());
+        Collections.sort(otherIds);
+        Iterator<String> myIt = myIds.iterator();
+        Iterator<String> otherIt = otherIds.iterator();
+        while (myIt.hasNext() && otherIt.hasNext()){
+            String my = myIt.next();
+            String other = otherIt.next();
+            if (my.compareTo(other) != 0) {
+                return my.compareTo(other);
+            }
+        }
+        if (myIt.hasNext()){
+            return +1;
+        }
+        if (otherIt.hasNext()){
+            return -1;
+        }
+        return 0;
+    }
+    
+    @Override 
+    public boolean equals(Object other){
+        if (other instanceof Mapping){
+            Mapping mapping = (Mapping)other;
+            return (compareTo(mapping) == 0);
+        }
+        return false;
+    }
+ 
+}

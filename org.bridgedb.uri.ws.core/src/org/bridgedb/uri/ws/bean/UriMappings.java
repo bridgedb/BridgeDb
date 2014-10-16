@@ -22,6 +22,7 @@ package org.bridgedb.uri.ws.bean;
 import java.util.HashSet;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.bridgedb.uri.api.Mapping;
 
 /**
  * Contains the information held for a particular mapping.
@@ -52,6 +53,17 @@ public class UriMappings {
     public static UriMappings asBean(Set<String> targets){
         UriMappings bean = new UriMappings();
         bean.setTargetUri(targets);
+        return bean;
+    }
+
+    public static UriMappings toBean(Set<Mapping> mappings){
+        UriMappings bean = new UriMappings();
+        bean.targetUri = new HashSet<String>();
+        for (Mapping mapping:mappings){
+            if (mapping.getTargetUri() != null){
+                bean.targetUri.addAll(mapping.getTargetUri());
+            }
+        }
         return bean;
     }
 

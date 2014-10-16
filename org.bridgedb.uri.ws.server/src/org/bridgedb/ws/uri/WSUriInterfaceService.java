@@ -25,6 +25,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -296,9 +297,14 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns,
             @QueryParam(WsUriConstants.FORMAT) String format,
             @Context HttpServletRequest httpServletRequest) {
-        MappingsBySysCodeId result = null;
+        Set<Mapping> mappings = new HashSet<Mapping>();
         try {
-            result = uriMapper.mapUriBySysCodeId(uris, lensUri, graph, targetUriPatterns);
+            if (uris == null || uris.isEmpty()){
+                throw new BridgeDBException(WsUriConstants.URI + " parameter missing!");
+            }
+            for (String uri:uris){
+                mappings.addAll(uriMapper.mapFull(uri, lensUri, true, graph, targetUriPatterns));
+            }
         } catch (BridgeDBException exception) {
             return  mapUriHtmlResult(uris, lensUri, graph, targetUriPatterns, format, httpServletRequest, null, exception);
         }
@@ -308,22 +314,23 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             format = MediaType.TEXT_HTML;
         }
         if (format.equals("application/xml")){
-            if (noConentOnEmpty & result.isEmpty()){
+            if (noConentOnEmpty & mappings.isEmpty()){
                 return noContentWrapper(httpServletRequest);
             } 
-            return Response.ok(new UriMappings(result.getUris()), MediaType.APPLICATION_XML_TYPE).build();
+            
+            return Response.ok(UriMappings.toBean(mappings), MediaType.APPLICATION_XML_TYPE).build();
         }
         else if (format.equals("application/json")){
-            if (noConentOnEmpty & result.isEmpty()){
+            if (noConentOnEmpty & mappings.isEmpty()){
                 return noContentWrapper(httpServletRequest);
             } 
-            return Response.ok(new UriMappings(result.getUris()), MediaType.APPLICATION_JSON_TYPE).build();
+            return Response.ok(UriMappings.toBean(mappings), MediaType.APPLICATION_JSON_TYPE).build();
         }
-        return  mapUriHtmlResult(uris, lensUri, graph, targetUriPatterns, format, httpServletRequest, result, null);
+        return  mapUriHtmlResult(uris, lensUri, graph, targetUriPatterns, format, httpServletRequest, mappings, null);
     }
 
     private Response mapUriHtmlResult(List<String> uris, String lensUri, String graph, List<String> targetUriPatterns,
-            String format, HttpServletRequest httpServletRequest, MappingsBySysCodeId result, BridgeDBException exception) {
+            String format, HttpServletRequest httpServletRequest, Collection<Mapping> mappingSet, BridgeDBException exception) {
         uris.remove("");
         targetUriPatterns.remove("");
         StringBuilder sb = topAndSide ("Identity Mapping Service", httpServletRequest);        
@@ -337,9 +344,12 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         velocityContext.put("targetUriPatternName", WsUriConstants.TARGET_URI_PATTERN);
         velocityContext.put("graph", graph);
         velocityContext.put("graphName", WsUriConstants.GRAPH);
-        if (result != null){
-            velocityContext.put("MappingsBySysCodeId",result);
-        } else {
+        if (mappingSet != null){            
+            ArrayList<Mapping> mappingList = new ArrayList<Mapping>(mappingSet);
+            Collections.sort(mappingList);
+            velocityContext.put("mappings",mappingList);
+         } else {
+            velocityContext.put("mappings",new ArrayList<Mapping>());            
             velocityContext.put("exception", exception.getMessage());
         }
         sb.append( WebTemplates.getForm(velocityContext, WebTemplates.MAP_URI_RESULTS)); 

@@ -4,27 +4,30 @@
     <h3>$exception</h3>
     <p>Warning: XML and JSON versions will throw an Exception with these parameters</p>
 #else 
-    #if( $MappingsBySysCodeId.isEmpty())
+    #if( $mappings.isEmpty())
         <h4>No Target Uris found</h4>
         <p>
         Warning if accepts header is set to "application/xml" or "application/json" this methods returns status 204 if no results are found.
         </p>
     #else
-        #foreach ( $resultSysCode in $MappingsBySysCodeId.getSysCodes())
-            <ul>
-                <li>$MappingsBySysCodeId.getDataSourceName($resultSysCode)</li>
-                #foreach ( $resultId in $MappingsBySysCodeId.getIds($resultSysCode))
+        #set( $syscode = "" )
+                <ul>
+        #foreach ( $mapping in $mappings)
+            #if (!$syscode.equals($mapping.getTargetName()))
+                </ul><ul>
+                    <li>$mapping.getTargetName()</li>
+                    #set( $syscode = $mapping.getTargetName())
+            #end
                     <ul>
-                        <li>$resultId</li>
+                        <li>$mapping.getTargetId()</li>      
                         <ul>
-                            #foreach ( $resultUri in $MappingsBySysCodeId.getUris($resultSysCode, $resultId))
+                            #foreach ( $resultUri in $mapping.getTargetUri())
                                 <li><a href=$resultUri>$resultUri</a></li>
                             #end
                         </ul>
                     </ul>
-                #end
-            </ul>
         #end
+                </ul>
     #end
 #end
 <h2>Parameters</h2>
