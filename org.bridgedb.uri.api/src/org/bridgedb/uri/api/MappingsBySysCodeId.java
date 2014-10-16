@@ -33,6 +33,7 @@ import org.bridgedb.utils.BridgeDBException;
 /**
  *
  * @author Christian
+ * @deprecated 
  */
 public class MappingsBySysCodeId {
     
