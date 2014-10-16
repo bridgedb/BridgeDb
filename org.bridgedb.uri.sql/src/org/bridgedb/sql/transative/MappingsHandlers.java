@@ -53,12 +53,12 @@ public class MappingsHandlers {
         //ystem.out.println("+ " + mapping);
         toCheck.push(mapping);
         mappings.add(mapping);
-        checkedPairs.add(mapping.getIdSysCodePairTarget());
+        checkedPairs.add(mapping.getTargetPair());
     }
     
     public final void addMappings(Set<DirectMapping> newMappings) {
         for (DirectMapping mapping: newMappings){
-            if (checkedPairs.contains(mapping.getIdSysCodePairTarget())){
+            if (checkedPairs.contains(mapping.getTargetPair())){
                 //ystem.out.println("Duplicate " + mapping.getIdSysCodePairTarget());
             } else {
                 addMapping(mapping);
@@ -75,7 +75,7 @@ public class MappingsHandlers {
     }
 
     public final void addMapping(IDSysCodePairMapping previous, DirectMapping newMapping) throws BridgeDBException {   
-        IdSysCodePair targetRef = newMapping.getIdSysCodePairTarget();
+        IdSysCodePair targetRef = newMapping.getTargetPair();
         if (checkedPairs.contains(targetRef)){
             //ystem.out.println("Duplicate " + targetRef);
             return;

@@ -41,11 +41,11 @@ public class TransitiveMapping extends IDSysCodePairMapping {
     private boolean includesMappingToSelf = false;
 
     public TransitiveMapping (IDSysCodePairMapping previous, DirectMapping newMapping, String predicate, String justification) throws BridgeDBException{
-        super(previous.getIdSysCodePairSource(), newMapping.getIdSysCodePairTarget(), 
+        super(previous.getSourcePair(), newMapping.getTargetPair(), 
                 predicate, justification, mergeIds(previous, newMapping), 
                 BridgeDBConstants.TRANSITIVE, BridgeDBConstants.TRANSITIVE, newMapping.getLens());
         //Never expected but just in case
-        if (!previous.getIdSysCodePairTarget().equals(newMapping.getIdSysCodePairSource())){
+        if (!previous.getTargetPair().equals(newMapping.getSourcePair())){
             throw new BridgeDBException ("Unexpected broken mapping chain");
         }
         via = createVia(previous, newMapping);
@@ -77,7 +77,7 @@ public class TransitiveMapping extends IDSysCodePairMapping {
         //ystem.out.println(previous);
         //ystem.out.println(newMapping);
         Set<String> syscodes;
-        if (newMapping.getIdSysCodePairSource().getSysCode().equals(newMapping.getIdSysCodePairTarget().getSysCode())){
+        if (newMapping.getSourceSysCode().equals(newMapping.getTargetSysCode())){
             if (previous.hasMappingToSelf()){
                 throw new BridgeDBException("Two mappings to self in same chain.");
             } else {
@@ -89,7 +89,7 @@ public class TransitiveMapping extends IDSysCodePairMapping {
             includesMappingToSelf = previous.hasMappingToSelf();
             syscodes = new HashSet<String>(previous.getSysCodesToCheck());  
         }
-        syscodes.add(newMapping.getIdSysCodePairTarget().getSysCode());
+        syscodes.add(newMapping.getTargetSysCode());
         //ystem.out.println("==" + syscodes + "==");
         return syscodes;
     }
@@ -103,7 +103,7 @@ public class TransitiveMapping extends IDSysCodePairMapping {
         //ystem.out.println ("c " + this);
         //ystem.out.println (targetRef);
         //Check if incoming is a mapping to self (Same syscode)
-        if (getIdSysCodePairTarget().getSysCode().equals(targetRef.getSysCode())){
+        if (getTargetSysCode().equals(targetRef.getSysCode())){
             //Only allow one per transitive
             //ystem.out.println("mapping to self");
             return includesMappingToSelf;
@@ -130,15 +130,6 @@ public class TransitiveMapping extends IDSysCodePairMapping {
     @Override
     public Set<String> getSysCodesToCheck() {
         return sysCodesToCheck;
-    }
-
-    @Override
-    public Set<String> getMappingSetId() {
-        HashSet<String> ids = new HashSet<String>();
-         for (DirectMapping aVia:via){
-            ids.add(aVia.getId());
-        }
-        return ids;
     }
 
 }

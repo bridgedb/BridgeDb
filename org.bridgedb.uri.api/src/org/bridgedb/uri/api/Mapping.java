@@ -36,7 +36,7 @@ import org.bridgedb.pairs.IdSysCodePair;
  * @author Christian
  */
 public class Mapping {
- 
+
     private final IdSysCodePair idSysCodePairSource;
     private final IdSysCodePair idSysCodePairTarget;
     private final String justification;
@@ -46,7 +46,6 @@ public class Mapping {
     private final String mappingSource;
     private final String mappingResource;
         
-    
     //These are set later if required        
     private Xref source = null;
     private Xref target = null;
@@ -91,11 +90,10 @@ public class Mapping {
         this.mappingResource = null;
     }
 
-    public Mapping (IdSysCodePair idSysCodePairSource, Xref source, String predicate,
-             IdSysCodePair idSysCodePairTarget, Xref target, 
+     public Mapping (Xref source, String predicate, Xref target, 
             Set<String> mappingSetIds, String lens){
-        this.idSysCodePairSource = idSysCodePairSource;
-        this.idSysCodePairTarget = idSysCodePairTarget;
+        this.idSysCodePairSource = null;
+        this.idSysCodePairTarget = null;
         this.justification = null;
         this.sourceUri = new HashSet<String>();
         this.source = source;
@@ -108,10 +106,11 @@ public class Mapping {
         this.mappingResource = null;
     }
 
-    public Mapping (Xref source, String predicate, Xref target, 
+    public Mapping (IdSysCodePair idSysCodePairSource, Xref source, String predicate,
+             IdSysCodePair idSysCodePairTarget, Xref target, 
             Set<String> mappingSetIds, String lens){
-        this.idSysCodePairSource = null;
-        this.idSysCodePairTarget = null;
+        this.idSysCodePairSource = idSysCodePairSource;
+        this.idSysCodePairTarget = idSysCodePairTarget;
         this.justification = null;
         this.sourceUri = new HashSet<String>();
         this.source = source;
@@ -140,26 +139,6 @@ public class Mapping {
         this.mappingResource = null;
     }
 
-    /**
-     * This is the constructor for a mapping to self.
-     * 
-     * @param xref
-     */
-    public Mapping (Xref xref, String lens){
-        this.idSysCodePairSource = null;
-        this.idSysCodePairTarget = null;
-        this.justification = null;
-        this.sourceUri = new HashSet<String>();
-        this.source = xref;
-        this.targetUri = new HashSet<String>();
-        this.target = xref;
-        this.mappingSetId = null;
-        this.predicate = null;
-        this.lens = lens;
-        this.mappingSource = null;
-        this.mappingResource = null;
-    }
-
     public Mapping (String uri, IdSysCodePair pair){
         this.idSysCodePairSource = pair;
         this.idSysCodePairTarget = pair;
@@ -180,33 +159,34 @@ public class Mapping {
     /**
      * @return the sourceUris
      */
-    public Set<String> getSourceUri() {
+    public final Set<String> getSourceUri() {
         return sourceUri;
     }
  
-    public void addSourceUri(String sourceUri){
+    public final void addSourceUri(String sourceUri){
         getSourceUri().add(sourceUri);
     }
     
-    public void addSourceUris(Collection<String> sourceUris){
+    public final void addSourceUris(Collection<String> sourceUris){
         getSourceUri().addAll(sourceUris);
     }
     
     /**
      * @return the target Uris
      */
-    public Set<String> getTargetUri() {
+    public final Set<String> getTargetUri() {
         return targetUri;
     }
 
-    public void addTargetUri(String targetUri){
+    public final void addTargetUri(String targetUri){
         getTargetUri().add(targetUri);
     }
 
-    public void addTargetUris(Collection<String> extraTargetUris){
+    public final void addTargetUris(Collection<String> extraTargetUris){
         getTargetUri().addAll(extraTargetUris);
     }
 
+    @Override
     public String toString(){
         StringBuilder output = new StringBuilder("mapping ");
         for (String sourceUri:getSourceUri()){
@@ -239,7 +219,7 @@ public class Mapping {
     }
    
     @Override
-    public boolean equals(Object other){
+    public final boolean equals(Object other){
         if (other == null) return false;
         if (other instanceof Mapping){
             Mapping otherMapping = (Mapping)other;
@@ -256,103 +236,129 @@ public class Mapping {
     /**
      * @return the mappingSetId
      */
-    public Set<String> getMappingSetId() {
+    public final Set<String> getMappingSetId() {
         return mappingSetId;
     }
 
     /**
      * @return the predicate
      */
-    public String getPredicate() {
+    public final String getPredicate() {
         return predicate;
     }
 
     /**
      * @return the source
      */
-    public Xref getSource() {
+    public final Xref getSource() {
         return source;
     }
 
     /**
      * @return the target
      */
-    public Xref getTarget() {
+    public final Xref getTarget() {
         return target;
     }
     
     /**
      * @param sourceUris the sourceUris to set
      */
-    public void setSourceUri(Set<String> sourceUris) {
+    public final void setSourceUri(Set<String> sourceUris) {
         this.sourceUri = sourceUris;
     }
 
     /**
      * @param targetUris the targetUris to set
      */
-    public void setTargetUri(Set<String> targetUris) {
+    public final void setTargetUri(Set<String> targetUris) {
         this.targetUri = targetUris;
     }
 
-    public String getLens() {
+    public final String getLens() {
         return lens;
-    }
-
-    /**
-     * @return the idSysCodePairSource
-     */
-    public IdSysCodePair getIdSysCodePairSource() {
-        return idSysCodePairSource;
-    }
-
-    /**
-     * @return the idSysCodePairTarget
-     */
-    public IdSysCodePair getIdSysCodePairTarget() {
-        return idSysCodePairTarget;
     }
 
     /**
      * @return the justification
      */
-    public String getJustification() {
+    public final String getJustification() {
         return justification;
     }
 
     /**
      * @param source the source to set
      */
-    public void setSource(Xref source) {
+    public final void setSource(Xref source) {
         this.source = source;
     }
 
     /**
      * @param target the target to set
      */
-    public void setTarget(Xref target) {
+    public final void setTarget(Xref target) {
         this.target = target;
     }
 
     /**
      * @return the mappingSource
      */
-    public String getMappingSource() {
+    public final String getMappingSource() {
         return mappingSource;
     }
 
     /**
      * @return the mappingResource
      */
-    public String getMappingResource() {
+    public final String getMappingResource() {
         return mappingResource;
     }
 
-    /**
-     * @param predicate the predicate to set
-     * /
-    public void setPredicate(String predicate) {
-        this.predicate = predicate;
+    public final String getSourceSysCode() {
+        if (idSysCodePairSource != null){
+            return idSysCodePairSource.getSysCode();
+        } else {
+            return source.getDataSource().getSystemCode();
+        }
     }
-    /**/
+
+    public final String getSourceId() {
+        if (idSysCodePairSource != null){
+            return idSysCodePairSource.getId();
+        } else {
+            return source.getId();
+        }
+    }
+    
+    public final IdSysCodePair getSourcePair() {
+        if (idSysCodePairSource != null){
+            return idSysCodePairSource;
+        } else {
+            return new IdSysCodePair(source.getId(), source.getDataSource().getSystemCode());
+        }
+    }
+    
+    public final String getTargetSysCode() {
+        if (idSysCodePairTarget != null){
+            return idSysCodePairTarget.getSysCode();
+        } else {
+            return target.getDataSource().getSystemCode();
+        }
+    }
+    
+    public final String getTargetId() {
+        if (idSysCodePairTarget != null){
+            return idSysCodePairTarget.getId();
+        } else {
+            return target.getId();
+        }
+    }
+
+    public final IdSysCodePair getTargetPair() {
+        if (idSysCodePairTarget != null){
+            return idSysCodePairTarget;
+        } else {
+            return new IdSysCodePair(source.getId(), target.getDataSource().getSystemCode());
+        }
+    }
  }

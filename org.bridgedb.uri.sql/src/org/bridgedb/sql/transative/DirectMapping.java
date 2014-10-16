@@ -44,27 +44,20 @@ public class DirectMapping extends IDSysCodePairMapping {
 
     @Override
     public boolean createsLoop(IdSysCodePair targetRef){
-        return getIdSysCodePairSource().getSysCode().equals(targetRef.getSysCode());
+        return getSourceSysCode().equals(targetRef.getSysCode());
     }
 
     @Override
     public boolean hasMappingToSelf() {
-        return getIdSysCodePairSource().getSysCode().equals(getIdSysCodePairTarget().getSysCode());
+        return getSourceSysCode().equals(getTargetSysCode());
     }
 
     @Override
     public Set<String> getSysCodesToCheck() {
         Set<String> sysCodes = new HashSet<String>();
-        sysCodes.add(getIdSysCodePairSource().getSysCode());
-        sysCodes.add(getIdSysCodePairTarget().getSysCode());
+        sysCodes.add(getSourceSysCode());
+        sysCodes.add(getTargetSysCode());
         return sysCodes;
-    }
-
-    @Override
-    public Set<String> getMappingSetId() {
-        HashSet<String> ids = new HashSet<String>();
-        ids.add(id);
-        return ids;
     }
 
     public String getId() {
