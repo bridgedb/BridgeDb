@@ -153,7 +153,7 @@ public class Mapping implements Comparable<Mapping>{
         this.targetUri = new HashSet<String>();
         this.targetUri.add(uri);
         this.target = null;
-        this.mappingSetId = null;
+        this.mappingSetId = new HashSet<String>();
         this.predicate = null;
         this.lens = null;
         this.mappingSource = null;
@@ -371,16 +371,27 @@ public class Mapping implements Comparable<Mapping>{
 
     @Override
     public int compareTo(Mapping mapping) {
+        if (this.sourceUri.size() != 1 || mapping.getSourceUri().size() != 1){
+            if (this.getSourceSysCode().compareTo(mapping.getSourceSysCode()) != 0){
+                return this.getTargetId().compareTo(mapping.getTargetId());
+            }
+            if (this.getSourceId().compareTo(mapping.getSourceId()) != 0){
+                return this.getTargetId().compareTo(mapping.getTargetId());
+            }
+        } else {
+            String aSourceUri = sourceUri.iterator().next();
+            String otherUri = mapping.getSourceUri().iterator().next();
+            if (aSourceUri.compareTo(otherUri) != 0){
+                return aSourceUri.compareTo(otherUri);
+            }
+        }
+        if (this.getTargetName().compareTo(mapping.getTargetName()) != 0){
+            return this.getTargetName().compareTo(mapping.getTargetName());
+        }
         if (this.getTargetName().compareTo(mapping.getTargetName()) != 0){
             return this.getTargetName().compareTo(mapping.getTargetName());
         }
         if (this.getTargetId().compareTo(mapping.getTargetId()) != 0){
-            return this.getTargetId().compareTo(mapping.getTargetId());
-        }
-        if (this.getSourceSysCode().compareTo(mapping.getSourceSysCode()) != 0){
-            return this.getTargetId().compareTo(mapping.getTargetId());
-        }
-        if (this.getSourceId().compareTo(mapping.getSourceId()) != 0){
             return this.getTargetId().compareTo(mapping.getTargetId());
         }
         ArrayList myIds = new ArrayList(getMappingSetId());

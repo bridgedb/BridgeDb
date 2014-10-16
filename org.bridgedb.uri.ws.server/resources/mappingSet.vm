@@ -21,18 +21,6 @@
         <dd>$mappingSetInfo.getNumberOfSources()</dd>
     <dt>Number of Distinct Target URIs</dt>
         <dd>$mappingSetInfo.getNumberOfTargets()</dd>      
-    <dt>Via Data Sets</dt>
-        <dd><ul>
-            #foreach ($dataSetInfo in $mappingSetInfo.getViaDataSets())
-                <li><a href="$contextPath/dataSource/$dataSetInfo.getSysCode()">$dataSetInfo.getFullName()</a></li>
-            #end
-        </ul></dd>
-    <dt>Via Mapping Sets</dt>
-        <dd><ul>
-            #foreach ($chainId in $mappingSetInfo.getChainIds())
-                <li><a href="$contextPath/mappingSet/$chainId">$chainId</a></li>
-            #end
-        </ul></dd>
 </dl>
 
 

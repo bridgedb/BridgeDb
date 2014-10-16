@@ -335,6 +335,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         targetUriPatterns.remove("");
         StringBuilder sb = topAndSide ("Identity Mapping Service", httpServletRequest);        
         VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("contextPath", httpServletRequest.getContextPath());
         velocityContext.put("sourceUris", uris);
         velocityContext.put("URI", WsUriConstants.URI);
         velocityContext.put("lensURI", lensUri);

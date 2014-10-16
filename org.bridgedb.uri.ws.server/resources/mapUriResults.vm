@@ -10,13 +10,21 @@
         Warning if accepts header is set to "application/xml" or "application/json" this methods returns status 204 if no results are found.
         </p>
     #else
-        #set( $syscode = "" )
+        #set( $targetSystemCode = "" )
+        #set( $sourceUri = "" )
+               <ul> 
+        #foreach ( $mapping in $mappings)       
+            #if (!$sourceUri.equals($mapping.getSourceUri().iterator().next()))
+                #set( $sourceUri = $mapping.getSourceUri().iterator().next())
+                </ul>
+                <h3>Mappings for $sourceUri</h3>
                 <ul>
-        #foreach ( $mapping in $mappings)
-            #if (!$syscode.equals($mapping.getTargetName()))
+                #set( $targetSystemCode = "" )
+            #end
+            #if (!$targetSystemCode.equals($mapping.getTarget().getDataSource().getSystemCode()))
                 </ul><ul>
-                    <li>$mapping.getTargetName()</li>
-                    #set( $syscode = $mapping.getTargetName())
+                    #set( $targetSystemCode = $mapping.getTarget().getDataSource().getSystemCode())
+                    <li><a href="$contextPath/dataSource/$targetSystemCode">$mapping.getTarget().getDataSource().getFullName()</a></li>
             #end
                     <ul>
                         <li>$mapping.getTargetId()</li>      
@@ -24,6 +32,17 @@
                             #foreach ( $resultUri in $mapping.getTargetUri())
                                 <li><a href=$resultUri>$resultUri</a></li>
                             #end
+                            #if ($mapping.getMappingSetId().size() == 0)
+                                <li>This is an automatic mapping to alternative equals URIs
+                            #elseif ($mapping.getMappingSetId().size() == 1)
+                                <li>Found in mappingSet  
+                            #else    
+                                <li>Derived from MappingSets  
+                            #end
+                            #foreach ( $id in $mapping.getMappingSetId())
+                                <a href="$contextPath/mappingSet/$id">$id</a>
+                            #end
+                            </li>
                         </ul>
                     </ul>
         #end
@@ -39,7 +58,7 @@
         <a href=$sourceUri">$sourceUri</a><br>
     #end
 #end
-#if ( $lensURI.isEmpty())
+#if ($lensURI)
     <h4>No $lensURIName parameter so using $defaultLensName</h4>
 #else
     <h4>${lensURIName}: $lensURI</h4>
