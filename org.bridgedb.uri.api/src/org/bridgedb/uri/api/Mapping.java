@@ -143,6 +143,22 @@ public class Mapping implements Comparable<Mapping>{
         this.mappingResource = null;
     }
 
+     public Mapping (String uri, Set<String> targetUris){
+        this.idSysCodePairSource = null;
+        this.idSysCodePairTarget = null;
+        this.justification = null;
+        this.sourceUri = new HashSet<String>();
+        this.sourceUri.add(uri);
+        this.source = null;
+        this.targetUri.add(uri);
+        this.target = null;
+        this.mappingSetId = new HashSet<String>();
+        this.predicate = null;
+        this.lens = null;
+        this.mappingSource = null;
+        this.mappingResource = null;
+    }
+    
     public Mapping (String uri, IdSysCodePair pair){
         this.idSysCodePairSource = pair;
         this.idSysCodePairTarget = pair;

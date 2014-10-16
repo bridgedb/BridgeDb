@@ -139,14 +139,11 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
 
     @Override
     public MappingsBySet mapBySet(Collection<String> sourceUris, String lensUri, String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
-        ArrayList<String> soureUrisList = new ArrayList(sourceUris);
-        List<String> tgtUriPatternStrings = toList(tgtUriPatterns);
-        Response response =  uriService.mapBySet(soureUrisList, lensUri, graph,  tgtUriPatternStrings);
-        if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()){
-            return new MappingsBySet(null);
-        }    
-        MappingsBySetBean bean = (MappingsBySetBean) response.getEntity();
-        return bean.asMappingsBySet();
+        Set<Mapping> mappings = new HashSet<Mapping>();
+        for (String uri:sourceUris){
+            mappings.addAll(this.mapFull(uri, lensUri, EXCLUDE_XREF_RESULTS, graph, tgtUriPatterns));
+        }
+        return new MappingsBySet(lensUri, mappings);
     }
 
     @Override

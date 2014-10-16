@@ -41,12 +41,41 @@ public class MappingsBySet {
      */
     private final Set<UriMapping> mappings;
     
-    public MappingsBySet(String lens){
+    public MappingsBySet(String lens, Set<Mapping> mappings){
         this.lens = lens;
         this.setMappings = new HashSet<SetMappings>();
         this.mappings = new HashSet<UriMapping>();
+        for (Mapping mapping:mappings){
+            if (mapping.getJustification() == null){
+                addUriMapping(mapping);
+            } else {
+                addSetMapping(mapping);
+            }
+        }
     }
     
+    private void addUriMapping(Mapping mapping) {
+        for (String source:mapping.getSourceUri()){
+            for (String target: mapping.getTargetUri()){
+                mappings.add(new UriMapping(source, target));
+            }
+        }
+    }
+
+    private void addSetMapping(Mapping mapping) {   
+        String mappingId = sortAndString(mapping.getMappingSetId());
+        SetMappings setMapping = new SetMappings(mappingId, mapping.getPredicate(), 
+                mapping.getJustification(), mapping.getMappingSource(), mapping.getMappingResource());
+        for (String source:mapping.getSourceUri()){
+            for (String target: mapping.getTargetUri()){
+                setMapping.addMapping(new UriMapping(source, target));
+            }
+        }
+        setMappings.add(setMapping);
+    }
+
+    
+    /**
     public void addMappings (Set<String> mappingSetIds, String predicate, String justification, String mappingSource, 
             String mappingResource, String sourceUri, Set<String> targetUris){
         String mappingId = sortAndString(mappingSetIds);
@@ -97,7 +126,7 @@ public class MappingsBySet {
             addSetMapping(setMapping);
         }
     }
-    
+    */
     private SetMappings setMappingById(String id) {
         for (SetMappings setMapping: getSetMappings()){
             if (setMapping.getId().equals(id)){
@@ -172,4 +201,5 @@ public class MappingsBySet {
         }
         return sb.toString();
     }
-}
+
+ }

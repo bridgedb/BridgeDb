@@ -21,13 +21,19 @@
                 <ul>
                 #set( $targetSystemCode = "" )
             #end
-            #if (!$targetSystemCode.equals($mapping.getTarget().getDataSource().getSystemCode()))
-                </ul><ul>
-                    #set( $targetSystemCode = $mapping.getTarget().getDataSource().getSystemCode())
-                    <li><a href="$contextPath/dataSource/$targetSystemCode">$mapping.getTarget().getDataSource().getFullName()</a></li>
-            #end
+            #if ($mapping.getTarget())
+                #if (!$targetSystemCode.equals($mapping.getTarget().getDataSource().getSystemCode()))
+                    </ul><ul>
+                        #set( $targetSystemCode = $mapping.getTarget().getDataSource().getSystemCode())
+                        <li><a href="$contextPath/dataSource/$targetSystemCode">$mapping.getTarget().getDataSource().getFullName()</a></li>
+                #end
                     <ul>
                         <li>$mapping.getTargetId()</li>      
+            #else
+                </ul><ul>
+                    <li>Unkown Uripattern</li>
+                    <ul>
+            #end
                         <ul>
                             #foreach ( $resultUri in $mapping.getTargetUri())
                                 <li><a href=$resultUri>$resultUri</a></li>

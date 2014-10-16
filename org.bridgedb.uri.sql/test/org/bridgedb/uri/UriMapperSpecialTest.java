@@ -80,7 +80,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         try {
             Set<Mapping> results = uriMapper.mapFull(mapBadUri1, Lens.DEFAULT_LENS_NAME, NO_TARGET_DATASOURCE);
             //if no exception there should be an empty result
-            assertTrue(results.isEmpty());
+            assertTrue(results.size() == 1);
         } catch (BridgeDBException ex){
             //ok
         }
@@ -434,7 +434,6 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         tgtUriPatterns.add("http://www.example.com/protclass/");
         Set<String> results = uriMapper.mapUri(uri, NULL_LENS, 
                 NULL_GRAPH, tgtUriPatterns);   
-        System.out.println("test "+ results);
         assertEquals (0, results.size());
     }
     
