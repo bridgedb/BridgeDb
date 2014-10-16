@@ -2088,27 +2088,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return results;
     }
     
-    private MappingsBySysCodeId filterAndExtractMappingBySysCodeId(Set<Mapping> mappings, IdSysCodePair sourceRef, Set<RegexUriPattern> targetUriPatterns) throws BridgeDBException {
-        if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
-            mappings.add(new Mapping(sourceRef));
-            return convertToMappingsBySysCodeId(mappings);
-        }
-        MappingsBySysCodeId results = new MappingsBySysCodeId();
-        for (RegexUriPattern targetUriPattern : targetUriPatterns) {
-            if (targetUriPattern != null){
-                for (Mapping mapping : mappings) {
-                    if (mapping.getTargetSysCode().equals(targetUriPattern.getSysCode())) {
-                        results.addMapping(mapping.getTargetPair(), targetUriPattern.getUri(mapping.getTargetId()));
-                    }
-                }
-                if (targetUriPattern.getSysCode().equals(sourceRef.getSysCode())) {
-                    results.addMapping(sourceRef, targetUriPattern.getUri(sourceRef.getId()));
-                }
-            }
-        }
-        return results;
-    }
-
     private MappingsBySet filterAndExtractMappingBySet(Set<Mapping> mappings, String sourceUri, IdSysCodePair sourceRef, 
             String lensId, Set<RegexUriPattern> targetUriPatterns) throws BridgeDBException {
         if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
@@ -2185,17 +2164,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return results;
     }
                                 
-    private MappingsBySysCodeId convertToMappingsBySysCodeId(Set<Mapping> mappings) throws BridgeDBException {
-        MappingsBySysCodeId results = new MappingsBySysCodeId();
-        for (Mapping mapping : mappings) {
-            Set<String> targetUris = toUris(mapping.getTargetPair());
-            for (String targetUri:targetUris){
-                results.addMapping(mapping.getTargetPair(), targetUri);
-            }
-        }
-        return results;
-    }
-
     private MappingsBySet convertToMappingBySet(Set<Mapping> mappings, String sourceUri,  
             String lensId) throws BridgeDBException {
         MappingsBySet mappingsBySet = new MappingsBySet(lensId);
@@ -2344,18 +2312,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
 
     @Override
+    /**
+     * deprecated use mapFull (in fact that is not used under the hood
+     */
     public MappingsBySysCodeId mapUriBySysCodeId(String sourceUri, String lensUri, String graph, Collection<String> tgtUriPatterns)
             throws BridgeDBException {
-        sourceUri = scrubUri(sourceUri);
-        IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
-        if (sourceRef == null) {
-            Set<String> uris = mapUnkownUri(sourceUri, graph, tgtUriPatterns);
-            MappingsBySysCodeId results = new MappingsBySysCodeId();
-            results.addMappings("Unknown URI pattern", "Unknown URI pattern", uris);
-        }
-        Set<RegexUriPattern> targetUriPatterns = findRegexPatternsWithNulls(graph, tgtUriPatterns);
-        Set<Mapping> mappings = getTransitiveMappings(sourceRef, lensUri);
-        return this.filterAndExtractMappingBySysCodeId(mappings, sourceRef, targetUriPatterns);
+        Set<Mapping> mappings = mapFull(sourceUri, lensUri, false, graph, tgtUriPatterns);
+        return new MappingsBySysCodeId(mappings);
     }
 
     public MappingsBySet mapBySet(String sourceUri, String lensUri, String graph, Collection<String> tgtUriPatterns)
@@ -2481,7 +2444,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     public MappingsBySysCodeId mapUriBySysCodeId(Collection<String> sourceUris, String lensUri, String graph, Collection<String> tgtUriPatterns)
             throws BridgeDBException {
         if (sourceUris.isEmpty()) {
-            return new MappingsBySysCodeId();
+            return new MappingsBySysCodeId(null);
         }
         if (sourceUris.size() == 1) {
             return mapUriBySysCodeId(sourceUris.iterator().next(), lensUri, graph, tgtUriPatterns);

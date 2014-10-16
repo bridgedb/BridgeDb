@@ -104,18 +104,24 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     }
     
     @Override
+    /**
+      * @deprecated use mapFull (in fact that is not used under the hood.
+     */
     public MappingsBySysCodeId mapUriBySysCodeId(String sourceUri, String lensUri, String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
-        Set<Mapping> beans = mapFull(sourceUri, lensUri, INCLUDE_XREF_RESULTS, graph, tgtUriPatterns);
-        return extractMappingsBySysCodeId(beans);
+        Set<Mapping> mappings = mapFull(sourceUri, lensUri, INCLUDE_XREF_RESULTS, graph, tgtUriPatterns);
+        return new MappingsBySysCodeId(mappings);
     }
 
     @Override
+    /**
+      * @deprecated use mapFull (in fact that is not used under the hood.
+     */
     public MappingsBySysCodeId mapUriBySysCodeId(Collection<String> sourceUris, String lensUri, String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
         if (sourceUris.size() == 1){
             return mapUriBySysCodeId(sourceUris.iterator().next(), lensUri, graph, tgtUriPatterns);
         } 
         if (sourceUris.isEmpty()){
-            return new MappingsBySysCodeId();
+            return new MappingsBySysCodeId(null);
         }
         Iterator<String> iterator = sourceUris.iterator();
         MappingsBySysCodeId result = mapUriBySysCodeId(iterator.next(), lensUri, graph, tgtUriPatterns);
@@ -123,14 +129,6 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
             result.merge(mapUriBySysCodeId(iterator.next(), lensUri, graph, tgtUriPatterns));
         }
         return result;
-    }
-
-    private MappingsBySysCodeId extractMappingsBySysCodeId(Collection<Mapping> beans) {
-        MappingsBySysCodeId results = new MappingsBySysCodeId();
-        for (Mapping bean:beans){
-            results.addMappings(bean.getTarget(), bean.getTargetUri());
-        }  
-        return results;
     }
 
     @Override

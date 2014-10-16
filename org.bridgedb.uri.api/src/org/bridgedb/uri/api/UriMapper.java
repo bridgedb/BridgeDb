@@ -160,9 +160,29 @@ public interface UriMapper extends IDMapper{
     public Set<String> mapUri(Xref sourceXref, String lensUri, String graph, Collection<String> tgtUriPatterns) 
             throws BridgeDBException;
 
+    /**
+     * 
+     * @param sourceUri
+     * @param lensUri
+     * @param graph
+     * @param tgtUriPatterns
+     * @return
+     * @throws BridgeDBException 
+     * @deprecated use mapFull (in fact that is not used under the hood.
+     */
     public MappingsBySysCodeId mapUriBySysCodeId (String sourceUri, String lensUri, String graph, Collection<String> tgtUriPatterns) 
             throws BridgeDBException;
 
+    /**
+     * 
+     * @param sourceUri
+     * @param lensUri
+     * @param graph
+     * @param tgtUriPatterns
+     * @return
+     * @throws BridgeDBException 
+     * @deprecated use mapFull (in fact that is not used under the hood.
+     */
     public MappingsBySysCodeId mapUriBySysCodeId (Collection<String> sourceUri, String lensUri, String graph, Collection<String> tgtUriPatterns) 
             throws BridgeDBException;
 
