@@ -880,6 +880,26 @@ public class WSAPI extends WSUriInterfaceService {
                 sb.append(WsUriConstants.DATA_SOURCE);
                 sb.append("</a></dt>");
         sb.append("<dd>Returns the DataSource and associated UriSpace(s) with a specific id</dd>\n");
+        sb.append("<dt><a href=\"#");
+                sb.append(WsUriConstants.TO_URIS);
+                sb.append("\">");
+                sb.append(WsUriConstants.TO_URIS);
+                sb.append("</a></dt>");
+        sb.append("<dd>Returns the URIs associated with a Xref (specified as <a href=\"#");
+            sb.append(ID_CODE);
+            sb.append("\">");
+            sb.append(WsConstants.ID);
+            sb.append("</a> and <a href=\"#");
+            sb.append(ID_CODE);
+            sb.append("\">");
+            sb.append(WsConstants.DATASOURCE_SYSTEM_CODE);
+            sb.append("</a>)</dd>\n");
+        sb.append("<dt><a href=\"#");
+                sb.append(WsUriConstants.TO_XREF);
+                sb.append("\">");
+                sb.append(WsUriConstants.TO_XREF);
+                sb.append("</a></dt>");
+        sb.append("<dd>Retrns the Xref for this URI</dd>\n");
     }
     
     protected final void describe_UriMapper(StringBuilder sb, String contextPath, Xref sourceXref1, String tragetSysCode1, String sourceUri1, Xref sourceXref2, 
@@ -895,6 +915,8 @@ public class WSAPI extends WSUriInterfaceService {
             describe_uriSearch(sb, contextPath, text); 
         }
         describe_dataSource(sb, contextPath, sysCode);
+        describe_toUris(sb, contextPath, sourceXref1);
+        describe_toXref(sb, contextPath, sourceUri1);
     }
         
     private void describe_map(StringBuilder sb, String contextPath, Xref sourceXref1, String tragetSysCode1, String sourceUri1, Xref sourceXref2, 
@@ -969,7 +991,7 @@ public class WSAPI extends WSUriInterfaceService {
                 sb.append("\">");
                 sb.append(WsUriConstants.TARGET_URI_PATTERN);
                 sb.append("</a>. If both are supplied an error is thrown.</li> ");
-            appendXmlJsonHtml(sb); 
+            appendXmlJsonAndHtml(sb); 
             sb.append("<li>Required arguements:</li>");
             sb.append("<ul>");
                 parameterUri(sb);
@@ -1349,7 +1371,7 @@ public class WSAPI extends WSUriInterfaceService {
                 sb.append("/id</h3>");
             sb.append("<ul>");
             sb.append("<li>Obtain a dataSource</li>");
-            appendXmlJsonHtml(sb); 
+            appendXmlJsonAndHtml(sb); 
             sb.append("<li>Required arguements: </li>");
                 sb.append("<ul>");
                 sb.append("<li>Returns the DataSource and associated UriSpace(s) with a specific id.</li> ");
@@ -1365,9 +1387,56 @@ public class WSAPI extends WSUriInterfaceService {
                     sb.append(sysCode);
                     sb.append("</a></li>");    
             sb.append("</ul>\n");        
-   }
+    }
 
-   private void describe_getOverallStatistics(StringBuilder sb, String contextPath) 
+    private void describe_toUris(StringBuilder sb, String contextPath, Xref xref) throws UnsupportedEncodingException {
+         sb.append("<h3><a name=\"");
+                sb.append(WsUriConstants.TO_URIS);
+                sb.append("\">");
+                sb.append(WsUriConstants.TO_URIS);
+                sb.append("</h3>");
+            sb.append("<ul>");
+                sb.append("<li>Returns the URIs associated with a Xref</li>");
+                appendXmlJsonAndHtml(sb); 
+                sb.append("<li>Required arguements: </li><ul>");
+                    this.parameterID_CODE(sb);
+                    sb.append("</ul>");
+                sb.append("<li>Example: <a href=\"");
+                    sb.append(contextPath);
+                    sb.append(WsUriConstants.TO_URIS);
+                    sb.append(FIRST_ID_PARAMETER);
+                    sb.append(xref.getId());
+                    sb.append(DATASOURCE_SYSTEM_CODE_PARAMETER);
+                    sb.append(URLEncoder.encode(xref.getDataSource().getSystemCode(), "UTF-8"));
+                    sb.append("\">");
+                    sb.append(WsUriConstants.TO_URIS);
+                    sb.append(FIRST_ID_PARAMETER);
+                    sb.append(xref.getId());
+                    sb.append(DATASOURCE_SYSTEM_CODE_PARAMETER);
+                    sb.append(xref.getDataSource().getSystemCode());
+                    sb.append("</a></li>\n");    
+           sb.append("</ul>\n");        
+    }
+    
+        private void describe_toXref(StringBuilder sb, String contextPath, String uri) 
+            throws UnsupportedEncodingException, BridgeDBException{
+        sb.append("<h3><a name=\"");
+                sb.append(WsUriConstants.TO_XREF);
+                sb.append("\">");
+                sb.append(WsUriConstants.TO_XREF);
+                sb.append("</a></h3>");
+        sb.append("<ul>");
+            sb.append("<li>Retrns the Xref for this URI</li>");
+            appendXmlJsonHtml(sb); 
+            sb.append("<li>Required arguements:</li>");
+            sb.append("<ul>");
+                parameterUri(sb);
+                sb.append("</ul>");    
+            this.mapExamplesUriBased1(sb, contextPath, WsUriConstants.TO_XREF, uri);
+            sb.append("</ul>\n");
+    }           
+
+    private void describe_getOverallStatistics(StringBuilder sb, String contextPath) 
             throws UnsupportedEncodingException, BridgeDBException{
          sb.append("<h3><a name=\"");
                 sb.append(WsUriConstants.GET_OVERALL_STATISTICS);
@@ -1850,6 +1919,21 @@ public class WSAPI extends WSUriInterfaceService {
     }
 
     private void appendXmlJsonHtml(StringBuilder sb) {
+        sb.append("<li>This method is available for media types XML, JSON and HTML.</li>");
+        if (noConentOnEmpty){
+            sb.append("<ul>");
+            sb.append("<li>Status 204 (no Content) is return if no data available.</li>");
+            sb.append("</ul>");
+        }
+        sb.append("<li>Request for media type HTML will a html formated page.</li>");
+        if (noConentOnEmpty){
+            sb.append("<ul>");
+            sb.append("<li>An warning page is returned if no data available.</li>");
+            sb.append("</ul>");
+        }
+    }
+    
+    private void appendXmlJsonAndHtml(StringBuilder sb) {
         sb.append("<li>This method is available for media types XML and JSON.</li>");
         if (noConentOnEmpty){
             sb.append("<ul>");

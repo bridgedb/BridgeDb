@@ -199,6 +199,24 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
         }
     }
 
+    @Override
+    public Response toUris(String id, String scrCode) throws BridgeDBException {
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        params.add(WsUriConstants.ID, encode(id));
+        params.add(WsUriConstants.DATASOURCE_SYSTEM_CODE, encode(scrCode));
+        try {
+            //Make service call
+            UriMappings result = 
+                    webResource.path(WsUriConstants.TO_XREF)
+                    .queryParams(params)
+                    .accept(MediaType.APPLICATION_XML_TYPE)
+                    .get(new GenericType<UriMappings>() {});
+            return Response.ok(result, MediaType.APPLICATION_XML_TYPE).build();
+        } catch (UniformInterfaceException ex){
+            return Response.noContent().build();
+        }
+    }
+
     /*@Override
     public List<Mapping> getSampleMappings() throws BridgeDBException {
         List<Mapping> result = 

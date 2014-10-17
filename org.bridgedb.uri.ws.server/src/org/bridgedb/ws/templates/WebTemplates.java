@@ -24,6 +24,7 @@ public class WebTemplates
     public static final String SOURCE_TARGET_INFO_SCRIPT = "sourceTargetInfos.vm";
     public static final String MAPPING_SET_INFO_SCRIPT = "mappingSetInfos.vm";
     public static final String MAPPING_SET_SCRIPT = "mappingSet.vm";
+    public static final String TO_URIS_SCRIPT = "toUris.vm";
     
     private static VelocityEngine velocityEngine = initialize();
     

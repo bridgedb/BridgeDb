@@ -254,7 +254,17 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
         }
         return bean.asXref();
     }
-
+    
+    public Set<String> toUris(Xref xref) throws BridgeDBException{
+        Response response = uriService.toUris(xref.getId(), xref.getDataSource().getSystemCode());
+        if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()){
+            return new HashSet<String> ();
+        } else {
+            UriMappings beans = (UriMappings)response.getEntity();
+            return beans.getTargetUri();
+        }       
+    }
+    
     //@Override Too slow
     //public List<Mapping> getSampleMapping() throws BridgeDBException {
     //    return uriService.getSampleMappings();

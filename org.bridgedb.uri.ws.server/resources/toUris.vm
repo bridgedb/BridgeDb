@@ -1,0 +1,8 @@
+<h2>ToUris results</h2>
+<h3>For id $id and code $sysCode</h3>
+<ul>
+    #foreach ($uri in $uris)
+        <li><a href=$uri>$uri</a></li>
+    #end
+</ul>
+

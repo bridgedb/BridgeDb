@@ -153,7 +153,6 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
                         + WsConstants.DATASOURCE_SYSTEM_CODE + " parameter."); 
             }
         }
-        System.out.println("WS service " + includeUriResults);
         return mapFull(id, scrCode, lensUri, includeUriResults, targetDataSources, graph, targetUriPatterns);
     }
 
@@ -514,6 +513,67 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
+    }
+    
+    @GET
+    @Produces({MediaType.APPLICATION_XML})
+    @Path("/" + WsUriConstants.TO_URIS)
+    @Override
+    public Response toUris(@QueryParam(WsConstants.ID) String id,
+            @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) String scrCode) throws BridgeDBException{
+        UriMappings result = toUrisInner(id, scrCode);
+        if (noConentOnEmpty & result.isEmpty()){
+            return Response.noContent().build();
+        } 
+        return Response.ok(result, MediaType.APPLICATION_XML_TYPE).build();
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/" + WsUriConstants.TO_URIS)
+    public Response toUrisJSon(@QueryParam(WsConstants.ID) String id,
+            @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) String scrCode) throws BridgeDBException{
+        UriMappings result = toUrisInner(id, scrCode);
+        if (noConentOnEmpty & result.isEmpty()){
+            return Response.noContent().build();
+        } 
+        return Response.ok(result, MediaType.APPLICATION_JSON_TYPE).build();
+    }
+
+    @GET
+    @Produces({MediaType.TEXT_HTML})
+    @Path("/" + WsUriConstants.TO_URIS)
+    public Response toUrisHtml(@QueryParam(WsConstants.ID) String id,
+            @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) String scrCode,
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException{
+        UriMappings result = toUrisInner(id, scrCode);
+        Set<String> uris = result.getTargetUri();
+        StringBuilder sb = topAndSide ("Identity Mapping Service", httpServletRequest);        
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("contextPath", httpServletRequest.getContextPath());
+        velocityContext.put("id", id);
+        velocityContext.put("sysCode", scrCode);
+        velocityContext.put("uris", uris);
+        sb.append( WebTemplates.getForm(velocityContext, WebTemplates.TO_URIS_SCRIPT)); 
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
+    public UriMappings toUrisInner(String id, String scrCode) throws BridgeDBException{
+        if (logger.isDebugEnabled()){
+            logger.debug("toUris called! ");
+            logger.debug("id = " + id);
+            logger.debug("srCode = " + scrCode);             
+        }
+        if (id == null){
+            throw new BridgeDBException ("Please provide  a " + WsConstants.ID + " parameter.");     
+        }
+        if (scrCode == null) {
+            throw new BridgeDBException ("Please provide  a " + WsConstants.DATASOURCE_SYSTEM_CODE  + " parameter."); 
+        }
+        DataSource dataSource = DataSource.getExistingBySystemCode(scrCode);
+        Xref sourceXref = new Xref(id, dataSource);
+        Set<String> results = uriMapper.toUris(sourceXref);
+        return UriMappings.asBean(results);
     }
 
     @GET

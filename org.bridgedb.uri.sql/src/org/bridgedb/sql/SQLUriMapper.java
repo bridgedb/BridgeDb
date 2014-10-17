@@ -1384,7 +1384,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return whereSet;
     }
 
-    private Set<String> toUris(Xref xref) throws BridgeDBException {
+    public final Set<String> toUris(Xref xref) throws BridgeDBException {
         IdSysCodePair ref = toIdSysCodePair(xref);
         if (ref == null) {
             return new HashSet<String>();

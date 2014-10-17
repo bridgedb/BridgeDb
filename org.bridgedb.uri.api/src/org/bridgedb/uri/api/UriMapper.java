@@ -337,6 +337,14 @@ public interface UriMapper extends IDMapper{
      */
     public Xref toXref(String uri) throws BridgeDBException;
     
+    /**
+     * Service to convert a Xref into all the known Uri representations of that Xref
+     * @param xref 
+     * @returnAll the unknown URI for this Xref
+     * @throws BridgeDBException 
+     */
+    public Set<String> toUris(Xref xref) throws BridgeDBException;
+
     public IdSysCodePair toIdSysCodePair(String uri) throws BridgeDBException;
     
     /*

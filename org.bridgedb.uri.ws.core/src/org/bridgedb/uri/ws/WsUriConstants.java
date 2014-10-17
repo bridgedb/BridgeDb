@@ -49,6 +49,7 @@ public class WsUriConstants extends WsConstants{
     public static final String TARGET_URI_PATTERN = "targetUriPattern";
 
     public static final String TO_XREF = "toXref";
+    public static final String TO_URIS = "toUris";
     public static final String URI = "Uri";
     public static final String URI_EXISTS = "UriExists";
     public static final String URI_SEARCH = "UriSearch";

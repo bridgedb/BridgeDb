@@ -85,6 +85,15 @@ public interface WSUriInterface extends WSCoreInterface{
     public Response toXref(String Uri) throws BridgeDBException;
 
     /**
+     * Converts a Xref (represented as id and DataSource scrCode to the known
+     * @param id
+     * @param scrCode
+     * @return
+     * @throws BridgeDBException 
+     */
+    public Response toUris(String id, String scrCode) throws BridgeDBException;
+
+    /**
      *
      * @param lensUri
      * @return An OverallStatisticsBean wrapped in a Response
