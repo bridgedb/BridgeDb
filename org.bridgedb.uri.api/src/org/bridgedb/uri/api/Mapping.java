@@ -56,6 +56,9 @@ public class Mapping implements Comparable<Mapping>{
     private Set<String> sourceUri = new HashSet<String>();
     private Set<String> targetUri = new HashSet<String>();
     
+    private List<String> viaId = new ArrayList<String>();
+    private List<Xref> vaiXref = new ArrayList<Xref>();
+    
     public Mapping(IdSysCodePair idSysCodePairSource, IdSysCodePair idSysCodePairTarget, 
             String predicate, String justification, int mappingSetId, 
             String mappingSource, String mappingResource, String lens){
@@ -439,6 +442,34 @@ public class Mapping implements Comparable<Mapping>{
             return (compareTo(mapping) == 0);
         }
         return false;
+    }
+
+    /**
+     * @return the viaId
+     */
+    public List<String> getViaId() {
+        return viaId;
+    }
+
+    /**
+     * @param viaId the viaId to set
+     */
+    public void setViaId(List<String> viaId) {
+        this.viaId = viaId;
+    }
+
+    /**
+     * @return the vaiXref
+     */
+    public List<Xref> getVaiXref() {
+        return vaiXref;
+    }
+
+    /**
+     * @param vaiXref the vaiXref to set
+     */
+    public void setVaiXref(List<Xref> vaiXref) {
+        this.vaiXref = vaiXref;
     }
  
 }

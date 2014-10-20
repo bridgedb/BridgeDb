@@ -19,11 +19,11 @@
 //
 package org.bridgedb.sql.transative;
 
-import java.util.List;
 import java.util.Set;
+import org.bridgedb.pairs.CodeMapper;
 import org.bridgedb.pairs.IdSysCodePair;
-import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.uri.api.Mapping;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  *
@@ -55,4 +55,5 @@ public abstract class IDSysCodePairMapping extends Mapping{
 
     public abstract Set<String> getSysCodesToCheck();
 
+    public abstract void setTargetXrefs(CodeMapper codeMapper) throws BridgeDBException;
 }

@@ -21,7 +21,9 @@ package org.bridgedb.sql.transative;
 
 import java.util.HashSet;
 import java.util.Set;
+import org.bridgedb.pairs.CodeMapper;
 import org.bridgedb.pairs.IdSysCodePair;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  *
@@ -62,6 +64,11 @@ public class DirectMapping extends IDSysCodePairMapping {
 
     public String getId() {
         return id;
+    }
+
+    @Override
+    public void setTargetXrefs(CodeMapper codeMapper) throws BridgeDBException {
+        setTarget(codeMapper.toXref(getTargetPair()));
     }
 
 }

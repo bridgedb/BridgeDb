@@ -19,6 +19,8 @@
 //
 package org.bridgedb.uri.ws.bean;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.bridgedb.uri.api.Mapping;
@@ -46,6 +48,9 @@ public class MappingBean {
     private Set<String> mappingSetId;
     private String predicate;
     private String lens;
+    
+    private List<String> viaId = new ArrayList<String>();
+    private List<XrefBean> vaiXref = new ArrayList<XrefBean>();
     
     /**
      * Default constructor for webService
@@ -176,6 +181,34 @@ public class MappingBean {
      */
     public void setLens(String lens) {
         this.lens = lens;
+    }
+
+    /**
+     * @return the viaId
+     */
+    public List<String> getViaId() {
+        return viaId;
+    }
+
+    /**
+     * @param viaId the viaId to set
+     */
+    public void setViaId(List<String> viaId) {
+        this.viaId = viaId;
+    }
+
+    /**
+     * @return the vaiXref
+     */
+    public List<XrefBean> getVaiXref() {
+        return vaiXref;
+    }
+
+    /**
+     * @param vaiXref the vaiXref to set
+     */
+    public void setVaiXref(List<XrefBean> vaiXref) {
+        this.vaiXref = vaiXref;
     }
  
  }

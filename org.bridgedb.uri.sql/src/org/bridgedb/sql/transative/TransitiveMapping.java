@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.bridgedb.Xref;
+import org.bridgedb.pairs.CodeMapper;
 import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.uri.api.Mapping;
@@ -116,8 +118,11 @@ public class TransitiveMapping extends IDSysCodePairMapping {
 
     public String toString(){
         StringBuilder builder = new StringBuilder(super.toString());
-        for (DirectMapping mapping:via){
-            builder.append(NEW_LINE).append("\t").append(mapping);
+        //for (DirectMapping mapping:via){
+        //    builder.append(NEW_LINE).append("\t").append(mapping);
+        //}
+        for (int i = 0; i < this.getViaId().size(); i++){
+            builder.append(NEW_LINE).append("/t").append(getViaId().get(i)).append(" ").append(getVaiXref().get(i));
         }
         return builder.toString();
     }
@@ -130,6 +135,20 @@ public class TransitiveMapping extends IDSysCodePairMapping {
     @Override
     public Set<String> getSysCodesToCheck() {
         return sysCodesToCheck;
+    }
+
+    @Override
+    public void setTargetXrefs(CodeMapper codeMapper) throws BridgeDBException {
+        setTarget(codeMapper.toXref(getTargetPair()));
+        List<String> viaId = new ArrayList<String>();
+        List<Xref> vaiXref = new ArrayList<Xref>();
+        for (DirectMapping aVia:via){
+            aVia.setTargetXrefs(codeMapper);
+            viaId.add(aVia.getId());
+            vaiXref.add(aVia.getTarget());
+        }
+        this.setViaId(viaId);
+        this.setVaiXref(vaiXref);
     }
 
 }

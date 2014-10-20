@@ -1900,6 +1900,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             Set<DirectMapping> results = new HashSet<DirectMapping>();
             statement.setString(1, sourceRef.getId());
             statement.setString(2, sourceRef.getSysCode());
+            System.out.println(statement);
             rs = statement.executeQuery();
             while (rs.next()) {
                 String id = rs.getString(TARGET_ID_COLUMN_NAME);
@@ -2160,7 +2161,11 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private void addXrefs(Set<Mapping> mappings) throws BridgeDBException {
         for (Mapping mapping : mappings) {
             mapping.setSource(codeMapper.toXref(mapping.getSourcePair()));
-            mapping.setTarget(codeMapper.toXref(mapping.getTargetPair()));
+            if (mappings instanceof IDSysCodePairMapping){
+                ((IDSysCodePairMapping)mapping).setTargetXrefs(codeMapper);
+            } else {
+                mapping.setTarget(codeMapper.toXref(mapping.getTargetPair()));
+            }
         }    
     }
 
