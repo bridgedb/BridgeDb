@@ -228,6 +228,8 @@ public class LensTools {
                 defaultLens.addJustifications(all.getJustifications());
             }
             testLens.addJustification(getTestJustifictaion());
+            testLens.addJustification(Lens.getDefaultJustifictaionString());
+ 
             testLens.addAllowedMiddleSources(defaultLens.getAllowedMiddleSources());
             Lens.setDefaultBaseUri(properties.getProperty(DEFAULT_BAE_URI_KEY));
             for (String group:groups.keySet()){

@@ -181,7 +181,7 @@ public class Lens {
         this.description = description;
     }
 
-    protected final void addJustification(String justification) {
+    public final void addJustification(String justification) {
         if (!this.justifications.contains(justification)){
             this.justifications.add(justification);
         }

@@ -98,6 +98,10 @@ public class OpsJustificationMaker implements JustificationMaker{
                  return null; //We don't want to tranitive with two cross type even if they are the same.
              }
              return left;
+        } else if (left.equals(Lens.getTestJustifictaion())){
+            return left;
+        } else if (right.equals(Lens.getTestJustifictaion())){
+            return right;
         } else if (left.equals(ChemInf.CHEMICAL_ENTITY)) {
             if (right.equals(ChemInf.INCHI_KEY)) {
                 return ChemInf.CHEMICAL_ENTITY;
@@ -190,18 +194,6 @@ public class OpsJustificationMaker implements JustificationMaker{
                 return CW_PROTEIN_HACK;
             } else if (right.equals(ChemInf.PROTEIN_CODING_GENE)) {
                 return CW_PROTEIN_HACK;
-            } else {
-                return null;
-            }
-        } else if (left.equals(Lens.getTestJustifictaion())){
-            if (right.startsWith(Lens.getTestJustifictaion())){
-                return right;
-            } else {
-                return null;
-            }
-        } else if (left.startsWith(Lens.getTestJustifictaion())){
-            if (right.equals(Lens.getTestJustifictaion())){
-                return left;
             } else {
                 return null;
             }

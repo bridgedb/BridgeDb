@@ -1900,7 +1900,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             Set<DirectMapping> results = new HashSet<DirectMapping>();
             statement.setString(1, sourceRef.getId());
             statement.setString(2, sourceRef.getSysCode());
-            System.out.println(statement);
             rs = statement.executeQuery();
             while (rs.next()) {
                 String id = rs.getString(TARGET_ID_COLUMN_NAME);
@@ -1919,6 +1918,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                                 mappingSource, mappingResource, lensId);
                 results.add(mapping);
             }
+            //ystem.out.println(results);
             return results;
         } catch (SQLException ex) {
             close(statement, rs);

@@ -45,7 +45,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         assertFalse(results.contains(map1xref1));
         assertFalse(results.contains(map3xref2));
         assertFalse(results.contains(map2Axref1));
-        assertFalse(results.contains(map2Axref2));
+        assertFalse(results.contains(map1Axref1));
+        assertTrue(results.contains(map2Axref2));
         assertTrue(results.contains(map2Axref3)); 
     }
 
@@ -88,7 +89,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         assertFalse(results.contains(map1xref1));
         assertFalse(results.contains(map3xref2));
         assertTrue(results.contains(map2Axref1));
-        assertFalse(results.contains(map2Axref2));
+        assertTrue(results.contains(map2Axref2));
+        assertFalse(results.contains(map1Axref2));
         assertTrue(results.contains(map2Axref3));
     }
 
@@ -113,7 +115,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         assertFalse(results.contains(map3AUri1));
         assertTrue(results.contains(map3AUri2));
         assertFalse(results.contains(map3AUri2a));
-        assertFalse(results.contains(map3AUri3));
+        assertTrue(results.contains(map3AUri3));
     }
 
     /**
@@ -154,8 +156,9 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         assertFalse(results.contains(map2Uri2));
         assertFalse(results.contains(map1Uri3));
         assertTrue(results.contains(map3AUri1));
-        assertFalse(results.contains(map3AUri2));
-        assertFalse(results.contains(map3AUri2a));
+        assertTrue(results.contains(map3AUri2));
+        assertFalse(results.contains(map2AUri2));
+        assertTrue(results.contains(map3AUri2a));
         assertTrue(results.contains(map3AUri3));
     }
 
@@ -178,7 +181,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         assertFalse(results.contains(map2Uri2));
         assertFalse(results.contains(map1Uri3));
         assertFalse(results.contains(map3AUri1));
-        assertFalse(results.contains(map3AUri2));
+        assertTrue(results.contains(map3AUri2));
         assertFalse(results.contains(map3AUri2a));
         assertTrue(results.contains(map3AUri3));
     }
@@ -222,8 +225,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         assertFalse(results.contains(map2Uri2));
         assertFalse(results.contains(map1Uri3));
         assertTrue(results.contains(map3AUri1));
-        assertFalse(results.contains(map3AUri2));
-        assertFalse(results.contains(map3AUri2a));
+        assertTrue(results.contains(map3AUri2));
+        assertTrue(results.contains(map3AUri2a));
         assertTrue(results.contains(map3AUri3));
     }
 
@@ -257,8 +260,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         assertFalse(targetUris.contains(map2Uri2));
         assertFalse(targetUris.contains(map1Uri3));
         assertFalse(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
+        assertTrue(targetUris.contains(map3AUri2));
+        assertTrue(targetUris.contains(map3AUri2a));
         assertTrue(targetUris.contains(map3AUri3));
 
         assertFalse(targetXrefs.contains(map3xref1));
@@ -379,8 +382,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         assertFalse(targetUris.contains(map2Uri2));
         assertFalse(targetUris.contains(map1Uri3));
         assertTrue(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
+        assertTrue(targetUris.contains(map3AUri2));
+        assertTrue(targetUris.contains(map3AUri2a));
         assertTrue(targetUris.contains(map3AUri3));
 
         assertTrue(targetXrefs.contains(map3xref1));
@@ -452,7 +455,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         assertFalse(targetUris.contains(map2Uri2));
         assertFalse(targetUris.contains(map1Uri3));
         assertFalse(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
+        assertTrue(targetUris.contains(map3AUri2));
         assertFalse(targetUris.contains(map3AUri2a));
         assertTrue(targetUris.contains(map3AUri3));
 
@@ -539,8 +542,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         assertFalse(targetUris.contains(map2Uri2));
         assertFalse(targetUris.contains(map1Uri3));
         assertFalse(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
+        assertTrue(targetUris.contains(map3AUri2));
+        assertTrue(targetUris.contains(map3AUri2a));
         assertTrue(targetUris.contains(map3AUri3));
 
         assertFalse(targetXrefs.contains(map3xref1));
@@ -625,8 +628,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         assertFalse(targetUris.contains(map2Uri2));
         assertFalse(targetUris.contains(map1Uri3));
         assertTrue(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
+        assertTrue(targetUris.contains(map3AUri2));
+        assertTrue(targetUris.contains(map3AUri2a));
         assertTrue(targetUris.contains(map3AUri3));
 
         assertTrue(targetXrefs.contains(map3xref1));
@@ -765,7 +768,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         assertFalse(targetUris.contains(map2Uri2));
         assertFalse(targetUris.contains(map1Uri3));
         assertFalse(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
+        assertTrue(targetUris.contains(map3AUri2));
         assertFalse(targetUris.contains(map3AUri2a));
         assertTrue(targetUris.contains(map3AUri3));
 

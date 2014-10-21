@@ -55,7 +55,7 @@ public class UriMapperRecoverTest extends UriListenerTest {
         uriMapper = SQLUriMapper.getExisting();
         OverallStatistics stats = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         stats.getNumberOfMappings();
-        assertEquals(8, stats.getNumberOfMappingSets());
+        assertEquals(10, stats.getNumberOfMappingSets());
         assertEquals(12, stats.getNumberOfMappings());
         listener.recover();
         stats = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
