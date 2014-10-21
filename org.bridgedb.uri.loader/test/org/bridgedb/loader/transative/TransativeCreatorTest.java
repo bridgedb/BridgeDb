@@ -94,8 +94,10 @@ public class TransativeCreatorTest {
     public void testLoadTestData() throws Exception {
         Reporter.println("LoadTestData");
         loadFile("../org.bridgedb.uri.loader/test-data/cw-cs.ttl", Lens.getDefaultJustifictaionString());
-        loadFile("../org.bridgedb.uri.loader/test-data/cs-cm.ttl", Lens.getDefaultJustifictaionString());
-        loadFile("../org.bridgedb.uri.loader/test-data/cs-chebi.ttl", Lens.getDefaultJustifictaionString());
+        loadFile("../org.bridgedb.uri.loader/test-data/cs-ops.ttl", Lens.getDefaultJustifictaionString());
+        loadFile("../org.bridgedb.uri.loader/test-data/ops-ops_lensed.ttl", Lens.getTestJustifictaion());
+        loadFile("../org.bridgedb.uri.loader/test-data/cw-cs_lensed.ttl", Lens.getTestJustifictaion());
+        loadFile("../org.bridgedb.uri.loader/test-data/cs-ops_lensed.ttl", Lens.getTestJustifictaion());
         File transative = TransativeCreator.doTransativeIfPossible(1, 3);
         loadFile(transative.getAbsolutePath(), Lens.getDefaultJustifictaionString());
         File transative2 = TransativeCreator.doTransativeIfPossible(1, 5);

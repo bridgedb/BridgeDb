@@ -9,34 +9,34 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 <> a void:DatasetDescription ;
-    dcterms:title "ConceptWiki to ChemSpider Linkset"^^xsd:string ;
-    dcterms:description """A linkset connecting ConceptWiki concepts 
-    	with ChemSpider Molecules."""^^xsd:string;
+    dcterms:title "ChemSpider to OPS Linkset"^^xsd:string ;
+    dcterms:description """A linkset connecting ChemSpider  
+    	with Ops ids."""^^xsd:string;
     pav:createdBy <http://www.foo.com/> ;
     pav:createdOn "2012-08-06"^^xsd:date;
     foaf:primaryTopic :conceptwiki_chemspider .
 
-:conceptwiki_chemspider a void:Linkset ;
+:chemspider_ops a void:Linkset ;
     dcterms:license "unknown" ;
-    void:subjectsTarget :conceptwiki ;
-    void:objectsTarget :chemspider ;
+    void:subjectsTarget :chemspider ;
+    void:objectsTarget :ops ;
     void:linkPredicate skos:exactMatch ;
     dul:expresses <http://semanticscience.org/resource/CHEMINF_000059> ;
     dcterms:created "2014-11-21"^^xsd:date .
-:conceptwiki a void:Dataset ;
-	dcterms:title "ConceptWiki"^^xsd:string ;
-    dcterms:license "unknown" ;
-    pav:retrievedOn "2012-02-28"^^xsd:date ;
-    void:subset :conceptwiki_chemspider ;
-    void:uriSpace <http://www.conceptwiki.org/concept/> .
 :chemspider a void:Dataset ;
 	dcterms:title "ChemSpider"^^xsd:string ;
     dcterms:license "http://www.chemspider.com/Disclaimer.aspx" ;
     dcterms:subject "unknown" ;
     pav:version "unknown" ;
     void:uriSpace <http://rdf.chemspider.com/> .
+:ops a void:Dataset ;
+	dcterms:title "ChemSpider"^^xsd:string ;
+    dcterms:license "http://www.chemspider.com/Disclaimer.aspx" ;
+    dcterms:subject "unknown" ;
+    pav:version "unknown" ;
+    void:uriSpace <http://ops.rsc.org/OPS> .
    
-<http://www.conceptwiki.org/concept/f25a234e-df03-419f-8504-cde8689a4d1f> skos:exactMatch <http://rdf.chemspider.com/28509384> .
-<http://www.conceptwiki.org/concept/23a8be84-7177-42ba-800c-dd9192d69ac6> skos:exactMatch <http://rdf.chemspider.com/28524249> .
-<http://www.conceptwiki.org/concept/f65bcedd-f18f-41ae-b1dd-9af4ed6a1f26> skos:exactMatch <http://rdf.chemspider.com/23202612> .
+<http://rdf.chemspider.com/28509384> skos:exactMatch <http://ops.rsc.org/OPS8> .
+<http://rdf.chemspider.com/28524249> skos:exactMatch <http://ops.rsc.org/OPS70263> .
+<http://rdf.chemspider.com/23202612> skos:exactMatch <http://ops.rsc.org/OPS1497600> .
 

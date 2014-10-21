@@ -73,14 +73,10 @@ public class LinksetListenerTest {
     public void testLoadTestData() throws Exception {
         Reporter.println("LoadTestData");
         loadFile("../org.bridgedb.uri.loader/test-data/cw-cs.ttl", Lens.getDefaultJustifictaionString());
-        loadFile("../org.bridgedb.uri.loader/test-data/cs-cm.ttl", Lens.getDefaultJustifictaionString());
-        loadFile("../org.bridgedb.uri.loader/test-data/cw-cm.ttl", Lens.getDefaultJustifictaionString());
-        loadFile("../org.bridgedb.uri.loader/test-data/cw-ct.ttl", Lens.getDefaultJustifictaionString());
-        loadFile("../org.bridgedb.uri.loader/test-data/cw-dd.ttl", Lens.getDefaultJustifictaionString());
-        loadFile("../org.bridgedb.uri.loader/test-data/cw-dt.ttl", Lens.getDefaultJustifictaionString());
-        loadFile("../org.bridgedb.uri.loader/test-data/cw-cs_test_lens.ttl", Lens.getTestJustifictaion());
-        loadFile("../org.bridgedb.uri.loader/test-data/cs-cm_test_lens.ttl", Lens.getTestJustifictaion());
-        loadFile("../org.bridgedb.uri.loader/test-data/cw-cm_test_lens.ttl", Lens.getTestJustifictaion());
+        loadFile("../org.bridgedb.uri.loader/test-data/cs-ops.ttl", Lens.getDefaultJustifictaionString());
+        loadFile("../org.bridgedb.uri.loader/test-data/ops-ops_lensed.ttl", Lens.getTestJustifictaion());
+        loadFile("../org.bridgedb.uri.loader/test-data/cw-cs_lensed.ttl", Lens.getTestJustifictaion());
+        loadFile("../org.bridgedb.uri.loader/test-data/cs-ops_lensed.ttl", Lens.getTestJustifictaion());
     }
 
  }

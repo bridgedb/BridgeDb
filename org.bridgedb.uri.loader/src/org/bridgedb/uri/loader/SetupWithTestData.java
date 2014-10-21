@@ -6,6 +6,7 @@ package org.bridgedb.uri.loader;
 
 import java.io.File;
 import org.bridgedb.sql.SQLUriMapper;
+import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.model.URI;
@@ -41,15 +42,13 @@ public class SetupWithTestData {
    public static void main(String[] args) throws BridgeDBException {
         Reporter.println("LoadTestData");
         SetupWithTestData loader = new SetupWithTestData();
-        loader.loadFile("../org.bridgedb.uri.loader/test-data/cw-cs.ttl", MAIN_JUSTIFCATION);
-        loader.loadFile("../org.bridgedb.uri.loader/test-data/cs-cm.ttl", MAIN_JUSTIFCATION);
-        loader.loadFile("../org.bridgedb.uri.loader/test-data/cw-cm.ttl", MAIN_JUSTIFCATION);
-        loader.loadFile("../org.bridgedb.uri.loader/test-data/cw-ct.ttl", MAIN_JUSTIFCATION);
-        loader.loadFile("../org.bridgedb.uri.loader/test-data/cw-dd.ttl", MAIN_JUSTIFCATION);
-        loader.loadFile("../org.bridgedb.uri.loader/test-data/cw-dt.ttl", MAIN_JUSTIFCATION);
-        loader.loadFile("../org.bridgedb.uri.loader/test-data/cw-cs_test_lens.ttl", LENS_JUSTIFCATION);
-        loader.loadFile("../org.bridgedb.uri.loader/test-data/cs-cm_test_lens.ttl", LENS_JUSTIFCATION);
-        loader.loadFile("../org.bridgedb.uri.loader/test-data/cw-cm_test_lens.ttl", LENS_JUSTIFCATION);
+        
+        loader.loadFile("../org.bridgedb.uri.loader/test-data/cw-cs.ttl", Lens.getDefaultJustifictaionString());
+        loader.loadFile("../org.bridgedb.uri.loader/test-data/cs-ops.ttl", Lens.getDefaultJustifictaionString());
+        loader.loadFile("../org.bridgedb.uri.loader/test-data/ops-ops_lensed.ttl", Lens.getTestJustifictaion());
+        loader.loadFile("../org.bridgedb.uri.loader/test-data/cw-cs_lensed.ttl", Lens.getTestJustifictaion());
+        loader.loadFile("../org.bridgedb.uri.loader/test-data/cs-ops_lensed.ttl", Lens.getTestJustifictaion());
+
     }
 
  }
