@@ -54,8 +54,8 @@ public class TransitiveMapping extends IDSysCodePairMapping {
         sysCodesToCheck = recordSysCodes(previous, newMapping);
     }
     
-    private static Set<String> mergeIds(IDSysCodePairMapping previous, DirectMapping newMapping){
-        Set<String> results = new HashSet<String>(previous.getMappingSetId());
+    private static List<String> mergeIds(IDSysCodePairMapping previous, DirectMapping newMapping){
+        ArrayList<String> results = new ArrayList<String>(previous.getMappingSetId());
         results.add(newMapping.getId());
         return results;
     } 
@@ -116,17 +116,6 @@ public class TransitiveMapping extends IDSysCodePairMapping {
         return sysCodesToCheck.contains(targetRef.getSysCode());
     }
 
-    public String toString(){
-        StringBuilder builder = new StringBuilder(super.toString());
-        //for (DirectMapping mapping:via){
-        //    builder.append(NEW_LINE).append("\t").append(mapping);
-        //}
-        for (int i = 0; i < this.getViaId().size(); i++){
-            builder.append(NEW_LINE).append("/t").append(getViaId().get(i)).append(" ").append(getVaiXref().get(i));
-        }
-        return builder.toString();
-    }
-
     @Override
     public boolean hasMappingToSelf() {
         return includesMappingToSelf;
@@ -140,15 +129,14 @@ public class TransitiveMapping extends IDSysCodePairMapping {
     @Override
     public void setTargetXrefs(CodeMapper codeMapper) throws BridgeDBException {
         setTarget(codeMapper.toXref(getTargetPair()));
-        List<String> viaId = new ArrayList<String>();
         List<Xref> vaiXref = new ArrayList<Xref>();
         for (DirectMapping aVia:via){
             aVia.setTargetXrefs(codeMapper);
-            viaId.add(aVia.getId());
             vaiXref.add(aVia.getTarget());
         }
-        this.setViaId(viaId);
-        this.setVaiXref(vaiXref);
+        this.setViaXref(vaiXref);
+        System.out.println("setTargetXrefs");
+        System.out.println(this);
     }
 
 }

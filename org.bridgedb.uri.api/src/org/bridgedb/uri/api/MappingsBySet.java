@@ -19,8 +19,8 @@
 //
 package org.bridgedb.uri.api;
 
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
 
@@ -63,7 +63,7 @@ public class MappingsBySet {
     }
 
     private void addSetMapping(Mapping mapping) {   
-        String mappingId = sortAndString(mapping.getMappingSetId());
+        String mappingId = toString(mapping.getMappingSetId());
         SetMappings setMapping = new SetMappings(mappingId, mapping.getPredicate(), 
                 mapping.getJustification(), mapping.getMappingSource(), mapping.getMappingResource());
         for (String source:mapping.getSourceUri()){
@@ -186,18 +186,16 @@ public class MappingsBySet {
         return mappings.isEmpty() && setMappings.isEmpty();
     }
 
-    private String sortAndString(Set<String> mappingSetIds) {
+    private String toString(List<String> mappingSetIds) {
         if (mappingSetIds == null || mappingSetIds.isEmpty()){
             return "";
         }
         if (mappingSetIds.size() == 1){
-            return mappingSetIds.iterator().next();
+            return mappingSetIds.get(0);
         }
-        ArrayList<String> list = new ArrayList<String>(mappingSetIds);
-        java.util.Collections.sort(list);
-        StringBuilder sb = new StringBuilder(list.get(0));
-        for (int i = 1; i < list.size(); i++){
-            sb.append("_").append(list.get(i));
+        StringBuilder sb = new StringBuilder(mappingSetIds.get(0));
+        for (int i = 1; i < mappingSetIds.size(); i++){
+            sb.append("_").append(mappingSetIds.get(i));
         }
         return sb.toString();
     }

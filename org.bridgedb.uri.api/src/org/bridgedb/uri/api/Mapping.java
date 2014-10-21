@@ -45,7 +45,7 @@ public class Mapping implements Comparable<Mapping>{
     private final IdSysCodePair idSysCodePairTarget;
     private final String justification;
     private final String lens;
-    private final Set<String> mappingSetId;
+    private final List<String> mappingSetId;
     private final String predicate;
     private final String mappingSource;
     private final String mappingResource;
@@ -56,8 +56,7 @@ public class Mapping implements Comparable<Mapping>{
     private Set<String> sourceUri = new HashSet<String>();
     private Set<String> targetUri = new HashSet<String>();
     
-    private List<String> viaId = new ArrayList<String>();
-    private List<Xref> vaiXref = new ArrayList<Xref>();
+    private List<Xref> viaXref = new ArrayList<Xref>();
     
     public Mapping(IdSysCodePair idSysCodePairSource, IdSysCodePair idSysCodePairTarget, 
             String predicate, String justification, int mappingSetId, 
@@ -66,7 +65,7 @@ public class Mapping implements Comparable<Mapping>{
         this.idSysCodePairTarget = idSysCodePairTarget;
         this.predicate = predicate;
         this.justification = justification;
-        this.mappingSetId = new HashSet<String>();
+        this.mappingSetId = new ArrayList<String>();
         this.mappingSetId.add(""+mappingSetId);
         this.lens = lens;     
         this.mappingSource = mappingSource;
@@ -74,7 +73,7 @@ public class Mapping implements Comparable<Mapping>{
     }
     
     public Mapping(IdSysCodePair idSysCodePairSource, IdSysCodePair idSysCodePairTarget, 
-            String predicate, String justification, Set<String> mappingSetIds, 
+            String predicate, String justification, List<String> mappingSetIds, 
             String mappingSource, String mappingResource, String lens){
         this.idSysCodePairSource = idSysCodePairSource;
         this.idSysCodePairTarget = idSysCodePairTarget;
@@ -91,14 +90,14 @@ public class Mapping implements Comparable<Mapping>{
         this.idSysCodePairTarget = pair;
         this.predicate = null;
         this.justification = null;
-        this.mappingSetId = new HashSet<String>();
+        this.mappingSetId = new ArrayList<String>();
         this.lens = null;     
         this.mappingSource = null;
         this.mappingResource = null;
     }
 
      public Mapping (Xref source, String predicate, Xref target, 
-            Set<String> mappingSetIds, String lens){
+            List<String> mappingSetIds, String lens){
         this.idSysCodePairSource = null;
         this.idSysCodePairTarget = null;
         this.justification = null;
@@ -115,7 +114,7 @@ public class Mapping implements Comparable<Mapping>{
 
     public Mapping (IdSysCodePair idSysCodePairSource, Xref source, String predicate,
              IdSysCodePair idSysCodePairTarget, Xref target, 
-            Set<String> mappingSetIds, String lens){
+            List<String> mappingSetIds, String lens){
         this.idSysCodePairSource = idSysCodePairSource;
         this.idSysCodePairTarget = idSysCodePairTarget;
         this.justification = null;
@@ -130,7 +129,7 @@ public class Mapping implements Comparable<Mapping>{
         this.mappingResource = null;
     }
 
-    public Mapping (String sourceUri, String predicate, Set<String> mappingSetIds, String lens){
+    public Mapping (String sourceUri, String predicate, List<String> mappingSetIds, String lens){
         this.idSysCodePairSource = null;
         this.idSysCodePairTarget = null;
         this.justification = null;
@@ -155,7 +154,7 @@ public class Mapping implements Comparable<Mapping>{
         this.source = null;
         this.targetUri.add(uri);
         this.target = null;
-        this.mappingSetId = new HashSet<String>();
+        this.mappingSetId = new ArrayList<String>();
         this.predicate = null;
         this.lens = null;
         this.mappingSource = null;
@@ -172,7 +171,7 @@ public class Mapping implements Comparable<Mapping>{
         this.targetUri = new HashSet<String>();
         this.targetUri.add(uri);
         this.target = null;
-        this.mappingSetId = new HashSet<String>();
+        this.mappingSetId = new ArrayList<String>();
         this.predicate = null;
         this.lens = null;
         this.mappingSource = null;
@@ -237,6 +236,12 @@ public class Mapping implements Comparable<Mapping>{
         }
         output.append("\n\tMappingSet(id): ");
         output.append(getMappingSetId());
+        if (this.getViaXref() != null && !this.getViaXref().isEmpty()){
+            output.append("\n\tViaXrefs ");
+            for (Xref xref:this.getViaXref()){
+                output.append("\n\t\t").append(xref);            
+            }
+        }
         output.append("\n");
         return output.toString();
     }
@@ -244,7 +249,7 @@ public class Mapping implements Comparable<Mapping>{
     /**
      * @return the mappingSetId
      */
-    public final Set<String> getMappingSetId() {
+    public final List<String> getMappingSetId() {
         return mappingSetId;
     }
 
@@ -445,31 +450,17 @@ public class Mapping implements Comparable<Mapping>{
     }
 
     /**
-     * @return the viaId
+     * @return the viaXref
      */
-    public List<String> getViaId() {
-        return viaId;
+    public List<Xref> getViaXref() {
+        return viaXref;
     }
 
     /**
-     * @param viaId the viaId to set
+     * @param viaXref the viaXref to set
      */
-    public void setViaId(List<String> viaId) {
-        this.viaId = viaId;
-    }
-
-    /**
-     * @return the vaiXref
-     */
-    public List<Xref> getVaiXref() {
-        return vaiXref;
-    }
-
-    /**
-     * @param vaiXref the vaiXref to set
-     */
-    public void setVaiXref(List<Xref> vaiXref) {
-        this.vaiXref = vaiXref;
+    public void setViaXref(List<Xref> viaXref) {
+        this.viaXref = viaXref;
     }
  
 }

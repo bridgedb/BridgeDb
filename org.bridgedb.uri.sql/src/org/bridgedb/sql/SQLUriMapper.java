@@ -1205,7 +1205,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 String sourceSysCode = rs.getString(SOURCE_DATASOURCE_COLUMN_NAME);
                 IdSysCodePair sourcePair = new IdSysCodePair(sourceId, sourceSysCode);
                 source = codeMapper.toXref(sourcePair);
-                HashSet<String> mappingSetIds = new HashSet<String>();
+                ArrayList<String> mappingSetIds = new ArrayList<String>();
                 mappingSetIds.add(mappingSetId);
                 Mapping uriMapping = new Mapping(sourcePair, source, predicate, 
                         targetPair, target, mappingSetIds, Lens.DEFAULT_LENS_NAME);
@@ -2161,7 +2161,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private void addXrefs(Set<Mapping> mappings) throws BridgeDBException {
         for (Mapping mapping : mappings) {
             mapping.setSource(codeMapper.toXref(mapping.getSourcePair()));
-            if (mappings instanceof IDSysCodePairMapping){
+            if (mapping instanceof IDSysCodePairMapping){
                 ((IDSysCodePairMapping)mapping).setTargetXrefs(codeMapper);
             } else {
                 mapping.setTarget(codeMapper.toXref(mapping.getTargetPair()));

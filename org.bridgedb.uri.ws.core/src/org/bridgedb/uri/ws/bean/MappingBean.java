@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.bridgedb.Xref;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.ws.bean.XrefBean;
 
@@ -45,12 +46,11 @@ public class MappingBean {
     // Singleton names look better in the xml Bean 
     private Set<String> sourceUri;
     private Set<String> targetUri;
-    private Set<String> mappingSetId;
     private String predicate;
     private String lens;
-    
-    private List<String> viaId = new ArrayList<String>();
-    private List<XrefBean> vaiXref = new ArrayList<XrefBean>();
+
+    private List<String> mappingSetId;
+    private List<XrefBean> viaXref = new ArrayList<XrefBean>();
     
     /**
      * Default constructor for webService
@@ -67,6 +67,9 @@ public class MappingBean {
         bean.setMappingSetId(mapping.getMappingSetId());
         bean.setPredicate(mapping.getPredicate());
         bean.setLens(mapping.getLens());
+        for (Xref via:mapping.getViaXref()){
+            bean.viaXref.add(XrefBean.asBean(via));
+        }
         return bean;
     }
 
@@ -82,6 +85,11 @@ public class MappingBean {
         }
         result.setSourceUri(bean.getSourceUri());
         result.setTargetUri(bean.getTargetUri());
+        ArrayList<Xref> viaRefs = new ArrayList<Xref>(); 
+        for (XrefBean via:bean.getViaXref()){
+            viaRefs.add(via.asXref());
+        }
+        result.setViaXref(viaRefs);
         return result;
     }
     
@@ -144,14 +152,14 @@ public class MappingBean {
     /**
      * @return the mappingSetId
      */
-    public Set<String> getMappingSetId() {
+    public List<String> getMappingSetId() {
         return mappingSetId;
     }
 
     /**
      * @param mappingSetId the mappingSetId to set
      */
-    public void setMappingSetId(Set<String> mappingSetId) {
+    public void setMappingSetId(List<String> mappingSetId) {
         this.mappingSetId = mappingSetId;
     }
 
@@ -184,31 +192,17 @@ public class MappingBean {
     }
 
     /**
-     * @return the viaId
+     * @return the viaXref
      */
-    public List<String> getViaId() {
-        return viaId;
+    public List<XrefBean> getViaXref() {
+        return viaXref;
     }
 
     /**
-     * @param viaId the viaId to set
+     * @param vaiXref the viaXref to set
      */
-    public void setViaId(List<String> viaId) {
-        this.viaId = viaId;
-    }
-
-    /**
-     * @return the vaiXref
-     */
-    public List<XrefBean> getVaiXref() {
-        return vaiXref;
-    }
-
-    /**
-     * @param vaiXref the vaiXref to set
-     */
-    public void setVaiXref(List<XrefBean> vaiXref) {
-        this.vaiXref = vaiXref;
+    public void setViaXref(List<XrefBean> viaXref) {
+        this.viaXref = viaXref;
     }
  
  }

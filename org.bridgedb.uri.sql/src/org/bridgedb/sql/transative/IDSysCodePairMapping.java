@@ -19,6 +19,7 @@
 //
 package org.bridgedb.sql.transative;
 
+import java.util.List;
 import java.util.Set;
 import org.bridgedb.pairs.CodeMapper;
 import org.bridgedb.pairs.IdSysCodePair;
@@ -39,7 +40,7 @@ public abstract class IDSysCodePairMapping extends Mapping{
     }
     
     public IDSysCodePairMapping(IdSysCodePair idSysCodePairSource, IdSysCodePair idSysCodePairTarget, 
-            String predicate, String justification, Set<String> mappingSetIds, 
+            String predicate, String justification, List<String> mappingSetIds, 
             String mappingSource, String mappingResource, String lens){
         super(idSysCodePairSource, idSysCodePairTarget, predicate, justification, mappingSetIds, 
                 mappingSource, mappingResource, lens);

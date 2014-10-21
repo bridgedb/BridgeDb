@@ -230,6 +230,18 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         assertTrue(results.contains(map3AUri3));
     }
 
+    private void checkVia(Mapping mapping){
+        if (mapping.getMappingSetId().size() <= 1){
+            assertEquals(0, mapping.getViaXref().size());
+        } else {
+            System.out.println(mapping);
+            if (mapping.getSource() == null){
+                assertEquals(0, mapping.getViaXref().size());            
+            } else {
+                assertEquals(mapping.getMappingSetId().size(), mapping.getViaXref().size() );
+            }
+        }
+    }
     /**
      * Test of mapFull method, of class UriMapper.
      */
@@ -252,6 +264,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
             }
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
+            checkVia(mapping);
         }
         assertFalse(targetUris.contains(map3Uri1));
         assertTrue(targetUris.contains(map3Uri2));
@@ -288,6 +301,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         for (Mapping mapping:results){
             assertTrue(mapping.getSourceUri().isEmpty());
             assertTrue(mapping.getTargetUri().isEmpty());
+            checkVia(mapping);
         }
     }
 
@@ -307,6 +321,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         for (Mapping mapping:results){
             assertTrue(mapping.getSourceUri().isEmpty());
             assertTrue(mapping.getTargetUri().isEmpty());
+            checkVia(mapping);
         }
     }
     /**
@@ -332,6 +347,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
             assertEquals(tgtDataSource, mapping.getTarget().getDataSource());
+            checkVia(mapping);
         }
         assertFalse(targetUris.contains(map3Uri1));
         assertFalse(targetUris.contains(map3Uri2));
@@ -374,6 +390,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
             }
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
+            checkVia(mapping);
         }
         assertTrue(targetUris.contains(map3Uri1));
         assertTrue(targetUris.contains(map3Uri2));
@@ -406,6 +423,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         for (Mapping mapping:results){
             assertTrue(mapping.getSourceUri().isEmpty());
             assertTrue(mapping.getTargetUri().isEmpty());
+            checkVia(mapping);
         }
     }
 
@@ -421,6 +439,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         for (Mapping mapping:results){
             assertTrue(mapping.getSourceUri().isEmpty());
             assertTrue(mapping.getTargetUri().isEmpty());
+            checkVia(mapping);
         }
     }
 
@@ -447,6 +466,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
             }
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
+            checkVia(mapping);
         }
         assertFalse(targetUris.contains(map3Uri1));
         assertTrue(targetUris.contains(map3Uri2));
@@ -488,6 +508,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
             }
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
+            checkVia(mapping);
         }
         assertFalse(targetUris.contains(map3Uri1));
         assertFalse(targetUris.contains(map3Uri2));
@@ -534,6 +555,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
             }
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
+            checkVia(mapping);
         }
         assertFalse(targetUris.contains(map3Uri1));
         assertTrue(targetUris.contains(map3Uri2));
@@ -578,6 +600,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
             }
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
+            checkVia(mapping);
         }
         assertFalse(targetUris.contains(map3Uri1));
         assertFalse(targetUris.contains(map3Uri2));
@@ -620,6 +643,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
             }
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
+            checkVia(mapping);
         }
         assertTrue(targetUris.contains(map3Uri1));
         assertTrue(targetUris.contains(map3Uri2));
@@ -654,6 +678,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         for (Mapping mapping:results){
             assertTrue(mapping.getSource() == null);
             assertTrue(mapping.getTarget() == null);
+            checkVia(mapping);
         }
     }
 
@@ -681,6 +706,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
             }
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
+            checkVia(mapping);
         }
         assertFalse(targetUris.contains(map3Uri1));
         assertFalse(targetUris.contains(map3Uri2));
@@ -715,6 +741,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         for (Mapping mapping:results){
             assertTrue(mapping.getSource() == null);
             assertTrue(mapping.getTarget() == null);
+            checkVia(mapping);
         }
     }
 
@@ -732,6 +759,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         for (Mapping mapping:results){
             assertTrue(mapping.getSource() == null);
             assertTrue(mapping.getTarget() == null);
+            checkVia(mapping);
         }
     }
 
@@ -760,6 +788,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
             }
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
+            checkVia(mapping);
         }
         assertFalse(targetUris.contains(map3Uri1));
         assertTrue(targetUris.contains(map3Uri2));
