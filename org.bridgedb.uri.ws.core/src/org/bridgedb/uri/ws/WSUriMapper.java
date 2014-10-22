@@ -306,7 +306,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     public List<SourceInfo> getSourceInfos(String lensUri) throws BridgeDBException {
         Response response = uriService.getSourceInfos(lensUri);
         if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()){
-            throw new BridgeDBException("Unable to get Source for lens: " + lensUri + " Server returned no context");
+            throw new BridgeDBException(uriService.getClass() + " Unable to get Source for lens: " + lensUri + " Server returned " + response.getStatus());
         }
         SourceInfosBean bean = (SourceInfosBean)response.getEntity(); 
         return bean.getSourceInfos();
@@ -316,7 +316,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     public List<SourceTargetInfo> getSourceTargetInfos(String sourceSysCode, String lensUri) throws BridgeDBException {
         Response response = uriService.getSourceTargetInfos(sourceSysCode, lensUri);
         if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()){
-            throw new BridgeDBException("Unable to get Source for lens: " + lensUri + " Server returned no context");
+            throw new BridgeDBException(uriService.getClass() + " Unable to get Source for lens: " + lensUri + " Server returned " + response.getStatus());
         }
         SourceTargetInfosBean bean = (SourceTargetInfosBean)response.getEntity(); 
         return bean.getSourceTargetInfos();

@@ -26,7 +26,7 @@ import org.bridgedb.statistics.SourceInfo;
  *
  * @author Christian
  */
-@XmlRootElement(name="SourceInfo")
+@XmlRootElement(name="sourceInfo")
 public class SourceInfoBean {
     private DataSetInfoBean source;
     private Integer numberOfTargets;

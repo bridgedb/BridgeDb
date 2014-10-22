@@ -133,7 +133,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             }
         }
         Collection<DataSource> targetDataSources = getDataSources(targetCodes);
-        if (id == null){
+         if (id == null){
             if (scrCode != null) {
                 throw new BridgeDBException (WsConstants.DATASOURCE_SYSTEM_CODE + " parameter " + scrCode 
                         + " should only be used together with " + WsConstants.ID + " parameter "); 
@@ -932,7 +932,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             //}
         } else {
             mappings = mapFull (uri, lensUri, targetDataSources);
-            if (targetPatterns != null){
+            if (targetPatterns != null && !targetPatterns.isEmpty()){
                 //Include Xref results as targetDataSources set
                 mappings.addAll(mapFull(uri, lensUri, true, graph, targetPatterns));                
             } 

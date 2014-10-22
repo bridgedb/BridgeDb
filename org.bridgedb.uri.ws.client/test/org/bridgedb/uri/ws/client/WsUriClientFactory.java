@@ -41,7 +41,7 @@ public class WsUriClientFactory extends org.bridgedb.utils.IDMapperTestBase{
         }
         //ystem.out.println("in WSCoreInterface 1");
         WSUriInterface webService;
-        webService = new WSUriClient("http://localhost:8080/OPS-IMS");
+        webService = new WSUriClient("http://localhost:8080/BridgeDb");
         //ystem.out.println("in WSCoreInterface 2");
         try { 
             webService.isFreeSearchSupported();
@@ -58,6 +58,7 @@ public class WsUriClientFactory extends org.bridgedb.utils.IDMapperTestBase{
             MappingSupportedBean bean = (MappingSupportedBean)response.getEntity();
             ok = bean.isMappingSupported();
         } catch (Exception ex){
+            ex.printStackTrace();
             ok = false;
         }
         if (!ok){

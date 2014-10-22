@@ -39,7 +39,9 @@ import org.bridgedb.uri.ws.bean.MappingsBean;
 import org.bridgedb.uri.ws.bean.MappingsBySetBean;
 import org.bridgedb.uri.ws.bean.OverallStatisticsBean;
 import org.bridgedb.uri.ws.bean.SourceInfoBean;
+import org.bridgedb.uri.ws.bean.SourceInfosBean;
 import org.bridgedb.uri.ws.bean.SourceTargetInfoBean;
+import org.bridgedb.uri.ws.bean.SourceTargetInfosBean;
 import org.bridgedb.uri.ws.bean.UriExistsBean;
 import org.bridgedb.uri.ws.bean.UriMappings;
 import org.bridgedb.uri.ws.bean.UriSearchBean;
@@ -234,7 +236,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
              //Make service call
              OverallStatisticsBean result = 
                     webResource.path(WsUriConstants.GET_OVERALL_STATISTICS)
-                   .queryParams(params)
+                    .queryParams(params)
                     .accept(MediaType.APPLICATION_XML_TYPE)
                     .get(new GenericType<OverallStatisticsBean>() {});
             return Response.ok(result, MediaType.APPLICATION_XML_TYPE).build();
@@ -245,11 +247,14 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
 
     @Override
     public Response getSourceInfos(String lensUri) throws BridgeDBException {
-       try {
-            SourceInfoBean result = 
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        params.add(WsUriConstants.LENS_URI, encode(lensUri));
+        try {
+            SourceInfosBean result = 
                     webResource.path(WsUriConstants.SOURCE_INFOS)
+                    .queryParams(params)
                     .accept(MediaType.APPLICATION_XML_TYPE)
-                    .get(new GenericType<SourceInfoBean>() {});
+                    .get(new GenericType<SourceInfosBean>() {});
             return Response.ok(result, MediaType.APPLICATION_XML_TYPE).build();
         } catch (UniformInterfaceException ex){
             return Response.noContent().build();
@@ -258,13 +263,18 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
 
     @Override
     public Response getSourceTargetInfos(String sourceSysCode, String lensUri) throws BridgeDBException {
-       try {
-            SourceTargetInfoBean result = 
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        params.add(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE, encode(sourceSysCode));
+        params.add(WsUriConstants.LENS_URI, encode(lensUri));
+        try {
+             SourceTargetInfosBean result = 
                     webResource.path(WsUriConstants.SOURCE_TARGET_INFOS)
+                    .queryParams(params)
                     .accept(MediaType.APPLICATION_XML_TYPE)
-                    .get(new GenericType<SourceTargetInfoBean>() {});
+                    .get(new GenericType<SourceTargetInfosBean>() {});
             return Response.ok(result, MediaType.APPLICATION_XML_TYPE).build();
         } catch (UniformInterfaceException ex){
+            ex.printStackTrace();
             return Response.noContent().build();
         }
     }
