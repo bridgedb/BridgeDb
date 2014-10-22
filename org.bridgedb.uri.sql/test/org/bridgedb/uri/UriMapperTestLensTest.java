@@ -252,26 +252,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertTrue(targetUris.contains(map3Uri2));
-        assertTrue(targetUris.contains(map3Uri2a));
-        assertTrue(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertFalse(targetUris.contains(map3AUri1));
-        assertTrue(targetUris.contains(map3AUri2));
-        assertTrue(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, not(hasItem(map3Uri1)));
+        assertThat(targetUris, hasItem(map3Uri2));
+        assertThat(targetUris, hasItem(map3Uri2a));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, not(hasItem(map3AUri1)));
+        assertThat(targetUris, hasItem(map3AUri2));
+        assertThat(targetUris, hasItem(map3AUri2a));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertTrue(targetXrefs.contains(map3xref2));
-        assertTrue(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertFalse(targetXrefs.contains(map3Axref1));
-        assertTrue(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, not(hasItem(map3xref1)));
+        assertThat(targetXrefs, hasItem(map3xref2));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, not(hasItem(map3Axref1)));
+        assertThat(targetXrefs, hasItem(map3Axref2));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
     /**
@@ -299,26 +299,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetXrefs.add(mapping.getTarget());
             assertEquals(tgtDataSource, mapping.getTarget().getDataSource());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertFalse(targetUris.contains(map3Uri2));
-        assertFalse(targetUris.contains(map3Uri2a));
-        assertTrue(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
+        assertThat(targetUris, not(hasItem(map3Uri1)));
+        assertThat(targetUris, not(hasItem(map3Uri2)));
+        assertThat(targetUris, not(hasItem(map3Uri2a)));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map3AUri1)));
+        assertThat(targetUris, not(hasItem(map3AUri2)));
+        assertThat(targetUris, not(hasItem(map3AUri2a)));
+        assertThat(targetUris, hasItem(map3AUri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertFalse(targetXrefs.contains(map3xref2));
-        assertTrue(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map3Axref1));
-        assertFalse(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
+        assertThat(targetXrefs, not(hasItem(map3xref1)));
+        assertThat(targetXrefs, not(hasItem(map3xref2)));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map3Axref1)));
+        assertThat(targetXrefs, not(hasItem(map3Axref2)));
+        assertThat(targetXrefs, hasItem(map3Axref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
     }
 
     /**
@@ -342,26 +342,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertTrue(targetUris.contains(map3Uri1));
-        assertTrue(targetUris.contains(map3Uri2));
-        assertTrue(targetUris.contains(map3Uri2a));
-        assertTrue(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertTrue(targetUris.contains(map3AUri1));
-        assertTrue(targetUris.contains(map3AUri2));
-        assertTrue(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, hasItem(map3Uri1));
+        assertThat(targetUris, hasItem(map3Uri2));
+        assertThat(targetUris, hasItem(map3Uri2a));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, hasItem(map3AUri1));
+        assertThat(targetUris, hasItem(map3AUri2));
+        assertThat(targetUris, hasItem(map3AUri2a));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertTrue(targetXrefs.contains(map3xref1));
-        assertTrue(targetXrefs.contains(map3xref2));
-        assertTrue(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertTrue(targetXrefs.contains(map3Axref1));
-        assertTrue(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, hasItem(map3xref1));
+        assertThat(targetXrefs, hasItem(map3xref2));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, hasItem(map3Axref1));
+        assertThat(targetXrefs, hasItem(map3Axref2));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
     /**
@@ -387,26 +387,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertTrue(targetUris.contains(map3Uri2));
-        assertFalse(targetUris.contains(map3Uri2a));
-        assertTrue(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertFalse(targetUris.contains(map3AUri1));
-        assertTrue(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, not(hasItem(map3Uri1)));
+        assertThat(targetUris, hasItem(map3Uri2));
+        assertThat(targetUris, not(hasItem(map3Uri2a)));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, not(hasItem(map3AUri1)));
+        assertThat(targetUris, hasItem(map3AUri2));
+        assertThat(targetUris, not(hasItem(map3AUri2a)));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertTrue(targetXrefs.contains(map3xref2));
-        assertTrue(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertFalse(targetXrefs.contains(map3Axref1));
-        assertTrue(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, not(hasItem(map3xref1)));
+        assertThat(targetXrefs, hasItem(map3xref2));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, not(hasItem(map3Axref1)));
+        assertThat(targetXrefs, hasItem(map3Axref2));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
     /**
@@ -432,26 +432,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertFalse(targetUris.contains(map3Uri2));
-        assertFalse(targetUris.contains(map3Uri2a));
-        assertTrue(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertFalse(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, not(hasItem(map3Uri1)));
+        assertThat(targetUris, not(hasItem(map3Uri2)));
+        assertThat(targetUris, not(hasItem(map3Uri2a)));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, not(hasItem(map3AUri1)));
+        assertThat(targetUris, not(hasItem(map3AUri2)));
+        assertThat(targetUris, not(hasItem(map3AUri2a)));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertFalse(targetXrefs.contains(map3xref2));
-        assertTrue(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertFalse(targetXrefs.contains(map3Axref1));
-        assertFalse(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, not(hasItem(map3xref1)));
+        assertThat(targetXrefs, not(hasItem(map3xref2)));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, not(hasItem(map3Axref1)));
+        assertThat(targetXrefs, not(hasItem(map3Axref2)));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
     /**
@@ -482,26 +482,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertTrue(targetUris.contains(map3Uri2));
-        assertTrue(targetUris.contains(map3Uri2a));
-        assertTrue(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertFalse(targetUris.contains(map3AUri1));
-        assertTrue(targetUris.contains(map3AUri2));
-        assertTrue(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, not(hasItem(map3Uri1)));
+        assertThat(targetUris, hasItem(map3Uri2));
+        assertThat(targetUris, hasItem(map3Uri2a));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, not(hasItem(map3AUri1)));
+        assertThat(targetUris, hasItem(map3AUri2));
+        assertThat(targetUris, hasItem(map3AUri2a));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertTrue(targetXrefs.contains(map3xref2));
-        assertTrue(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertFalse(targetXrefs.contains(map3Axref1));
-        assertTrue(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, not(hasItem(map3xref1)));
+        assertThat(targetXrefs, hasItem(map3xref2));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, not(hasItem(map3Axref1)));
+        assertThat(targetXrefs, hasItem(map3Axref2));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
     /**
@@ -530,26 +530,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertFalse(targetUris.contains(map3Uri2));
-        assertFalse(targetUris.contains(map3Uri2a));
-        assertTrue(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertFalse(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, not(hasItem(map3Uri1)));
+        assertThat(targetUris, not(hasItem(map3Uri2)));
+        assertThat(targetUris, not(hasItem(map3Uri2a)));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, not(hasItem(map3AUri1)));
+        assertThat(targetUris, not(hasItem(map3AUri2)));
+        assertThat(targetUris, not(hasItem(map3AUri2a)));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertFalse(targetXrefs.contains(map3xref2));
-        assertTrue(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertFalse(targetXrefs.contains(map3Axref1));
-        assertFalse(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, not(hasItem(map3xref1)));
+        assertThat(targetXrefs, not(hasItem(map3xref2)));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, not(hasItem(map3Axref1)));
+        assertThat(targetXrefs, not(hasItem(map3Axref2)));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
     /**
@@ -577,26 +577,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertTrue(targetUris.contains(map3Uri1));
-        assertTrue(targetUris.contains(map3Uri2));
-        assertTrue(targetUris.contains(map3Uri2a));
-        assertTrue(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertTrue(targetUris.contains(map3AUri1));
-        assertTrue(targetUris.contains(map3AUri2));
-        assertTrue(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, hasItem(map3Uri1));
+        assertThat(targetUris, hasItem(map3Uri2));
+        assertThat(targetUris, hasItem(map3Uri2a));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, hasItem(map3AUri1));
+        assertThat(targetUris, hasItem(map3AUri2));
+        assertThat(targetUris, hasItem(map3AUri2a));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertTrue(targetXrefs.contains(map3xref1));
-        assertTrue(targetXrefs.contains(map3xref2));
-        assertTrue(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertTrue(targetXrefs.contains(map3Axref1));
-        assertTrue(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, hasItem(map3xref1));
+        assertThat(targetXrefs, hasItem(map3xref2));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, hasItem(map3Axref1));
+        assertThat(targetXrefs, hasItem(map3Axref2));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
     /**
@@ -624,26 +624,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertFalse(targetUris.contains(map3Uri2));
-        assertFalse(targetUris.contains(map3Uri2a));
-        assertTrue(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertFalse(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, not(hasItem(map3Uri1)));
+        assertThat(targetUris, not(hasItem(map3Uri2)));
+        assertThat(targetUris, not(hasItem(map3Uri2a)));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, not(hasItem(map3AUri1)));
+        assertThat(targetUris, not(hasItem(map3AUri2)));
+        assertThat(targetUris, not(hasItem(map3AUri2a)));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertFalse(targetXrefs.contains(map3xref2));
-        assertTrue(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertFalse(targetXrefs.contains(map3Axref1));
-        assertFalse(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, not(hasItem(map3xref1)));
+        assertThat(targetXrefs, not(hasItem(map3xref2)));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, not(hasItem(map3Axref1)));
+        assertThat(targetXrefs, not(hasItem(map3Axref2)));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
     /**
@@ -672,26 +672,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertTrue(targetUris.contains(map3Uri2));
-        assertFalse(targetUris.contains(map3Uri2a));
-        assertTrue(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertFalse(targetUris.contains(map3AUri1));
-        assertTrue(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, not(hasItem(map3Uri1)));
+        assertThat(targetUris, hasItem(map3Uri2));
+        assertThat(targetUris, not(hasItem(map3Uri2a)));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, not(hasItem(map3AUri1)));
+        assertThat(targetUris, hasItem(map3AUri2));
+        assertThat(targetUris, not(hasItem(map3AUri2a)));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertTrue(targetXrefs.contains(map3xref2));
-        assertTrue(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertFalse(targetXrefs.contains(map3Axref1));
-        assertTrue(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, not(hasItem(map3xref1)));
+        assertThat(targetXrefs, hasItem(map3xref2));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, not(hasItem(map3Axref1)));
+        assertThat(targetXrefs, hasItem(map3Axref2));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
 }
