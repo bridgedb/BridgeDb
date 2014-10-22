@@ -1830,7 +1830,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         if (graph == null || graph.trim().isEmpty()) {
             HashSet<RegexUriPattern> results = new HashSet<RegexUriPattern>();
             for (String tgtUriPattern:tgtUriPatterns) {
-                if (tgtUriPattern == null) {
+                if (tgtUriPattern == null || tgtUriPattern.isEmpty()) {
                     results.add(null);
                 } else if (tgtUriPattern.contains("$id")) {    
                     //todo regex in pattern
@@ -2265,7 +2265,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
         Set<Mapping> mappings = getTransitiveMappings(sourceRef, lensId);
         Set<Mapping> filteredMappings = filterByDataSource(mappings, sourceRef, tgtDataSources);
-        this.addSourceUri(filteredMappings, sourceUri);
+         this.addSourceUri(filteredMappings, sourceUri);
         this.addTargetURIs(filteredMappings);
         this.addXrefs(filteredMappings);
         return filteredMappings;
