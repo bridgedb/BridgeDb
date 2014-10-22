@@ -234,7 +234,6 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         if (mapping.getMappingSetId().size() <= 1){
             assertEquals(0, mapping.getViaXref().size());
         } else {
-            System.out.println(mapping);
             if (mapping.getSource() == null){
                 assertEquals(0, mapping.getViaXref().size());            
             } else {

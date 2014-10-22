@@ -135,8 +135,6 @@ public class TransitiveMapping extends IDSysCodePairMapping {
             vaiXref.add(aVia.getTarget());
         }
         this.setViaXref(vaiXref);
-        System.out.println("setTargetXrefs");
-        System.out.println(this);
     }
 
 }

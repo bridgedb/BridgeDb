@@ -346,8 +346,6 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
         assertTrue(targetUris.contains(map3Uri2));
         assertTrue(targetUris.contains(map3Uri2a));
         assertTrue(targetUris.contains(map3Uri3));
-        System.out.println(map3AUri1);
-        System.out.println(targetUris);
         assertFalse(targetUris.contains(map2Uri2));
         assertFalse(targetUris.contains(map1Uri3));
         assertTrue(targetUris.contains(map3AUri1));
