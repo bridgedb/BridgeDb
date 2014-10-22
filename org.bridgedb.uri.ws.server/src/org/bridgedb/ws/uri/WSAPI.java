@@ -1177,7 +1177,7 @@ public class WSAPI extends WSUriInterfaceService {
         sb.append(exampleName);
         sb.append("): <a href=\"");
         sb.append(contextPath);
-        sb.append(WsUriConstants.SOURCE_TARGET_INFOS);
+        sb.append(WsUriConstants.SOURCE_INFOS);
         if (xml){
             sb.append(WsUriConstants.XML);
         }
@@ -1188,7 +1188,7 @@ public class WSAPI extends WSUriInterfaceService {
             sb.append(Lens.ALL_LENS_NAME);                    
         }
         sb.append("\">");
-        sb.append(WsUriConstants.SOURCE_TARGET_INFOS);
+        sb.append(WsUriConstants.SOURCE_INFOS);
         if (xml){
             sb.append(WsUriConstants.XML);
         }
