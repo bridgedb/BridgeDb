@@ -57,12 +57,14 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     
     @Test 
     public void testMap2Way() throws BridgeDBException {
-        report("testMap2Way");
-        OverallStatistics stats1 = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
-        loadData2Way();
-        OverallStatistics stats2 = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
-        assertTrue(stats2.getNumberOfMappings() == stats1.getNumberOfMappings() + 6);
-        assertTrue(stats2.getNumberOfMappingSets() == stats1.getNumberOfMappingSets() + 2);
+        if (uriMapper instanceof SQLUriMapper){
+            report("testMap2Way");
+            OverallStatistics stats1 = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
+            loadData2Way();
+            OverallStatistics stats2 = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
+            assertTrue(stats2.getNumberOfMappings() == stats1.getNumberOfMappings() + 6);
+            assertTrue(stats2.getNumberOfMappingSets() == stats1.getNumberOfMappingSets() + 2);
+        }
     }
 
     @Test 
