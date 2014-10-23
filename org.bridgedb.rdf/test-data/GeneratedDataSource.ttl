@@ -1890,7 +1890,7 @@ bridgeDB:DataSource_Uniprot_TrEMBL a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.uniprot.org/uniprot/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/uniprot/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/uniprot/$id> ;
-	bridgeDB:hasRegexPattern "^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9])(\\.\\d+)?$" ;
+	bridgeDB:hasRegexPattern "^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9])(\\.\\d+)?|([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])$" ;
 	dcterms:alternative "UniProtKB/TrEMBL" ;
 	bridgeDB:hasUriPattern <http://bio2rdf.org/uniprot:$id> , <http://purl.uniprot.org/uniprot/$id> , <http://www.ebi.uniprot.org/entry/$id> .
 
@@ -1979,6 +1979,17 @@ bridgeDB:DataSource_WormBase a bridgeDB:DataSource ;
 	bridgeDB:hasRegexPattern "^WBGene\\d{8}$" ;
 	dcterms:alternative "WormBase" ;
 	bridgeDB:hasUriPattern <http://purl.uniprot.org/wormbase/$id> .
+
+bridgeDB:DataSource_XMetDB a bridgeDB:DataSource ;
+	bridgeDB:fullName "XMetDB" ;
+	bridgeDB:systemCode "Xm" ;
+	bridgeDB:mainUrl "http://www.xmetdb.org/" ;
+	bridgeDB:idExample "XMETDB171" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "interaction" ;
+	bridgeDB:hasUrlPattern <http://www.xmetdb.org/xmetdb/protocol/$id> ;
+	bridgeDB:hasRegexPattern "^XMETDB\\d+$" ;
+	dcterms:alternative "Xenobiotics Metabolism Database" .
 
 bridgeDB:DataSource_ZFIN a bridgeDB:DataSource ;
 	bridgeDB:fullName "ZFIN" ;
@@ -3565,6 +3576,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://www.wormbase.org/db/gene/gene?name=$id;class=Gene> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://www.wormbase.org/db/gene/gene?name=" ;
 	bridgeDB:hasPostfix ";class=Gene" .
+
+<http://www.xmetdb.org/xmetdb/protocol/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://www.xmetdb.org/xmetdb/protocol/" .
 
 <http://www.yeastgenome.org/cgi-bin/locus.fpl?dbid=$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://www.yeastgenome.org/cgi-bin/locus.fpl?dbid=" .

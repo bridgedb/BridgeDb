@@ -1,8 +1,8 @@
 Anopheles	gambiae	Mosquito_Ag	Ag
 Arabidopsis	thaliana	Arabidopsis	At
-Aspergillus	niger	Black mold	An
+Aspergillus niger	Black mold	An
 Bacillus	subtilis	Bsubtilis	Bs
-Beta vulgaris Sugar Beet  Bv
+Beta  vulgaris  Sugar Beet  Bv
 Bos	taurus	Cow	Bt
 Caenorhabditis	elegans	Celegans	Ce
 Canis	familiaris	Dog	Cf

@@ -13,21 +13,23 @@
   	<module>org.bridgedb.ws.core</module>
   	<module>org.bridgedb.ws.server</module>
   	<module>org.bridgedb.ws.client</module>
-    <module>org.bridgedb.rdf</module>
-    <module>org.bridgedb.uri.api</module>
-    <module>org.bridgedb.uri.sql</module>
-    <module>org.bridgedb.uri.loader</module>
-    <module>org.bridgedb.uri.ws.core</module>
-    <module>org.bridgedb.uri.ws.server</module>
-    <module>org.bridgedb.uri.ws.client</module>
-    <module>org.bridgedb.rdb</module>
+        <module>org.bridgedb.rdf</module>
+        <module>org.bridgedb.uri.api</module>
+        <module>org.bridgedb.uri.sql</module>
+        <module>org.bridgedb.uri.loader</module>
+        <module>org.bridgedb.uri.ws.core</module>
+        <module>org.bridgedb.uri.ws.server</module>
+        <module>org.bridgedb.uri.ws.client</module>
+        <module>org.bridgedb.rdb</module>
+  	<module>org.bridgedb.rdb.construct</module>
   	<module>org.bridgedb.webservice.bridgerest</module>
   	<module>org.bridgedb.webservice.biomart</module>
   	<module>org.bridgedb.webservice.cronos</module>
   	<module>org.bridgedb.webservice.picr</module>
   	<module>org.bridgedb.webservice.synergizer</module>
+        <module>org.bridgedb.tools.qc</module>
   	<module>examples</module>
-    <module>org.bridgedb.server</module>
+  	<module>org.bridgedb.server</module>
   </modules>
   
     <properties>

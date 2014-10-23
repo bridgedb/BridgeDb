@@ -123,6 +123,28 @@ public class BioDataSourceTest
 	}
 
 	@Test
+	public void testXMetDB_Regex() {
+		assertTrue(DataSourcePatterns.getDataSourceMatches("XMETDB175").contains(
+			DataSource.getBySystemCode("Xm")
+		));
+	}
+
+	@Test
+	public void testXMetDB() {
+		DataSource xmetdb = DataSource.getBySystemCode("Xm");
+		assertNotNull(xmetdb);
+		assertEquals("XMetDB", xmetdb.getFullName());
+	}
+
+	@Test
+	public void testUniprotIDs() {
+		assertTrue(DataSourcePatterns.getDataSourceMatches("P62158").contains(BioDataSource.UNIPROT));
+		assertFalse(DataSourcePatterns.getDataSourceMatches("PA2158").contains(BioDataSource.UNIPROT));
+		assertTrue(DataSourcePatterns.getDataSourceMatches("G4XXL9").contains(BioDataSource.UNIPROT));
+		assertTrue(DataSourcePatterns.getDataSourceMatches("G4XXL9XXL9").contains(BioDataSource.UNIPROT));
+	}
+
+	@Test
 	public void testDataSource()
 	{
 		DataSource ds = BioDataSource.ENSEMBL;
