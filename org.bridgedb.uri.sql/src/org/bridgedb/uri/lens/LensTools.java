@@ -21,16 +21,13 @@ package org.bridgedb.uri.lens;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.log4j.Logger;
+import org.bridgedb.rdf.BridgeDBRdfHandler;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.DCTermsConstants;
 import org.bridgedb.rdf.constants.PavConstants;
@@ -38,7 +35,6 @@ import org.bridgedb.rdf.constants.RdfConstants;
 import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
-import org.bridgedb.utils.Reporter;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.CalendarLiteralImpl;
@@ -55,19 +51,27 @@ public class LensTools {
     private static final String PROPERTIES_FILE = "lens.properties";
     public static final String DEFAULT_BAE_URI_KEY = "defaultLensBaseUri";
     
-    private static HashMap<String,Lens> register = null;
     private static int nextNumber = -0; 
     
     private static final String ID_PREFIX = "L";
     private static final String PROPERTY_PREFIX = "lens";
    
+    private static final String ALLOWED_MIDDLE_SOURCE = "allowedMiddleSource";
     private static final String CREATED_BY = "createdBy";
     private static final String CREATED_ON = "createdOn";
     private static final String DESCRIPTION = "description";
     private static final String JUSTIFICATION = "justification";
     private static final String DEFAULT = "default";
     private static final String NAME = "name";
+    private static final String GROUP = "group";
+
+    public static final String PUBLIC_GROUP_NAME = "public";
+    public static final String TEST_GROUP_NAME = "test";
+    public static final String ALL_GROUP_NAME = "all";      
+
+    private static HashMap<String,Lens> register = null;
     
+    private static HashMap<String,List<Lens>> groups = null;
     
     static final Logger logger = Logger.getLogger(LensTools.class);
 
@@ -143,9 +147,7 @@ public class LensTools {
     }
 
     private static Lens lookupById(String id) throws BridgeDBException {
-        if (register.isEmpty()){
-            init();
-        }
+        init();
         return register.get(id.toLowerCase());
     }
     
@@ -166,7 +168,9 @@ public class LensTools {
                 }                
             }
             Lens lens = findOrCreatedById(parts[1]);
-            if (parts[2].equals(CREATED_BY)){
+            if (parts[2].equals(ALLOWED_MIDDLE_SOURCE)){
+                lens.addAllowedMiddleSource(properties.getProperty(key));
+            } else if (parts[2].equals(CREATED_BY)){
                 lens.setCreatedBy(properties.getProperty(key));
             } else if (parts[2].equals(CREATED_ON)){
                 lens.setCreatedOn(properties.getProperty(key));
@@ -176,9 +180,14 @@ public class LensTools {
                 lens.setDescription(properties.getProperty(key));
             } else if (parts[2].equals(DEFAULT)){
                 Lens defaultLens = findOrCreatedById(Lens.DEFAULT_LENS_NAME);
+                lens.addAllowedMiddleSources(defaultLens.getAllowedMiddleSources());
                 lens.addJustifications(defaultLens.getJustifications());
             } else if (parts[2].equals(JUSTIFICATION)){
                 lens.addJustification(properties.getProperty(key));
+            } else if (parts[2].equals(GROUP)){
+                addToGroup(properties.getProperty(key), lens);
+            } else if (parts[2].equals(PUBLIC_GROUP_NAME)){
+                addToGroup(PUBLIC_GROUP_NAME, lens);
             } else {
                 logger.error("Found unexpected property " + key);
             }
@@ -188,7 +197,9 @@ public class LensTools {
     public static void init() throws BridgeDBException {
         if (register == null){
             logger.info("init");
+            BridgeDBRdfHandler.init();
             register = new HashMap<String,Lens>();
+            groups = new HashMap<String,List<Lens>>(); 
             //Create the all, default and test lens
             Lens all = findOrCreatedById(Lens.ALL_LENS_NAME);
             Lens defaultLens = findOrCreatedById(Lens.DEFAULT_LENS_NAME);
@@ -199,12 +210,14 @@ public class LensTools {
                 //process the default lens
                 processKey(properties, key, true);
             }
+            addToGroup(PUBLIC_GROUP_NAME, defaultLens);
             for (String key:keys){
                 //process the other lens
                 processKey(properties, key, false);
             }
-            for (Lens lens:getLens()){
+            for (Lens lens:getAllLens()){
                 all.addJustifications(lens.getJustifications());
+                all.addAllowedMiddleSources(lens.getAllowedMiddleSources());
             }
             all.addJustification(getDefaultJustifictaionString());
             all.addJustification(getTestJustifictaion());
@@ -215,7 +228,13 @@ public class LensTools {
                 defaultLens.addJustifications(all.getJustifications());
             }
             testLens.addJustification(getTestJustifictaion());
+            testLens.addJustification(Lens.getDefaultJustifictaionString());
+ 
+            testLens.addAllowedMiddleSources(defaultLens.getAllowedMiddleSources());
             Lens.setDefaultBaseUri(properties.getProperty(DEFAULT_BAE_URI_KEY));
+            for (String group:groups.keySet()){
+               addToGroup(group,defaultLens);
+            }
         }
      }
 
@@ -239,7 +258,7 @@ public class LensTools {
         }
    }
 
-    public static List<Lens> getLens() throws BridgeDBException {
+    public static List<Lens> getAllLens() throws BridgeDBException {
         init();
         List results = new ArrayList<Lens> (register.values());
         Lens defaultLens = byId(Lens.DEFAULT_LENS_NAME);
@@ -248,9 +267,23 @@ public class LensTools {
         return results;
     }
 
-    public static Set<Statement> getLensAsRdf(String baseUri) {
+    public static List<Lens> getLens(String group) throws BridgeDBException {
+        init();
+        group = scrubGroup(group);
+        if (group.equals(ALL_GROUP_NAME)){
+            return getAllLens();
+        }
+        List<Lens> lenses = groups.get(group);
+        if (lenses == null){
+            lenses = new ArrayList<Lens>();
+        }
+        return lenses;
+    }
+
+    public static Set<Statement> getLensAsRdf(String baseUri, String group) throws BridgeDBException {
         HashSet<Statement> results = new HashSet<Statement>();
-        for (Lens lens:register.values()){
+        List<Lens> lenses = getLens(group);
+        for (Lens lens:lenses){
             results.addAll(asRdf(lens, baseUri));
         }
         return results;
@@ -269,5 +302,37 @@ public class LensTools {
             results.add(new StatementImpl(subject, BridgeDBConstants.LINKSET_JUSTIFICATION, new URIImpl(justification)));
         }
         return results;
+    }
+
+    public static Set<String> getLensGroups(){
+        HashSet<String> keys = new HashSet(groups.keySet());
+        keys.add(ALL_GROUP_NAME);
+        return keys;
+    }
+    
+    private static String scrubGroup(String group) {
+        if (group == null) {
+            return PUBLIC_GROUP_NAME;
+        }
+        String scrubbed = group.toLowerCase().trim();
+        if (scrubbed.contains("/")){
+            scrubbed = scrubbed.substring(scrubbed.lastIndexOf("/"));
+        }
+        if (scrubbed.isEmpty()){
+            return PUBLIC_GROUP_NAME;            
+        }
+        return scrubbed;
+    }
+    
+    private static void addToGroup (String group, Lens lens){
+        group = scrubGroup(group);
+        List<Lens> lenses = groups.get(group);
+        if (lenses == null){
+            lenses = new ArrayList<Lens>();
+        }
+        if (!lenses.contains(lens)){
+            lenses.add(lens);
+        }
+        groups.put(group, lenses);
     }
 }

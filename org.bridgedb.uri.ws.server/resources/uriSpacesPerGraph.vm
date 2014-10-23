@@ -1,0 +1,17 @@
+<h2>URISpaces Per Graph</h2>
+<table border="1" >
+    <tr>
+        <th>Graph</th>
+        <th>NameSpace</th>
+    </tr>
+    #foreach ($graph in $mappings.keySet())
+        #foreach($pattern in $mappings.get($graph))
+            <tr>
+                <td>$graph</td>
+                <td>$pattern.getUriPattern()</td>
+            </tr>
+        #end
+    #end
+</table>
+
+

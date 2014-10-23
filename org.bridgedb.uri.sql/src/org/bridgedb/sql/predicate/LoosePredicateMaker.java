@@ -17,22 +17,47 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.uri.loader.transative;
+package org.bridgedb.sql.predicate;
 
-import org.bridgedb.uri.loader.transative.constant.SkosConstants;
-import org.bridgedb.uri.loader.transative.constant.OwlConstants;
-import org.bridgedb.uri.loader.transative.constant.OboConstants;
-import org.bridgedb.uri.loader.transative.constant.RdfSchemaConstants;
+import org.bridgedb.rdf.constants.OWLConstants;
+import org.bridgedb.rdf.constants.OboConstants;
+import org.bridgedb.rdf.constants.RdfSchemaConstants;
+import org.bridgedb.rdf.constants.SkosConstants;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
  *
  * @author Christian
  */
-public class PredicateMaker {
+public class LoosePredicateMaker implements PredicateMaker{
 //Broaawed + narrow = error
     
-    public static String combine(String left, String right) throws BridgeDBException {
+    private static final LoosePredicateMaker instance = new LoosePredicateMaker();
+    
+    private LoosePredicateMaker(){
+    }
+    
+    public static LoosePredicateMaker getInstance(){
+        return instance;
+    }
+    
+    public static void init() throws BridgeDBException{
+        //Currently does nothing but this is where you would read a proerties file.
+    }
+    
+    @Override
+    public String combine(String left, String right) throws BridgeDBException {
+        String result = possibleCombine(left, right);
+        if (result == null){
+            throw new BridgeDBException("unable to combine " + left + " with " + right);
+        } else {
+            return result;
+        }
+
+    }
+    
+    @Override
+    public String possibleCombine(String left, String right) {
         if (left.equals(right)){
             return left;
         }
@@ -47,8 +72,8 @@ public class PredicateMaker {
         if (right.equals(RdfSchemaConstants.SEE_ALSO)) {
             return RdfSchemaConstants.SEE_ALSO;
         }
-        if (left.equals(OwlConstants.SAME_AS)) {
-            if (right.equals(OwlConstants.EQUIVALENT_CLASS)) return OwlConstants.EQUIVALENT_CLASS;
+        if (left.equals(OWLConstants.SAME_AS)) {
+            if (right.equals(OWLConstants.EQUIVALENT_CLASS)) return OWLConstants.EQUIVALENT_CLASS;
             if (right.equals(SkosConstants.EXACT_MATCH)) return SkosConstants.EXACT_MATCH;
             if (right.equals(SkosConstants.CLOSE_MATCH)) return SkosConstants.CLOSE_MATCH;
             if (right.equals(SkosConstants.MAPPING_RELATION)) return SkosConstants.MAPPING_RELATION;
@@ -57,8 +82,8 @@ public class PredicateMaker {
             if (right.equals(SkosConstants.BROAD_MATCH)) return SkosConstants.BROAD_MATCH;  
             if (right.equals(OboConstants.HAS_PART)) return OboConstants.HAS_PART;
         }
-        if (left.equals(OwlConstants.EQUIVALENT_CLASS)) {
-            if (right.equals(OwlConstants.SAME_AS)) return OwlConstants.EQUIVALENT_CLASS;
+        if (left.equals(OWLConstants.EQUIVALENT_CLASS)) {
+            if (right.equals(OWLConstants.SAME_AS)) return OWLConstants.EQUIVALENT_CLASS;
             if (right.equals(SkosConstants.EXACT_MATCH)) return SkosConstants.EXACT_MATCH;
             if (right.equals(SkosConstants.CLOSE_MATCH)) return SkosConstants.CLOSE_MATCH;
             if (right.equals(SkosConstants.MAPPING_RELATION)) return SkosConstants.MAPPING_RELATION;
@@ -68,8 +93,8 @@ public class PredicateMaker {
             if (right.equals(OboConstants.HAS_PART)) return OboConstants.HAS_PART;
         }
         if (left.equals(SkosConstants.EXACT_MATCH)) { //TODO keep other
-            if (right.equals(OwlConstants.EQUIVALENT_CLASS)) return SkosConstants.EXACT_MATCH;
-            if (right.equals(OwlConstants.SAME_AS)) return SkosConstants.EXACT_MATCH;
+            if (right.equals(OWLConstants.EQUIVALENT_CLASS)) return SkosConstants.EXACT_MATCH;
+            if (right.equals(OWLConstants.SAME_AS)) return SkosConstants.EXACT_MATCH;
             if (right.equals(SkosConstants.CLOSE_MATCH)) return SkosConstants.CLOSE_MATCH;
             if (right.equals(SkosConstants.MAPPING_RELATION)) return SkosConstants.MAPPING_RELATION;
             if (right.equals(SkosConstants.RELATED_MATCH)) return SkosConstants.MAPPING_RELATION;
@@ -78,8 +103,8 @@ public class PredicateMaker {
             if (right.equals(OboConstants.HAS_PART)) return OboConstants.HAS_PART;
         }
         if (left.equals(SkosConstants.CLOSE_MATCH)) {
-            if (right.equals(OwlConstants.EQUIVALENT_CLASS)) return SkosConstants.CLOSE_MATCH;
-            if (right.equals(OwlConstants.SAME_AS)) return SkosConstants.CLOSE_MATCH;
+            if (right.equals(OWLConstants.EQUIVALENT_CLASS)) return SkosConstants.CLOSE_MATCH;
+            if (right.equals(OWLConstants.SAME_AS)) return SkosConstants.CLOSE_MATCH;
             if (right.equals(SkosConstants.EXACT_MATCH)) return SkosConstants.CLOSE_MATCH;
             if (right.equals(SkosConstants.MAPPING_RELATION)) return SkosConstants.MAPPING_RELATION;
             if (right.equals(SkosConstants.RELATED_MATCH)) return SkosConstants.MAPPING_RELATION;
@@ -88,8 +113,8 @@ public class PredicateMaker {
             if (right.equals(OboConstants.HAS_PART)) return OboConstants.HAS_PART;
         }
         if (left.equals(SkosConstants.MAPPING_RELATION)) {
-            if (right.equals(OwlConstants.EQUIVALENT_CLASS)) return SkosConstants.MAPPING_RELATION;
-            if (right.equals(OwlConstants.SAME_AS)) return SkosConstants.MAPPING_RELATION;
+            if (right.equals(OWLConstants.EQUIVALENT_CLASS)) return SkosConstants.MAPPING_RELATION;
+            if (right.equals(OWLConstants.SAME_AS)) return SkosConstants.MAPPING_RELATION;
             if (right.equals(SkosConstants.EXACT_MATCH)) return SkosConstants.MAPPING_RELATION;
             if (right.equals(SkosConstants.CLOSE_MATCH)) return SkosConstants.MAPPING_RELATION;
             if (right.equals(SkosConstants.RELATED_MATCH)) return SkosConstants.MAPPING_RELATION;
@@ -100,8 +125,8 @@ public class PredicateMaker {
         //So Borad, Narrow and mapping relation all go up to mapping Relation
         if (left.equals(SkosConstants.RELATED_MATCH) || left.equals(SkosConstants.BROAD_MATCH) || 
                 left.equals(SkosConstants.NARROW_MATCH)) {
-            if (right.equals(OwlConstants.EQUIVALENT_CLASS)) return left;
-            if (right.equals(OwlConstants.SAME_AS)) return left;
+            if (right.equals(OWLConstants.EQUIVALENT_CLASS)) return left;
+            if (right.equals(OWLConstants.SAME_AS)) return left;
             if (right.equals(SkosConstants.EXACT_MATCH)) return SkosConstants.MAPPING_RELATION;
             if (right.equals(SkosConstants.CLOSE_MATCH)) return SkosConstants.MAPPING_RELATION;
             if (right.equals(SkosConstants.MAPPING_RELATION)) return SkosConstants.MAPPING_RELATION;
@@ -110,12 +135,12 @@ public class PredicateMaker {
             if (right.equals(SkosConstants.BROAD_MATCH)) return SkosConstants.MAPPING_RELATION;    
         }
         if (left.equals(OboConstants.HAS_PART)) {
-        	if (right.equals(OwlConstants.EQUIVALENT_CLASS)) return OboConstants.HAS_PART;
-        	if (right.equals(OwlConstants.SAME_AS)) return OboConstants.HAS_PART;
+        	if (right.equals(OWLConstants.EQUIVALENT_CLASS)) return OboConstants.HAS_PART;
+        	if (right.equals(OWLConstants.SAME_AS)) return OboConstants.HAS_PART;
         	if (right.equals(SkosConstants.EXACT_MATCH)) return OboConstants.HAS_PART;
         	if (right.equals(SkosConstants.CLOSE_MATCH)) return OboConstants.HAS_PART;
         }
-        throw new BridgeDBException("unable to combine " + left + " with " + right);
+        return null;
     }
     
     private static String cleanup(String predicate){

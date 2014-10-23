@@ -1,0 +1,11 @@
+<h2>Lens Groups</h2>
+#if ($exception)
+    <h4>Unable to process your request</h4>
+    <h3>$exception</h3>
+#else 
+    <ul>
+        #foreach ($lensGroup in $lensGroups)
+            <li><a href="$lensCall$lensGroup">$lensCall$lensGroup</a></li>
+        #end
+    </ul>
+#end

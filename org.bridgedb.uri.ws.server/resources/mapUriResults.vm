@@ -4,27 +4,68 @@
     <h3>$exception</h3>
     <p>Warning: XML and JSON versions will throw an Exception with these parameters</p>
 #else 
-    #if( $MappingsBySysCodeId.isEmpty())
+    #if( $mappings.isEmpty())
         <h4>No Target Uris found</h4>
         <p>
         Warning if accepts header is set to "application/xml" or "application/json" this methods returns status 204 if no results are found.
         </p>
     #else
-        #foreach ( $resultSysCode in $MappingsBySysCodeId.getSysCodes())
-            <ul>
-                <li>$MappingsBySysCodeId.getDataSourceName($resultSysCode)</li>
-                #foreach ( $resultId in $MappingsBySysCodeId.getIds($resultSysCode))
+        #set( $targetSystemCode = "" )
+        #set( $sourceUri = "" )
+               <ul> 
+        #foreach ( $mapping in $mappings)       
+            #if (!$sourceUri.equals($mapping.getSourceUri().iterator().next()))
+                #set( $sourceUri = $mapping.getSourceUri().iterator().next())
+                </ul>
+                <h3>Mappings for $sourceUri</h3>
+                <ul>
+                #set( $targetSystemCode = "" )
+            #end
+            #if ($mapping.getTarget())
+                #if (!$targetSystemCode.equals($mapping.getTarget().getDataSource().getSystemCode()))
+                    </ul><ul>
+                        #set( $targetSystemCode = $mapping.getTarget().getDataSource().getSystemCode() )
+                        <li><a href="$contextPath/dataSource/$targetSystemCode">$mapping.getTarget().getDataSource().getFullName()</a></li>
+                #end
                     <ul>
-                        <li>$resultId</li>
+                        <li>$mapping.getTargetId()</li>      
+            #else
+                </ul><ul>
+                    <li>Unkown Uripattern</li>
+                    <ul>
+            #end
                         <ul>
-                            #foreach ( $resultUri in $MappingsBySysCodeId.getUris($resultSysCode, $resultId))
+                            #foreach ( $resultUri in $mapping.getTargetUri())
                                 <li><a href=$resultUri>$resultUri</a></li>
+                            #end
+                            #if ($mapping.getMappingSetId().size() == 0)
+                                <li>This is an automatic mapping to alternative equals URIs
+                            #elseif ($mapping.getMappingSetId().size() == 1)
+                                <li>Found in mappingSet  
+                                #foreach ( $id in $mapping.getMappingSetId())
+                                    <a href="$contextPath/mappingSet/$id">mappingSet/$id</a>
+                                #end
+                                </li>
+                            #else    
+                                <li>Derived via</li>
+                                <ul>
+                                    #set ($count = $mapping.getMappingSetId().size() - 1)
+                                    #foreach ( $index in [0..$count]) 
+                                        #set ( $id = $mapping.getViaXref().get($index).getId() )
+                                        #set ( $dataSource = $mapping.getViaXref().get($index).getDataSource() )
+                                        #set ( $setId = $mapping.getMappingSetId().get($index) )
+                                        <li>
+                                            <a href="$contextPath/toUris?id=$id&code=$dataSource.getSystemCode()"> 
+                                            $dataSource.getFullName():$id</a> in
+                                            <a href="$contextPath/mappingSet/$setId">mappingSet/$setId</a>
+                                        </li>
+                                    #end
+                                </ul>
                             #end
                         </ul>
                     </ul>
-                #end
-            </ul>
         #end
+                </ul>
     #end
 #end
 <h2>Parameters</h2>
@@ -36,7 +77,7 @@
         <a href=$sourceUri">$sourceUri</a><br>
     #end
 #end
-#if ( $lensURI.isEmpty())
+#if ($lensURI)
     <h4>No $lensURIName parameter so using $defaultLensName</h4>
 #else
     <h4>${lensURIName}: $lensURI</h4>

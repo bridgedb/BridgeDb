@@ -17,16 +17,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.uri.loader.transative.constant;
+package org.bridgedb.sql.predicate;
+
+import org.bridgedb.utils.BridgeDBException;
 
 /**
- * seeAlso
-
+ *
+ * @author Christian
  */
-public class RdfSchemaConstants {
-
-    private static final String PREFIX = "http://www.w3.org/2000/01/rdf-schema#";
+public interface PredicateMaker {
     
-    public static final String SEE_ALSO = PREFIX + "seeAlso";
+    public String possibleCombine(String left, String right);
 
+    public String combine(String left, String right) throws BridgeDBException;
 }

@@ -42,7 +42,7 @@ public class XrefsBean {
         for (Xref xref:xrefs){
             logger.info(xref);
             if (xref != null){
-                Xref.add(new XrefBean(xref));
+                Xref.add(XrefBean.asBean(xref));
             }
         }
     }

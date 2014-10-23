@@ -22,6 +22,9 @@ import org.junit.Test;
 public abstract class UriMapperTestLensTest extends UriListenerTest{
 
     private static  final String NULL_GRAPH = null;
+    public static final Set<String> NO_PATTERNS = null;
+    public static final Set<DataSource> NO_TARGET_DATASOURCE = null;
+    public static final Boolean DEFAULT_IGNORE_XREF = null;
 
     /**
      * Test of mapID method, of class UriMapper.
@@ -29,17 +32,20 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
     @Test
     public void testMapID_sourceXref_lensUri_tgtDataSources() throws Exception {
         report("MapID_sourceXref_lensUri_tgtDataSources");
-        Xref sourceXref = map2xref2;
+        Xref sourceXref = map2xref1;
         String lensUri = Lens.TEST_LENS_NAME;
-        Set results = uriMapper.mapID(sourceXref, lensUri, DataSource2, DataSource3);
+        Set<DataSource> targets = new HashSet<DataSource>();
+        targets.add(DataSource2);
+        targets.add(DataSource3);
+        Set results = uriMapper.mapID(sourceXref, lensUri, targets);
         assertFalse(results.contains(map2xref1));
         assertTrue(results.contains(map2xref2));
-        assertFalse(results.contains(map2xref3)); 
+        assertTrue(results.contains(map2xref3)); 
         assertFalse(results.contains(map1xref2));
         assertFalse(results.contains(map1xref1));
         assertFalse(results.contains(map3xref2));
         assertFalse(results.contains(map2Axref1));
-        assertFalse(results.contains(map2Axref2));
+        assertTrue(results.contains(map2Axref2));
         assertTrue(results.contains(map2Axref3)); 
     }
 
@@ -49,13 +55,15 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
     @Test
     public void testMapID_sourceXref_lensUri_tgtDataSource() throws Exception {
         report("MapID_sourceXref_lensUri_tgtDataSource");
-        Xref sourceXref = map2xref2;
+        Xref sourceXref = map2xref1;
         String lensUri = Lens.TEST_LENS_NAME;
         DataSource tgtDataSource = DataSource3;
-        Set results = uriMapper.mapID(sourceXref, lensUri, tgtDataSource);
+        Set<DataSource> targets = new HashSet<DataSource>();
+        targets.add(tgtDataSource);
+        Set results = uriMapper.mapID(sourceXref, lensUri, targets);
         assertFalse(results.contains(map2xref1));
         assertFalse(results.contains(map2xref2));
-        assertFalse(results.contains(map2xref3));
+        assertTrue(results.contains(map2xref3));
         assertFalse(results.contains(map1xref2));
         assertFalse(results.contains(map1xref1));
         assertFalse(results.contains(map3xref2));
@@ -70,17 +78,17 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
     @Test
     public void testMapID_sourceXref_lensUri() throws Exception {
         report("MapID_sourceXref_lensUri");
-        Xref sourceXref = map2xref2;
+        Xref sourceXref = map2xref1;
         String lensUri = Lens.TEST_LENS_NAME;
-        Set results = uriMapper.mapID(sourceXref, lensUri);
-        assertFalse(results.contains(map2xref1));
+        Set results = uriMapper.mapID(sourceXref, lensUri, NO_TARGET_DATASOURCE);
+        assertTrue(results.contains(map2xref1));
         assertTrue(results.contains(map2xref2));
-        assertFalse(results.contains(map2xref3));
+        assertTrue(results.contains(map2xref3));
         assertFalse(results.contains(map1xref2));
         assertFalse(results.contains(map1xref1));
         assertFalse(results.contains(map3xref2));
         assertTrue(results.contains(map2Axref1));
-        assertFalse(results.contains(map2Axref2));
+        assertTrue(results.contains(map2Axref2));
         assertTrue(results.contains(map2Axref3));
     }
 
@@ -93,9 +101,12 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
         String sourceUri = map3Uri3;
         String lensUri = Lens.TEST_LENS_NAME;
         UriPattern[] tgtUriPatterns = null;
-        Set results = uriMapper.mapUri(sourceUri, lensUri, NULL_GRAPH, stringPattern2, stringPattern3);
+        Set<String> targets = new HashSet<String>();
+        targets.add(stringPattern2);
+        targets.add(stringPattern3);
+        Set results = uriMapper.mapUri(sourceUri, lensUri, NULL_GRAPH, targets);
         assertFalse(results.contains(map3Uri1));
-        assertFalse(results.contains(map3Uri2));
+        assertTrue(results.contains(map3Uri2));
         assertFalse(results.contains(map3Uri2a));
         assertTrue(results.contains(map3Uri3));
         assertFalse(results.contains(map2Uri2));
@@ -103,7 +114,7 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
         assertFalse(results.contains(map3AUri1));
         assertTrue(results.contains(map3AUri2));
         assertFalse(results.contains(map3AUri2a));
-        assertFalse(results.contains(map3AUri3));
+        assertTrue(results.contains(map3AUri3));
     }
 
     /**
@@ -112,13 +123,15 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
     @Test
     public void testMapUri_sourceXref_lensUri_tgtUriPattern() throws Exception {
         report("MapUri_sourceXref_lensUri_tgtUriPattern");
-        Xref sourceXref = map3xref2;
+        Xref sourceXref = map3xref1;
         String lensUri = Lens.TEST_LENS_NAME;
-        Set results = uriMapper.mapUri(sourceXref, lensUri, NULL_GRAPH, stringPattern3);
+        Set<String> targets = new HashSet<String>();
+        targets.add(stringPattern3);
+        Set results = uriMapper.mapUri(sourceXref, lensUri, NULL_GRAPH, targets);
         assertFalse(results.contains(map3Uri1));
         assertFalse(results.contains(map3Uri2));
         assertFalse(results.contains(map3Uri2a));
-        assertFalse(results.contains(map3Uri3));
+        assertTrue(results.contains(map3Uri3));
         assertFalse(results.contains(map2Uri2));
         assertFalse(results.contains(map1Uri3));
         assertFalse(results.contains(map3AUri1));
@@ -132,18 +145,18 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
     @Test
     public void testMapUri_sourceXref_lensUri() throws Exception {
         report("MapUri_sourceXref_lensUri");
-        Xref sourceXref = map3xref2;
+        Xref sourceXref = map3xref1;
         String lensUri = Lens.TEST_LENS_NAME;
-        Set results = uriMapper.mapUri(sourceXref, lensUri, NULL_GRAPH);
-        assertFalse(results.contains(map3Uri1));
+        Set results = uriMapper.mapUri(sourceXref, lensUri, NULL_GRAPH, NO_PATTERNS);
+        assertTrue(results.contains(map3Uri1));
         assertTrue(results.contains(map3Uri2));
         assertTrue(results.contains(map3Uri2a));
-        assertFalse(results.contains(map3Uri3));
+        assertTrue(results.contains(map3Uri3));
         assertFalse(results.contains(map2Uri2));
         assertFalse(results.contains(map1Uri3));
         assertTrue(results.contains(map3AUri1));
-        assertFalse(results.contains(map3AUri2));
-        assertFalse(results.contains(map3AUri2a));
+        assertTrue(results.contains(map3AUri2));
+        assertTrue(results.contains(map3AUri2a));
         assertTrue(results.contains(map3AUri3));
     }
 
@@ -153,18 +166,20 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
     @Test
     public void testMapUri_sourceXref_lensUri_tgtUriPatterns() throws Exception {
         report("MapUri_sourceXref_lensUri_tgtUriPatterns");
-        Xref sourceXref = map3xref2;
+        Xref sourceXref = map3xref1;
         String lensUri = Lens.TEST_LENS_NAME;
-        UriPattern[] tgtUriPatterns = null;
-        Set results = uriMapper.mapUri(sourceXref, lensUri, NULL_GRAPH, stringPattern2, stringPattern3);
+        Set<String> targets = new HashSet<String>();
+        targets.add(stringPattern2);
+        targets.add(stringPattern3);
+        Set results = uriMapper.mapUri(sourceXref, lensUri, NULL_GRAPH, targets);
         assertFalse(results.contains(map3Uri1));
         assertTrue(results.contains(map3Uri2));
         assertFalse(results.contains(map3Uri2a));
-        assertFalse(results.contains(map3Uri3));
+        assertTrue(results.contains(map3Uri3));
         assertFalse(results.contains(map2Uri2));
         assertFalse(results.contains(map1Uri3));
         assertFalse(results.contains(map3AUri1));
-        assertFalse(results.contains(map3AUri2));
+        assertTrue(results.contains(map3AUri2));
         assertFalse(results.contains(map3AUri2a));
         assertTrue(results.contains(map3AUri3));
     }
@@ -175,13 +190,15 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
     @Test
     public void testMapUri_sourceUri_lensUri_tgtUriPattern() throws Exception {
         report("MapUri_sourceUri_lensUri_tgtUriPattern");
-        String sourceUri = map3Uri2;
+        String sourceUri = map3Uri1;
         String lensUri = Lens.TEST_LENS_NAME;
-        Set results = uriMapper.mapUri(sourceUri, lensUri, NULL_GRAPH, stringPattern3);
+        Set<String> targets = new HashSet<String>();
+        targets.add(stringPattern3);
+        Set results = uriMapper.mapUri(sourceUri, lensUri, NULL_GRAPH, targets);
         assertFalse(results.contains(map3Uri1));
         assertFalse(results.contains(map3Uri2));
         assertFalse(results.contains(map3Uri2a));
-        assertFalse(results.contains(map3Uri3));
+        assertTrue(results.contains(map3Uri3));
         assertFalse(results.contains(map2Uri2));
         assertFalse(results.contains(map1Uri3));
         assertFalse(results.contains(map3AUri1));
@@ -196,18 +213,18 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
     @Test
     public void testMapUri_sourceUri_lensUri() throws Exception {
         report("MapUri_sourceUri_lensUri");
-        String sourceUri = map3Uri2;
+        String sourceUri = map3Uri1;
         String lensUri = Lens.TEST_LENS_NAME;
-        Set results = uriMapper.mapUri(sourceUri, lensUri, NULL_GRAPH);
-        assertFalse(results.contains(map3Uri1));
+        Set results = uriMapper.mapUri(sourceUri, lensUri, NULL_GRAPH, NO_PATTERNS);
+        assertTrue(results.contains(map3Uri1));
         assertTrue(results.contains(map3Uri2));
         assertTrue(results.contains(map3Uri2a));
-        assertFalse(results.contains(map3Uri3));
+        assertTrue(results.contains(map3Uri3));
         assertFalse(results.contains(map2Uri2));
         assertFalse(results.contains(map1Uri3));
         assertTrue(results.contains(map3AUri1));
-        assertFalse(results.contains(map3AUri2));
-        assertFalse(results.contains(map3AUri2a));
+        assertTrue(results.contains(map3AUri2));
+        assertTrue(results.contains(map3AUri2a));
         assertTrue(results.contains(map3AUri3));
     }
 
@@ -217,10 +234,13 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
     @Test
     public void testMapFull_sourceXref_lensUri_tgtDataSources() throws Exception {
         report("MapFull_sourceXref_lensUri_tgtDataSources");
-        Xref sourceXref = map3xref2;
+        Xref sourceXref = map3xref1;
         String lensUri = Lens.TEST_LENS_NAME;
         DataSource[] tgtDataSources = null;
-        Set<Mapping> results = uriMapper.mapFull(sourceXref, lensUri, DataSource2, DataSource3);
+        Set<DataSource> targets = new HashSet<DataSource>();
+        targets.add(DataSource2);
+        targets.add(DataSource3);
+        Set<Mapping> results = uriMapper.mapFull(sourceXref, lensUri, true, targets);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         for (Mapping mapping:results){
@@ -232,26 +252,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertTrue(targetUris.contains(map3Uri2));
-        assertTrue(targetUris.contains(map3Uri2a));
-        assertFalse(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertFalse(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, not(hasItem(map3Uri1)));
+        assertThat(targetUris, hasItem(map3Uri2));
+        assertThat(targetUris, hasItem(map3Uri2a));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, not(hasItem(map3AUri1)));
+        assertThat(targetUris, hasItem(map3AUri2));
+        assertThat(targetUris, hasItem(map3AUri2a));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertTrue(targetXrefs.contains(map3xref2));
-        assertFalse(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertFalse(targetXrefs.contains(map3Axref1));
-        assertFalse(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, not(hasItem(map3xref1)));
+        assertThat(targetXrefs, hasItem(map3xref2));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, not(hasItem(map3Axref1)));
+        assertThat(targetXrefs, hasItem(map3Axref2));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
     /**
@@ -260,10 +280,12 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
     @Test
     public void testMapFull_sourceXref_lensUri_tgtDataSource() throws Exception {
         report("MapFull_sourceXref_lensUri_tgtDataSources");
-        Xref sourceXref = map3xref2;
+        Xref sourceXref = map3xref1;
         String lensUri = Lens.TEST_LENS_NAME;
         DataSource tgtDataSource = DataSource3;
-        Set<Mapping> results = uriMapper.mapFull(sourceXref, lensUri, tgtDataSource);
+        Set<DataSource> targets = new HashSet<DataSource>();
+        targets.add(tgtDataSource);
+        Set<Mapping> results = uriMapper.mapFull(sourceXref, lensUri, true, targets);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
@@ -277,26 +299,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetXrefs.add(mapping.getTarget());
             assertEquals(tgtDataSource, mapping.getTarget().getDataSource());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertFalse(targetUris.contains(map3Uri2));
-        assertFalse(targetUris.contains(map3Uri2a));
-        assertFalse(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
+        assertThat(targetUris, not(hasItem(map3Uri1)));
+        assertThat(targetUris, not(hasItem(map3Uri2)));
+        assertThat(targetUris, not(hasItem(map3Uri2a)));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map3AUri1)));
+        assertThat(targetUris, not(hasItem(map3AUri2)));
+        assertThat(targetUris, not(hasItem(map3AUri2a)));
+        assertThat(targetUris, hasItem(map3AUri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertFalse(targetXrefs.contains(map3xref2));
-        assertFalse(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map3Axref1));
-        assertFalse(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
+        assertThat(targetXrefs, not(hasItem(map3xref1)));
+        assertThat(targetXrefs, not(hasItem(map3xref2)));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map3Axref1)));
+        assertThat(targetXrefs, not(hasItem(map3Axref2)));
+        assertThat(targetXrefs, hasItem(map3Axref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
     }
 
     /**
@@ -304,10 +326,10 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
      */
     @Test
     public void testMapFull_sourceXref_lensUri() throws Exception {
-        report("MapFull_sourceXref_lensUri_tgtDataSources");
-        Xref sourceXref = map3xref2;
+        report("MapFull_sourceXref_lensUri");
+        Xref sourceXref = map3xref1;
         String lensUri = Lens.TEST_LENS_NAME;
-        Set<Mapping> results = uriMapper.mapFull(sourceXref, lensUri);
+        Set<Mapping> results = uriMapper.mapFull(sourceXref, lensUri, true, NO_TARGET_DATASOURCE);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
@@ -320,26 +342,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertTrue(targetUris.contains(map3Uri2));
-        assertTrue(targetUris.contains(map3Uri2a));
-        assertFalse(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertTrue(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, hasItem(map3Uri1));
+        assertThat(targetUris, hasItem(map3Uri2));
+        assertThat(targetUris, hasItem(map3Uri2a));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, hasItem(map3AUri1));
+        assertThat(targetUris, hasItem(map3AUri2));
+        assertThat(targetUris, hasItem(map3AUri2a));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertTrue(targetXrefs.contains(map3xref2));
-        assertFalse(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertTrue(targetXrefs.contains(map3Axref1));
-        assertFalse(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, hasItem(map3xref1));
+        assertThat(targetXrefs, hasItem(map3xref2));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, hasItem(map3Axref1));
+        assertThat(targetXrefs, hasItem(map3Axref2));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
     /**
@@ -348,10 +370,12 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
     @Test
     public void testMapFull_sourceXref_lensUri_tgtUriPatterns() throws Exception {
         report("MapFull_sourceXref_lensUri_tgtUriPatterns");
-        Xref sourceXref = map3xref2;
+        Xref sourceXref = map3xref1;
         String lensUri = Lens.TEST_LENS_NAME;
-        UriPattern[] tgtUriPatterns = null;
-        Set<Mapping> results = uriMapper.mapFull(sourceXref, lensUri, NULL_GRAPH, stringPattern2, stringPattern3);
+        Set<String> targets = new HashSet<String>();
+        targets.add(stringPattern2);
+        targets.add(stringPattern3);
+        Set<Mapping> results = uriMapper.mapFull(sourceXref, lensUri, NULL_GRAPH, targets);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         for (Mapping mapping:results){
@@ -363,26 +387,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertTrue(targetUris.contains(map3Uri2));
-        assertFalse(targetUris.contains(map3Uri2a));
-        assertFalse(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertFalse(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, not(hasItem(map3Uri1)));
+        assertThat(targetUris, hasItem(map3Uri2));
+        assertThat(targetUris, not(hasItem(map3Uri2a)));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, not(hasItem(map3AUri1)));
+        assertThat(targetUris, hasItem(map3AUri2));
+        assertThat(targetUris, not(hasItem(map3AUri2a)));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertTrue(targetXrefs.contains(map3xref2));
-        assertFalse(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertFalse(targetXrefs.contains(map3Axref1));
-        assertFalse(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, not(hasItem(map3xref1)));
+        assertThat(targetXrefs, hasItem(map3xref2));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, not(hasItem(map3Axref1)));
+        assertThat(targetXrefs, hasItem(map3Axref2));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
     /**
@@ -391,9 +415,11 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
     @Test
     public void testMapFull_sourceXref_lensUri_tgtUriPattern() throws Exception {
         report("MapFull_sourceXref_lensUri_tgtUriPattern");
-        Xref sourceXref = map3xref2;
+        Xref sourceXref = map3xref1;
         String lensUri = Lens.TEST_LENS_NAME;
-        Set<Mapping> results = uriMapper.mapFull(sourceXref, lensUri, NULL_GRAPH, stringPattern3);
+        Set<String> targets = new HashSet<String>();
+        targets.add(stringPattern3);
+        Set<Mapping> results = uriMapper.mapFull(sourceXref, lensUri, NULL_GRAPH, targets);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
@@ -406,26 +432,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertFalse(targetUris.contains(map3Uri2));
-        assertFalse(targetUris.contains(map3Uri2a));
-        assertFalse(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertFalse(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, not(hasItem(map3Uri1)));
+        assertThat(targetUris, not(hasItem(map3Uri2)));
+        assertThat(targetUris, not(hasItem(map3Uri2a)));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, not(hasItem(map3AUri1)));
+        assertThat(targetUris, not(hasItem(map3AUri2)));
+        assertThat(targetUris, not(hasItem(map3AUri2a)));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertFalse(targetXrefs.contains(map3xref2));
-        assertFalse(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertFalse(targetXrefs.contains(map3Axref1));
-        assertFalse(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, not(hasItem(map3xref1)));
+        assertThat(targetXrefs, not(hasItem(map3xref2)));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, not(hasItem(map3Axref1)));
+        assertThat(targetXrefs, not(hasItem(map3Axref2)));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
     /**
@@ -434,12 +460,15 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
     @Test
     public void testMapFull_sourceUri_lensUri_tgtDataSources() throws Exception {
         report("MapFull_sourceUri_lensUri_tgtDataSources");
-        String sourceUri = map3Uri2;
-        Xref sourceXref = map3xref2;
+        String sourceUri = map3Uri1;
+        Xref sourceXref = map3xref1;
         String lensUri = Lens.TEST_LENS_NAME;
         DataSource[] tgtDataSources = null;
         Set expResult = null;
-        Set<Mapping> results = uriMapper.mapFull(sourceUri, lensUri, DataSource2, DataSource3);
+        Set<DataSource> targets = new HashSet<DataSource>();
+        targets.add(DataSource2);
+        targets.add(DataSource3);
+        Set<Mapping> results = uriMapper.mapFull(sourceUri, lensUri, targets);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         for (Mapping mapping:results){
@@ -453,26 +482,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertTrue(targetUris.contains(map3Uri2));
-        assertTrue(targetUris.contains(map3Uri2a));
-        assertFalse(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertFalse(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, not(hasItem(map3Uri1)));
+        assertThat(targetUris, hasItem(map3Uri2));
+        assertThat(targetUris, hasItem(map3Uri2a));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, not(hasItem(map3AUri1)));
+        assertThat(targetUris, hasItem(map3AUri2));
+        assertThat(targetUris, hasItem(map3AUri2a));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertTrue(targetXrefs.contains(map3xref2));
-        assertFalse(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertFalse(targetXrefs.contains(map3Axref1));
-        assertFalse(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, not(hasItem(map3xref1)));
+        assertThat(targetXrefs, hasItem(map3xref2));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, not(hasItem(map3Axref1)));
+        assertThat(targetXrefs, hasItem(map3Axref2));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
     /**
@@ -481,11 +510,13 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
     @Test
     public void testMapFull_sourceUri_lensUri_tgtDataSource() throws Exception {
         report("MapFull_sourceUri_lensUri_tgtDataSource");
-        String sourceUri = map3Uri2;
-        Xref sourceXref = map3xref2;
+        String sourceUri = map3Uri1;
+        Xref sourceXref = map3xref1;
         String lensUri = Lens.TEST_LENS_NAME;
         DataSource tgtDataSource = DataSource3;
-        Set<Mapping> results = uriMapper.mapFull(sourceUri, lensUri, tgtDataSource);
+        Set<DataSource> targets = new HashSet<DataSource>();
+        targets.add(tgtDataSource);
+        Set<Mapping> results = uriMapper.mapFull(sourceUri, lensUri, targets);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         for (Mapping mapping:results){
@@ -499,26 +530,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertFalse(targetUris.contains(map3Uri2));
-        assertFalse(targetUris.contains(map3Uri2a));
-        assertFalse(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertFalse(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, not(hasItem(map3Uri1)));
+        assertThat(targetUris, not(hasItem(map3Uri2)));
+        assertThat(targetUris, not(hasItem(map3Uri2a)));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, not(hasItem(map3AUri1)));
+        assertThat(targetUris, not(hasItem(map3AUri2)));
+        assertThat(targetUris, not(hasItem(map3AUri2a)));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertFalse(targetXrefs.contains(map3xref2));
-        assertFalse(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertFalse(targetXrefs.contains(map3Axref1));
-        assertFalse(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, not(hasItem(map3xref1)));
+        assertThat(targetXrefs, not(hasItem(map3xref2)));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, not(hasItem(map3Axref1)));
+        assertThat(targetXrefs, not(hasItem(map3Axref2)));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
     /**
@@ -527,10 +558,12 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
     @Test
     public void testMapFull_MapFull_sourceUri_lensUri() throws Exception {
         report("MapFull_sourceUri_lensUri");
-        String sourceUri = map3Uri2;
-        Xref sourceXref = map3xref2;
+        String sourceUri = map3Uri1;
+        Xref sourceXref = map3xref1;
         String lensUri = Lens.TEST_LENS_NAME;
-        Set<Mapping> results = uriMapper.mapFull(sourceUri, lensUri);
+        //To set includeXrefUri we have to use the call which would included graph 
+        //therefor the extra null;
+        Set<Mapping> results = uriMapper.mapFull(sourceUri, lensUri, true, NULL_GRAPH, NO_PATTERNS);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         for (Mapping mapping:results){
@@ -544,26 +577,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertTrue(targetUris.contains(map3Uri2));
-        assertTrue(targetUris.contains(map3Uri2a));
-        assertFalse(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertTrue(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, hasItem(map3Uri1));
+        assertThat(targetUris, hasItem(map3Uri2));
+        assertThat(targetUris, hasItem(map3Uri2a));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, hasItem(map3AUri1));
+        assertThat(targetUris, hasItem(map3AUri2));
+        assertThat(targetUris, hasItem(map3AUri2a));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertTrue(targetXrefs.contains(map3xref2));
-        assertFalse(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertTrue(targetXrefs.contains(map3Axref1));
-        assertFalse(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, hasItem(map3xref1));
+        assertThat(targetXrefs, hasItem(map3xref2));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, hasItem(map3Axref1));
+        assertThat(targetXrefs, hasItem(map3Axref2));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
     /**
@@ -572,10 +605,12 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
     @Test
     public void testMapFull_sourceUri_lensUri_tgtUriPattern() throws Exception {
         report("MapFull_sourceUri_lensUri_tgtUriPattern");
-        String sourceUri = map3Uri2;
-        Xref sourceXref = map3xref2;
+        String sourceUri = map3Uri1;
+        Xref sourceXref = map3xref1;
         String lensUri = Lens.TEST_LENS_NAME;
-        Set<Mapping> results = uriMapper.mapFull(sourceUri, lensUri, NULL_GRAPH, stringPattern3);
+        Set<String> targets = new HashSet<String>();
+        targets.add(stringPattern3);
+        Set<Mapping> results = uriMapper.mapFull(sourceUri, lensUri, true, NULL_GRAPH, targets);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         for (Mapping mapping:results){
@@ -589,26 +624,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertFalse(targetUris.contains(map3Uri2));
-        assertFalse(targetUris.contains(map3Uri2a));
-        assertFalse(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertFalse(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, not(hasItem(map3Uri1)));
+        assertThat(targetUris, not(hasItem(map3Uri2)));
+        assertThat(targetUris, not(hasItem(map3Uri2a)));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, not(hasItem(map3AUri1)));
+        assertThat(targetUris, not(hasItem(map3AUri2)));
+        assertThat(targetUris, not(hasItem(map3AUri2a)));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertFalse(targetXrefs.contains(map3xref2));
-        assertFalse(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertFalse(targetXrefs.contains(map3Axref1));
-        assertFalse(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, not(hasItem(map3xref1)));
+        assertThat(targetXrefs, not(hasItem(map3xref2)));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, not(hasItem(map3Axref1)));
+        assertThat(targetXrefs, not(hasItem(map3Axref2)));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
     /**
@@ -617,11 +652,13 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
     @Test
     public void testMapFull_sourceUri_lensUri_tgtUriPatterns() throws Exception {
         report("MapFull_sourceUri_lensUri_tgtUriPatterns");
-        String sourceUri = map3Uri2;
-        Xref sourceXref = map3xref2;
+        String sourceUri = map3Uri1;
+        Xref sourceXref = map3xref1;
         String lensUri = Lens.TEST_LENS_NAME;
-        UriPattern[] tgtUriPatterns = null;
-        Set<Mapping> results = uriMapper.mapFull(sourceUri, lensUri, NULL_GRAPH, stringPattern2, stringPattern3);
+        Set<String> targets = new HashSet<String>();
+        targets.add(stringPattern2);
+        targets.add(stringPattern3);
+        Set<Mapping> results = uriMapper.mapFull(sourceUri, lensUri, true, NULL_GRAPH, targets);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         for (Mapping mapping:results){
@@ -635,26 +672,26 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
             targetUris.addAll(mapping.getTargetUri());
             targetXrefs.add(mapping.getTarget());
         }
-        assertFalse(targetUris.contains(map3Uri1));
-        assertTrue(targetUris.contains(map3Uri2));
-        assertFalse(targetUris.contains(map3Uri2a));
-        assertFalse(targetUris.contains(map3Uri3));
-        assertFalse(targetUris.contains(map2Uri2));
-        assertFalse(targetUris.contains(map1Uri3));
-        assertFalse(targetUris.contains(map3AUri1));
-        assertFalse(targetUris.contains(map3AUri2));
-        assertFalse(targetUris.contains(map3AUri2a));
-        assertTrue(targetUris.contains(map3AUri3));
+        assertThat(targetUris, not(hasItem(map3Uri1)));
+        assertThat(targetUris, hasItem(map3Uri2));
+        assertThat(targetUris, not(hasItem(map3Uri2a)));
+        assertThat(targetUris, hasItem(map3Uri3));
+        assertThat(targetUris, not(hasItem(map2Uri2)));
+        assertThat(targetUris, not(hasItem(map1Uri3)));
+        assertThat(targetUris, not(hasItem(map3AUri1)));
+        assertThat(targetUris, hasItem(map3AUri2));
+        assertThat(targetUris, not(hasItem(map3AUri2a)));
+        assertThat(targetUris, hasItem(map3AUri3));
 
-        assertFalse(targetXrefs.contains(map3xref1));
-        assertTrue(targetXrefs.contains(map3xref2));
-        assertFalse(targetXrefs.contains(map3xref3));
-        assertFalse(targetXrefs.contains(map1xref2));
-        assertFalse(targetXrefs.contains(map1xref1));
-        assertFalse(targetXrefs.contains(map2xref2));   
-        assertFalse(targetXrefs.contains(map3Axref1));
-        assertFalse(targetXrefs.contains(map3Axref2));
-        assertTrue(targetXrefs.contains(map3Axref3));
+        assertThat(targetXrefs, not(hasItem(map3xref1)));
+        assertThat(targetXrefs, hasItem(map3xref2));
+        assertThat(targetXrefs, hasItem(map3xref3));
+        assertThat(targetXrefs, not(hasItem(map1xref2)));
+        assertThat(targetXrefs, not(hasItem(map1xref1)));
+        assertThat(targetXrefs, not(hasItem(map2xref2)));   
+        assertThat(targetXrefs, not(hasItem(map3Axref1)));
+        assertThat(targetXrefs, hasItem(map3Axref2));
+        assertThat(targetXrefs, hasItem(map3Axref3));
     }
 
 }

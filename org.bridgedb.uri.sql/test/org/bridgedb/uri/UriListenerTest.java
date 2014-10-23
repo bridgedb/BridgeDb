@@ -28,6 +28,7 @@ import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.UriPatternType;
 import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.uri.lens.Lens;
+import org.bridgedb.uri.lens.LensTools;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;
@@ -49,8 +50,6 @@ public abstract class UriListenerTest extends IDMapperTestBase{
     protected static final String TEST_PREDICATE = "http://www.w3.org/2004/02/skos/core#exactMatch";
         
     public static final boolean SYMETRIC = true;
-    public static final Set<String> NO_VIA = null;
-    public static final Set<Integer> NO_CHAIN = null;
 
     protected static final int mappingSet2_3 = 3;
  
@@ -82,10 +81,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
     protected static Xref map3Axref2;
     protected static Xref map3Axref3;
 
-    protected static String uriSpace1;
-    protected static String uriSpace2;
     protected static String uriSpace2a;
-    protected static String uriSpace3;
     protected static String uriSpace3a;
     
     protected static String link1to2;
@@ -130,52 +126,46 @@ public abstract class UriListenerTest extends IDMapperTestBase{
     protected static String mapBadUri1;
     protected static String mapBadUri2;
     protected static String mapBadUri3;
-   
+        
     @BeforeClass
     public static void setupUris() throws BridgeDBException{
         map1Axref1 = new Xref(ds1Id1+"000001", DataSource1);
         map1Axref2 = new Xref(ds2Id1+"000001", DataSource2);
         map1Axref3 = new Xref(ds3Id1+"000001", DataSource3);
-        map2Axref1 = new Xref("bd42675d-9966-48f5-b42e-f6a0c5ec6794000001", DataSource1);
+        map2Axref1 = new Xref(ds1Id2+"000001", DataSource1);
         map2Axref2 = new Xref(ds2Id2+"000001", DataSource2);
-        map2Axref3 = new Xref("370186000001", DataSource3);
-        map3Axref1 = new Xref("9d4a6a08-6757-4ff2-98c1-e3c8b3e095cc000001", DataSource1);
-        map3Axref2 = new Xref(ds2Id3+"000001" , DataSource2);
-        map3Axref3 = new Xref("520018000001", DataSource3);
-
-        uriSpace1 = "http://www.conceptwiki.org/concept/";
-        uriSpace2 = "http://www.chemspider.com/";
-        uriSpace2a = "http://rdf.chemspider.com/";
-        uriSpace3 = "http://data.kasabi.com/dataset/chembl-rdf/molecule/m";
-        uriSpace3a = "http://linkedchemistry.info/chembl/molecule/m";
+        map2Axref3 = new Xref(ds3Id2+"000001", DataSource3);
+        map3Axref1 = new Xref(ds1Id3+"000001", DataSource1);
+        map3Axref2 = new Xref(ds2Id3+"000001", DataSource2);
+        map3Axref3 = new Xref(ds3Id3+"000001", DataSource3);
          
         link1to2 = uriSpace1 + "->" + uriSpace2;
-        link1to3 = uriSpace1 + "->" + uriSpace3;
         link2to1 = uriSpace2 + "->" + uriSpace1;
         link2to3 = uriSpace2 + "->" + uriSpace3;
-        link3to1 = uriSpace3 + "->" + uriSpace1;
         link3to2 = uriSpace3 + "->" + uriSpace3;
 
         map1Uri1 = map1xref1.getUrl();
-        map1Uri2 = uriSpace2 + ds2Id1;
+        map1Uri2 = map1xref2.getUrl();
+        uriSpace2a = "http://rdf.chemspider.com/";
         map1Uri3 = map1xref3.getUrl();
+        uriSpace3a = "http://ops.rsc.org/Compounds/Get/";
         map1AUri1 = map1Axref1.getUrl();
-        map1AUri2 = uriSpace2 + ds2Id1+"000001";
+        map1AUri2 = map1Axref2.getUrl();
         map1AUri3 = map1Axref3.getUrl();
         //Second set of URLs that are expected to map together.
         map2Uri1 = map2xref1.getUrl();
-        map2Uri2 = uriSpace2 + ds2Id2;
+        map2Uri2 = map2xref2.getUrl();
         map2Uri3 = map2xref3.getUrl();
         map2AUri1 = map2Axref1.getUrl();
-        map2AUri2 = uriSpace2 + ds2Id2+"000001";
+        map2AUri2 = map2Axref2.getUrl();
         map2AUri3 = map2Axref3.getUrl();
         //Third Set of URLs which again should map to each other but not the above
         map3Uri1 = map3xref1.getUrl();
-        map3Uri2 = uriSpace2 + ds2Id3;
+        map3Uri2 = map3xref2.getUrl();
         map3Uri2a = uriSpace2a + ds2Id3;
         map3Uri3 = map3xref3.getUrl();
         map3AUri1 = map3Axref1.getUrl();
-        map3AUri2 = uriSpace2 + ds2Id3+"000001";
+        map3AUri2 = map3Axref2.getUrl();
         map3AUri2a = uriSpace2a + ds2Id3+"000001";
         map3AUri3 = map3Axref3.getUrl();
          //And a few Uris also not used
@@ -191,21 +181,22 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         setupUris();
         connectionOk = true;
         DataSourcePatterns.registerPattern(DataSource2, Pattern.compile("^\\d+$"));
-        uriPattern1 = UriPattern.register(uriSpace1 + "$id", dataSource1Code, UriPatternType.dataSourceUriPattern);
-        uriPattern2 = UriPattern.register(uriSpace2 + "$id", dataSource2Code, UriPatternType.dataSourceUriPattern);
+        uriPattern1 = UriPattern.register(uriSpace1, dataSource1Code, UriPatternType.dataSourceUriPattern);
+        uriPattern2 = UriPattern.register(uriSpace2, dataSource2Code, UriPatternType.dataSourceUriPattern);
+        uriPattern2 = UriPattern.register("http://www.chemspider.com/Chemical-Structure.$id.html", dataSource2Code, UriPatternType.dataSourceUriPattern);
         UriPattern.register(uriSpace2a + "$id", dataSource2Code, UriPatternType.dataSourceUriPattern);
-        uriPattern3 = UriPattern.register(uriSpace3 + "$id", dataSource3Code, UriPatternType.dataSourceUriPattern);
+        uriPattern3 = UriPattern.register(uriSpace3, dataSource3Code, UriPatternType.dataSourceUriPattern);
         UriPattern.register(uriSpace3a + "$id", dataSource3Code, UriPatternType.dataSourceUriPattern);
         
         regexUriPattern1 = RegexUriPattern.factory(uriPattern1, dataSource1Code);
         regexUriPattern2 = RegexUriPattern.factory(uriPattern2, dataSource2Code);
         regexUriPattern3 = RegexUriPattern.factory(uriPattern3, dataSource3Code);
         
-        stringPattern1 = uriSpace1 + "$id";
-        stringPattern2 = uriSpace2 + "$id";
-        stringPattern3 = uriSpace3 + "$id";
-        
-    }
+        stringPattern1 = uriSpace1;
+        stringPattern2 = uriSpace2;
+        stringPattern3 = uriSpace3;
+     
+   }
         
     /**
      * Method for loading the Test data
@@ -217,77 +208,51 @@ public abstract class UriListenerTest extends IDMapperTestBase{
 
         Resource resource = new URIImpl("http://example.com/1to2");
         int mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
-                Lens.getDefaultJustifictaionString(), regexUriPattern2, resource, resource, SYMETRIC, NO_VIA, NO_CHAIN);
+                Lens.getDefaultJustifictaionString(), Lens.getDefaultJustifictaionString(), regexUriPattern2, resource, resource);
         listener.insertUriMapping(map1Uri1, map1Uri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2Uri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3Uri2, mappingSet, SYMETRIC);
         
         resource = new URIImpl("http://example.com/2to3");
         mappingSet = listener.registerMappingSet(regexUriPattern2, TEST_PREDICATE, 
-                Lens.getDefaultJustifictaionString(), regexUriPattern3, resource, resource, SYMETRIC, NO_VIA, NO_CHAIN);
+                Lens.getDefaultJustifictaionString(), Lens.getDefaultJustifictaionString(), regexUriPattern3, resource, resource);
         assertEquals(mappingSet2_3, mappingSet);
         listener.insertUriMapping(map1Uri2, map1Uri3, mappingSet2_3, SYMETRIC);
         listener.insertUriMapping(map2Uri2, map2Uri3, mappingSet2_3, SYMETRIC);
         listener.insertUriMapping(map3Uri2, map3Uri3, mappingSet2_3, SYMETRIC);
 
-        resource = new URIImpl("http://example.com/1to3");
-        mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
-                Lens.getDefaultJustifictaionString(), regexUriPattern3, resource, resource, SYMETRIC, NO_VIA, NO_CHAIN);
-        listener.insertUriMapping(map1Uri1, map1Uri3, mappingSet, SYMETRIC);
-        listener.insertUriMapping(map2Uri1, map2Uri3, mappingSet, SYMETRIC);
-        listener.insertUriMapping(map3Uri1, map3Uri3, mappingSet, SYMETRIC);
-
+        //Close here to test recover
         listener.closeInput();
         
-        resource = new URIImpl("http://example.com/1to2Lensed");
+        resource = new URIImpl("http://example.com/3to3Lensed");
+        mappingSet = listener.registerMappingSet(regexUriPattern3, TEST_PREDICATE, 
+        		Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern3, resource, resource);
+        listener.insertUriMapping(map1Uri3, map1AUri3, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map2Uri3, map2AUri3, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map3Uri3, map3AUri3, mappingSet, SYMETRIC);
+
+        resource = new URIImpl("http://example.com/1to2lensed");
         mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
-        		Lens.getTestJustifictaion(), regexUriPattern2, resource, resource, SYMETRIC, NO_VIA, NO_CHAIN);
-        listener.insertUriMapping(map1Uri1, map1AUri2, mappingSet, SYMETRIC);
-        listener.insertUriMapping(map2Uri1, map2AUri2, mappingSet, SYMETRIC);
-        listener.insertUriMapping(map3Uri1, map3AUri2, mappingSet, SYMETRIC);
-        listener.insertUriMapping(map1AUri1, map1Uri2, mappingSet, SYMETRIC);
-        listener.insertUriMapping(map2AUri1, map2Uri2, mappingSet, SYMETRIC);
-        listener.insertUriMapping(map3AUri1, map3Uri2, mappingSet, SYMETRIC);
-
-        resource = new URIImpl("http://example.com/2to3Lensed");
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern2, resource, resource);
+        listener.insertUriMapping(map1AUri1, map1AUri2, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map2AUri1, map2AUri2, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map3AUri1, map3AUri2, mappingSet, SYMETRIC);
+        
+        resource = new URIImpl("http://example.com/2to3");
         mappingSet = listener.registerMappingSet(regexUriPattern2, TEST_PREDICATE, 
-        		Lens.getTestJustifictaion(), regexUriPattern3, resource, resource, SYMETRIC, NO_VIA, NO_CHAIN);
-        listener.insertUriMapping(map1Uri2, map1AUri3, mappingSet, SYMETRIC);
-        listener.insertUriMapping(map2Uri2, map2AUri3, mappingSet, SYMETRIC);
-        listener.insertUriMapping(map3Uri2, map3AUri3, mappingSet, SYMETRIC);
-        listener.insertUriMapping(map1AUri2, map1Uri3, mappingSet, SYMETRIC);
-        listener.insertUriMapping(map2AUri2, map2Uri3, mappingSet, SYMETRIC);
-        listener.insertUriMapping(map3AUri2, map3Uri3, mappingSet, SYMETRIC);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern3, resource, resource);
+        listener.insertUriMapping(map1AUri2, map1AUri3, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map2AUri2, map2AUri3, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map3AUri2, map3AUri3, mappingSet, SYMETRIC);
 
-    }
+}
     
-    /**
-     * Method for loading the Test data
-     * Should be called in a @beforeClass method after setting listener
-     * 
-     * @throws BridgeDBException
-     */
     public static void loadData() throws BridgeDBException{
         loadDataPart1();
-        
-        HashSet<String> via = new HashSet<String>();
-        via.add("test via");
-        HashSet<Integer> chain = new HashSet<Integer>();
-        chain.add(1);
-        chain.add(2);
-        Resource resource = new URIImpl("http://example.com/1to3Lensed");
-        int mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
-        		Lens.getTestJustifictaion(), regexUriPattern3, resource, resource, SYMETRIC, via, chain);
-        listener.insertUriMapping(map1Uri1, map1AUri3, mappingSet, SYMETRIC);
-        listener.insertUriMapping(map2Uri1, map2AUri3, mappingSet, SYMETRIC);
-        listener.insertUriMapping(map3Uri1, map3AUri3, mappingSet, SYMETRIC);
-        listener.insertUriMapping(map1AUri1, map1Uri3, mappingSet, SYMETRIC);
-        listener.insertUriMapping(map2AUri1, map2Uri3, mappingSet, SYMETRIC);
-        listener.insertUriMapping(map3AUri1, map3Uri3, mappingSet, SYMETRIC);
-
+        //Close here if not testing recover
         listener.closeInput();
     }
-    
+
     /**
      * Method for loading the Test data
      * Should be called in a @beforeClass method after setting listener

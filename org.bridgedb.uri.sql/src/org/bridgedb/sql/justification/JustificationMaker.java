@@ -1,9 +1,8 @@
 // BridgeDb,
 // An abstraction layer for identifier mapping services, both local and online.
 //
-// Copyright 2006-2009  BridgeDb developers
-// Copyright 2012-2013  Christian Y. A. Brenninkmeijer
-// Copyright 2012-2013  OpenPhacts
+// Copyright      2012  Christian Y. A. Brenninkmeijer
+// Copyright      2012  OpenPhacts
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,17 +16,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.uri.loader.transative.constant;
+package org.bridgedb.sql.justification;
+
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  *
+ * @author Christian
  */
-public class OwlConstants {
+public interface JustificationMaker {
 
-    private static final String PREFIX = "http://www.w3.org/2002/07/owl#";
+    public String combine(String left, String right) throws BridgeDBException;
     
-    public static final String EQUIVALENT_CLASS = PREFIX + "equivalentClass";
-    public static final String SAME_AS = PREFIX + "sameAs";
-    public static final String THING = "owl:Thing";
+    public String possibleCombine(String left, String right);
+    
+    public String getInverse(String justification);
+    
+    public String getForward(String justification);
 
 }

@@ -19,8 +19,11 @@
 //
 package org.bridgedb.uri.ws.bean;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.bridgedb.Xref;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.ws.bean.XrefBean;
 
@@ -39,12 +42,15 @@ public class MappingBean {
  
     private XrefBean source;
     private XrefBean target;
-    
+
     // Singleton names look better in the xml Bean 
     private Set<String> sourceUri;
     private Set<String> targetUri;
-    private Integer mappingSetId;
     private String predicate;
+    private String lens;
+
+    private List<String> mappingSetId;
+    private List<XrefBean> viaXref = new ArrayList<XrefBean>();
     
     /**
      * Default constructor for webService
@@ -55,19 +61,35 @@ public class MappingBean {
     public static MappingBean asBean(Mapping mapping){
         MappingBean bean = new MappingBean();
         bean.setSourceUri(mapping.getSourceUri());
-        bean.setSource(new XrefBean(mapping.getSource()));
+        bean.setSource(XrefBean.asBean(mapping.getSource()));
         bean.setTargetUri(mapping.getTargetUri());
-        bean.setTarget(new XrefBean(mapping.getTarget()));
+        bean.setTarget(XrefBean.asBean(mapping.getTarget()));
         bean.setMappingSetId(mapping.getMappingSetId());
         bean.setPredicate(mapping.getPredicate());
+        bean.setLens(mapping.getLens());
+        for (Xref via:mapping.getViaXref()){
+            bean.viaXref.add(XrefBean.asBean(via));
+        }
         return bean;
     }
 
     public static Mapping asMapping (MappingBean bean){
-        Mapping result = new Mapping (bean.getSource().asXref(), bean.getPredicate(),
-                bean.getTarget().asXref(), bean.getMappingSetId());
+        Mapping result;
+        if (bean.source == null){
+            String sourceUri = bean.getSourceUri().iterator().next();
+            result = new Mapping (sourceUri, bean.getPredicate(), 
+                    bean.getMappingSetId(), bean.getLens());
+        } else {
+            result = new Mapping (bean.getSource().asXref(), bean.getPredicate(),
+                bean.getTarget().asXref(), bean.getMappingSetId(), bean.getLens());
+        }
         result.setSourceUri(bean.getSourceUri());
         result.setTargetUri(bean.getTargetUri());
+        ArrayList<Xref> viaRefs = new ArrayList<Xref>(); 
+        for (XrefBean via:bean.getViaXref()){
+            viaRefs.add(via.asXref());
+        }
+        result.setViaXref(viaRefs);
         return result;
     }
     
@@ -130,14 +152,14 @@ public class MappingBean {
     /**
      * @return the mappingSetId
      */
-    public Integer getMappingSetId() {
+    public List<String> getMappingSetId() {
         return mappingSetId;
     }
 
     /**
      * @param mappingSetId the mappingSetId to set
      */
-    public void setMappingSetId(Integer mappingSetId) {
+    public void setMappingSetId(List<String> mappingSetId) {
         this.mappingSetId = mappingSetId;
     }
 
@@ -155,6 +177,32 @@ public class MappingBean {
         this.predicate = predicate;
     }
 
+    /**
+     * @return the lens
+     */
+    public String getLens() {
+        return lens;
+    }
 
+    /**
+     * @param lens the lens to set
+     */
+    public void setLens(String lens) {
+        this.lens = lens;
+    }
+
+    /**
+     * @return the viaXref
+     */
+    public List<XrefBean> getViaXref() {
+        return viaXref;
+    }
+
+    /**
+     * @param vaiXref the viaXref to set
+     */
+    public void setViaXref(List<XrefBean> viaXref) {
+        this.viaXref = viaXref;
+    }
  
  }

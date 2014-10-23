@@ -29,6 +29,9 @@ public class OWLConstants {
 
     private static final String xmlschemans = "http://www.w3.org/2002/07/owl#";
     
-    public static final URI SAMEAS_URI = new URIImpl(xmlschemans + "sameAs"); 
+    public static final String EQUIVALENT_CLASS = xmlschemans + "equivalentClass";
+    public static final String SAME_AS = xmlschemans + "sameAs";
+    public static final URI SAMEAS_URI = new URIImpl(SAME_AS);     
+    public static final String THING = "owl:Thing";
 
 }

@@ -30,46 +30,46 @@ import org.bridgedb.statistics.SourceInfo;
  *
  * @author Christian
  */
-@XmlRootElement(name="SourceInfos")
+@XmlRootElement(name="sourceInfos")
 public class SourceInfosBean {
 
-    private Set<SourceInfoBean> SourceInfo;
+    private Set<SourceInfoBean> sourceInfo;
     
     /**
      * WS Constructor
      */
     public SourceInfosBean(){
-        SourceInfo = new HashSet<SourceInfoBean>();
-    }
-
-    /**
-     * @return the SourceInfo
-     */
-    public Set<SourceInfoBean> getSourceInfo() {
-        return SourceInfo;
-    }
-
-    /**
-     * @param SourceInfo the SourceInfo to set
-     */
-    public void setSourceInfo(Set<SourceInfoBean> SourceInfo) {
-        this.SourceInfo = SourceInfo;
+        sourceInfo = new HashSet<SourceInfoBean>();
     }
 
     public List<SourceInfo> getSourceInfos() {
         ArrayList<SourceInfo> results = new ArrayList<SourceInfo>();
-        for (SourceInfoBean bean:SourceInfo){
+        for (SourceInfoBean bean:sourceInfo){
             results.add(bean.asSourceInfo());
         }
         return results;
     }
 
     public void addSourceInfo(SourceInfo info) {
-        SourceInfo.add(new SourceInfoBean(info));
+        sourceInfo.add(new SourceInfoBean(info));
     }
 
     public boolean isEmpty() {
-        return SourceInfo.isEmpty();
+        return sourceInfo.isEmpty();
+    }
+
+    /**
+     * @return the sourceInfo
+     */
+    public Set<SourceInfoBean> getSourceInfo() {
+        return sourceInfo;
+    }
+
+    /**
+     * @param sourceInfo the sourceInfo to set
+     */
+    public void setSourceInfo(Set<SourceInfoBean> sourceInfo) {
+        this.sourceInfo = sourceInfo;
     }
     
 

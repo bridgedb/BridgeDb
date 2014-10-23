@@ -19,6 +19,7 @@
 //
 package org.bridgedb.uri.api;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -32,50 +33,33 @@ import org.bridgedb.utils.BridgeDBException;
 /**
  *
  * @author Christian
+ * @deprecated 
  */
 public class MappingsBySysCodeId {
     
-    private Map<String,Map<String, Set<String>>> mappings = new HashMap<String,Map<String, Set<String>>>();
+    private Map<String,Map<String, Set<String>>> allMappings = new HashMap<String,Map<String, Set<String>>>();
     private static final Logger logger = Logger.getLogger(MappingsBySysCodeId.class);
 
-    public final void addMapping(IdSysCodePair pair, String uri) {
-        Map<String, Set<String>> byCode = mappings.get(pair.getSysCode());
-        if (byCode == null){
-            byCode = new HashMap<String, Set<String>>();
+    public MappingsBySysCodeId(Collection<Mapping> mappings){
+        if (mappings != null){
+            for (Mapping mapping:mappings){
+                Map<String, Set<String>> byCode = allMappings.get(mapping.getTargetSysCode());
+                if (byCode == null){
+                    byCode = new HashMap<String, Set<String>>();
+                }
+                Set<String> byId = byCode.get(mapping.getTargetId());
+                if (byId == null){
+                    byId = new HashSet<String>();
+                }
+                byId.addAll(mapping.getTargetUri());
+                byCode.put(mapping.getTargetId(), byId);
+                allMappings.put(mapping.getTargetSysCode(), byCode);
+            }
         }
-        Set<String> byId = byCode.get(pair.getId());
-        if (byId == null){
-            byId = new HashSet<String>();
-        }
-        byId.add(uri);
-        byCode.put(pair.getId(), byId);
-        mappings.put(pair.getSysCode(), byCode);
-    }
-
-    public final void addMappings(IdSysCodePair pair, Set<String> URIs) {
-        addMappings(pair.getSysCode(), pair.getId(), URIs);
-    }
-    
-    public final void addMappings(String sysCode, String id, Set<String> URIs) {
-        Map<String, Set<String>> byCode = mappings.get(sysCode);
-        if (byCode == null){
-            byCode = new HashMap<String, Set<String>>();
-        }
-        Set<String> byId = byCode.get(id);
-        if (byId == null){
-            byId = new HashSet<String>();
-        }
-        byId.addAll(URIs);
-        byCode.put(id, byId);
-        mappings.put(sysCode, byCode);
-    }
-    
-    public final void addMappings(Xref xref, Set<String> URIs) {
-        addMappings(xref.getId(), xref.getDataSource().getSystemCode(), URIs);
     }
     
     public Set<String> getSysCodes(){
-        return mappings.keySet();
+        return allMappings.keySet();
     }
 
     //Semantic sugar method for webtemplate
@@ -84,7 +68,7 @@ public class MappingsBySysCodeId {
     }
     
     public Set<String> getIds(String sysCode) throws BridgeDBException {
-        Map<String, Set<String>> byCode = mappings.get(sysCode);
+        Map<String, Set<String>> byCode = allMappings.get(sysCode);
         if (byCode == null){
             throw new BridgeDBException ("No mappings known for sysCode " + sysCode);
         }
@@ -98,7 +82,7 @@ public class MappingsBySysCodeId {
     }
 
     public Set<String> getUris(String sysCode, String id) throws BridgeDBException {
-        Map<String, Set<String>> byCode = mappings.get(sysCode);
+        Map<String, Set<String>> byCode = allMappings.get(sysCode);
         if (byCode == null){
             throw new BridgeDBException ("No mappings known for sysCode " + sysCode);
         }
@@ -110,10 +94,10 @@ public class MappingsBySysCodeId {
     }
 
     public void merge(MappingsBySysCodeId other) {
-        for (String sysCode: other.mappings.keySet()){
-            if (mappings.containsKey(sysCode)){
-                 Map<String, Set<String>> byCode = mappings.get(sysCode);
-                 Map<String, Set<String>> otherByCode = other.mappings.get(sysCode);
+        for (String sysCode: other.allMappings.keySet()){
+            if (allMappings.containsKey(sysCode)){
+                 Map<String, Set<String>> byCode = allMappings.get(sysCode);
+                 Map<String, Set<String>> otherByCode = other.allMappings.get(sysCode);
                  for (String id: otherByCode.keySet()){
                      if (byCode.containsKey(id)){
                          byCode.get(id).addAll(otherByCode.get(id));
@@ -122,19 +106,19 @@ public class MappingsBySysCodeId {
                      }
                  }
             } else {
-                mappings.put(sysCode, other.mappings.get(sysCode));
+                allMappings.put(sysCode, other.allMappings.get(sysCode));
             }
         }
     }
 
     public boolean isEmpty() {
-        return mappings.isEmpty();
+        return allMappings.isEmpty();
     }
 
     public Set<String> getUris() {
         Set<String> result = new HashSet<String>();
-        for (String sysCode: mappings.keySet()){
-            Map<String, Set<String>> byCode = mappings.get(sysCode);
+        for (String sysCode: allMappings.keySet()){
+            Map<String, Set<String>> byCode = allMappings.get(sysCode);
             for (String id: byCode.keySet()){
                 result.addAll(byCode.get(id));
             }

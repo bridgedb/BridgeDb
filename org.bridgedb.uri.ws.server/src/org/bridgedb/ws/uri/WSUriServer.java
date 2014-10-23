@@ -21,14 +21,18 @@ package org.bridgedb.ws.uri;
 
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -43,15 +47,19 @@ import org.bridgedb.rdf.BridgeDbRdfTools;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.statistics.MappingSetInfo;
+import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.SetMappings;
 import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.lens.LensTools;
 import org.bridgedb.uri.tools.GraphResolver;
+import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriResultsAsRDF;
 import org.bridgedb.uri.ws.WsUriConstants;
+import org.bridgedb.uri.ws.bean.URISpacesInGraphBean;
 import org.bridgedb.utils.BridgeDBException;
+import org.bridgedb.ws.WsConstants;
 import org.bridgedb.ws.templates.WebTemplates;
 import org.openrdf.model.Statement;
 
@@ -118,7 +126,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
 
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("targetUriPatterns", UriPattern.getUriPatterns());
-        velocityContext.put("lenses", LensTools.getLens());
+        velocityContext.put("lenses", LensTools.getLens(LensTools.ALL_GROUP_NAME));
         String mapUriScripts = WebTemplates.getForm(velocityContext, WebTemplates.SELECTORS_SCRIPTS);
         StringBuilder sb = topAndSide ("Home page for BridgeDB WebServer", mapUriScripts, httpServletRequest);
         
@@ -145,7 +153,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
 
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("targetUriPatterns", UriPattern.getUriPatterns());
-        velocityContext.put("lenses", LensTools.getLens());
+        velocityContext.put("lenses", LensTools.getLens(LensTools.ALL_GROUP_NAME));
         String mapUriScripts = WebTemplates.getForm(velocityContext, WebTemplates.SELECTORS_SCRIPTS);
         StringBuilder sb = topAndSide ("mapURI Service", mapUriScripts, httpServletRequest);
         sb.append(mapUriForm(INCLUDE_GRAPH, httpServletRequest));
@@ -284,7 +292,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
     private String mapUriForm(boolean includeGraph, HttpServletRequest httpServletRequest) throws BridgeDBException{
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("targetUriPatterns", UriPattern.getUriPatterns());
-        velocityContext.put("lenses", LensTools.getLens());        
+        velocityContext.put("lenses", LensTools.getLens(LensTools.ALL_GROUP_NAME));        
         velocityContext.put("contextPath", httpServletRequest.getContextPath());
         velocityContext.put("defaultLens", LensTools.byId(Lens.DEFAULT_LENS_NAME));
         velocityContext.put("formatName", WsUriConstants.FORMAT);
@@ -292,7 +300,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
             velocityContext.put("graphName", WsUriConstants.GRAPH); 
             velocityContext.put("graphs", GraphResolver.knownGraphs());
         }
-        velocityContext.put("lenses", LensTools.getLens());
+        velocityContext.put("lenses", LensTools.getLens(LensTools.ALL_GROUP_NAME));
         velocityContext.put("lensURIName", WsUriConstants.LENS_URI);
         velocityContext.put("mapURI", WsUriConstants.MAP_URI);
         velocityContext.put("targetUriPatternName", WsUriConstants.TARGET_URI_PATTERN);
@@ -332,37 +340,66 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/" + Lens.METHOD_NAME) 
-	public Response getLensesHtml(@QueryParam(WsUriConstants.LENS_URI)  String lensUri,
+    public Response getLensesHtml(@QueryParam(WsUriConstants.LENS_URI)  String lensUri,
+                @QueryParam(WsUriConstants.LENS_GROUP) String lensGroup,
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
-        List<Lens> lenses = getTheLens(lensUri);
+        List<Lens> lenses = getTheLens(lensUri, lensGroup);
         StringBuilder sb = topAndSide("Lens Summary",  httpServletRequest);
-        sb.append("\n<table border=\"1\">");
-        sb.append("<tr>");
-        sb.append("<th>Name</th>");
-        sb.append("<th>URI</th>");
-        sb.append("<th>Description</th></tr>\n");
-		for (Lens lens:lenses) {
-            sb.append("<tr><td>");
-            sb.append(lens.getName());
-            sb.append("</td><td><a href=\"");
-            sb.append(lens.toUri(httpServletRequest.getContextPath()));
-            sb.append("\">");
-            sb.append(lens.toUri(httpServletRequest.getContextPath()));
-            sb.append("</a></td><td>").append(lens.getDescription()).append("</td></tr>\n");        
-		}
-        sb.append("</table>");
+        if (lensUri != null && !lensUri.isEmpty()){
+           sb.append("<h2>For ").append(WsUriConstants.LENS_URI).append("=").append(lensUri).append("</h2>");
+        }else if (lensGroup != null && !lensGroup.isEmpty()){
+           sb.append("<h2>For ").append(WsUriConstants.LENS_GROUP).append("=").append(lensGroup).append("</h2>");
+        } else {
+           sb.append("<h2>For the public lens </h2>");            
+        }
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("lenses", lenses);
+        velocityContext.put("contextPath", httpServletRequest.getContextPath()); 
+        velocityContext.put("dataSourceMethod", WsUriConstants.DATA_SOURCE + "/"); 
+        sb.append(WebTemplates.getForm(velocityContext, WebTemplates.LENS));
         sb.append("<p><a href=\"");
         sb.append(httpServletRequest.getContextPath());
         sb.append("/");
         sb.append(Lens.METHOD_NAME);
         sb.append(WsUriConstants.XML);
+        if (lensUri != null && !lensUri.isEmpty()){
+            sb.append("?");
+            sb.append(WsUriConstants.LENS_URI);
+            sb.append("=");
+            sb.append(lensUri);
+        } else if (lensGroup != null && !lensGroup.isEmpty()){
+            sb.append("?");
+            sb.append(WsUriConstants.LENS_GROUP);
+            sb.append("=");
+            sb.append(lensGroup);
+        }
         sb.append("\">");
         sb.append("XML Format");
         sb.append("</a></p>\n");        
+        addLensGroups(sb, httpServletRequest);
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
-	}
+    }
     
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/" + WsUriConstants.LENS_GROUP) 
+    public Response getLensGroup(@Context HttpServletRequest httpServletRequest) throws BridgeDBException {
+        StringBuilder sb = topAndSide("Lens Groups",  httpServletRequest);
+        addLensGroups(sb, httpServletRequest);
+        footerAndEnd(sb);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
+    private void addLensGroups(StringBuilder sb, HttpServletRequest httpServletRequest){
+        Set<String> lensGroups = LensTools.getLensGroups();
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("lensGroups", lensGroups);
+        velocityContext.put("lensCall", httpServletRequest.getContextPath() + "/" 
+                + Lens.METHOD_NAME + "?" + WsUriConstants.LENS_GROUP + "=");            
+        sb.append(WebTemplates.getForm(velocityContext, WebTemplates.LENS_GROUP));
+    }
+ 
     /**
      * Not longer works as it did not scale
      * @deprecated Will now always throw an Exception
@@ -455,7 +492,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
     @Path("/" + Lens.METHOD_NAME + WsUriConstants.RDF) 
     public Response lensRdfText(@QueryParam(WsUriConstants.RDF_FORMAT) String formatName,
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
-        Set<Statement> statements = LensTools.getLensAsRdf(getBaseUri(httpServletRequest));
+        Set<Statement> statements = LensTools.getLensAsRdf(getBaseUri(httpServletRequest), LensTools.ALL_GROUP_NAME);
         if (statements.isEmpty()){
             return Response.noContent().build();
         } else {
@@ -470,7 +507,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
     public Response lensRdfHtml(@QueryParam(WsUriConstants.RDF_FORMAT) String formatName,
             @Context HttpServletRequest httpServletRequest
             ) throws BridgeDBException {
-        Set<Statement> statements = LensTools.getLensAsRdf(getBaseUri(httpServletRequest));
+        Set<Statement> statements = LensTools.getLensAsRdf(getBaseUri(httpServletRequest), LensTools.ALL_GROUP_NAME);
         StringBuilder sb = topAndSide("HTML friendly " + WsUriConstants.MAP_BY_SET + WsUriConstants.RDF + " Output",  httpServletRequest);
         sb.append("<h2>Warning unlike ");
         sb.append(WsUriConstants.MAP_BY_SET);
@@ -519,6 +556,80 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
     private String getBaseUri(HttpServletRequest httpServletRequest) {
         return httpServletRequest.getScheme() + "://" + httpServletRequest.getServerName() + ":" + httpServletRequest.getServerPort() + httpServletRequest.getRequestURI();
     }
+    
+    @POST
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("/" + WsUriConstants.URI_SPACES_PER_GRAPH) 
+    public List<URISpacesInGraphBean> URISpacesPerGraphAsXML() throws BridgeDBException {
+        Map<String, Set<RegexUriPattern>> mappings = 
+                GraphResolver.getInstance().getAllowedUriPatterns();
+        ArrayList<URISpacesInGraphBean> results = new ArrayList<URISpacesInGraphBean>();
+        for (String graph:mappings.keySet()){
+           Set<String> patternStrings = new HashSet<String>();
+           for (RegexUriPattern pattern:mappings.get(graph)){
+               patternStrings.add(pattern.getUriPattern());
+           }
+           results.add(new URISpacesInGraphBean(graph, patternStrings));
+        }
+        return results;
+    }
+    
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("/" + WsUriConstants.URI_SPACES_PER_GRAPH) 
+    public List<URISpacesInGraphBean> URISpacesPerGraphAsXMLGet() throws BridgeDBException {
+        return URISpacesPerGraphAsXML();
+    }
+
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/" + WsUriConstants.URI_SPACES_PER_GRAPH) 
+    public Response URISpacesPerGraphAsHtml(@Context HttpServletRequest httpServletRequest) 
+            throws BridgeDBException {
+//        Map<String, Set<RegexUriPattern>> mappings = 
+//                GraphResolver.getInstance().getAllowedUriPatterns();  
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("mappings", GraphResolver.getInstance().getAllowedUriPatterns());
+        String graphInfo = WebTemplates.getForm(velocityContext, WebTemplates.GRAPH_INFO_SCRIPT);
+        StringBuilder sb = topAndSide ("\"URI Spaces per Graph", httpServletRequest);
+        sb.append(graphInfo);
+        footerAndEnd(sb);
+
+/*        StringBuilder sb = topAndSide("URI Spaces per Graph", httpServletRequest);
+        sb.append("<h2>URISpaces Per Graph</H2>\n"); 
+        sb.append("<p>");
+        sb.append("<table border=\"1\">");
+        sb.append("<tr>");
+        sb.append("<th>Graph</th>");
+        sb.append("<th>NameSpace</th>");
+        sb.append("</tr>");
+        for (String graph:mappings.keySet()){
+           for (RegexUriPattern pattern:mappings.get(graph)){
+                sb.append("<tr>");
+                sb.append("<td>");
+                sb.append(graph);
+                sb.append("</td>");
+                sb.append("<td>");
+                sb.append(pattern.getUriPattern());
+                sb.append("</td>");
+                sb.append("</tr>");
+             }
+            sb.append("<tr>");
+            sb.append("</tr>");
+        }
+        footerAndEnd(sb);
+*/
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+    
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/" + WsUriConstants.URI_SPACES_PER_GRAPH) 
+    public Response URISpacesPerGraphAsHtmlGet(@Context HttpServletRequest httpServletRequest) 
+            throws BridgeDBException {
+       return URISpacesPerGraphAsHtml(httpServletRequest); 
+    }
+
 }
 
 

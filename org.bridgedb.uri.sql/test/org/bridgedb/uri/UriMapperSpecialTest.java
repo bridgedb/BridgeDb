@@ -19,8 +19,10 @@
 //
 package org.bridgedb.uri;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.sql.SQLListener;
@@ -47,22 +49,29 @@ import org.junit.Test;
  */
 public abstract class UriMapperSpecialTest extends UriListenerTest{
            
-    public static  final String NULL_GRAPH = null;
-
+    public static final String NULL_GRAPH = null;
+    public static final Set<String> NULL_PATTERNS = null;
+    public static final Set<DataSource> NO_TARGET_DATASOURCE = null;
+    public static final Boolean DEFAULT_IGNORE_XREF = null;
+    public static final String NULL_LENS = null;
+    
     @Test 
     public void testMap2Way() throws BridgeDBException {
-        report("testMap2Way");
-        OverallStatistics stats1 = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
-        loadData2Way();
-        OverallStatistics stats2 = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
-        assertTrue(stats2.getNumberOfMappings() == stats1.getNumberOfMappings() + 6);
-        assertTrue(stats2.getNumberOfMappingSets() == stats1.getNumberOfMappingSets() + 2);
+        if (uriMapper instanceof SQLUriMapper){
+            report("testMap2Way");
+            OverallStatistics stats1 = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
+            loadData2Way();
+            OverallStatistics stats2 = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
+            assertTrue(stats2.getNumberOfMappings() == stats1.getNumberOfMappings() + 6);
+            assertTrue(stats2.getNumberOfMappingSets() == stats1.getNumberOfMappingSets() + 2);
+        }
     }
 
     @Test 
     public void testMapIDOneBad() throws BridgeDBException {
         report("MapIDOneBad");
-        Set<String> results = uriMapper.mapUri(mapBadUri1, Lens.DEFAULT_LENS_NAME, NULL_GRAPH);
+        Set<String> results = uriMapper.mapUri(mapBadUri1, Lens.DEFAULT_LENS_NAME, 
+                NULL_GRAPH, NULL_PATTERNS);
         //Changed Sept 2014 to allow any URI even an unkown one to map to itself.
         assertThat(results, hasItem(mapBadUri1));
     }
@@ -71,9 +80,9 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     public void testMapFullOneBad() {
         report("MapFullOneBad");
         try {
-            Set<Mapping> results = uriMapper.mapFull(mapBadUri1, Lens.DEFAULT_LENS_NAME);
+            Set<Mapping> results = uriMapper.mapFull(mapBadUri1, Lens.DEFAULT_LENS_NAME, NO_TARGET_DATASOURCE);
             //if no exception there should be an empty result
-            assertTrue(results.isEmpty());
+            assertTrue(results.size() == 1);
         } catch (BridgeDBException ex){
             //ok
         }
@@ -82,8 +91,12 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     @Test
     public void testMapFullOneBadOneNameSpace(){
         report("MapFullOneBadOneNameSpace");
+        Set<String> tgtUriPatterns = new HashSet<String>();
+        tgtUriPatterns.add(stringPattern2);
         try {
-            Set<Mapping> results = uriMapper.mapFull(mapBadUri1, Lens.DEFAULT_LENS_NAME, NULL_GRAPH, stringPattern2);
+            Set<Mapping> results = uriMapper.mapFull(mapBadUri1, Lens.DEFAULT_LENS_NAME, 
+                    DEFAULT_IGNORE_XREF, 
+                    NULL_GRAPH, tgtUriPatterns);
             //if no exception there should be an empty result
             assertTrue(results.isEmpty());
         } catch (BridgeDBException ex){
@@ -149,7 +162,8 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     @Test
     public void testConceptWiki1() throws BridgeDBException {
         report("ConceptWiki1");
-        Set<String> results= uriMapper.mapUri("http://www.conceptwiki.org/concept/f665ee1f-dcdd-467e-8fa2-81d800c385d4", null, null);
+        Set<String> results= uriMapper.mapUri("http://www.conceptwiki.org/concept/f665ee1f-dcdd-467e-8fa2-81d800c385d4", 
+                NULL_LENS , NULL_GRAPH, NULL_PATTERNS);
         assertThat(results.size(), greaterThanOrEqualTo(3));
         assertThat(results, hasItem("http://www.conceptwiki.org/concept/index/f665ee1f-dcdd-467e-8fa2-81d800c385d4"));
         assertThat(results, hasItem("http://www.conceptwiki.org/web-ws/concept/get?uuid=f665ee1f-dcdd-467e-8fa2-81d800c385d4"));
@@ -158,7 +172,8 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     @Test
     public void testConceptWiki2() throws BridgeDBException {
         report("ConceptWiki2");
-        Set<String> results= uriMapper.mapUri("http://www.conceptwiki.org/concept/index/f665ee1f-dcdd-467e-8fa2-81d800c385d4", null, null);
+        Set<String> results= uriMapper.mapUri("http://www.conceptwiki.org/concept/index/f665ee1f-dcdd-467e-8fa2-81d800c385d4", 
+                NULL_LENS , NULL_GRAPH, NULL_PATTERNS);
         assertThat(results.size(), greaterThanOrEqualTo(3));
         assertThat(results, hasItem("http://www.conceptwiki.org/concept/f665ee1f-dcdd-467e-8fa2-81d800c385d4"));
         assertThat(results, hasItem("http://www.conceptwiki.org/web-ws/concept/get?uuid=f665ee1f-dcdd-467e-8fa2-81d800c385d4"));
@@ -168,8 +183,8 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     public void testGetOverallStatistics() throws BridgeDBException {
         report("GetOverallStatistics()");
         OverallStatistics results = uriMapper.getOverallStatistics(Lens.DEFAULT_LENS_NAME);
-        assertThat (results.getNumberOfMappings(), greaterThanOrEqualTo(18));
-        assertThat (results.getNumberOfMappingSets(), greaterThanOrEqualTo(6));
+        assertThat (results.getNumberOfMappings(), greaterThanOrEqualTo(12));
+        assertThat (results.getNumberOfMappingSets(), greaterThanOrEqualTo(4));
         assertThat (results.getNumberOfSourceDataSources(), greaterThanOrEqualTo(3));
         assertThat (results.getNumberOfTargetDataSources(), greaterThanOrEqualTo(3));
         assertThat (results.getNumberOfPredicates(), greaterThanOrEqualTo(1));
@@ -217,7 +232,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     @Test
     public void testGetSourceTargetInfos() throws BridgeDBException {
         report("GetSourceTargetInfos");
-        List<SourceTargetInfo> results = uriMapper.getSourceTargetInfos(DataSource1.getSystemCode(), Lens.DEFAULT_LENS_NAME);
+        List<SourceTargetInfo> results = uriMapper.getSourceTargetInfos(DataSource2.getSystemCode(), Lens.DEFAULT_LENS_NAME);
         assertThat (results.size(), greaterThanOrEqualTo(2));
     }
 
@@ -231,7 +246,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     @Test
     public void testGetSourceTargetInfosAll() throws BridgeDBException {
         report("GetSourceTargetInfosAll");
-        List<SourceTargetInfo> results = uriMapper.getSourceTargetInfos(DataSource1.getSystemCode(), Lens.ALL_LENS_NAME);
+        List<SourceTargetInfo> results = uriMapper.getSourceTargetInfos(DataSource2.getSystemCode(), Lens.ALL_LENS_NAME);
         assertThat (results.size(), greaterThanOrEqualTo(2));
     }
 
@@ -282,7 +297,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         //Date start = new Date();
         report("Uniprot");
         String uri = "http://www.uniprot.org/uniprot/P50250";
-        Set<String> result = uriMapper.mapUri(uri, null, null);        
+        Set<String> result = uriMapper.mapUri(uri, NULL_LENS , NULL_GRAPH, NULL_PATTERNS);
     }
     
     @Test
@@ -336,8 +351,8 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
             report("testIdentifiersOrgPattern");
             String uri = "http://identifiers.org/";
             String graph = null;
-            String[] tgtUriPatterns = new String[1];
-            tgtUriPatterns[0] = uri;
+            Set<String> tgtUriPatterns = new HashSet<String>();
+            tgtUriPatterns.add(uri);
             Set<RegexUriPattern> results = ((SQLUriMapper)uriMapper).findRegexPatternsWithNulls(graph, tgtUriPatterns);
             assertThat (results.size(), greaterThanOrEqualTo(100));
         }
@@ -385,7 +400,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         //Date start = new Date();
         report("ChemblProtclass1");
         String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
-        Set<String> results = uriMapper.mapUri(uri, null, null, null);        
+        Set<String> results = uriMapper.mapUri(uri, NULL_LENS , NULL_GRAPH, NULL_PATTERNS);        
         assertThat(results, hasItem(uri));
     }
     
@@ -394,7 +409,9 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         //Date start = new Date();
         report("ChemblProtclass2");
         String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
-        Set<String> results = uriMapper.mapUri(uri, null, null, "http://rdf.ebi.ac.uk/resource/chembl/protclass/");    
+        Set<String> tgtUriPatterns = new HashSet<String>();
+        tgtUriPatterns.add("http://rdf.ebi.ac.uk/resource/chembl/protclass/");
+        Set<String> results = uriMapper.mapUri(uri, NULL_LENS , NULL_GRAPH, tgtUriPatterns);    
         assertThat(results, hasItem(uri));
     }
     
@@ -403,7 +420,10 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         //Date start = new Date();
         report("ChemblProtclass3");
         String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
-        Set<String> results = uriMapper.mapUri(uri, null, null, "http://rdf.ebi.ac.uk/resource/chembl/protclass/", "http://www.example.com/protclass/");        
+        Set<String> tgtUriPatterns = new HashSet<String>();
+        tgtUriPatterns.add("http://rdf.ebi.ac.uk/resource/chembl/protclass/");
+        tgtUriPatterns.add("\"http://www.example.com/protclass/\"");
+        Set<String> results = uriMapper.mapUri(uri, NULL_LENS, NULL_GRAPH, tgtUriPatterns);        
         assertThat(results, hasItem(uri));
     }
     
@@ -412,7 +432,10 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         //Date start = new Date();
         report("ChemblProtclass4");
         String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
-        Set<String> results = uriMapper.mapUri(uri, null, null, "http://www.example.com/protclass/");        
+        Set<String> tgtUriPatterns = new HashSet<String>();
+        tgtUriPatterns.add("http://www.example.com/protclass/");
+        Set<String> results = uriMapper.mapUri(uri, NULL_LENS, 
+                NULL_GRAPH, tgtUriPatterns);   
         assertEquals (0, results.size());
     }
     
@@ -422,7 +445,9 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         //Date start = new Date();
         report("ChemblProtclassFull");
         String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
-        Set<Mapping> results = uriMapper.mapFull(uri, null, null, null);        
+        Set<Mapping> results = uriMapper.mapFull(uri, NULL_LENS, 
+                DEFAULT_IGNORE_XREF, 
+                NULL_GRAPH, NULL_PATTERNS);        
         //if
         assertEquals (1, results.size());
     }
@@ -433,7 +458,11 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         //Date start = new Date();
         report("ChemblProtclass2Full");
         String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
-        Set<Mapping> results = uriMapper.mapFull(uri, null, null, "http://rdf.ebi.ac.uk/resource/chembl/protclass/");        
+        Set<String> tgtUriPatterns = new HashSet<String>();
+        tgtUriPatterns.add("http://rdf.ebi.ac.uk/resource/chembl/protclass/");
+        Set<Mapping> results = uriMapper.mapFull(uri, NULL_LENS, 
+                DEFAULT_IGNORE_XREF, 
+                NULL_GRAPH, tgtUriPatterns);        
         assertEquals (1, results.size());
     }
     
@@ -443,7 +472,12 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         //Date start = new Date();
         report("ChemblProtclass3Full");
         String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
-        Set<Mapping> results = uriMapper.mapFull(uri, null, null, "http://rdf.ebi.ac.uk/resource/chembl/protclass/", "http://www.example.com/protclass/");        
+        Set<String> tgtUriPatterns = new HashSet<String>();
+        tgtUriPatterns.add("http://rdf.ebi.ac.uk/resource/chembl/protclass/");
+        tgtUriPatterns.add("http://www.example.com/protclass/");
+        Set<Mapping> results = uriMapper.mapFull(uri, NULL_LENS, 
+                DEFAULT_IGNORE_XREF, 
+                NULL_GRAPH, tgtUriPatterns);        
         assertEquals (1, results.size());
     }
     
@@ -453,7 +487,11 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         //Date start = new Date();
         report("ChemblProtclass4Full");
         String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
-        Set<Mapping> results = uriMapper.mapFull(uri, null, null, "http://www.example.com/protclass/");        
+        Set<String> tgtUriPatterns = new HashSet<String>();
+        tgtUriPatterns.add("http://www.example.com/protclass/");
+        Set<Mapping> results = uriMapper.mapFull(uri, NULL_LENS, 
+                DEFAULT_IGNORE_XREF, 
+                NULL_GRAPH, tgtUriPatterns);        
         assertEquals (0, results.size());
     }
 }

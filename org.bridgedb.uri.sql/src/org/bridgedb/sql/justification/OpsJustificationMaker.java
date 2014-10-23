@@ -16,23 +16,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.uri.loader.transative;
+package org.bridgedb.sql.justification;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import org.bridgedb.rdf.constants.ChemInf;
+import org.bridgedb.rdf.constants.OboConstants;
 import org.bridgedb.uri.lens.Lens;
-import org.bridgedb.uri.loader.transative.constant.ChemInf;
-import org.bridgedb.uri.loader.transative.constant.OboConstants;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
  *
  * @author Christian
  */
-public class JustificationMaker {
+public class OpsJustificationMaker implements JustificationMaker{
 
-    public static Set<String> CHEMICAL_LENS = new HashSet<String>(Arrays.asList(
+    private static Set<String> CHEMICAL_LENS = new HashSet<String>(Arrays.asList(
             //Child-Child
             ChemInf.isIsotopologueOf,
             ChemInf.isStereoisomerOf,
@@ -61,16 +61,29 @@ public class JustificationMaker {
     private static final String CW_GENE_HACK = "http://example.com/ConceptWikiGene";
     private static final String CW_PROTEIN_HACK = "http://example.com/ConceptWikiProtein";
     private static final String ENEMBL_BASED_PROTIEN_GENE_HACK = "http://example.com/EnsemblBasedProteinGene";
-    public static final String  PROTEIN_CODING_GENE = "http://semanticscience.org/resource/SIO_000985";
+    private static final String  PROTEIN_CODING_GENE = "http://semanticscience.org/resource/SIO_000985";
     
-    public static Set<String> CROSS_TYPE = new HashSet<String>(Arrays.asList(
+    private static final Set<String> CROSS_TYPE = new HashSet<String>(Arrays.asList(
             ChemInf.PROTEIN_CODING_GENE,
             ChemInf.FUNCTIONAL_RNA_CODING_GENE,
             ENEMBL_BASED_PROTIEN_GENE_HACK,
             ChemInf.DATABASE_CROSS_REFERENCE
             ));
     
-   public static String combine(String left, String right) throws BridgeDBException{
+    private static final OpsJustificationMaker instance = new OpsJustificationMaker();
+    
+    private OpsJustificationMaker(){}
+    
+    public static OpsJustificationMaker getInstance(){
+        return instance;
+    }
+    
+    public static void init() throws BridgeDBException{
+        //Currently does nothing but this is where you would read a proerties file.
+    }
+    
+    @Override
+    public String combine(String left, String right) throws BridgeDBException{
         String result = possibleCombine(left, right);
         if (result != null){
             return result;
@@ -78,12 +91,17 @@ public class JustificationMaker {
         throw new BridgeDBException("unable to combine " + left + " with " + right);
     }
     
-    public static String possibleCombine(String left, String right) {
+    @Override
+    public String possibleCombine(String left, String right) {
         if (left.equals(right)){
              if (CROSS_TYPE.contains(left)){
                  return null; //We don't want to tranitive with two cross type even if they are the same.
              }
              return left;
+        } else if (left.equals(Lens.getTestJustifictaion())){
+            return left;
+        } else if (right.equals(Lens.getTestJustifictaion())){
+            return right;
         } else if (left.equals(ChemInf.CHEMICAL_ENTITY)) {
             if (right.equals(ChemInf.INCHI_KEY)) {
                 return ChemInf.CHEMICAL_ENTITY;
@@ -179,24 +197,12 @@ public class JustificationMaker {
             } else {
                 return null;
             }
-        } else if (left.equals(Lens.getTestJustifictaion())){
-            if (right.startsWith(Lens.getTestJustifictaion())){
-                return right;
-            } else {
-                return null;
-            }
-        } else if (left.startsWith(Lens.getTestJustifictaion())){
-            if (right.equals(Lens.getTestJustifictaion())){
-                return left;
-            } else {
-                return null;
-            }
         }
-        System.out.println("not found " + left);
         return null;
     }
     
-    public static String getInverse(String justification) {
+    @Override
+    public String getInverse(String justification) {
         if (justification.equals(ChemInf.isUnchargedCounterpartOf)){
             return ChemInf.hasUnchargedCounterpart;
         }
@@ -242,7 +248,8 @@ public class JustificationMaker {
         return justification;
     }
     
-    public static String getForward(String justification) {
+    @Override
+    public String getForward(String justification) {
         if (justification.equals("http://example.com/ConceptWikiGene")){
             return PROTEIN_CODING_GENE;
         }

@@ -128,7 +128,6 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
             + "\t\t<th>Predicate</th>\n"
             + "\t\t<th>Justification</th>\n"
             + "\t\t<th colspan=\"6\"> Target Frequency</th>\n"
-            + "\t\t<th colspan=\"2\"> Transative</th>\n"
             + "\t</tr>\n"
             + "\t<tr>\n"
             + "\t\t<th></th>\n"
@@ -149,8 +148,6 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
 		    + "\t\t<th>90%</th>\n"
 		    + "\t\t<th>99%</th>\n"
 		    + "\t\t<th>Max</th>\n"
-            + "\t\t<th>Data Source(s)</th>\n"
-            + "\t\t<th>Ids</th>\n"
             + "\t</tr>\n";
 
     String SCRIPT = "<script language=\"javascript\">\n"
@@ -323,7 +320,6 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         addNumberCell(sb, info.getFrequency90());
         addNumberCell(sb, info.getFrequency99());
         addNumberCell(sb, info.getFrequencyMax());
-        addTransatives(sb, i);
     }
 
     private void addSingleTarget(StringBuilder sb, int i) throws BridgeDBException {
@@ -548,38 +544,6 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
     
     private void addJustificationCell(StringBuilder sb, int i) throws BridgeDBException {
         addLinkCell(sb, infos[i].getJustification());
-    }
-
-    private void addTransatives(StringBuilder sb, int i) throws BridgeDBException {
-        sb.append("\t\t<td>");
-        Set<DataSetInfo> viaSet = infos[i].getViaDataSets();
-        int size = viaSet.size();
-        int count = 0;
-        for (DataSetInfo dsInfo:viaSet){
-            addDataSourceLink(sb, dsInfo);
-            count++;
-            if (count < size){
-                sb.append(", ");
-            }
-        }
-        sb.append("</td>\n");
-        sb.append("\t\t<td>");
-        Set<Integer> chainSet = infos[i].getChainIds();
-        size = chainSet.size();
-        count = 0;
-        for (Integer chain:chainSet){
-            if (chain >= 0){
-                addMappingInfoLinkById(sb, "" + chain);
-            } else {
-                addMappingInfoLinkById(sb, "" + (0-chain));
-            }
-            count++;
-            if (count < size){
-                sb.append(", ");
-            }
-        }
-        sb.append("</td>\n");
-        sb.append("\t</tr>\n");
     }
 
 }

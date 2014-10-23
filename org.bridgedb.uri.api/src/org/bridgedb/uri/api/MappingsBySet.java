@@ -20,6 +20,7 @@
 package org.bridgedb.uri.api;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
 
@@ -40,17 +41,47 @@ public class MappingsBySet {
      */
     private final Set<UriMapping> mappings;
     
-    public MappingsBySet(String lens){
+    public MappingsBySet(String lens, Set<Mapping> mappings){
         this.lens = lens;
         this.setMappings = new HashSet<SetMappings>();
         this.mappings = new HashSet<UriMapping>();
+        for (Mapping mapping:mappings){
+            if (mapping.getJustification() == null){
+                addUriMapping(mapping);
+            } else {
+                addSetMapping(mapping);
+            }
+        }
     }
     
-    public void addMapping (int mappingSetId, String predicate, String justification, String mappingSource, 
+    private void addUriMapping(Mapping mapping) {
+        for (String source:mapping.getSourceUri()){
+            for (String target: mapping.getTargetUri()){
+                mappings.add(new UriMapping(source, target));
+            }
+        }
+    }
+
+    private void addSetMapping(Mapping mapping) {   
+        String mappingId = toString(mapping.getMappingSetId());
+        SetMappings setMapping = new SetMappings(mappingId, mapping.getPredicate(), 
+                mapping.getJustification(), mapping.getMappingSource(), mapping.getMappingResource());
+        for (String source:mapping.getSourceUri()){
+            for (String target: mapping.getTargetUri()){
+                setMapping.addMapping(new UriMapping(source, target));
+            }
+        }
+        setMappings.add(setMapping);
+    }
+
+    
+    /**
+    public void addMappings (Set<String> mappingSetIds, String predicate, String justification, String mappingSource, 
             String mappingResource, String sourceUri, Set<String> targetUris){
-        SetMappings setMapping = setMappingById(mappingSetId);
+        String mappingId = sortAndString(mappingSetIds);
+        SetMappings setMapping = setMappingById(mappingId);
         if (setMapping == null){
-            setMapping = new SetMappings(mappingSetId, predicate, justification, mappingSource, mappingResource);
+            setMapping = new SetMappings(mappingId, predicate, justification, mappingSource, mappingResource);
             setMappings.add(setMapping);
         }
         for (String targetUri: targetUris){
@@ -62,8 +93,9 @@ public class MappingsBySet {
         setMappings.add(setMapping);
     }
     
-    public void addMapping (int mappingSetId, String predicate, String justification, String mappingSource, 
+    public void addMapping (Set<String> mappingSetIds, String predicate, String justification, String mappingSource, 
             String mappingResource, String sourceUri, String targetUri){
+        String mappingSetId = sortAndString(mappingSetIds);
         SetMappings setMapping = setMappingById(mappingSetId);
         if (setMapping == null){
             setMapping = new SetMappings(mappingSetId, predicate, justification, mappingSource, mappingResource);
@@ -79,15 +111,25 @@ public class MappingsBySet {
     public final void addMapping (UriMapping uriMapping){
         mappings.add(uriMapping);
     }
-     public void addMapping (String sourceUri, Set<String> targetUris){
+    
+    public void addMappings (String sourceUri, Set<String> targetUris){
        for (String targetUri:targetUris){
            addMapping(sourceUri, targetUri);
        }
     }
 
-    private SetMappings setMappingById(int id) {
+    public void addMappings (MappingsBySet other){
+        for (UriMapping uriMapping: other.getMappings()){
+            addMapping(uriMapping);
+        }
+        for (SetMappings setMapping: other.getSetMappings()){
+            addSetMapping(setMapping);
+        }
+    }
+    */
+    private SetMappings setMappingById(String id) {
         for (SetMappings setMapping: getSetMappings()){
-            if (setMapping.getId() == id){
+            if (setMapping.getId().equals(id)){
                 return setMapping;
             }
         }
@@ -143,4 +185,19 @@ public class MappingsBySet {
     public boolean isEmpty(){
         return mappings.isEmpty() && setMappings.isEmpty();
     }
-}
+
+    private String toString(List<String> mappingSetIds) {
+        if (mappingSetIds == null || mappingSetIds.isEmpty()){
+            return "";
+        }
+        if (mappingSetIds.size() == 1){
+            return mappingSetIds.get(0);
+        }
+        StringBuilder sb = new StringBuilder(mappingSetIds.get(0));
+        for (int i = 1; i < mappingSetIds.size(); i++){
+            sb.append("_").append(mappingSetIds.get(i));
+        }
+        return sb.toString();
+    }
+
+ }

@@ -43,8 +43,9 @@ public interface WSUriInterface extends WSCoreInterface{
      * @return A MappingsBean wrapped in a Response
      * @throws BridgeDBException
      */
-    public Response map(String id, String scrCode, String uri, String lensUri, List<String> targetCodes, 
-            String graph, List<String> targetUriPattern) throws BridgeDBException;
+    public Response map(String id, String scrCode, String uri, String lensUri, 
+            Boolean includeXrefResults, Boolean includeUriResults,
+            List<String> targetCodes, String graph, List<String> targetUriPattern) throws BridgeDBException;
 
     /**
      *
@@ -82,6 +83,15 @@ public interface WSUriInterface extends WSCoreInterface{
      * @throws BridgeDBException
      */
     public Response toXref(String Uri) throws BridgeDBException;
+
+    /**
+     * Converts a Xref (represented as id and DataSource scrCode to the known
+     * @param id
+     * @param scrCode
+     * @return
+     * @throws BridgeDBException 
+     */
+    public Response toUris(String id, String scrCode) throws BridgeDBException;
 
     /**
      *
@@ -158,7 +168,7 @@ public interface WSUriInterface extends WSCoreInterface{
      * @return A LensesBean wrapped in a Response
      * @throws BridgeDBException
      */
-    public Response getLenses(String lensUri) throws BridgeDBException;
+    public Response getLenses(String lensUri, String lensGroup) throws BridgeDBException;
 
 
  }

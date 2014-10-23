@@ -13,6 +13,9 @@ public class WebTemplates
 
     public static final String BRIDGEDB_HOME = "bridgeDBHome.vm";
     public static final String FRAME = "frame.vm";
+    public static final String GRAPH_INFO_SCRIPT = "uriSpacesPerGraph.vm";
+    public static final String LENS = "lensTable.vm";
+    public static final String LENS_GROUP = "lensGroup.vm";
     public static final String MAP_URI_FORM = "mapUriForm.vm";
     public static final String MAP_URI_RESULTS = "mapUriResults.vm";
     public static final String SELECTORS_SCRIPTS = "selectorsScripts.vm";
@@ -21,6 +24,7 @@ public class WebTemplates
     public static final String SOURCE_TARGET_INFO_SCRIPT = "sourceTargetInfos.vm";
     public static final String MAPPING_SET_INFO_SCRIPT = "mappingSetInfos.vm";
     public static final String MAPPING_SET_SCRIPT = "mappingSet.vm";
+    public static final String TO_URIS_SCRIPT = "toUris.vm";
     
     private static VelocityEngine velocityEngine = initialize();
     
