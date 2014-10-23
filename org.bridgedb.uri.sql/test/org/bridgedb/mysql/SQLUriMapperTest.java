@@ -65,10 +65,18 @@ public class SQLUriMapperTest extends UriListenerTest{
     }
       
     @Test
-    public void testBugInsdc() throws Exception {http://identifiers.org/ena.embl/DAAA02036360
+    public void testBugInsdc() throws Exception {
         report("LoadBugInsdc");
         RegexUriPattern pattern = sqlUriMapper.toUriPattern("http://identifiers.org/ena.embl/AAG52984");
         assertNotNull(pattern);
     }
-
+    
+    @Test
+    public void testBugDrugbank() throws Exception {
+        report("BugDrugbank");
+        RegexUriPattern pattern = sqlUriMapper.toUriPattern("http://drugbank.ca/drugs/DB01269");
+        System.out.println(pattern);
+        assertNotNull(pattern);
+    }
+    
 }
