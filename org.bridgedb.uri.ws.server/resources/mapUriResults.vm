@@ -24,7 +24,7 @@
             #if ($mapping.getTarget())
                 #if (!$targetSystemCode.equals($mapping.getTarget().getDataSource().getSystemCode()))
                     </ul><ul>
-                        #set( $targetSystemCode = $mapping.getTarget().getDataSource().getSystemCode())
+                        #set( $targetSystemCode = $mapping.getTarget().getDataSource().getSystemCode() )
                         <li><a href="$contextPath/dataSource/$targetSystemCode">$mapping.getTarget().getDataSource().getFullName()</a></li>
                 #end
                     <ul>
@@ -42,13 +42,26 @@
                                 <li>This is an automatic mapping to alternative equals URIs
                             #elseif ($mapping.getMappingSetId().size() == 1)
                                 <li>Found in mappingSet  
+                                #foreach ( $id in $mapping.getMappingSetId())
+                                    <a href="$contextPath/mappingSet/$id">mappingSet/$id</a>
+                                #end
+                                </li>
                             #else    
-                                <li>Derived from MappingSets  
+                                <li>Derived via</li>
+                                <ul>
+                                    #set ($count = $mapping.getMappingSetId().size() - 1)
+                                    #foreach ( $index in [0..$count]) 
+                                        #set ( $id = $mapping.getViaXref().get($index).getId() )
+                                        #set ( $dataSource = $mapping.getViaXref().get($index).getDataSource() )
+                                        #set ( $setId = $mapping.getMappingSetId().get($index) )
+                                        <li>
+                                            <a href="$contextPath/toUris?id=$id&code=$dataSource.getSystemCode()"> 
+                                            $dataSource.getFullName():$id</a> in
+                                            <a href="$contextPath/mappingSet/$setId">mappingSet/$setId</a>
+                                        </li>
+                                    #end
+                                </ul>
                             #end
-                            #foreach ( $id in $mapping.getMappingSetId())
-                                <a href="$contextPath/mappingSet/$id">$id</a>
-                            #end
-                            </li>
                         </ul>
                     </ul>
         #end
