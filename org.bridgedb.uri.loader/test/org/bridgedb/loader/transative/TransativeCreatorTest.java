@@ -100,7 +100,7 @@ public class TransativeCreatorTest {
         loadFile("../org.bridgedb.uri.loader/test-data/cs-ops_lensed.ttl", Lens.getTestJustifictaion());
         File transative = TransativeCreator.doTransativeIfPossible(1, 3);
         loadFile(transative.getAbsolutePath(), Lens.getDefaultJustifictaionString());
-        File transative2 = TransativeCreator.doTransativeIfPossible(1, 5);
+        File transative2 = TransativeCreator.doTransativeIfPossible(4, 2);
         //assertTrue(transative.exists());
         //loadFile(transative, MAIN_JUSTIFCATION);
     }

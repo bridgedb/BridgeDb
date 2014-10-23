@@ -24,12 +24,6 @@
     void:linkPredicate skos:exactMatch ;
     dul:expresses <http://www.bridgedb.org/test#testJustification> ;
     dcterms:created "2014-11-21"^^xsd:date .
-:chemspider a void:Dataset ;
-	dcterms:title "ChemSpider"^^xsd:string ;
-    dcterms:license "http://www.chemspider.com/Disclaimer.aspx" ;
-    dcterms:subject "unknown" ;
-    pav:version "unknown" ;
-    void:uriSpace <http://rdf.chemspider.com/> .
 :ops a void:Dataset ;
 	dcterms:title "ChemSpider"^^xsd:string ;
     dcterms:license "http://www.chemspider.com/Disclaimer.aspx" ;
@@ -37,7 +31,7 @@
     pav:version "unknown" ;
     void:uriSpace <http://ops.rsc.org/OPS> .
    
-<http://rdf.chemspider.com/28509384000001> skos:exactMatch <http://ops.rsc.org/OPS8000001> .
-<http://rdf.chemspider.com/28524249000001> skos:exactMatch <http://ops.rsc.org/OPS70263000001> .
-<http://rdf.chemspider.com/23202612000001> skos:exactMatch <http://ops.rsc.org/OPS1497600000001> .
+<http://ops.rsc.org/OPS8> skos:exactMatch <http://ops.rsc.org/OPS8000001> .
+<http://ops.rsc.org/OPS70263> skos:exactMatch <http://ops.rsc.org/OPS70263000001> .
+<http://ops.rsc.org/OPS1497600> skos:exactMatch <http://ops.rsc.org/OPS1497600000001> .
 
