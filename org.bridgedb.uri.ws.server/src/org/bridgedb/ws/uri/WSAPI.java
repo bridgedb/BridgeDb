@@ -431,6 +431,7 @@ public class WSAPI extends WSUriInterfaceService {
                     parameterTargetCode(sb);
                     sb.append(" paramters set");
             sb.append("</ul>");
+            sb.append("<li>For transitives also allows the Via information to be added.</li>");
             sb.append("<li>In all other cases defaults to false.</li>");
             sb.append("</ul>\n");
         sb.append("<dt><a name=\"");
@@ -530,7 +531,7 @@ public class WSAPI extends WSUriInterfaceService {
                 sb.append("<ul>");
                 parameterTargetCode(sb);
                 sb.append("</ul>");        
-            mapExamplesXrefbased(sb, contextPath, WsConstants.MAP_ID, sourceXref1, tragetSysCode1, sourceXref2);
+            mapExamplesXrefbased(sb, contextPath, WsConstants.MAP_ID, sourceXref1, tragetSysCode1, sourceXref2, false);
             sb.append("</ul>\n");
     }
     
@@ -968,7 +969,7 @@ public class WSAPI extends WSUriInterfaceService {
                 parameterTargetPattern(sb);
                 parameterTargetCode(sb);
                 sb.append("</ul>");
-        mapExamplesXrefbased(sb, contextPath, WsUriConstants.MAP, sourceXref1, tragetSysCode1, sourceXref2);
+        mapExamplesXrefbased(sb, contextPath, WsUriConstants.MAP, sourceXref1, tragetSysCode1, sourceXref2, true);
         mapExamplesUriBased(sb, contextPath, WsUriConstants.MAP, sourceUri1, sourceUri2, targetUriSpace2);
         sb.append("</ul>\n");
     }
@@ -1002,6 +1003,13 @@ public class WSAPI extends WSUriInterfaceService {
                 parameterGraph(sb);
                 parameterTargetPattern(sb);
                 sb.append("</ul>");
+            sb.append("<li>Note: The HTML version of this call is actually based on ");
+            refMap(sb);
+            sb.append("</li>");  
+            sb.append("<ul>");
+                sb.append("<li>The id of the mapping set(s) used is added</li>");
+                sb.append("<li>The via (intermediate) values of transitives are shown.</li>");
+                sb.append("</ul>");                
             mapExamplesUriBased(sb, contextPath, WsUriConstants.MAP_URI, sourceUri1, sourceUri2, targetUriSpace2);
             sb.append("</ul>\n");
     }           
@@ -1127,6 +1135,12 @@ public class WSAPI extends WSUriInterfaceService {
                 sb.append(SetMappings.METHOD_NAME);
                 sb.append("</a></dt>");
         sb.append("<dd>Brings up a table of all the mappings in the system for a particular Source and Target.</dd>");
+        sb.append("<dt><a href=\"#");
+                sb.append(SetMappings.METHOD_NAME);
+                sb.append("\">");
+                sb.append(SetMappings.METHOD_NAME);
+                sb.append("/id</a></dt>");
+        sb.append("<dd>Provides the metadata for one mapping set</dd>");
         //sb.append("<dt><a href=\"#");
         //        sb.append(WsUriConstants.GRAPHVIZ);
         //        sb.append("\">");
@@ -1295,7 +1309,7 @@ public class WSAPI extends WSUriInterfaceService {
                 addMappingSetExample(sb, contextPath, "All Lens XML version", true, false, sourceSysCode, targetSysCode); 
             sb.append("</ul>");
         sb.append("</ul>\n");
-    }  
+      }  
 
     private void addMappingSetExample(StringBuilder sb, String contextPath, String exampleName, boolean xml, boolean lens, String sourceSysCode, String targetSysCode) throws UnsupportedEncodingException{
         sb.append("<li>Example (");
@@ -1673,6 +1687,14 @@ public class WSAPI extends WSUriInterfaceService {
         sb.append("</a></li> ");
     }
    
+    private void refMap(StringBuilder sb){
+        sb.append("<a href=\"#");
+        sb.append(WsUriConstants.MAP);
+        sb.append("\">");
+        sb.append(WsUriConstants.MAP);
+        sb.append("</a>");
+    }
+
     private void refMapUri(StringBuilder sb){
         sb.append("<a href=\"#");
         sb.append(WsUriConstants.MAP_URI);
@@ -1713,7 +1735,8 @@ public class WSAPI extends WSUriInterfaceService {
         sb.append("</a> ");
     }
 
-    private void mapExamplesXrefbased(StringBuilder sb, String contextPath, String methodName, Xref sourceXref1, String tragetSysCode1, Xref sourceXref2) 
+    private void mapExamplesXrefbased(StringBuilder sb, String contextPath, String methodName, 
+            Xref sourceXref1, String tragetSysCode1, Xref sourceXref2, boolean includeUri) 
             throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<li>Example: <a href=\"");
             sb.append(contextPath);
@@ -1750,7 +1773,18 @@ public class WSAPI extends WSUriInterfaceService {
             sb.append(sbInnerEncoded.toString());
             sb.append("\">");
             sb.append(sbInnerPure.toString());
-            sb.append("</a></li>");                    
+            sb.append("</a></li>");         
+        if (includeUri){
+            sb.append("<li>Example: <a href=\"");
+                sb.append(contextPath);
+                String includePart = "&" + WsUriConstants.INCLUDE_URI_RESULTS + "=true";
+                sbInnerPure.append(includePart);
+                sbInnerEncoded.append(includePart);
+                sb.append(sbInnerEncoded.toString());
+                sb.append("\">");
+                sb.append(sbInnerPure.toString());
+                sb.append("</a></li>");                    
+        }
      }
     
     private void mapExamplesUriBased(StringBuilder sb, String contextPath, String methodName, String sourceUri1, String sourceUri2, String targetUriSpace2) 
@@ -1771,6 +1805,7 @@ public class WSAPI extends WSUriInterfaceService {
         mapExamplesUriBasedWithGraph(sb, contextPath, methodName, sourceUri2);
         mapExamplesUriBasedWithTarget(sb, contextPath, methodName, sourceUri2, targetUriSpace2);
         mapExamplesUriBased4(sb, contextPath, methodName, sourceUri1);
+        mapExamplesUriIncludeXref(sb, contextPath, methodName, sourceUri1);
     }
     
     private void mapExamplesUriBased1(StringBuilder sb, String contextPath, String methodName, String sourceUri1) 
@@ -1866,7 +1901,24 @@ public class WSAPI extends WSUriInterfaceService {
         sb.append(sourceUri1);
         addDefaultLens(sb);
         sb.append("</a></li>");    
+    }     
+    
+        private void mapExamplesUriIncludeXref(StringBuilder sb, String contextPath, String methodName, String sourceUri1) 
+            throws UnsupportedEncodingException, BridgeDBException{
+        sb.append("<li>Default Lens: <a href=\"");
+        sb.append(contextPath);
+        sb.append(methodName);
+        sb.append(FIRST_URI_PARAMETER);
+        sb.append(URLEncoder.encode(sourceUri1, "UTF-8"));
+        sb.append("&").append(WsUriConstants.INCLUDE_XREF_RESULTS).append("=true");
+        sb.append("\">");
+        sb.append(methodName);
+        sb.append(FIRST_URI_PARAMETER);
+        sb.append(sourceUri1);
+        sb.append("&").append(WsUriConstants.INCLUDE_XREF_RESULTS).append("=true");
+        sb.append("</a></li>");    
     }           
+
 
     private void mapExamplesUriBasedFormatted(StringBuilder sb, String contextPath, String methodName, String sourceUri1, 
             String RdfFormat) throws UnsupportedEncodingException, BridgeDBException{
