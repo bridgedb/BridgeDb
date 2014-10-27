@@ -42,7 +42,7 @@ import org.openrdf.rio.helpers.RDFHandlerBase;
 public class LinksetHandler extends RDFHandlerBase{
     
     boolean processingFirstStatement = true;
-    private final URI linkPredicate;
+    protected final URI linkPredicate;
     private final String justification;
     private final String backwardJustification;
     private final Resource mappingResource;
