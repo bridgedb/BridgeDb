@@ -19,7 +19,6 @@
 //
 package org.bridgedb.uri.loader;
 
-import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriListener;
@@ -50,15 +49,12 @@ public class LinksetHandler extends RDFHandlerBase{
     private final Resource mappingSource;
     private boolean symetric;
     private final UriListener uriListener;
-    private final Set<String> viaLabels;
-    private final Set<Integer> chainedLinkSets;
 
     private int mappingSet;
     private int noneLinkStatements;
     
-    @Deprecated
     public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, Resource mappingResource, 
-            Resource mappingSource, boolean symetric, Set<String> viaLabels, Set<Integer> chainedLinkSets){
+            Resource mappingSource, boolean symetric){
         this.uriListener = uriListener;
         this.linkPredicate = linkPredicate;
         this.justification = justification;
@@ -66,8 +62,6 @@ public class LinksetHandler extends RDFHandlerBase{
         this.mappingResource = mappingResource;
         this.mappingSource = mappingSource;
         this.symetric = symetric;
-        this.viaLabels = viaLabels;
-        this.chainedLinkSets = chainedLinkSets;
     }
     
     public LinksetHandler(UriListener uriListener, URI linkPredicate, String forwardJustification, String backwardJustification, 
@@ -79,13 +73,6 @@ public class LinksetHandler extends RDFHandlerBase{
         this.mappingResource = mappingResource;
         this.mappingSource = mappingSource;
         this.symetric = true;
-        this.viaLabels = null;
-        this.chainedLinkSets = null;
-    }
-
-    public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, Resource mappingResource, 
-            Resource mappingSource, boolean symetric){
-        this(uriListener, linkPredicate, justification, mappingResource, mappingSource, symetric, null, null);
     }
 
     static final Logger logger = Logger.getLogger(LinksetHandler.class);

@@ -47,11 +47,10 @@ public class LinksetListener {
         return handler.getMappingsetId();
     }
     
-    @Deprecated    
     public int parse(File file, Resource mappingResource, Resource mappingSource, URI linkPredicate, String justification, 
-            Boolean symetric, Set<String> viaLabels, Set<Integer> chainedLinkSets) throws BridgeDBException{
+            Boolean symetric) throws BridgeDBException{
         LinksetHandler handler = new LinksetHandler(uriListener, linkPredicate, justification, mappingResource, 
-                mappingSource, symetric, viaLabels, chainedLinkSets);
+                mappingSource, symetric);
         RdfParser parser = getParser(handler);
         parser.parse(mappingSource.stringValue(), file);
         return handler.getMappingsetId();
