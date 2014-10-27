@@ -64,7 +64,6 @@ import org.bridgedb.uri.tools.GraphResolver;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;
-import org.bridgedb.utils.ConfigReader;
 import org.openrdf.model.Resource;
 
 /**
@@ -152,7 +151,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * different SQL implementaions.
      * @throws BridgeDBException
      */
-    private SQLUriMapper(boolean dropTables, CodeMapper codeMapper) throws BridgeDBException {
+    protected SQLUriMapper(boolean dropTables, CodeMapper codeMapper) throws BridgeDBException {
         super(dropTables, codeMapper);
         UriPattern.refreshUriPatterns();
         clearUriPatterns();
