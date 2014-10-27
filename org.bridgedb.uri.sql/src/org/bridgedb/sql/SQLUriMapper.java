@@ -94,12 +94,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private static final String PREDICATE_COLUMN_NAME = "predicate";
     private static final String PREFIX_COLUMN_NAME = "prefix";
     private static final String POSTFIX_COLUMN_NAME = "postfix";
-    static final String MAPPING_75_PERCENT_FREQUENCY_COLUMN_NAME = "mapping75Frequency";
-    static final String MAPPING_90_PERCENT_FREQUENCY_COLUMN_NAME = "mapping90Frequency";
-    static final String MAPPING_99_PERCENT_FREQUENCY_COLUMN_NAME = "mapping99Frequency";
     static final String MAPPING_LINK_COUNT_COLUMN_NAME = "mappingLinkCount";
-    static final String MAPPING_MAX_FREQUENCY_COLUMN_NAME = "mappingMaxFrequency";
-    static final String MAPPING_MEDIUM_FREQUENCY_COLUMN_NAME = "mappingMediumFrequency";
     static final String MAPPING_RESOURCE_COLUMN_NAME = "resource";
     static final String MAPPING_SOURCE_COLUMN_NAME = "source";
     static final String MAPPING_SOURCE_COUNT_COLUMN_NAME = "mappingSourceCount";
@@ -217,12 +212,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                     + SYMMETRIC_COLUMN_NAME + " INT, "
                     + MAPPING_LINK_COUNT_COLUMN_NAME + " INT, "
                     + MAPPING_SOURCE_COUNT_COLUMN_NAME + " INT, "
-                    + MAPPING_TARGET_COUNT_COLUMN_NAME + " INT, "
-                    + MAPPING_MEDIUM_FREQUENCY_COLUMN_NAME + " INT, "
-                    + MAPPING_75_PERCENT_FREQUENCY_COLUMN_NAME + " INT, "
-                    + MAPPING_90_PERCENT_FREQUENCY_COLUMN_NAME + " INT, "
-                    + MAPPING_99_PERCENT_FREQUENCY_COLUMN_NAME + " INT, "
-                    + MAPPING_MAX_FREQUENCY_COLUMN_NAME + " INT"
+                    + MAPPING_TARGET_COUNT_COLUMN_NAME + " INT"
                     + " ) " + SqlFactory.engineSetting();
             sh.execute(query);
         } catch (SQLException e) {
@@ -1244,12 +1234,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                         rs.getInt(SYMMETRIC_COLUMN_NAME),
                         rs.getInt(MAPPING_LINK_COUNT_COLUMN_NAME),
                         rs.getInt(MAPPING_SOURCE_COUNT_COLUMN_NAME),
-                        rs.getInt(MAPPING_TARGET_COUNT_COLUMN_NAME),
-                        rs.getInt(MAPPING_MEDIUM_FREQUENCY_COLUMN_NAME),
-                        rs.getInt(MAPPING_75_PERCENT_FREQUENCY_COLUMN_NAME),
-                        rs.getInt(MAPPING_90_PERCENT_FREQUENCY_COLUMN_NAME),
-                        rs.getInt(MAPPING_99_PERCENT_FREQUENCY_COLUMN_NAME),
-                        rs.getInt(MAPPING_MAX_FREQUENCY_COLUMN_NAME)));
+                        rs.getInt(MAPPING_TARGET_COUNT_COLUMN_NAME)));
             }
         } catch (SQLException ex) {
             throw new BridgeDBException("Unable to parse results.", ex);
@@ -1592,7 +1577,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             while (rs.next()) {
                 int mappingSetId = rs.getInt(ID_COLUMN_NAME);
                 int mappings = countLinks(mappingSetId);
-                countFrequency(mappingSetId);
             }
             logger.debug("Updating counts finished!");
         } catch (SQLException ex) {
@@ -1682,134 +1666,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append(MAPPING_SET_ID_COLUMN_NAME);
         query.append(" = ");
         query.append(mappingSetId);
-    }
-
-    /**
-     * Updates the count variable for each Mapping Sets.
-     * <p>
-     * This allows the counts of the mappings in each Mapping Set to be quickly
-     * returned.
-     *
-     * @throws BridgeDBException
-     */
-    private void countFrequency(int mappingSetId) throws BridgeDBException {
-        float numberOfsource = 0;
-        //ystem.out.println ("Updating frequency count for " + mappingSetId + ". Please Wait!");
-        logger.debug("Updating frequency count for " + mappingSetId + ". Please Wait!");
-        Statement countStatement = this.createStatement();
-        Statement updateStatement = this.createStatement();
-        StringBuilder query = new StringBuilder("SELECT targetFrequency, COUNT(");
-        query.append(SOURCE_ID_COLUMN_NAME + ") as frequency");
-        query.append(" FROM (SELECT ");
-        query.append(SOURCE_ID_COLUMN_NAME);
-        query.append(", COUNT(DISTINCT(");
-        query.append(TARGET_ID_COLUMN_NAME);
-        query.append(")) as targetFrequency");
-        query.append(" from mapping");
-        addStatsMappingSetIdConditions(query, mappingSetId);
-        query.append(" GROUP BY ");
-        query.append(SOURCE_ID_COLUMN_NAME);
-        query.append(") AS innerQuery");
-        query.append(" GROUP BY targetFrequency ORDER BY targetFrequency");
-        ResultSet rs = null;
-        try {
-            //ystem.out.println(query);
-            rs = countStatement.executeQuery(query.toString());
-            logger.debug("Count query run. Updating link count now");
-            while (rs.next()) {
-                int frequency = rs.getInt("frequency");
-                numberOfsource += frequency;
-            }
-            //ystem.out.println("numberOfsource = " + numberOfsource);
-            rs.beforeFirst();
-            int sourceCount = 0;
-            int freqMedium = -1;
-            int freq75 = -1;
-            int freq90 = -1;
-            int freq99 = -1;
-            int targetFrequency = -1;
-            while (rs.next()) {
-                targetFrequency = rs.getInt("targetFrequency");
-                int frequency = rs.getInt("frequency");
-                //ystem.out.println("targetFrequency: " + targetFrequency + "   frequency: " + frequency);
-                sourceCount += frequency;
-                if (sourceCount >= numberOfsource * 0.50) {
-                    if (sourceCount >= numberOfsource * 0.75) {
-                        if (sourceCount >= numberOfsource * 0.90) {
-                            if (sourceCount >= numberOfsource * 0.99) {
-                                if (freq99 < 0) {
-                                    freq99 = targetFrequency;
-                                    //ystem.out.println("Set 99 = " + targetFrequency);
-                                }
-                            } else {
-                                if (freq90 < 0) {
-                                    freq90 = targetFrequency;
-                                }
-                            }
-                        } else {
-                            if (freq75 < 0) {
-                                freq75 = targetFrequency;
-                            }
-                        }
-                    } else {
-                        if (freqMedium < 0) {
-                            freqMedium = targetFrequency;
-                        }
-                    }
-                }
-            }
-            if (freq99 < 0) {
-                freq99 = targetFrequency;
-            }
-            if (freq90 < 0) {
-                freq90 = freq99;
-            }
-            if (freq75 < 0) {
-                freq75 = freq90;
-            }
-            if (freqMedium < 0) {
-                freqMedium = freq75;
-            }
-            StringBuilder update = new StringBuilder("update ");
-            update.append(MAPPING_SET_TABLE_NAME);
-            update.append(" set ");
-            update.append(MAPPING_MEDIUM_FREQUENCY_COLUMN_NAME);
-            update.append(" = ");
-            update.append(freqMedium);
-            update.append(", ");
-            update.append(MAPPING_75_PERCENT_FREQUENCY_COLUMN_NAME);
-            update.append(" = ");
-            update.append(freq75);
-            update.append(", ");
-            update.append(MAPPING_90_PERCENT_FREQUENCY_COLUMN_NAME);
-            update.append(" = ");
-            update.append(freq90);
-            update.append(", ");
-            update.append(MAPPING_99_PERCENT_FREQUENCY_COLUMN_NAME);
-            update.append(" = ");
-            update.append(freq99);
-            update.append(", ");
-            update.append(MAPPING_MAX_FREQUENCY_COLUMN_NAME);
-            update.append(" = ");
-            update.append(targetFrequency);
-            addStatsIdConditions(update, mappingSetId);
-            //ystem.out.println(update);
-            try {
-                int updateCount = updateStatement.executeUpdate(update.toString());
-                if (updateCount != 1) {
-                    throw new BridgeDBException("Updated rows " + updateCount + " <> 1 when running " + update);
-                }
-            } catch (SQLException ex) {
-                throw new BridgeDBException("Unable to run update. " + update, ex);
-            }
-            logger.debug("Updating frequency finished!");
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            throw new BridgeDBException("Unable to run query. " + query, ex);
-        } finally {
-            close(updateStatement, null);
-            close(countStatement, rs);
-        }
     }
 
     private Set<RegexUriPattern> mergeGraphAndTargets(String graph, RegexUriPattern[] tgtUriPatterns) throws BridgeDBException {

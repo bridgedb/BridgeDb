@@ -40,11 +40,6 @@ public class MappingSetInfoBean {
     private String mappingSource;    
     private Integer numberOfSources;
     private Integer numberOfTargets;
-    private Integer frequencyMedium;
-    private Integer frequency75;
-    private Integer frequency90;
-    private Integer frequency99;
-    private Integer frequencyMax;
 
     /**
      * WS Constructor
@@ -65,11 +60,6 @@ public class MappingSetInfoBean {
         numberOfLinks = info.getNumberOfLinks();
         numberOfSources= info.getNumberOfSources();
         numberOfTargets = info.getNumberOfTargets();
-        frequencyMedium = info.getFrequencyMedium();
-        frequency75 = info.getFrequency75();
-        frequency90 = info.getFrequency90();
-        frequency99 = info.getFrequency99();
-        frequencyMax = info.getFrequencyMax();
     }
 
     public MappingSetInfo asMappingSetInfo(){
@@ -83,12 +73,7 @@ public class MappingSetInfoBean {
                getSymmetric(), 
                getNumberOfLinks(),
                getNumberOfSources(),
-               getNumberOfTargets(),
-               getFrequencyMedium(),
-               getFrequency75(),
-               getFrequency90(),
-               getFrequency99(),
-               getFrequencyMax());
+               getNumberOfTargets());
     }
         
     /**
@@ -215,76 +200,6 @@ public class MappingSetInfoBean {
      */
     public void setNumberOfTargets(Integer numberOfTargets) {
         this.numberOfTargets = numberOfTargets;
-    }
-
-    /**
-     * @return the frequencyMedium
-     */
-    public Integer getFrequencyMedium() {
-        return frequencyMedium;
-    }
-
-    /**
-     * @param frequencyMedium the frequencyMedium to set
-     */
-    public void setFrequencyMedium(Integer frequencyMedium) {
-        this.frequencyMedium = frequencyMedium;
-    }
-
-    /**
-     * @return the frequency75
-     */
-    public Integer getFrequency75() {
-        return frequency75;
-    }
-
-    /**
-     * @param frequency75 the frequency75 to set
-     */
-    public void setFrequency75(Integer frequency75) {
-        this.frequency75 = frequency75;
-    }
-
-    /**
-     * @return the frequency90
-     */
-    public Integer getFrequency90() {
-        return frequency90;
-    }
-
-    /**
-     * @param frequency90 the frequency90 to set
-     */
-    public void setFrequency90(Integer frequency90) {
-        this.frequency90 = frequency90;
-    }
-
-    /**
-     * @return the frequency99
-     */
-    public Integer getFrequency99() {
-        return frequency99;
-    }
-
-    /**
-     * @param frequency99 the frequency99 to set
-     */
-    public void setFrequency99(Integer frequency99) {
-        this.frequency99 = frequency99;
-    }
-
-    /**
-     * @return the frequencyMax
-     */
-    public Integer getFrequencyMax() {
-        return frequencyMax;
-    }
-
-    /**
-     * @param frequencyMax the frequencyMax to set
-     */
-    public void setFrequencyMax(Integer frequencyMax) {
-        this.frequencyMax = frequencyMax;
     }
 
     /**

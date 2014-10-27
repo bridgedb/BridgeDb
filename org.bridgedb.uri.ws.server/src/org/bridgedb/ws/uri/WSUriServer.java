@@ -324,19 +324,6 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         return imsApiPage(httpServletRequest);
     }
     
-    /**
-     * @deprecated 
-     * @param sb
-     * @param mappingSetInfos
-     * @param httpServletRequest
-     * @throws BridgeDBException 
-     */
-    protected void addMappingTable(StringBuilder sb, List<MappingSetInfo> mappingSetInfos, HttpServletRequest httpServletRequest) 
-            throws BridgeDBException{
-        MappingSetTableMaker maker = new MappingSetTableMaker(mappingSetInfos, httpServletRequest);
-        maker.tableMaker(sb);
-    }
-    
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/" + Lens.METHOD_NAME) 
