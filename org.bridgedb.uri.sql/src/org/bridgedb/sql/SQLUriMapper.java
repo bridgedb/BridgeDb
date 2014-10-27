@@ -93,12 +93,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private static final String PREDICATE_COLUMN_NAME = "predicate";
     private static final String PREFIX_COLUMN_NAME = "prefix";
     private static final String POSTFIX_COLUMN_NAME = "postfix";
-    static final String MAPPING_75_PERCENT_FREQUENCY_COLUMN_NAME = "mapping75Frequency";
-    static final String MAPPING_90_PERCENT_FREQUENCY_COLUMN_NAME = "mapping90Frequency";
-    static final String MAPPING_99_PERCENT_FREQUENCY_COLUMN_NAME = "mapping99Frequency";
     static final String MAPPING_LINK_COUNT_COLUMN_NAME = "mappingLinkCount";
-    static final String MAPPING_MAX_FREQUENCY_COLUMN_NAME = "mappingMaxFrequency";
-    static final String MAPPING_MEDIUM_FREQUENCY_COLUMN_NAME = "mappingMediumFrequency";
     static final String MAPPING_RESOURCE_COLUMN_NAME = "resource";
     static final String MAPPING_SOURCE_COLUMN_NAME = "source";
     static final String MAPPING_SOURCE_COUNT_COLUMN_NAME = "mappingSourceCount";
@@ -216,12 +211,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                     + SYMMETRIC_COLUMN_NAME + " INT, "
                     + MAPPING_LINK_COUNT_COLUMN_NAME + " INT, "
                     + MAPPING_SOURCE_COUNT_COLUMN_NAME + " INT, "
-                    + MAPPING_TARGET_COUNT_COLUMN_NAME + " INT, "
-                    + MAPPING_MEDIUM_FREQUENCY_COLUMN_NAME + " INT, "
-                    + MAPPING_75_PERCENT_FREQUENCY_COLUMN_NAME + " INT, "
-                    + MAPPING_90_PERCENT_FREQUENCY_COLUMN_NAME + " INT, "
-                    + MAPPING_99_PERCENT_FREQUENCY_COLUMN_NAME + " INT, "
-                    + MAPPING_MAX_FREQUENCY_COLUMN_NAME + " INT"
+                    + MAPPING_TARGET_COUNT_COLUMN_NAME + " INT"
                     + " ) " + SqlFactory.engineSetting();
             sh.execute(query);
         } catch (SQLException e) {
@@ -290,32 +280,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return uri.startsWith(pattern);
     }
 
-    private StringBuilder startMappingQueryX() {
-        StringBuilder query = new StringBuilder("SELECT ");
-        query.append(TARGET_ID_COLUMN_NAME);
-        query.append(", ");
-        query.append(TARGET_DATASOURCE_COLUMN_NAME);
-        return query;
-    }
-
-    private StringBuilder startMappingsBySetQueryX() {
-        StringBuilder query = new StringBuilder("SELECT ");
-        query.append(TARGET_ID_COLUMN_NAME);
-        query.append(", ");
-        query.append(TARGET_DATASOURCE_COLUMN_NAME);
-        query.append(", ");
-        query.append(MAPPING_SET_ID_COLUMN_NAME);
-        query.append(", ");
-        query.append(PREDICATE_COLUMN_NAME);
-        query.append(", ");
-        query.append(JUSTIFICATION_COLUMN_NAME);
-        query.append(", ");
-        query.append(MAPPING_SOURCE_COLUMN_NAME);
-        query.append(", ");
-        query.append(MAPPING_RESOURCE_COLUMN_NAME);
-        return query;
-    }
-
     private void appendMappingInfo(StringBuilder query) {
         query.append(", ");
         query.append(MAPPING_SET_ID_COLUMN_NAME);
@@ -330,42 +294,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append(SOURCE_DATASOURCE_COLUMN_NAME);
     }
 
-    private void appendMappingFromAndWhere(StringBuilder query, IdSysCodePair ref, String lensUri, String tgtSysCode)
-            throws BridgeDBException {
-        appendMappingFromJoinMapping(query);
-        appendSourceIdSysCodePair(query, ref);
-        if (tgtSysCode != null) {
-            query.append(" AND ");
-            query.append(TARGET_DATASOURCE_COLUMN_NAME);
-            query.append(" = '");
-            query.append(tgtSysCode);
-            query.append("' ");
-        }
-        appendLensClause(query, lensUri, true);
-    }
-
-    private void appendMappingFromJoinMapping(StringBuilder query) {
-        appendMappingFrom(query);
-        appendMappingJoinMapping(query);
-    }
-
-    private void appendMappingFrom(StringBuilder query) {
+   private void appendMappingFrom(StringBuilder query) {
         query.append(" FROM ");
         query.append(MAPPING_TABLE_NAME);
         query.append(", ");
         query.append(MAPPING_SET_TABLE_NAME);
     }
 
-    /*public static void appendMappingInfoFromAndWhere(StringBuilder query){
-     query.append(" FROM ");
-     query.append(MAPPING_SET_TABLE_NAME);
-     query.append(", ");
-     query.append(MAPPING_STATS_TABLE_NAME);
-     query.append(" WHERE ");
-     query.append(ID_COLUMN_NAME);
-     query.append(" = ");
-     query.append(MAPPING_SET_ID_COLUMN_NAME);
-     }*/
     /**
      * Adds the WHERE clause conditions for ensuring that the returned mappings
      * are from active linksets.
@@ -680,23 +615,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
 
-    /*private int getMappingsCount() throws BridgeDBException{
-     String linkQuery = "SELECT count(*) as numberOfMappings "
-     + "FROM " + MAPPING_TABLE_NAME;
-     Statement statement = this.createStatement();
-     try {
-     ResultSet rs = statement.executeQuery(linkQuery);
-     if (rs.next()){
-     return rs.getInt("numberOfMappings");
-     } else {
-     ystem.err.println(linkQuery);
-     throw new BridgeDBException("No Results for query. " + linkQuery);
-     }
-     } catch (SQLException ex) {
-     ex.printStackTrace();
-     throw new BridgeDBException("Unable to run query. " + linkQuery, ex);
-     }      
-     }*/
     @Override
     public MappingSetInfo getMappingSetInfo(int mappingSetId) throws BridgeDBException {
         StringBuilder query = new StringBuilder("SELECT *");
@@ -1100,70 +1018,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         targetUriPatterns.clear();
     }
 
-    /**
-     * Method to split a Uri into an URISpace and an ID.
-     *
-     * Based on OPENRDF version with ":" added as and extra splitter.
-     *
-     * Ideally this would be replaced by a method from Identifiers.org based on
-     * their knoweldge or ULIs
-     *
-     * @param uri Uri to split
-     * @return The URISpace of the Uri
-     */
-    private final static String splitUriSpace(String uri) {
-        String prefix = null;
-        uri = uri.trim();
-        if (uri.contains("#")) {
-            prefix = uri.substring(0, uri.lastIndexOf("#") + 1);
-        } else if (uri.contains("=")) {
-            prefix = uri.substring(0, uri.lastIndexOf("=") + 1);
-        } else if (uri.contains("/")) {
-            prefix = uri.substring(0, uri.lastIndexOf("/") + 1);
-        } else if (uri.contains(":")) {
-            prefix = uri.substring(0, uri.lastIndexOf(":") + 1);
-        }
-        //ystem.out.println(lookupPrefix);
-        if (prefix == null) {
-            throw new IllegalArgumentException("Uri should have a '#', '/, or a ':' in it.");
-        }
-        if (prefix.isEmpty()) {
-            throw new IllegalArgumentException("Uri should not start with a '#', '/, or a ':'.");
-        }
-        return prefix;
-    }
-
     private DataSetInfo findDataSetInfo(String sysCode) throws BridgeDBException {
         DataSource ds = DataSource.getExistingBySystemCode(sysCode);
         return new DataSetInfo(sysCode, ds.getFullName());
-    }
-
-    /**
-     * Generates a set of Uri from a ResultSet.
-     *
-     * This implementation just concats the URISpace and Id
-     *
-     * Ideally this would be replaced by a method from Identifiers.org based on
-     * their knoweldge or ULI/URLs This may require the method to be exstended
-     * with the Target NameSpaces.
-     *
-     * @param rs Result Set holding the information
-     * @return Uris generated
-     * @throws BridgeDBException
-     */
-    private Set<String> resultSetToUrisSet(ResultSet rs) throws BridgeDBException {
-        HashSet<String> results = new HashSet<String>();
-        try {
-            while (rs.next()) {
-                String id = rs.getString("id");
-                String uriSpace = rs.getString(PREFIX_COLUMN_NAME);
-                String uri = uriSpace + id;
-                results.add(uri);
-            }
-            return results;
-        } catch (SQLException ex) {
-            throw new BridgeDBException("Unable to parse results.", ex);
-        }
     }
 
     /**
@@ -1243,12 +1100,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                         rs.getInt(SYMMETRIC_COLUMN_NAME),
                         rs.getInt(MAPPING_LINK_COUNT_COLUMN_NAME),
                         rs.getInt(MAPPING_SOURCE_COUNT_COLUMN_NAME),
-                        rs.getInt(MAPPING_TARGET_COUNT_COLUMN_NAME),
-                        rs.getInt(MAPPING_MEDIUM_FREQUENCY_COLUMN_NAME),
-                        rs.getInt(MAPPING_75_PERCENT_FREQUENCY_COLUMN_NAME),
-                        rs.getInt(MAPPING_90_PERCENT_FREQUENCY_COLUMN_NAME),
-                        rs.getInt(MAPPING_99_PERCENT_FREQUENCY_COLUMN_NAME),
-                        rs.getInt(MAPPING_MAX_FREQUENCY_COLUMN_NAME)));
+                        rs.getInt(MAPPING_TARGET_COUNT_COLUMN_NAME)));
             }
         } catch (SQLException ex) {
             throw new BridgeDBException("Unable to parse results.", ex);
@@ -1441,32 +1293,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
 
-    private Set<String> getPatternCodes(String column) throws BridgeDBException {
-        StringBuilder query = new StringBuilder();
-        query.append("SELECT ");
-        query.append(column);
-        query.append(" FROM ");
-        query.append(MAPPING_SET_TABLE_NAME);
-        query.append(" WHERE ");
-        query.append(column);
-        query.append(" LIKE \"%$id%\"");
-
-        Statement statement = this.createStatement();
-        Set<String> results = new HashSet<String>();
-        ResultSet rs = null;
-        try {
-            rs = statement.executeQuery(query.toString());
-            while (rs.next()) {
-                results.add(rs.getString(column));
-            }
-        } catch (SQLException ex) {
-            throw new BridgeDBException("Unable to run query. " + query, ex);
-        } finally {
-            close(statement, rs);
-        }
-        return results;
-    }
-
     public final static String scrubUri(String original) {
         if (original == null) {
             return null;
@@ -1591,7 +1417,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             while (rs.next()) {
                 int mappingSetId = rs.getInt(ID_COLUMN_NAME);
                 int mappings = countLinks(mappingSetId);
-                countFrequency(mappingSetId);
             }
             logger.debug("Updating counts finished!");
         } catch (SQLException ex) {
@@ -1681,145 +1506,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append(MAPPING_SET_ID_COLUMN_NAME);
         query.append(" = ");
         query.append(mappingSetId);
-    }
-
-    /**
-     * Updates the count variable for each Mapping Sets.
-     * <p>
-     * This allows the counts of the mappings in each Mapping Set to be quickly
-     * returned.
-     *
-     * @throws BridgeDBException
-     */
-    private void countFrequency(int mappingSetId) throws BridgeDBException {
-        float numberOfsource = 0;
-        //ystem.out.println ("Updating frequency count for " + mappingSetId + ". Please Wait!");
-        logger.debug("Updating frequency count for " + mappingSetId + ". Please Wait!");
-        Statement countStatement = this.createStatement();
-        Statement updateStatement = this.createStatement();
-        StringBuilder query = new StringBuilder("SELECT targetFrequency, COUNT(");
-        query.append(SOURCE_ID_COLUMN_NAME + ") as frequency");
-        query.append(" FROM (SELECT ");
-        query.append(SOURCE_ID_COLUMN_NAME);
-        query.append(", COUNT(DISTINCT(");
-        query.append(TARGET_ID_COLUMN_NAME);
-        query.append(")) as targetFrequency");
-        query.append(" from mapping");
-        addStatsMappingSetIdConditions(query, mappingSetId);
-        query.append(" GROUP BY ");
-        query.append(SOURCE_ID_COLUMN_NAME);
-        query.append(") AS innerQuery");
-        query.append(" GROUP BY targetFrequency ORDER BY targetFrequency");
-        ResultSet rs = null;
-        try {
-            //ystem.out.println(query);
-            rs = countStatement.executeQuery(query.toString());
-            logger.debug("Count query run. Updating link count now");
-            while (rs.next()) {
-                int frequency = rs.getInt("frequency");
-                numberOfsource += frequency;
-            }
-            //ystem.out.println("numberOfsource = " + numberOfsource);
-            rs.beforeFirst();
-            int sourceCount = 0;
-            int freqMedium = -1;
-            int freq75 = -1;
-            int freq90 = -1;
-            int freq99 = -1;
-            int targetFrequency = -1;
-            while (rs.next()) {
-                targetFrequency = rs.getInt("targetFrequency");
-                int frequency = rs.getInt("frequency");
-                //ystem.out.println("targetFrequency: " + targetFrequency + "   frequency: " + frequency);
-                sourceCount += frequency;
-                if (sourceCount >= numberOfsource * 0.50) {
-                    if (sourceCount >= numberOfsource * 0.75) {
-                        if (sourceCount >= numberOfsource * 0.90) {
-                            if (sourceCount >= numberOfsource * 0.99) {
-                                if (freq99 < 0) {
-                                    freq99 = targetFrequency;
-                                    //ystem.out.println("Set 99 = " + targetFrequency);
-                                }
-                            } else {
-                                if (freq90 < 0) {
-                                    freq90 = targetFrequency;
-                                }
-                            }
-                        } else {
-                            if (freq75 < 0) {
-                                freq75 = targetFrequency;
-                            }
-                        }
-                    } else {
-                        if (freqMedium < 0) {
-                            freqMedium = targetFrequency;
-                        }
-                    }
-                }
-            }
-            if (freq99 < 0) {
-                freq99 = targetFrequency;
-            }
-            if (freq90 < 0) {
-                freq90 = freq99;
-            }
-            if (freq75 < 0) {
-                freq75 = freq90;
-            }
-            if (freqMedium < 0) {
-                freqMedium = freq75;
-            }
-            StringBuilder update = new StringBuilder("update ");
-            update.append(MAPPING_SET_TABLE_NAME);
-            update.append(" set ");
-            update.append(MAPPING_MEDIUM_FREQUENCY_COLUMN_NAME);
-            update.append(" = ");
-            update.append(freqMedium);
-            update.append(", ");
-            update.append(MAPPING_75_PERCENT_FREQUENCY_COLUMN_NAME);
-            update.append(" = ");
-            update.append(freq75);
-            update.append(", ");
-            update.append(MAPPING_90_PERCENT_FREQUENCY_COLUMN_NAME);
-            update.append(" = ");
-            update.append(freq90);
-            update.append(", ");
-            update.append(MAPPING_99_PERCENT_FREQUENCY_COLUMN_NAME);
-            update.append(" = ");
-            update.append(freq99);
-            update.append(", ");
-            update.append(MAPPING_MAX_FREQUENCY_COLUMN_NAME);
-            update.append(" = ");
-            update.append(targetFrequency);
-            addStatsIdConditions(update, mappingSetId);
-            //ystem.out.println(update);
-            try {
-                int updateCount = updateStatement.executeUpdate(update.toString());
-                if (updateCount != 1) {
-                    throw new BridgeDBException("Updated rows " + updateCount + " <> 1 when running " + update);
-                }
-            } catch (SQLException ex) {
-                throw new BridgeDBException("Unable to run update. " + update, ex);
-            }
-            logger.debug("Updating frequency finished!");
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            throw new BridgeDBException("Unable to run query. " + query, ex);
-        } finally {
-            close(updateStatement, null);
-            close(countStatement, rs);
-        }
-    }
-
-    private Set<RegexUriPattern> mergeGraphAndTargets(String graph, RegexUriPattern[] tgtUriPatterns) throws BridgeDBException {
-        if (tgtUriPatterns == null || tgtUriPatterns.length == 0) {
-            return GraphResolver.getUriPatternsForGraph(graph);
-        }
-        if (graph == null || graph.trim().isEmpty()) {
-            HashSet<RegexUriPattern> results = new HashSet<RegexUriPattern>(Arrays.asList(tgtUriPatterns));
-            return results;
-        }
-        throw new BridgeDBException("Illegal call with both graph and tgtUriPatterns parameters");
     }
 
     public final Set<RegexUriPattern> findRegexPatternsWithNulls(String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {

@@ -19,9 +19,6 @@
 //
 package org.bridgedb.statistics;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Holder class for the main Meta Data of MappingSet.
  *
@@ -41,16 +38,10 @@ public class MappingSetInfo {
     private Integer numberOfLinks;
     private final Integer numberOfSources;
     private final Integer numberOfTargets;
-    private final Integer frequencyMedium;
-    private final Integer frequency75;
-    private final Integer frequency90;
-    private final Integer frequency99;
-    private final Integer frequencyMax;
 
     public MappingSetInfo(int id, DataSetInfo source, String predicate, DataSetInfo target, String justification,
             String mappingResource, String mappingSource, int symmetric, 
-            Integer numberOfLinks, Integer numberOfSources, Integer numberOfTargets, Integer frequencyMedium,
-            Integer frequency75, Integer frequency90, Integer frequency99, Integer frequencyMax){
+            Integer numberOfLinks, Integer numberOfSources, Integer numberOfTargets){
         intId = id;
         stringId = null;
         this.predicate = predicate;
@@ -63,11 +54,6 @@ public class MappingSetInfo {
         this.numberOfLinks = numberOfLinks;
         this.numberOfSources = numberOfSources;
         this.numberOfTargets = numberOfTargets;
-        this.frequencyMedium = frequencyMedium;
-        this.frequency75 = frequency75;
-        this.frequency90 = frequency90;
-        this.frequency99 = frequency99;
-        this.frequencyMax = frequencyMax;
     }
     
     /**
@@ -237,39 +223,4 @@ public class MappingSetInfo {
         return numberOfTargets;
     }
 
-    /**
-     * @return the frequencyMedium
-     */
-    public Integer getFrequencyMedium() {
-        return frequencyMedium;
-    }
-
-    /**
-     * @return the frequency75
-     */
-    public Integer getFrequency75() {
-        return frequency75;
-    }
-
-    /**
-     * @return the frequency90
-     */
-    public Integer getFrequency90() {
-        return frequency90;
-    }
-
-    /**
-     * @return the frequency99
-     */
-    public Integer getFrequency99() {
-        return frequency99;
-    }
-
-    /**
-     * @return the frequencyMax
-     */
-    public Integer getFrequencyMax() {
-        return frequencyMax;
-    }
-
-  }
+}
