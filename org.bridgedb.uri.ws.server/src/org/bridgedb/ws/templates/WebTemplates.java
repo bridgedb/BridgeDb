@@ -11,6 +11,7 @@ import org.apache.velocity.runtime.RuntimeConstants;
 public class WebTemplates 
 {
 
+    public static final String API_SCRIPT = "api.vm";
     public static final String BRIDGEDB_HOME = "bridgeDBHome.vm";
     public static final String FRAME = "frame.vm";
     public static final String GRAPH_INFO_SCRIPT = "uriSpacesPerGraph.vm";
