@@ -64,7 +64,6 @@ import org.bridgedb.uri.tools.GraphResolver;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;
-import org.bridgedb.utils.ConfigReader;
 import org.openrdf.model.Resource;
 
 /**
@@ -281,32 +280,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return uri.startsWith(pattern);
     }
 
-    private StringBuilder startMappingQueryX() {
-        StringBuilder query = new StringBuilder("SELECT ");
-        query.append(TARGET_ID_COLUMN_NAME);
-        query.append(", ");
-        query.append(TARGET_DATASOURCE_COLUMN_NAME);
-        return query;
-    }
-
-    private StringBuilder startMappingsBySetQueryX() {
-        StringBuilder query = new StringBuilder("SELECT ");
-        query.append(TARGET_ID_COLUMN_NAME);
-        query.append(", ");
-        query.append(TARGET_DATASOURCE_COLUMN_NAME);
-        query.append(", ");
-        query.append(MAPPING_SET_ID_COLUMN_NAME);
-        query.append(", ");
-        query.append(PREDICATE_COLUMN_NAME);
-        query.append(", ");
-        query.append(JUSTIFICATION_COLUMN_NAME);
-        query.append(", ");
-        query.append(MAPPING_SOURCE_COLUMN_NAME);
-        query.append(", ");
-        query.append(MAPPING_RESOURCE_COLUMN_NAME);
-        return query;
-    }
-
     private void appendMappingInfo(StringBuilder query) {
         query.append(", ");
         query.append(MAPPING_SET_ID_COLUMN_NAME);
@@ -321,42 +294,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append(SOURCE_DATASOURCE_COLUMN_NAME);
     }
 
-    private void appendMappingFromAndWhere(StringBuilder query, IdSysCodePair ref, String lensUri, String tgtSysCode)
-            throws BridgeDBException {
-        appendMappingFromJoinMapping(query);
-        appendSourceIdSysCodePair(query, ref);
-        if (tgtSysCode != null) {
-            query.append(" AND ");
-            query.append(TARGET_DATASOURCE_COLUMN_NAME);
-            query.append(" = '");
-            query.append(tgtSysCode);
-            query.append("' ");
-        }
-        appendLensClause(query, lensUri, true);
-    }
-
-    private void appendMappingFromJoinMapping(StringBuilder query) {
-        appendMappingFrom(query);
-        appendMappingJoinMapping(query);
-    }
-
-    private void appendMappingFrom(StringBuilder query) {
+   private void appendMappingFrom(StringBuilder query) {
         query.append(" FROM ");
         query.append(MAPPING_TABLE_NAME);
         query.append(", ");
         query.append(MAPPING_SET_TABLE_NAME);
     }
 
-    /*public static void appendMappingInfoFromAndWhere(StringBuilder query){
-     query.append(" FROM ");
-     query.append(MAPPING_SET_TABLE_NAME);
-     query.append(", ");
-     query.append(MAPPING_STATS_TABLE_NAME);
-     query.append(" WHERE ");
-     query.append(ID_COLUMN_NAME);
-     query.append(" = ");
-     query.append(MAPPING_SET_ID_COLUMN_NAME);
-     }*/
     /**
      * Adds the WHERE clause conditions for ensuring that the returned mappings
      * are from active linksets.
@@ -671,23 +615,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
 
-    /*private int getMappingsCount() throws BridgeDBException{
-     String linkQuery = "SELECT count(*) as numberOfMappings "
-     + "FROM " + MAPPING_TABLE_NAME;
-     Statement statement = this.createStatement();
-     try {
-     ResultSet rs = statement.executeQuery(linkQuery);
-     if (rs.next()){
-     return rs.getInt("numberOfMappings");
-     } else {
-     ystem.err.println(linkQuery);
-     throw new BridgeDBException("No Results for query. " + linkQuery);
-     }
-     } catch (SQLException ex) {
-     ex.printStackTrace();
-     throw new BridgeDBException("Unable to run query. " + linkQuery, ex);
-     }      
-     }*/
     @Override
     public MappingSetInfo getMappingSetInfo(int mappingSetId) throws BridgeDBException {
         StringBuilder query = new StringBuilder("SELECT *");
@@ -1091,70 +1018,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         targetUriPatterns.clear();
     }
 
-    /**
-     * Method to split a Uri into an URISpace and an ID.
-     *
-     * Based on OPENRDF version with ":" added as and extra splitter.
-     *
-     * Ideally this would be replaced by a method from Identifiers.org based on
-     * their knoweldge or ULIs
-     *
-     * @param uri Uri to split
-     * @return The URISpace of the Uri
-     */
-    private final static String splitUriSpace(String uri) {
-        String prefix = null;
-        uri = uri.trim();
-        if (uri.contains("#")) {
-            prefix = uri.substring(0, uri.lastIndexOf("#") + 1);
-        } else if (uri.contains("=")) {
-            prefix = uri.substring(0, uri.lastIndexOf("=") + 1);
-        } else if (uri.contains("/")) {
-            prefix = uri.substring(0, uri.lastIndexOf("/") + 1);
-        } else if (uri.contains(":")) {
-            prefix = uri.substring(0, uri.lastIndexOf(":") + 1);
-        }
-        //ystem.out.println(lookupPrefix);
-        if (prefix == null) {
-            throw new IllegalArgumentException("Uri should have a '#', '/, or a ':' in it.");
-        }
-        if (prefix.isEmpty()) {
-            throw new IllegalArgumentException("Uri should not start with a '#', '/, or a ':'.");
-        }
-        return prefix;
-    }
-
     private DataSetInfo findDataSetInfo(String sysCode) throws BridgeDBException {
         DataSource ds = DataSource.getExistingBySystemCode(sysCode);
         return new DataSetInfo(sysCode, ds.getFullName());
-    }
-
-    /**
-     * Generates a set of Uri from a ResultSet.
-     *
-     * This implementation just concats the URISpace and Id
-     *
-     * Ideally this would be replaced by a method from Identifiers.org based on
-     * their knoweldge or ULI/URLs This may require the method to be exstended
-     * with the Target NameSpaces.
-     *
-     * @param rs Result Set holding the information
-     * @return Uris generated
-     * @throws BridgeDBException
-     */
-    private Set<String> resultSetToUrisSet(ResultSet rs) throws BridgeDBException {
-        HashSet<String> results = new HashSet<String>();
-        try {
-            while (rs.next()) {
-                String id = rs.getString("id");
-                String uriSpace = rs.getString(PREFIX_COLUMN_NAME);
-                String uri = uriSpace + id;
-                results.add(uri);
-            }
-            return results;
-        } catch (SQLException ex) {
-            throw new BridgeDBException("Unable to parse results.", ex);
-        }
     }
 
     /**
@@ -1427,32 +1293,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
 
-    private Set<String> getPatternCodes(String column) throws BridgeDBException {
-        StringBuilder query = new StringBuilder();
-        query.append("SELECT ");
-        query.append(column);
-        query.append(" FROM ");
-        query.append(MAPPING_SET_TABLE_NAME);
-        query.append(" WHERE ");
-        query.append(column);
-        query.append(" LIKE \"%$id%\"");
-
-        Statement statement = this.createStatement();
-        Set<String> results = new HashSet<String>();
-        ResultSet rs = null;
-        try {
-            rs = statement.executeQuery(query.toString());
-            while (rs.next()) {
-                results.add(rs.getString(column));
-            }
-        } catch (SQLException ex) {
-            throw new BridgeDBException("Unable to run query. " + query, ex);
-        } finally {
-            close(statement, rs);
-        }
-        return results;
-    }
-
     public final static String scrubUri(String original) {
         if (original == null) {
             return null;
@@ -1666,17 +1506,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append(MAPPING_SET_ID_COLUMN_NAME);
         query.append(" = ");
         query.append(mappingSetId);
-    }
-
-    private Set<RegexUriPattern> mergeGraphAndTargets(String graph, RegexUriPattern[] tgtUriPatterns) throws BridgeDBException {
-        if (tgtUriPatterns == null || tgtUriPatterns.length == 0) {
-            return GraphResolver.getUriPatternsForGraph(graph);
-        }
-        if (graph == null || graph.trim().isEmpty()) {
-            HashSet<RegexUriPattern> results = new HashSet<RegexUriPattern>(Arrays.asList(tgtUriPatterns));
-            return results;
-        }
-        throw new BridgeDBException("Illegal call with both graph and tgtUriPatterns parameters");
     }
 
     public final Set<RegexUriPattern> findRegexPatternsWithNulls(String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
