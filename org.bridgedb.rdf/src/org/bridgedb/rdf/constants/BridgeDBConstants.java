@@ -107,6 +107,10 @@ public class BridgeDBConstants {
     public static final URI VIA_URI = new URIImpl(PREFIX + "isTransativeVia");
     public static final URI IS_SYMETRIC = new URIImpl(PREFIX + "isSymetric");
     public static final URI LINKSET_JUSTIFICATION = new URIImpl(PREFIX + "linksetJustification");
+    public static final URI SUBJECTS_DATATYPE = new URIImpl(PREFIX + "subjectsDatatype");
+    public static final URI OBJECTS_DATATYPE = new URIImpl(PREFIX + "objectsDatatype");
+    public static final URI SUBJECTS_SPECIES = new URIImpl(PREFIX + "subjectsSpecies");
+    public static final URI OBJECTS_SPECIES  = new URIImpl(PREFIX + "objectsSpecies");
     
     public static final URI LENS_URI = new URIImpl(PREFIX + "lens");
     public static final String TRANSITIVE = PREFIX + "Transitive";

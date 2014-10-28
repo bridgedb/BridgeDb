@@ -17,6 +17,8 @@ public class DCatConstants {
     
     public static final String ACCESS_URL = "accessURL";
     public static final URI ACCESS_URL_URI = new URIImpl(voidns + ACCESS_URL);
+    public static final String BYTE_SIZE = "byteSize ";
+    public static final URI BYTE_SIZE_URI = new URIImpl(voidns + BYTE_SIZE);
     public static final String DESCRIPTION = "description";
     public static final URI DESCRIPTION_URI = new URIImpl(voidns + DESCRIPTION);
     public static final String DISTRIBUTION = "distribution";
