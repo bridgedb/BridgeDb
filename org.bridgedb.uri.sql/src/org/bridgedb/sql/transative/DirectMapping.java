@@ -33,9 +33,9 @@ public class DirectMapping extends IDSysCodePairMapping {
     private final String id;
     private final int originalId;
 
-    public DirectMapping (IdSysCodePair source, IdSysCodePair target, int id, int symmetric, String predicate, String justification, 
-            String mappingSource, String mappingResource, String lens){
-        super(source, target, predicate, justification, id, mappingSource, mappingResource, lens);
+    public DirectMapping (IdSysCodePair source, IdSysCodePair target, int id, int symmetric, String predicate, 
+            String justification, String mappingSource, String lens){
+        super(source, target, predicate, justification, id, mappingSource, lens);
         this.id = "" + id;
         if (symmetric < 0){
             this.originalId = 0 - symmetric;

@@ -44,13 +44,13 @@ public interface UriListener {
      * @param forwardJustification The URI that states why the link holds in the forward direction. Can not be null
      * @param backwardJustification The URI that states why the link holds in the reverse direction. Can not be null
      * @param targetUriPattern A registered UriPattern used by the source UriS
-     * @param mappingResource The RDF Resource/Context/Graph of the data
      * @param mappingSource The File or URI the data was read from
      * @return Id of the forward mappingSet.
      * @throws BridgeDBException Thrown if either UriSpace has not previously been registered using registerUriSpace
      */
     public int registerMappingSet(RegexUriPattern sourceUriPattern, String predicate, String forwardJustification, 
-           String backwardJustification, RegexUriPattern targetUriPattern, Resource mappingResource, Resource mappingSource) throws  BridgeDBException;
+            String backwardJustification, RegexUriPattern targetUriPattern, Resource mappingSource) 
+            throws  BridgeDBException;
 
     /**
      * Registers a mapping set using UriSpaces rather than DataSoucres.
@@ -63,14 +63,13 @@ public interface UriListener {
      * @param justification The URI that states why the link holds in the forward direction, and if applicable backwards as well.
      * @param backwardJustification The URI that states why the link holds in the reverse direction. Can not be null
      * @param targetUriPattern A registered UriPattern used by the source UriS
-     * @param mappingResource The RDF Resource/Context/Graph of the data
      * @param mappingSource The File or URI the data was read from
      * @param symetric Determines if mappingSet should be loaded in both directions
      * @return Id of the forward mappingSet.
      * @throws BridgeDBException Thrown if either UriSpace has not previously been registered using registerUriSpace
      */
     public int registerMappingSet(RegexUriPattern sourceUriPattern, String predicate, String justification,
-            RegexUriPattern targetUriPattern, Resource mappingResource, Resource mappingSource, boolean symetric) throws BridgeDBException;
+            RegexUriPattern targetUriPattern, Resource mappingSource, boolean symetric) throws BridgeDBException;
 
     public RegexUriPattern toUriPattern(String uri) throws BridgeDBException;
             

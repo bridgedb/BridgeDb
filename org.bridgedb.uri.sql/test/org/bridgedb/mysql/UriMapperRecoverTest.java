@@ -63,7 +63,7 @@ public class UriMapperRecoverTest extends UriListenerTest {
         assertEquals(4, stats.getNumberOfMappingSets());
         Resource resource = new URIImpl("http://example.com/1to2Another");
         int mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
-        		Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern2, resource, resource);
+        		Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern2, resource);
         assertEquals(5, mappingSet);
         stats = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         assertEquals(12, stats.getNumberOfMappings());

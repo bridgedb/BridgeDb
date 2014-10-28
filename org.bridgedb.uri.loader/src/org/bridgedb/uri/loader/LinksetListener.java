@@ -41,23 +41,23 @@ public class LinksetListener {
     
     public int parse(File file, URI linkPredicate, String justification, boolean symetric) throws BridgeDBException{
         URI mappingUri = RdfParser.fileToURL(file);
-        LinksetHandler handler = new LinksetHandler(uriListener, linkPredicate, justification, mappingUri, mappingUri, symetric); 
+        LinksetHandler handler = new LinksetHandler(uriListener, linkPredicate, justification, mappingUri, symetric); 
         RdfParser parser = getParser(handler);
         parser.parse(mappingUri.stringValue(), file);
         return handler.getMappingsetId();
     }
     
-    public int parse(File file, Resource mappingResource, Resource mappingSource, URI linkPredicate, String justification, 
+    public int parse(File file, URI mappingSource, URI linkPredicate, String justification, 
             Boolean symetric) throws BridgeDBException{
-        LinksetHandler handler = new LinksetHandler(uriListener, linkPredicate, justification, mappingResource, 
-                mappingSource, symetric);
+        LinksetHandler handler = new LinksetHandler(uriListener, linkPredicate, justification, mappingSource, symetric);
         RdfParser parser = getParser(handler);
         parser.parse(mappingSource.stringValue(), file);
         return handler.getMappingsetId();
     }
     
-    public int parse(String uri, Resource mappingResource, Resource  mappingSource, URI linkPredicate, String justification, boolean symetric) throws BridgeDBException{
-        LinksetHandler handler = new LinksetHandler(uriListener, linkPredicate, justification, mappingResource, mappingSource, symetric);
+    public int parse(String uri, URI  mappingSource, URI linkPredicate, String justification, boolean symetric) 
+            throws BridgeDBException{
+        LinksetHandler handler = new LinksetHandler(uriListener, linkPredicate, justification, mappingSource, symetric);
         RdfParser parser = getParser(handler);
         parser.parse(uri);
         return handler.getMappingsetId();

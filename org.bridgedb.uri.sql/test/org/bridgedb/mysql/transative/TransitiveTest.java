@@ -38,7 +38,7 @@ import org.bridgedb.utils.Reporter;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openrdf.model.Resource;
+import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
 
 /**
@@ -158,109 +158,109 @@ public class TransitiveTest {
     
     public static void loadData() throws BridgeDBException{
         
-        Resource resource = new URIImpl("http://example.com/TransitiveTest/AtoB");
+        URI source = new URIImpl("http://example.com/TransitiveTest/AtoB");
         mappingSetAB = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternB, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternB, source);
         
-        resource = new URIImpl("http://example.com/TransitiveTest/AtoB2");
+        source = new URIImpl("http://example.com/TransitiveTest/AtoB2");
         mappingSetAB2 = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE2, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternB, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternB, source);
         
-        resource = new URIImpl("http://example.com/TransitiveTest/AtoC");
+        source = new URIImpl("http://example.com/TransitiveTest/AtoC");
         mappingSetAC = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternC, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternC, source);
         
-        resource = new URIImpl("http://example.com/TransitiveTest/AtoD");
+        source = new URIImpl("http://example.com/TransitiveTest/AtoD");
         mappingSetAD = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternD, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternD, source);
 
-        resource = new URIImpl("http://example.com/TransitiveTest/AtoE");
+        source = new URIImpl("http://example.com/TransitiveTest/AtoE");
         mappingSetAE = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternE, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternE, source);
         
-        resource = new URIImpl("http://example.com/TransitiveTest/AtoF");
+        source = new URIImpl("http://example.com/TransitiveTest/AtoF");
         mappingSetAF = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, source);
 
-        resource = new URIImpl("http://example.com/TransitiveTest/BtoC");
+        source = new URIImpl("http://example.com/TransitiveTest/BtoC");
         mappingSetBC = sqlUriMapper.registerMappingSet(regexUriPatternB, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternC, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternC, source);
         
-        resource = new URIImpl("http://example.com/TransitiveTest/BtoC2");
+        source = new URIImpl("http://example.com/TransitiveTest/BtoC2");
         mappingSetBC2 = sqlUriMapper.registerMappingSet(regexUriPatternB, TEST_PREDICATE2, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternC, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternC, source);
 
-        resource = new URIImpl("http://example.com/TransitiveTest/BtoC9");
+        source = new URIImpl("http://example.com/TransitiveTest/BtoC9");
         mappingSetBC9 = sqlUriMapper.registerMappingSet(regexUriPatternB, TEST_PREDICATE, 
-                TEST_JUSTIFICATION9, TEST_JUSTIFICATION9, regexUriPatternC, resource, resource);
+                TEST_JUSTIFICATION9, TEST_JUSTIFICATION9, regexUriPatternC, source);
 
-        resource = new URIImpl("http://example.com/TransitiveTest/BtoD");
+        source = new URIImpl("http://example.com/TransitiveTest/BtoD");
         mappingSetBD = sqlUriMapper.registerMappingSet(regexUriPatternB, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternD, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternD, source);
 
-        resource = new URIImpl("http://example.com/TransitiveTest/BtoE");
+        source = new URIImpl("http://example.com/TransitiveTest/BtoE");
         mappingSetBE = sqlUriMapper.registerMappingSet(regexUriPatternB, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternE, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternE, source);
         
-        resource = new URIImpl("http://example.com/TransitiveTest/BtoF");
+        source = new URIImpl("http://example.com/TransitiveTest/BtoF");
         mappingSetBF = sqlUriMapper.registerMappingSet(regexUriPatternB, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, source);
 
-        resource = new URIImpl("http://example.com/TransitiveTest/CtoD");
+        source = new URIImpl("http://example.com/TransitiveTest/CtoD");
         mappingSetCD = sqlUriMapper.registerMappingSet(regexUriPatternC, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternD, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternD, source);
 
-        resource = new URIImpl("http://example.com/TransitiveTest/CtoD2");
+        source = new URIImpl("http://example.com/TransitiveTest/CtoD2");
         mappingSetCD2 = sqlUriMapper.registerMappingSet(regexUriPatternC, TEST_PREDICATE2, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternD, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternD, source);
 
-        resource = new URIImpl("http://example.com/TransitiveTest/CtoD9");
+        source = new URIImpl("http://example.com/TransitiveTest/CtoD9");
         mappingSetCD9 = sqlUriMapper.registerMappingSet(regexUriPatternC, TEST_PREDICATE, 
-                TEST_JUSTIFICATION9, TEST_JUSTIFICATION9, regexUriPatternD, resource, resource);
+                TEST_JUSTIFICATION9, TEST_JUSTIFICATION9, regexUriPatternD, source);
 
-        resource = new URIImpl("http://example.com/TransitiveTest/CtoE");
+        source = new URIImpl("http://example.com/TransitiveTest/CtoE");
         mappingSetCE = sqlUriMapper.registerMappingSet(regexUriPatternC, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternE, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternE, source);
 
-        resource = new URIImpl("http://example.com/TransitiveTest/CtoF");
+        source = new URIImpl("http://example.com/TransitiveTest/CtoF");
         mappingSetCF = sqlUriMapper.registerMappingSet(regexUriPatternC, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, source);
 
-        resource = new URIImpl("http://example.com/TransitiveTest/DtoE");
+        source = new URIImpl("http://example.com/TransitiveTest/DtoE");
         mappingSetDE = sqlUriMapper.registerMappingSet(regexUriPatternD, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternE, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternE, source);
 
-        resource = new URIImpl("http://example.com/TransitiveTest/DtoF");
+        source = new URIImpl("http://example.com/TransitiveTest/DtoF");
         mappingSetDF = sqlUriMapper.registerMappingSet(regexUriPatternD, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, source);
 
-        resource = new URIImpl("http://example.com/TransitiveTest/EtoE");
+        source = new URIImpl("http://example.com/TransitiveTest/EtoE");
         mappingSetEE = sqlUriMapper.registerMappingSet(regexUriPatternE, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternE, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternE, source);
 
-        resource = new URIImpl("http://example.com/TransitiveTest/EtoF");
+        source = new URIImpl("http://example.com/TransitiveTest/EtoF");
         mappingSetEF = sqlUriMapper.registerMappingSet(regexUriPatternE, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, source);
 
-        resource = new URIImpl("http://example.com/TransitiveTest/FtoF");
+        source = new URIImpl("http://example.com/TransitiveTest/FtoF");
         mappingSetFF = sqlUriMapper.registerMappingSet(regexUriPatternF, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, source);
 
-        resource = new URIImpl("http://example.com/TransitiveTest/AtoX");
+        source = new URIImpl("http://example.com/TransitiveTest/AtoX");
         mappingSetAX = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternX, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternX, source);
         
-        resource = new URIImpl("http://example.com/TransitiveTest/CtoX");
+        source = new URIImpl("http://example.com/TransitiveTest/CtoX");
         mappingSetCX = sqlUriMapper.registerMappingSet(regexUriPatternC, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternX, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternX, source);
         
-        resource = new URIImpl("http://example.com/TransitiveTest/AtoY");
+        source = new URIImpl("http://example.com/TransitiveTest/AtoY");
         mappingSetAY = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternY, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternY, source);
         
-        resource = new URIImpl("http://example.com/TransitiveTest/CtoY");
+        source = new URIImpl("http://example.com/TransitiveTest/CtoY");
         mappingSetCY = sqlUriMapper.registerMappingSet(regexUriPatternC, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternY, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternY, source);
 
         //A1 -> B1 -> C1 -> D1
         sqlUriMapper.insertUriMapping(prefixA+"1", prefixB+"1", mappingSetAB, SYMETRIC);

@@ -19,7 +19,6 @@
 //
 package org.bridgedb.sql.transative;
 
-import org.bridgedb.sql.transative.DirectMapping;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -28,7 +27,6 @@ import org.bridgedb.Xref;
 import org.bridgedb.pairs.CodeMapper;
 import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
-import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
@@ -42,10 +40,10 @@ public class TransitiveMapping extends IDSysCodePairMapping {
     private final Set<String> sysCodesToCheck;
     private boolean includesMappingToSelf = false;
 
-    public TransitiveMapping (IDSysCodePairMapping previous, DirectMapping newMapping, String predicate, String justification) throws BridgeDBException{
-        super(previous.getSourcePair(), newMapping.getTargetPair(), 
-                predicate, justification, mergeIds(previous, newMapping), 
-                BridgeDBConstants.TRANSITIVE, BridgeDBConstants.TRANSITIVE, newMapping.getLens());
+    public TransitiveMapping (IDSysCodePairMapping previous, DirectMapping newMapping, String predicate, 
+            String justification) throws BridgeDBException{
+        super(previous.getSourcePair(), newMapping.getTargetPair(), predicate, justification, 
+                mergeIds(previous, newMapping), BridgeDBConstants.TRANSITIVE, newMapping.getLens());
         //Never expected but just in case
         if (!previous.getTargetPair().equals(newMapping.getSourcePair())){
             throw new BridgeDBException ("Unexpected broken mapping chain");

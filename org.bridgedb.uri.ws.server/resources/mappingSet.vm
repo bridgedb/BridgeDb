@@ -13,8 +13,6 @@
         <dd><a href="$mappingSetInfo.getPredicate()">$mappingSetInfo.predicateLocalName()</a></dd>
     <dt>Justification</dt>
         <dd><a href="$mappingSetInfo.getJustification()">$mappingSetInfo.justificationLocalName()</a></dd>
-    <dt>Mapping Resource</dt>
-        <dd><a href="$mappingSetInfo.getMappingResource()">$mappingSetInfo.resourceLocalName()</a></dd>
     <dt>Mapping Source</dt>
         <dd><a href="$mappingSetInfo.getMappingSource()">$mappingSetInfo.sourceLocalName()</a></dd>
     <dt>Number of Distinct Source URIs</dt>

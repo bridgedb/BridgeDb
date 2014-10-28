@@ -40,7 +40,7 @@ public class UriResultsAsRDF {
     
     private static Set<Statement> asRDF(SetMappings setMappings, String lens, String lensBaseUri) throws BridgeDBException {
         HashSet<Statement> statements = new HashSet<Statement>();
-        URI setUri = new URIImpl(setMappings.getMappingResource());
+        URI setUri = new URIImpl(setMappings.getMappingSource());
         URI predicateURI = toURI(setMappings.getPredicate());
         Statement statement = new StatementImpl(setUri, VoidConstants.LINK_PREDICATE, predicateURI);
         statements.add(statement);

@@ -45,32 +45,29 @@ public class LinksetHandler extends RDFHandlerBase{
     protected final URI linkPredicate;
     private final String justification;
     private final String backwardJustification;
-    private final Resource mappingResource;
-    private final Resource mappingSource;
+    private final URI mappingSource;
     private boolean symetric;
     private final UriListener uriListener;
 
     private int mappingSet;
     private int noneLinkStatements;
     
-    public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, Resource mappingResource, 
-            Resource mappingSource, boolean symetric){
+    public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification,  
+            URI mappingSource, boolean symetric){
         this.uriListener = uriListener;
         this.linkPredicate = linkPredicate;
         this.justification = justification;
         this.backwardJustification = null;
-        this.mappingResource = mappingResource;
         this.mappingSource = mappingSource;
         this.symetric = symetric;
     }
     
     public LinksetHandler(UriListener uriListener, URI linkPredicate, String forwardJustification, String backwardJustification, 
-            Resource mappingResource, Resource mappingSource){
+            URI mappingSource){
         this.uriListener = uriListener;
         this.linkPredicate = linkPredicate;
         this.justification = forwardJustification;
         this.backwardJustification = backwardJustification;
-        this.mappingResource = mappingResource;
         this.mappingSource = mappingSource;
         this.symetric = true;
     }
@@ -122,11 +119,11 @@ public class LinksetHandler extends RDFHandlerBase{
                     throw new RDFHandlerException("Unable to get a pattern for " + object.stringValue());
                 }
                 if (backwardJustification == null){
-                    mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), justification, targetPattern, 
-                        mappingResource, mappingSource, symetric);
+                    mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), 
+                            justification, targetPattern, mappingSource, symetric);
                 } else {
-                    mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), justification, backwardJustification, 
-                        targetPattern, mappingResource, mappingSource);
+                    mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), 
+                            justification, backwardJustification, targetPattern, mappingSource);
                 }
 //                if (symetric == null){
 //                    //If symetric is undefined assume map to self is not symetric

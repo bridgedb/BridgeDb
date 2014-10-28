@@ -19,7 +19,6 @@
 //
 package org.bridgedb.uri;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 import org.bridgedb.DataSourcePatterns;
@@ -28,14 +27,13 @@ import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.UriPatternType;
 import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.uri.lens.Lens;
-import org.bridgedb.uri.lens.LensTools;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.IDMapperTestBase;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
-import org.openrdf.model.Resource;
+import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
 
 /**
@@ -206,16 +204,16 @@ public abstract class UriListenerTest extends IDMapperTestBase{
      */
     public static void loadDataPart1() throws BridgeDBException{
 
-        Resource resource = new URIImpl("http://example.com/1to2");
+        URI source = new URIImpl("http://example.com/1to2");
         int mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
-                Lens.getDefaultJustifictaionString(), Lens.getDefaultJustifictaionString(), regexUriPattern2, resource, resource);
+                Lens.getDefaultJustifictaionString(), Lens.getDefaultJustifictaionString(), regexUriPattern2, source);
         listener.insertUriMapping(map1Uri1, map1Uri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2Uri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3Uri2, mappingSet, SYMETRIC);
         
-        resource = new URIImpl("http://example.com/2to3");
+        source = new URIImpl("http://example.com/2to3");
         mappingSet = listener.registerMappingSet(regexUriPattern2, TEST_PREDICATE, 
-                Lens.getDefaultJustifictaionString(), Lens.getDefaultJustifictaionString(), regexUriPattern3, resource, resource);
+                Lens.getDefaultJustifictaionString(), Lens.getDefaultJustifictaionString(), regexUriPattern3, source);
         assertEquals(mappingSet2_3, mappingSet);
         listener.insertUriMapping(map1Uri2, map1Uri3, mappingSet2_3, SYMETRIC);
         listener.insertUriMapping(map2Uri2, map2Uri3, mappingSet2_3, SYMETRIC);
@@ -224,23 +222,23 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         //Close here to test recover
         listener.closeInput();
         
-        resource = new URIImpl("http://example.com/3to3Lensed");
+        source = new URIImpl("http://example.com/3to3Lensed");
         mappingSet = listener.registerMappingSet(regexUriPattern3, TEST_PREDICATE, 
-        		Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern3, resource, resource);
+        		Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern3, source);
         listener.insertUriMapping(map1Uri3, map1AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri3, map2AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri3, map3AUri3, mappingSet, SYMETRIC);
 
-        resource = new URIImpl("http://example.com/1to2lensed");
+        source = new URIImpl("http://example.com/1to2lensed");
         mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern2, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern2, source);
         listener.insertUriMapping(map1AUri1, map1AUri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2AUri1, map2AUri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3AUri1, map3AUri2, mappingSet, SYMETRIC);
         
-        resource = new URIImpl("http://example.com/2to3");
+        source = new URIImpl("http://example.com/2to3");
         mappingSet = listener.registerMappingSet(regexUriPattern2, TEST_PREDICATE, 
-                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern3, resource, resource);
+                Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern3, source);
         listener.insertUriMapping(map1AUri2, map1AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2AUri2, map2AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3AUri2, map3AUri3, mappingSet, SYMETRIC);
@@ -260,9 +258,9 @@ public abstract class UriListenerTest extends IDMapperTestBase{
      * @throws BridgeDBException
      */
     public static void loadData2Way() throws BridgeDBException{
-        Resource resource = new URIImpl("http://example.com/2to3Lensed");
+        URI source = new URIImpl("http://example.com/2to3Lensed");
         int mappingSet = listener.registerMappingSet(regexUriPattern2, TEST_PREDICATE, 
-        		Lens.getTestJustifictaion() +"Forward", Lens.getTestJustifictaion() +"BackWard", regexUriPattern3, resource, resource);
+        		Lens.getTestJustifictaion() +"Forward", Lens.getTestJustifictaion() +"BackWard", regexUriPattern3, source);
         listener.insertUriMapping(map1Uri2, map1AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri2, map2AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri2, map3AUri3, mappingSet, SYMETRIC);

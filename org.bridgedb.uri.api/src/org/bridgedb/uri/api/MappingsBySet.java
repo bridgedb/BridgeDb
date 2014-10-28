@@ -65,7 +65,7 @@ public class MappingsBySet {
     private void addSetMapping(Mapping mapping) {   
         String mappingId = toString(mapping.getMappingSetId());
         SetMappings setMapping = new SetMappings(mappingId, mapping.getPredicate(), 
-                mapping.getJustification(), mapping.getMappingSource(), mapping.getMappingResource());
+                mapping.getJustification(), mapping.getMappingSource());
         for (String source:mapping.getSourceUri()){
             for (String target: mapping.getTargetUri()){
                 setMapping.addMapping(new UriMapping(source, target));

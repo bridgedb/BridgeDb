@@ -33,17 +33,14 @@ import org.bridgedb.utils.BridgeDBException;
 public abstract class IDSysCodePairMapping extends Mapping{
 
     public IDSysCodePairMapping(IdSysCodePair idSysCodePairSource, IdSysCodePair idSysCodePairTarget, 
-            String predicate, String justification, int mappingSetId, 
-            String mappingSource, String mappingResource, String lens){
-        super(idSysCodePairSource, idSysCodePairTarget, predicate, justification, mappingSetId, 
-                mappingSource, mappingResource, lens);
+            String predicate, String justification, int mappingSetId, String mappingSource, String lens){
+        super(idSysCodePairSource, idSysCodePairTarget, predicate, justification, mappingSetId, mappingSource, lens);
     }
     
     public IDSysCodePairMapping(IdSysCodePair idSysCodePairSource, IdSysCodePair idSysCodePairTarget, 
             String predicate, String justification, List<String> mappingSetIds, 
-            String mappingSource, String mappingResource, String lens){
-        super(idSysCodePairSource, idSysCodePairTarget, predicate, justification, mappingSetIds, 
-                mappingSource, mappingResource, lens);
+            String mappingSource, String lens){
+        super(idSysCodePairSource, idSysCodePairTarget, predicate, justification, mappingSetIds, mappingSource, lens);
     }
 
     public IDSysCodePairMapping(IdSysCodePair pair){

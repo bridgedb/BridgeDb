@@ -24,7 +24,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -94,7 +93,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private static final String PREFIX_COLUMN_NAME = "prefix";
     private static final String POSTFIX_COLUMN_NAME = "postfix";
     static final String MAPPING_LINK_COUNT_COLUMN_NAME = "mappingLinkCount";
-    static final String MAPPING_RESOURCE_COLUMN_NAME = "resource";
     static final String MAPPING_SOURCE_COLUMN_NAME = "source";
     static final String MAPPING_SOURCE_COUNT_COLUMN_NAME = "mappingSourceCount";
     static final String SYMMETRIC_COLUMN_NAME = "symmetric";
@@ -206,7 +204,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                     + PREDICATE_COLUMN_NAME + " VARCHAR(" + PREDICATE_LENGTH + "), "
                     + JUSTIFICATION_COLUMN_NAME + " VARCHAR(" + JUSTIFICATION_LENGTH + "), "
                     + TARGET_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + "), "
-                    + MAPPING_RESOURCE_COLUMN_NAME + " VARCHAR(" + MAPPING_URI_LENGTH + "), "
                     + MAPPING_SOURCE_COLUMN_NAME + " VARCHAR(" + MAPPING_URI_LENGTH + "), "
                     + SYMMETRIC_COLUMN_NAME + " INT, "
                     + MAPPING_LINK_COUNT_COLUMN_NAME + " INT, "
@@ -818,14 +815,14 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     
     @Override
     public int registerMappingSet(RegexUriPattern sourceUriPattern, String predicate, String justification,
-            RegexUriPattern targetUriPattern, Resource mappingResource, Resource mappingSource, boolean symetric) throws BridgeDBException {
+            RegexUriPattern targetUriPattern, Resource mappingSource, boolean symetric) throws BridgeDBException {
         checkUriPattern(sourceUriPattern);
         checkUriPattern(targetUriPattern);
         DataSource source = DataSource.getExistingBySystemCode(sourceUriPattern.getSysCode());
         DataSource target = DataSource.getExistingBySystemCode(targetUriPattern.getSysCode());
-        int mappingSetId = registerMappingSet(source, target, predicate, justification, mappingResource, mappingSource, 0);
+        int mappingSetId = registerMappingSet(source, target, predicate, justification, mappingSource, 0);
         if (symetric) {
-            int symetricId = registerMappingSet(target, source, predicate, justification, mappingResource, mappingSource, mappingSetId);
+            int symetricId = registerMappingSet(target, source, predicate, justification, mappingSource, mappingSetId);
             setSymmetric(mappingSetId, symetricId);
         }
         subjectUriPatterns.put(mappingSetId, sourceUriPattern);
@@ -835,16 +832,16 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     @Override
     public int registerMappingSet(RegexUriPattern sourceUriPattern, String predicate, String forwardJustification, String backwardJustification,
-            RegexUriPattern targetUriPattern, Resource mappingResource, Resource mappingSource) throws BridgeDBException {
+            RegexUriPattern targetUriPattern, Resource mappingSource) throws BridgeDBException {
         if (forwardJustification.equals(backwardJustification)){
-            return registerMappingSet(sourceUriPattern, predicate, forwardJustification, targetUriPattern, mappingResource, mappingSource, true);
+            return registerMappingSet(sourceUriPattern, predicate, forwardJustification, targetUriPattern, mappingSource, true);
         } else {
             checkUriPattern(sourceUriPattern);
             checkUriPattern(targetUriPattern);
             DataSource source = DataSource.getExistingBySystemCode(sourceUriPattern.getSysCode());
             DataSource target = DataSource.getExistingBySystemCode(targetUriPattern.getSysCode());
-            int mappingSetId = registerMappingSet(source, target, predicate, forwardJustification, mappingResource, mappingSource, 0);
-            int symetricId = registerMappingSet(target, source, predicate, backwardJustification, mappingResource, mappingSource, 0);
+            int mappingSetId = registerMappingSet(source, target, predicate, forwardJustification, mappingSource, 0);
+            int symetricId = registerMappingSet(target, source, predicate, backwardJustification, mappingSource, 0);
             subjectUriPatterns.put(mappingSetId, sourceUriPattern);
             targetUriPatterns.put(mappingSetId, targetUriPattern);
             //Two linksets are NOT symmetric
@@ -859,7 +856,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      *
      */
     private int registerMappingSet(DataSource source, DataSource target, String predicate,
-            String justification, Resource mappingResource, Resource mappingSource, int symmetric) throws BridgeDBException {
+            String justification, Resource mappingSource, int symmetric) throws BridgeDBException {
         StringBuilder query = new StringBuilder("INSERT INTO ");
         query.append(MAPPING_SET_TABLE_NAME);
         query.append(" (");
@@ -870,8 +867,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append(JUSTIFICATION_COLUMN_NAME);
         query.append(", ");
         query.append(TARGET_DATASOURCE_COLUMN_NAME);
-        query.append(", ");
-        query.append(MAPPING_RESOURCE_COLUMN_NAME);
         query.append(", ");
         query.append(MAPPING_SOURCE_COLUMN_NAME);
         query.append(", ");
@@ -884,8 +879,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append(justification);
         query.append("', '");
         query.append(getDataSourceKey(target));
-        query.append("', '");
-        query.append(mappingResource);
         query.append("', '");
         query.append(mappingSource);
         query.append("', ");
@@ -1095,7 +1088,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                         rs.getString(PREDICATE_COLUMN_NAME),
                         targetInfo,
                         rs.getString(JUSTIFICATION_COLUMN_NAME),
-                        rs.getString(MAPPING_RESOURCE_COLUMN_NAME),
                         rs.getString(MAPPING_SOURCE_COLUMN_NAME),
                         rs.getInt(SYMMETRIC_COLUMN_NAME),
                         rs.getInt(MAPPING_LINK_COUNT_COLUMN_NAME),
@@ -1596,11 +1588,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 String predicate = rs.getString(PREDICATE_COLUMN_NAME);
                 String justification = rs.getString(JUSTIFICATION_COLUMN_NAME);
                 String mappingSource = rs.getString(MAPPING_SOURCE_COLUMN_NAME);
-                String mappingResource = rs.getString(MAPPING_RESOURCE_COLUMN_NAME);
-                DirectMapping mapping = 
-                        new DirectMapping(sourceRef, targetRef, mappingSetId, 
-                                symmetric, predicate, justification,
-                                mappingSource, mappingResource, lensId);
+                DirectMapping mapping = new DirectMapping(sourceRef, targetRef, mappingSetId, symmetric, predicate, 
+                        justification, mappingSource, lensId);
                 results.add(mapping);
             }
             //ystem.out.println(results);
@@ -1621,7 +1610,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             + PREDICATE_COLUMN_NAME + ", "
             + JUSTIFICATION_COLUMN_NAME + ", "
             + MAPPING_SOURCE_COLUMN_NAME + ", "
-            + MAPPING_RESOURCE_COLUMN_NAME + ", "
             + SYMMETRIC_COLUMN_NAME
             + " FROM " + MAPPING_TABLE_NAME + ", " + MAPPING_SET_TABLE_NAME
             + " WHERE " + MAPPING_SET_ID_COLUMN_NAME + " = " + MAPPING_SET_DOT_ID_COLUMN_NAME

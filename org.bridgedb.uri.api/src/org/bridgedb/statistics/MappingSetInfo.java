@@ -32,7 +32,6 @@ public class MappingSetInfo {
     private final String predicate;
     private final DataSetInfo target;
     private final String justification;
-    private final String mappingResource;
     private final String mappingSource;
     private final int symmetric;
     private Integer numberOfLinks;
@@ -40,15 +39,14 @@ public class MappingSetInfo {
     private final Integer numberOfTargets;
 
     public MappingSetInfo(int id, DataSetInfo source, String predicate, DataSetInfo target, String justification,
-            String mappingResource, String mappingSource, int symmetric, 
-            Integer numberOfLinks, Integer numberOfSources, Integer numberOfTargets){
+            String mappingSource, int symmetric, Integer numberOfLinks, Integer numberOfSources, 
+            Integer numberOfTargets){
         intId = id;
         stringId = null;
         this.predicate = predicate;
         this.source = source;
         this.target = target;
         this.justification = justification;
-        this.mappingResource = mappingResource;
         this.mappingSource = mappingSource;
         this.symmetric = symmetric;
         this.numberOfLinks = numberOfLinks;
@@ -169,20 +167,6 @@ public class MappingSetInfo {
 
     public boolean isTransitive() {
         return false;
-    }
-
-    /**
-     * @return the mappingResource
-     */
-    public String getMappingResource() {
-        return mappingResource;
-    }
-
-    /**
-     * @return the local name of the mappingResource
-     */
-    public String resourceLocalName() {
-        return localName(mappingResource);
     }
 
     private String localName(String uri) {
