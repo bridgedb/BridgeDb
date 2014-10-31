@@ -39,37 +39,29 @@ import org.openrdf.rio.helpers.RDFHandlerBase;
  *
  * @author Christian
  */
-public class LinksetHandler extends RDFHandlerBase{
+public class LinksetHandler extends LinkHandler{
     
     boolean processingFirstStatement = true;
-    protected final URI linkPredicate;
     private final String justification;
     private final String backwardJustification;
     private final URI mappingSource;
-    private boolean symetric;
-    private final UriListener uriListener;
 
-    private int mappingSet;
     private int noneLinkStatements;
     
     public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification,  
             URI mappingSource, boolean symetric){
-        this.uriListener = uriListener;
-        this.linkPredicate = linkPredicate;
+        super(uriListener, linkPredicate, symetric);
         this.justification = justification;
         this.backwardJustification = null;
         this.mappingSource = mappingSource;
-        this.symetric = symetric;
     }
     
     public LinksetHandler(UriListener uriListener, URI linkPredicate, String forwardJustification, String backwardJustification, 
             URI mappingSource){
-        this.uriListener = uriListener;
-        this.linkPredicate = linkPredicate;
+        super(uriListener, linkPredicate, true);
         this.justification = forwardJustification;
         this.backwardJustification = backwardJustification;
         this.mappingSource = mappingSource;
-        this.symetric = true;
     }
 
     static final Logger logger = Logger.getLogger(LinksetHandler.class);
@@ -79,10 +71,7 @@ public class LinksetHandler extends RDFHandlerBase{
         if (processingFirstStatement) {
             processFirstStatement(st);
         } else {
-            if (st.getPredicate().equals(linkPredicate)) {
-                /* Only store those statements that correspond to the link predicate */
-                insertUriMapping(st);
-            }
+            super.handleStatement(st);
         }
     }
        
@@ -133,50 +122,18 @@ public class LinksetHandler extends RDFHandlerBase{
             } catch (BridgeDBException ex) {
                 throw new RDFHandlerException("Error registering mappingset from " + st, ex);
             }
-            insertUriMapping(st);
+            super.handleStatement(st);
         } else {
             this.noneLinkStatements++;
         }
     }
 
     @Override
-    public void startRDF() throws RDFHandlerException{
-        super.startRDF();
-    } 
-    
-    @Override
     public void endRDF() throws RDFHandlerException{
         super.endRDF();
-        try {
-            uriListener.closeInput();
-        } catch (BridgeDBException ex) {
-            throw new RDFHandlerException("Error endingRDF ", ex);
-        }
         if (this.processingFirstStatement){
             throw new RDFHandlerException("No Statements found with predicate: " + linkPredicate);
         }
-    }
-
-    private void insertUriMapping(Statement st) throws RDFHandlerException {
-        Resource subject = st.getSubject();
-        Value object = st.getObject();
-        if (!(subject instanceof URI)){
-            throw new RDFHandlerException ("None URI subject in " + st);
-        }
-        if (!(object instanceof URI)){
-            throw new RDFHandlerException ("None URI object in " + st);
-        }
-        String sourceUri = subject.stringValue();
-        String targetUri = object.stringValue();
-        try {
-            uriListener.insertUriMapping(sourceUri, targetUri, mappingSet, symetric);
-        } catch (BridgeDBException ex) {
-            throw new RDFHandlerException("Error inserting statement " + st, ex);
-        }
-    }
-
-    public int getMappingsetId() {
-        return mappingSet;
     }
 
  }
