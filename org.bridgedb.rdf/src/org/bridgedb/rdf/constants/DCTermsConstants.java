@@ -20,6 +20,15 @@ public class DCTermsConstants {
     
     public static final String DESCRIPTION = "description";
     public static final URI DESCRIPTION_URI = new URIImpl(voidns + DESCRIPTION);
+ 
+    public static final String ISSUED = "issued";
+    public static final URI ISSUED_URI = new URIImpl(voidns + ISSUED);
+  
+    public static final String LICENSE = "license";
+    public static final URI LICENSE_URI = new URIImpl(voidns + LICENSE);
+  
+    public static final String PUBLISHER = "publisher";
+    public static final URI PUBLISHER_URI = new URIImpl(voidns + PUBLISHER);
   
     public static final String TITLE = "title";
     public static final URI TITLE_URI = new URIImpl(voidns + TITLE);
