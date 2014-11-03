@@ -24,7 +24,7 @@
     void:linkPredicate skos:exactMatch ;
     dul:expresses <http://semanticscience.org/resource/CHEMINF_000059> ;
     dcterms:issued "2014-11-03"^^xsd:date;
-    dcterms:created "2014-11-21"^^xsd:date .
+    dcterms:created "2014-11-21"^^xsd:date ;
     pav:authoredBy <https://github.com/Christian-B> ;
     pav:authoredBy <http://www.cs.man.ac.uk/~brenninc/> ;
     pav:createdOn "2014-11-03"^^xsd:date .
