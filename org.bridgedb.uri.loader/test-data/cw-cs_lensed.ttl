@@ -18,22 +18,18 @@
     foaf:primaryTopic :conceptwiki_chemspider .
 
 :conceptwiki_chemspider a void:Linkset ;
-    dcterms:license "unknown" ;
     void:subjectsTarget :conceptwiki ;
     void:objectsTarget :chemspider ;
     void:linkPredicate skos:exactMatch ;
     dul:expresses <http://www.bridgedb.org/test#testJustification> ;
     dcterms:created "2014-11-21"^^xsd:date .
 :conceptwiki a void:Dataset ;
-	dcterms:title "ConceptWiki"^^xsd:string ;
-    dcterms:license "unknown" ;
+    dcterms:title "ConceptWiki"^^xsd:string ;
     void:subset :conceptwiki_chemspider ;
     void:uriSpace <http://www.conceptwiki.org/concept/> .
 :chemspider a void:Dataset ;
-	dcterms:title "ChemSpider"^^xsd:string ;
+    dcterms:title "ChemSpider"^^xsd:string ;
     dcterms:license "http://www.chemspider.com/Disclaimer.aspx" ;
-    dcterms:subject "unknown" ;
-    pav:version "unknown" ;
     void:uriSpace <http://rdf.chemspider.com/> .
    
 <http://www.conceptwiki.org/concept/f25a234e-df03-419f-8504-cde8689a4d1f000001> skos:exactMatch <http://rdf.chemspider.com/28509384000001> .
