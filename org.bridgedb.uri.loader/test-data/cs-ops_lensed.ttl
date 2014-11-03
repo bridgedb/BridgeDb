@@ -18,7 +18,6 @@
     foaf:primaryTopic :conceptwiki_chemspider .
 
 :chemspider_ops a void:Linkset ;
-    dcterms:license "unknown" ;
     void:subjectsTarget :chemspider ;
     void:objectsTarget :ops ;
     void:linkPredicate skos:exactMatch ;
@@ -27,14 +26,10 @@
 :chemspider a void:Dataset ;
 	dcterms:title "ChemSpider"^^xsd:string ;
     dcterms:license "http://www.chemspider.com/Disclaimer.aspx" ;
-    dcterms:subject "unknown" ;
-    pav:version "unknown" ;
     void:uriSpace <http://rdf.chemspider.com/> .
 :ops a void:Dataset ;
 	dcterms:title "ChemSpider"^^xsd:string ;
     dcterms:license "http://www.chemspider.com/Disclaimer.aspx" ;
-    dcterms:subject "unknown" ;
-    pav:version "unknown" ;
     void:uriSpace <http://ops.rsc.org/OPS> .
    
 <http://rdf.chemspider.com/28509384000001> skos:exactMatch <http://ops.rsc.org/OPS8000001> .
