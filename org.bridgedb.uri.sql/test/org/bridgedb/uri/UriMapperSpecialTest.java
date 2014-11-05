@@ -193,11 +193,11 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     @Test
     public void testGetMappingSetInfo() throws BridgeDBException {
         report("GetMappingSetInfo");
-        MappingSetInfo result = uriMapper.getMappingSetInfo(mappingSet2_3);
+        MappingSetInfo result = uriMapper.getMappingSetInfo(mappingSet2to3);
         assertEquals(DataSource2.getSystemCode(), result.getSource().getSysCode());
         assertEquals(DataSource3.getSystemCode(), result.getTarget().getSysCode());
         assertFalse(result.isSymmetric());
-        result = uriMapper.getMappingSetInfo(mappingSet2_3+1);
+        result = uriMapper.getMappingSetInfo(mappingSet2to3+1);
         assertEquals(DataSource3.getSystemCode(), result.getSource().getSysCode());
         assertEquals(DataSource2.getSystemCode(), result.getTarget().getSysCode());
         assertTrue(result.isSymmetric());
