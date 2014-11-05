@@ -43,7 +43,9 @@ public class PavConstants {
     public static final URI IMPORTED_BY = new URIImpl(pavTermns + "importedBy");
     public static final URI IMPORTED_FROM = new URIImpl(pavTermns + "importedFrom");
     public static final URI IMPORTED_ON = new URIImpl(pavTermns + "importedOn");
+    public static final URI LAST_REFERSHED_ON = new URIImpl(pavTermns + "lastRefreshedOn");
     public static final URI MODIFIED_ON = new URIImpl(pavTermns + "modified");
+    public static final URI PREVIOUS_VERSION = new URIImpl(pavTermns + "previousVersion");
     public static final URI RETRIEVED_BY = new URIImpl(pavTermns + "retrievedBy");
     public static final URI RETRIEVED_ON = new URIImpl(pavTermns + "retrievedOn");
     public static final URI RETRIEVED_FROM = new URIImpl(pavTermns + "retrievedFrom");

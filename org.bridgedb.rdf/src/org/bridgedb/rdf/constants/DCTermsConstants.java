@@ -14,7 +14,10 @@ import org.openrdf.model.impl.URIImpl;
 public class DCTermsConstants {
     public static final String voidns = "http://purl.org/dc/terms/";
     public static final String PREFIX_NAME = "dcterms";
-    
+     
+    public static final String ACCRUAL_PERIODICITY = "accrualPeriodicity";
+    public static final URI ACCRUAL_PERIODICITY_URI = new URIImpl(voidns + ACCRUAL_PERIODICITY);
+
     public static final String ALTERNATIVE = "alternative";
     public static final URI ALTERNATIVE_URI = new URIImpl(voidns + ALTERNATIVE);
     
