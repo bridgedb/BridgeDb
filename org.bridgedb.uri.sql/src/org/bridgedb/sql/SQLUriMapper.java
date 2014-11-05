@@ -2053,6 +2053,33 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return mapID(sourceXref, Lens.ALL_LENS_NAME, targetDataSources);
     }
 
+    protected int getSymmetric(int mappingSetId) throws BridgeDBException{
+        String query = "SELECT "
+            + SYMMETRIC_COLUMN_NAME
+            + " FROM " + MAPPING_SET_TABLE_NAME
+            + " WHERE " + ID_COLUMN_NAME + " =  ?";
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        try {
+            statement = createPreparedStatement(query);
+            statement.setInt(1, mappingSetId);
+            rs = rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(SYMMETRIC_COLUMN_NAME);
+            } else {
+                return 0;
+            }
+       } catch (BridgeDBException ex) {
+            throw ex;
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to run " + query, ex);
+        } finally {
+            close(statement, rs);
+        }
+    }
+
+
+           
 }
 
 
