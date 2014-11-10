@@ -25,11 +25,11 @@
     dcterms:created "2014-11-21"^^xsd:date .
 :chemspider a void:Dataset ;
 	dcterms:title "ChemSpider"^^xsd:string ;
-    dcterms:license "http://www.chemspider.com/Disclaimer.aspx" ;
+    dcterms:license <http://www.chemspider.com/Disclaimer.aspx> ;
     void:uriSpace <http://rdf.chemspider.com/> .
 :ops a void:Dataset ;
 	dcterms:title "ChemSpider"^^xsd:string ;
-    dcterms:license "http://www.chemspider.com/Disclaimer.aspx" ;
+    dcterms:license <http://www.chemspider.com/Disclaimer.aspx> ;
     void:uriSpace <http://ops.rsc.org/OPS> .
    
 <http://rdf.chemspider.com/28509384000001> skos:exactMatch <http://ops.rsc.org/OPS8000001> .
