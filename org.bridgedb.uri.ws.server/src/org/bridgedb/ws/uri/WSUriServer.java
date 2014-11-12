@@ -437,7 +437,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         }
     }
     
-    private void generateTextarea(StringBuilder sb, String fieldName, String text) {
+    protected final void generateTextarea(StringBuilder sb, String fieldName, String text) {
         sb.append("<p>").append(fieldName);
     	sb.append("<br/><textarea rows=\"40\" name=\"").append(fieldName)
                 .append("\" style=\"width:100%; background-color: #EEEEFF;\">");
