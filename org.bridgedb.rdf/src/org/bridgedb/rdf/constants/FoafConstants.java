@@ -17,5 +17,8 @@ public class FoafConstants {
       
     public static final String PAGE = "citeAsAuthority";
     public static final URI PAGE_URI = new URIImpl(voidns + PAGE);
-  
+    
+    public static final String PRIMARY_TOPIC = "primaryTopic";
+    public static final URI PRIMARY_TOPIC_URI = new URIImpl(voidns + PRIMARY_TOPIC);
+    
 }
