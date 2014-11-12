@@ -34,11 +34,7 @@ public class SetMappings {
     private final String justification;
     private final String mappingSource;
     private final Set<UriMapping> mappings;
-    
-    public static final String METHOD_NAME = "mappingSet";
-    public static final String URI_PREFIX = "/" + METHOD_NAME + "/";
-    public static final String HAS_LENS = "http://www.bridgedb.org/rdf/fulfillsLens" ;
-    
+        
     public SetMappings(String id, String predicate, String justification, String mappingSource){
         this.id = id;
         this.predicate = predicate;

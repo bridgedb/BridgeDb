@@ -134,7 +134,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         
         velocityContext.put("api", WsUriConstants.BRIDGEDB_API);
         velocityContext.put("contextPath", httpServletRequest.getContextPath());
-        velocityContext.put("getMappingInfo", SetMappings.METHOD_NAME);
+        velocityContext.put("getMappingInfo", WsUriConstants.MAPPING_SET);
         velocityContext.put("map",WsUriConstants.MAP);
         velocityContext.put("mapURI", WsUriConstants.MAP_URI);
         velocityContext.put("mapUriForm", mapUriForm);
@@ -239,7 +239,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
 
     @GET
     @Produces({MediaType.TEXT_HTML})
-    @Path("/" + SetMappings.METHOD_NAME) 
+    @Path("/" + WsUriConstants.MAPPING_SET) 
     public Response getMappingSetInfosHtml(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
             @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
             @QueryParam(WsUriConstants.LENS_URI) String lensUri,
@@ -269,7 +269,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
 
     @GET
     @Produces({MediaType.TEXT_HTML})
-    @Path("/" + SetMappings.METHOD_NAME + "/{id}")
+    @Path("/" + WsUriConstants.MAPPING_SET + "/{id}")
     public Response getMappingSetInfo(@PathParam("id") String idString,
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException {  
         if (idString == null) {

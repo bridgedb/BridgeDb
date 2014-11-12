@@ -688,7 +688,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 
     @GET
     @Produces({MediaType.APPLICATION_XML})
-    @Path("/" + SetMappings.METHOD_NAME + WsUriConstants.XML) 
+    @Path("/" + WsUriConstants.MAPPING_SET + WsUriConstants.XML) 
     public Response getMappingSetInfosXML(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
             @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
      		@QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
@@ -707,7 +707,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Override
     @GET
     @Produces({MediaType.APPLICATION_XML})
-    @Path("/" + SetMappings.METHOD_NAME) 
+    @Path("/" + WsUriConstants.MAPPING_SET) 
     public Response getMappingSetInfos(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
             @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
      		@QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
@@ -720,7 +720,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    @Path("/" + SetMappings.METHOD_NAME) 
+    @Path("/" + WsUriConstants.MAPPING_SET) 
     public Response getMappingSetInfosJson(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
             @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
      		@QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
@@ -845,7 +845,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 
     @GET
     @Produces({MediaType.APPLICATION_XML})
-    @Path("/" + SetMappings.METHOD_NAME + "/{id}")
+    @Path("/" + WsUriConstants.MAPPING_SET + "/{id}")
     @Override
     public Response getMappingSetInfo(@PathParam("id") String idString) throws BridgeDBException {  
         MappingSetInfoBean bean = getMappingSetInfoInner(idString);
@@ -857,7 +857,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    @Path("/" + SetMappings.METHOD_NAME + "/{id}")
+    @Path("/" + WsUriConstants.MAPPING_SET + "/{id}")
     public Response getMappingSetInfoJson(@PathParam("id") String idString) throws BridgeDBException {  
         MappingSetInfoBean bean = getMappingSetInfoInner(idString);
         if (noConentOnEmpty & bean.isEmpty()){

@@ -283,7 +283,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     public Response getMappingSetInfo(String mappingSetId) throws BridgeDBException {
         try {
             MappingSetInfoBean result = 
-                    webResource.path(SetMappings.METHOD_NAME + "/" + mappingSetId)
+                    webResource.path(WsUriConstants.MAPPING_SET + "/" + mappingSetId)
                     .accept(MediaType.APPLICATION_XML_TYPE)
                     .get(new GenericType<MappingSetInfoBean>() {});
             return Response.ok(result, MediaType.APPLICATION_XML_TYPE).build();
@@ -301,7 +301,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
         try {
             //Make service call
             MappingSetInfosBean result = 
-                    webResource.path(SetMappings.METHOD_NAME)
+                    webResource.path(WsUriConstants.MAPPING_SET)
                     .queryParams(params)
                     .accept(MediaType.APPLICATION_XML_TYPE)
                     .get(new GenericType<MappingSetInfosBean>() {});

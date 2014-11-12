@@ -10,12 +10,12 @@ import org.bridgedb.uri.lens.Lens;
 import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.rdf.BridgeDbRdfTools;
+import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.DulConstants;
 import org.bridgedb.rdf.constants.OWLConstants;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.SetMappings;
-import static org.bridgedb.uri.api.SetMappings.HAS_LENS;
 import org.bridgedb.uri.api.UriMapping;
 import org.bridgedb.uri.lens.LensTools;
 import org.bridgedb.utils.BridgeDBException;
@@ -53,7 +53,7 @@ public class UriResultsAsRDF {
         if (lens != null){
             Lens theLens = LensTools.byId(lens);
             URI lensUri = new URIImpl(theLens.toUri(lensBaseUri));
-            URI hasLensUri = new URIImpl(HAS_LENS);
+            URI hasLensUri = BridgeDBConstants.FULFILLS_LENS;
             statement = new StatementImpl(setUri, hasLensUri, lensUri);
             statements.add(statement);
         }

@@ -112,6 +112,8 @@ public class BridgeDBConstants {
     public static final URI OBJECTS_DATATYPE = new URIImpl(PREFIX + "objectsDatatype");
     public static final URI SUBJECTS_SPECIES = new URIImpl(PREFIX + "subjectsSpecies");
     public static final URI OBJECTS_SPECIES  = new URIImpl(PREFIX + "objectsSpecies");
+    public static final URI FULFILLS_LENS = new URIImpl(PREFIX + "fulfillsLens");
+    
     
     public static final URI LENS_URI = new URIImpl(PREFIX + "lens");
     public static final String TRANSITIVE = PREFIX + "Transitive";

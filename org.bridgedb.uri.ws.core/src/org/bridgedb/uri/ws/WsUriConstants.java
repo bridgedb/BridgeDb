@@ -19,7 +19,6 @@
 //
 package org.bridgedb.uri.ws;
 
-import javax.ws.rs.QueryParam;
 import org.bridgedb.ws.WsConstants;
 
 /**
@@ -41,6 +40,7 @@ public class WsUriConstants extends WsConstants{
     public static final String MAP = "map";
     public static final String MAP_URI = "mapUri";
     public static final String MAP_BY_SET = "mapBySet";
+    public static final String MAPPING_SET = "mappingSet";
     public static final String LENS_URI = "lensUri";
     public static final String LENS_GROUP = "lensGroup";
     public static final String RDF = "RDF";
