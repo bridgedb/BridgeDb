@@ -1,0 +1,26 @@
+<h2>Mapping Source as RDF </h2>
+<table id="rdf" border=1>
+    <thead>
+        <tr>
+            <th>Subject</th>
+            <th>Predicate</th>
+            <th>Object</th>
+        </tr>
+        </thead>
+        <tbody>
+        #foreach ($statement in $statements)
+            <tr>
+                <td>$statement.getSubject().stringValue()</td>
+                <td>$statement.getPredicate().stringValue()</td>
+                <td>$statement.getObject().stringValue()</td>
+            </tr>        
+        #end
+    </tbody>
+</table>
+<script type="text/javascript" charset="utf8" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<script>
+    $(function(){
+        $("#rdf").dataTable();
+    })
+</script>

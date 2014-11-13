@@ -13,9 +13,12 @@ import org.bridgedb.rdf.BridgeDbRdfTools;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.DulConstants;
 import org.bridgedb.rdf.constants.OWLConstants;
+import org.bridgedb.rdf.constants.PavConstants;
 import org.bridgedb.rdf.constants.VoidConstants;
+import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.SetMappings;
+import org.bridgedb.uri.api.UriConstants;
 import org.bridgedb.uri.api.UriMapping;
 import org.bridgedb.uri.lens.LensTools;
 import org.bridgedb.utils.BridgeDBException;
@@ -90,5 +93,15 @@ public class UriResultsAsRDF {
         return BridgeDbRdfTools.writeRDF(statements, formatName);
     }
     
-
+    public static Set<Statement> asRDF(MappingSetInfo info, String baseUri){
+        HashSet<Statement> results = new HashSet<Statement>();
+        URI linksetId = toURI(baseUri + UriConstants.MAPPING_SET + UriConstants.RDF + "/" + info.getStringId());
+        URI source = toURI(info.getMappingSource());
+        results.add(new StatementImpl(linksetId, PavConstants.IMPORTED_FROM, source));
+        URI predicate = toURI(info.getPredicate());
+        results.add(new StatementImpl(linksetId, VoidConstants.LINK_PREDICATE, predicate));
+        URI justification = toURI(info.getJustification());
+        results.add(new StatementImpl(linksetId, BridgeDBConstants.LINKSET_JUSTIFICATION, justification));
+        return results;
+    }
 }

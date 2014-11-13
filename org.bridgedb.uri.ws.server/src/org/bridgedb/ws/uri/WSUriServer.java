@@ -71,6 +71,9 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
     
     private static boolean EXCLUDE_GRAPH = false;
     private static boolean INCLUDE_GRAPH = true;
+    private final String GET_BASE_URI_FROM_CONTEXT = null;
+    private final String DO_NOT_CONVERT_TO_RDF = null;
+    private final boolean XREF_DATA_NOT_REQUIRED = false;
 
     private ServletContext context;
 
@@ -287,6 +290,95 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         sb.append(mappingSetInfo);
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+    
+    @GET
+    @Path("/" + WsUriConstants.MAPPING_SET + WsUriConstants.RDF + "/{id}")
+    @Produces(MediaType.TEXT_HTML)
+    public Response getMappingSetRdfHtml(@PathParam("id") String idString,  @Context HttpServletRequest httpServletRequest) 
+            throws BridgeDBException{
+        return getMappingSetRdfHtml(idString, GET_BASE_URI_FROM_CONTEXT, DO_NOT_CONVERT_TO_RDF, httpServletRequest);
+    }
+    
+    @GET
+    @Path("/" + WsUriConstants.MAPPING_SET + WsUriConstants.RDF + "/{id}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getMappingSetRdfText(@PathParam("id") String idString,  @Context HttpServletRequest httpServletRequest) 
+            throws BridgeDBException{
+        return getMappingSetRdfText(idString, GET_BASE_URI_FROM_CONTEXT, DO_NOT_CONVERT_TO_RDF, httpServletRequest);
+    }
+
+    @GET
+    @Path("/" + WsUriConstants.MAPPING_SET + WsUriConstants.RDF)
+    @Produces(MediaType.TEXT_HTML)
+    public Response getMappingSetRdfHtml(@QueryParam(WsConstants.ID) String idString, 
+            @QueryParam(WsUriConstants.BASE_URI) String baseUri,
+            @QueryParam(WsUriConstants.RDF_FORMAT) String formatName,
+            @Context HttpServletRequest httpServletRequest) 
+            throws BridgeDBException{        
+        StringBuilder sb = topAndSide ("MappingSet " + idString, httpServletRequest);
+        Set<Statement> statements = getMappingSetStatements(idString, checkBaseUri(baseUri, httpServletRequest));
+        sb.append("<h4>Use MediaType.TEXT_PLAIN to return remove HTML stuff</h4>");
+        sb.append("<p>Warning MediaType.TEXT_PLAIN version returns status 204 if no mappings found.</p>");
+        if (formatName != null || formatName != null){
+            generateTextarea(sb, "RDF", BridgeDbRdfTools.writeRDF(statements, formatName));
+        } else {
+            sb.append("<p>Warning MediaType.TEXT_PLAIN version returns RDF using the default format even if no format specified.</p>");
+            VelocityContext velocityContext = new VelocityContext();
+            velocityContext.put("statements", statements);
+            sb.append(WebTemplates.getForm(velocityContext, WebTemplates.RDF_TRIPLE_SCRIPT));
+        }        
+        footerAndEnd(sb);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+    
+    @GET
+    @Path("/" + WsUriConstants.MAPPING_SET + WsUriConstants.RDF)
+    @Produces({MediaType.TEXT_PLAIN})    
+    public Response getMappingSetRdfText(@QueryParam(WsConstants.ID) String idString, 
+            @QueryParam(WsUriConstants.BASE_URI) String baseUri,
+            @QueryParam(WsUriConstants.RDF_FORMAT) String formatName,
+            @Context HttpServletRequest httpServletRequest) 
+            throws BridgeDBException{
+        Set<Statement> statements = getMappingSetStatements(idString, checkBaseUri(baseUri, httpServletRequest)); 
+        if (noConentOnEmpty & statements.isEmpty()){
+            return Response.noContent().build();
+        } 
+        String rdfInfo = BridgeDbRdfTools.writeRDF(statements, formatName); 
+        return Response.ok(rdfInfo, MediaType.TEXT_PLAIN_TYPE).build();
+    }    
+    
+    protected Set<Statement> getMappingSetStatements(String idString, String baseUri) 
+            throws BridgeDBException{
+        String[] stringIds = idString.split("_");
+        int[] ids = new int[stringIds.length];
+        for (int i = 0; i< ids.length; i++){
+            try{
+                ids[i] = Integer.parseInt(stringIds[i]);
+            } catch (NumberFormatException ex){
+                throw new BridgeDBException("Illegal id String: " + idString 
+                        + " Expected 1 or more numbers seperated by underscore. ", ex);
+            }
+        } 
+        if (ids.length == 1){
+            return UriResultsAsRDF.asRDF(uriMapper.getMappingSetInfo(ids[0]), baseUri);
+        } else  {
+            Set<Statement> statements = new HashSet<Statement>();
+            for (int id:ids){
+                statements.addAll(UriResultsAsRDF.asRDF(uriMapper.getMappingSetInfo(id), baseUri));
+            }
+            return statements;       
+        }
+        
+     }
+    
+    private String checkBaseUri(String baseUri, HttpServletRequest httpServletRequest) 
+            throws BridgeDBException{
+        if (baseUri == null || baseUri.isEmpty()){
+            StringBuffer url = httpServletRequest.getRequestURL();
+            return url.substring(1, url.length()- httpServletRequest.getPathInfo().length() + 1);
+        }
+        return baseUri;       
     }
     
     private String mapUriForm(boolean includeGraph, HttpServletRequest httpServletRequest) throws BridgeDBException{
