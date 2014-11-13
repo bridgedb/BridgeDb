@@ -5,6 +5,7 @@
             <th>Subject</th>
             <th>Predicate</th>
             <th>Object</th>
+            <th>Context</th>
         </tr>
         </thead>
         <tbody>
@@ -13,6 +14,7 @@
                 <td>$statement.getSubject().stringValue()</td>
                 <td>$statement.getPredicate().stringValue()</td>
                 <td>$statement.getObject().stringValue()</td>
+                <td>$statement.getContext().stringValue()</td>
             </tr>        
         #end
     </tbody>

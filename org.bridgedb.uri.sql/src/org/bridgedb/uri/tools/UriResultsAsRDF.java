@@ -16,6 +16,7 @@ import org.bridgedb.rdf.constants.OWLConstants;
 import org.bridgedb.rdf.constants.PavConstants;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.statistics.MappingSetInfo;
+import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.SetMappings;
 import org.bridgedb.uri.api.UriConstants;
@@ -92,10 +93,14 @@ public class UriResultsAsRDF {
         Set<Statement> statements = asRDF(mappingsBySet, lensBaseUri);
         return BridgeDbRdfTools.writeRDF(statements, formatName);
     }
+
+    private static URI mappingSetURI(String id, String baseUri){
+        return toURI(baseUri + UriConstants.MAPPING_SET + UriConstants.RDF + "/" + id);
+    }
     
     public static Set<Statement> asRDF(MappingSetInfo info, String baseUri){
         HashSet<Statement> results = new HashSet<Statement>();
-        URI linksetId = toURI(baseUri + UriConstants.MAPPING_SET + UriConstants.RDF + "/" + info.getStringId());
+        URI linksetId = mappingSetURI(info.getStringId(), baseUri);
         URI source = toURI(info.getMappingSource());
         results.add(new StatementImpl(linksetId, PavConstants.IMPORTED_FROM, source));
         URI predicate = toURI(info.getPredicate());
@@ -104,4 +109,24 @@ public class UriResultsAsRDF {
         results.add(new StatementImpl(linksetId, BridgeDBConstants.LINKSET_JUSTIFICATION, justification));
         return results;
     }
+
+    public static Set<Statement> asRDF(Set<Mapping> mappings, String baseUri){
+        Set<Statement> statements = new HashSet<Statement>();
+        for (Mapping mapping:mappings){
+            String predicate = mapping.getPredicate();
+            if (predicate != null){
+                URI predicateUri = new URIImpl(mapping.getPredicate());
+                URI mappingSet = mappingSetURI(mapping.combinedId(), baseUri);
+                for (String source:mapping.getSourceUri()){
+                    URI sourceUri = new URIImpl(source);
+                    for (String target: mapping.getTargetUri()){
+                        URI targetUri = new URIImpl(target);
+                        statements.add(new ContextStatementImpl(sourceUri, predicateUri, targetUri, mappingSet));
+                    }
+                }
+            }
+        }
+        return statements;
+    }
+    
 }

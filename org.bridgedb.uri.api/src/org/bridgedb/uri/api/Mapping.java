@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Set;
 import org.bridgedb.Xref;
 import org.bridgedb.pairs.IdSysCodePair;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  * Contains the information held for a particular mapping.
@@ -243,6 +244,31 @@ public class Mapping implements Comparable<Mapping>{
         return mappingSetId;
     }
 
+    public final String combinedId(){
+        if (mappingSetId.size() == 1){
+            return "" + mappingSetId.get(0);
+        }
+        StringBuilder sb = new StringBuilder(mappingSetId.get(0));
+        for (int i = 1; i < mappingSetId.size(); i++){
+            sb.append("_").append(mappingSetId.get(i));
+        }
+        return sb.toString();
+    }
+    
+    public static int[] splitId(String idString) throws BridgeDBException{
+        String[] stringIds = idString.split("_");
+        int[] ids = new int[stringIds.length];
+        for (int i = 0; i< ids.length; i++){
+            try{
+                ids[i] = Integer.parseInt(stringIds[i]);
+            } catch (NumberFormatException ex){
+                throw new BridgeDBException("Illegal id String: " + idString 
+                        + " Expected 1 or more numbers seperated by underscore. ", ex);
+            }
+        } 
+        return ids;
+    }
+    
     /**
      * @return the predicate
      */

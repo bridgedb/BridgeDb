@@ -326,6 +326,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
             sb.append("<p>Warning MediaType.TEXT_PLAIN version returns RDF using the default format even if no format specified.</p>");
             VelocityContext velocityContext = new VelocityContext();
             velocityContext.put("statements", statements);
+            velocityContext.put("subject", WsUriConstants.MAPPING_SET);
             sb.append(WebTemplates.getForm(velocityContext, WebTemplates.RDF_TRIPLE_SCRIPT));
         }        
         footerAndEnd(sb);
@@ -348,18 +349,20 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         return Response.ok(rdfInfo, MediaType.TEXT_PLAIN_TYPE).build();
     }    
     
+    /**
+     * Gets known Statements about the mappingSet.
+     * 
+     * This method is expected to be overwritten by services like the Open PHACTS IMS 
+     * that have better rdf data about the mappingSet
+     * 
+     * @param idString
+     * @param baseUri
+     * @return
+     * @throws BridgeDBException 
+     */
     protected Set<Statement> getMappingSetStatements(String idString, String baseUri) 
             throws BridgeDBException{
-        String[] stringIds = idString.split("_");
-        int[] ids = new int[stringIds.length];
-        for (int i = 0; i< ids.length; i++){
-            try{
-                ids[i] = Integer.parseInt(stringIds[i]);
-            } catch (NumberFormatException ex){
-                throw new BridgeDBException("Illegal id String: " + idString 
-                        + " Expected 1 or more numbers seperated by underscore. ", ex);
-            }
-        } 
+        int[] ids = Mapping.splitId(idString);
         if (ids.length == 1){
             return UriResultsAsRDF.asRDF(uriMapper.getMappingSetInfo(ids[0]), baseUri);
         } else  {
@@ -368,17 +371,85 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
                 statements.addAll(UriResultsAsRDF.asRDF(uriMapper.getMappingSetInfo(id), baseUri));
             }
             return statements;       
-        }
-        
+        }       
      }
     
     private String checkBaseUri(String baseUri, HttpServletRequest httpServletRequest) 
             throws BridgeDBException{
         if (baseUri == null || baseUri.isEmpty()){
             StringBuffer url = httpServletRequest.getRequestURL();
-            return url.substring(1, url.length()- httpServletRequest.getPathInfo().length() + 1);
+            return url.substring(0, url.length()- httpServletRequest.getPathInfo().length() + 1);
         }
         return baseUri;       
+    }
+    
+    @GET
+    @Path("/" + WsUriConstants.MAP_URI + WsUriConstants.RDF)
+    @Produces(MediaType.TEXT_HTML)
+    public Response mapUriRdfHtml(
+    		@QueryParam(WsUriConstants.URI) List<String> uris,
+     		@QueryParam(WsUriConstants.LENS_URI) String lensUri,
+            @QueryParam(WsUriConstants.GRAPH) String graph,
+            @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns, 
+            @QueryParam(WsUriConstants.BASE_URI) String baseUri,
+            @QueryParam(WsUriConstants.RDF_FORMAT) String formatName,
+            @Context HttpServletRequest httpServletRequest) 
+            throws BridgeDBException{  
+        Set<Mapping> mappings;
+        if (uris.size() == 1){
+            mappings = uriMapper.mapFull(uris.iterator().next(), lensUri, XREF_DATA_NOT_REQUIRED, graph, targetUriPatterns);
+        } else {
+            mappings = new HashSet<Mapping>();
+            for(String single:uris){
+                mappings.addAll(uriMapper.mapFull(single, lensUri, XREF_DATA_NOT_REQUIRED, graph, targetUriPatterns));
+            }
+        }
+        baseUri = checkBaseUri(baseUri, httpServletRequest);
+        Set<Statement> statements = UriResultsAsRDF.asRDF(mappings, baseUri);
+        StringBuilder sb = topAndSide ( WsUriConstants.MAP_URI + " as RDF", httpServletRequest);
+        sb.append("<h4>Use MediaType.TEXT_PLAIN to return remove HTML stuff</h4>");
+        sb.append("<p>Warning MediaType.TEXT_PLAIN version returns status 204 if no mappings found.</p>");
+        if (formatName != null || formatName != null){
+            generateTextarea(sb, "RDF", BridgeDbRdfTools.writeRDF(statements, formatName));
+        } else {
+            sb.append("<p>Warning MediaType.TEXT_PLAIN version returns RDF using the default format even if no format specified.</p>");
+            VelocityContext velocityContext = new VelocityContext();
+            velocityContext.put("statements", statements);
+            velocityContext.put("subject", WsUriConstants.MAP_URI);
+            sb.append(WebTemplates.getForm(velocityContext, WebTemplates.RDF_QUAD_SCRIPT));
+        }        
+        footerAndEnd(sb);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+    
+    @GET
+    @Path("/" + WsUriConstants.MAP_URI + WsUriConstants.RDF)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response mapUriRdfText(
+    		@QueryParam(WsUriConstants.URI) List<String> uris,
+     		@QueryParam(WsUriConstants.LENS_URI) String lensUri,
+            @QueryParam(WsUriConstants.GRAPH) String graph,
+            @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns, 
+            @QueryParam(WsUriConstants.BASE_URI) String baseUri,
+            @QueryParam(WsUriConstants.RDF_FORMAT) String formatName,
+            @Context HttpServletRequest httpServletRequest) 
+            throws BridgeDBException{  
+        Set<Mapping> mappings;
+        if (uris.size() == 1){
+            mappings = uriMapper.mapFull(uris.iterator().next(), lensUri, XREF_DATA_NOT_REQUIRED, graph, targetUriPatterns);
+        } else {
+            mappings = new HashSet<Mapping>();
+            for(String single:uris){
+                mappings.addAll(uriMapper.mapFull(single, lensUri, XREF_DATA_NOT_REQUIRED, graph, targetUriPatterns));
+            }
+        }
+        baseUri = checkBaseUri(baseUri, httpServletRequest);
+        Set<Statement> statements = UriResultsAsRDF.asRDF(mappings, baseUri);
+        if (noConentOnEmpty & statements.isEmpty()){
+            return Response.noContent().build();
+        } 
+        String rdfInfo = BridgeDbRdfTools.writeRDF(statements, formatName); 
+        return Response.ok(rdfInfo, MediaType.TEXT_PLAIN_TYPE).build();
     }
     
     private String mapUriForm(boolean includeGraph, HttpServletRequest httpServletRequest) throws BridgeDBException{

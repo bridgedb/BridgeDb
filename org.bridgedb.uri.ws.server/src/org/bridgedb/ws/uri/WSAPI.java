@@ -33,6 +33,7 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
 import org.bridgedb.Xref;
+import org.bridgedb.rdf.BridgeDbRdfTools;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.uri.tools.GraphResolver;
@@ -135,6 +136,7 @@ public class WSAPI extends WSUriInterfaceService {
         velocityContext.put("code1", sourceSysCode1);
         velocityContext.put("sourceCode1", sourceSysCode1);
         velocityContext.put("targetCode1", tragetSysCode1);
+       velocityContext.put("rdfFormats", BridgeDbRdfTools.getAvaiableWriters());
         
         //Exmples for mapping 2
         velocityContext.put("uri2", sourceUri2);

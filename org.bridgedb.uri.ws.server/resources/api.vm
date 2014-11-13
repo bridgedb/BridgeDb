@@ -43,11 +43,14 @@
     <dt><a href="$contextPath/BridgeDbApi#mapUri">mapUri</a></dt>
     <dd>List the URIs that map to this/these URIs</dd>
 
+    <dt><a href="$contextPath/BridgeDbApi#mapUriRDF">mapUriRDF</a></dt>
+    <dd>Same data as <a href="$contextPath/BridgeDbApi#mapUri">mapURI</a> but presented as RDF.</dd>
+
     <dt><a href="$contextPath/BridgeDbApi#mapBySet">mapBySet</a></dt>
     <dd>List the URIs that map to this/these URIs organised into Sets and Source Target pairs.</dd>
 
     <dt><a href="$contextPath/BridgeDbApi#mapBySetRDF">mapBySetRDF</a></dt>
-    <dd>Same data as <a href="$contextPath/BridgeDbApi#mapBySet">mapBySet</a> but presented at RDF.</dd>
+    <dd>Same data as <a href="$contextPath/BridgeDbApi#mapBySet">mapBySet</a> but presented as RDF.</dd>
 
     <dt><a href="$contextPath/BridgeDbApi#UriExists">UriExists</a></dt>
     <dd>State if the URI is know to the Mapping Service or not</dd>
@@ -598,6 +601,31 @@ Their behaviour is consistent across all methods, unless stated otherwise
         mapUri?Uri=$uri2&amp;targetUriPattern=http://identifiers.org</a></li>
     <li>All Lens: <a href="$contextPath/mapUri?Uri=$uri2&lensUri=All">
         mapUri?Uri=$uri2&amp;lensUri=All</a></li>
+ </ul>
+
+<h3><a name="mapUriRDF">mapUriRDF</a></h3>
+<ul>
+    <li>Same data as <a href="$contextPath/BridgeDbApi#mapUri">mapUri</a> but presented at RDF.</li>
+    <li>This method is available for media type text/plain.
+        <ul>
+            <li>Status 204 (no Content) is never returned.</li>
+        </ul>
+    </li>
+    <li>Request for media type HTML will return same text in a window.
+        <ul>
+            <li>Empty RDF is returned if no data available.</li>
+        </ul>
+    </li>
+    <li>Includes all the same arguements as :<a href="$contextPath/BridgeDbApi#mapUri">mapUri</a></li>
+    <li>Plus 
+        <ul>
+            <li><a href="$contextPath/BridgeDbApi#rdfFormat">rdfFormat</a></li>
+        </ul>
+    </li>
+    <li>As Statements: <a href="$contextPath/mapUriRDF?Uri=$uri2">mapUriRDF?Uri=$uri2</a></li>
+    #foreach ($rdfFormat in $rdfFormats)
+        <li>$rdfFormat: <a href="$contextPath/mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat">mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat</a></li>
+    #end
 </ul>
 
 <h3><a name="mapBySet">mapBySet</a></h3>
@@ -623,8 +651,9 @@ Their behaviour is consistent across all methods, unless stated otherwise
 
 <h3><a name="mapBySetRDF">mapBySetRDF</a></h3>
 <ul>
+    <li>DEPRECATED: Use <a href="$contextPath/BridgeDbApi#mapUriRDF">mapUriRDF</a> which gives the required information.</li>
     <li>Same data as <a href="$contextPath/BridgeDbApi#mapBySet">mapBySet</a> but presented at RDF.</li>
-    <li>This method is available for media types TEXT.
+    <li>This method is available for media type text/plain.
         <ul>
             <li>Status 204 (no Content) is never returned.</li>
         </ul>
@@ -640,22 +669,9 @@ Their behaviour is consistent across all methods, unless stated otherwise
             <li><a href="$contextPath/BridgeDbApi#rdfFormat">rdfFormat</a></li>
         </ul>
     </li>
-    <li>Example: <a href="$contextPath/mapBySetRDF?Uri=$uri2&lensUri=All&rdfFormat=TriX">
-            mapBySetRDF?Uri=$uri2&amp;lensUri=All&amp;rdfFormat=TriX"</a></li>
-    <li>Example: <a href="$contextPath/mapBySetRDF?Uri=$uri2&lensUri=All&rdfFormat=TriG">
-            mapBySetRDF?Uri=$uri2&amp;lensUri=All&amp;rdfFormat=TriG"</a></li>
-    <li>Example: <a href="$contextPath/mapBySetRDF?Uri=$uri2&lensUri=All&rdfFormat=N-Quads">
-            mapBySetRDF?Uri=$uri2&amp;lensUri=All&amp;rdfFormat=N-Quads"</a></li>
-    <li>Example: <a href="$contextPath/mapBySetRDF?Uri=$uri2&lensUri=All&rdfFormat=N-Triples">
-            mapBySetRDF?Uri=$uri2&amp;lensUri=All&amp;rdfFormat=N-Triples"</a></li>
-    <li>Example: <a href="$contextPath/mapBySetRDF?Uri=$uri2&lensUri=All&rdfFormat=RDF/JSON">
-            mapBySetRDF?Uri=$uri2&amp;lensUri=All&amp;rdfFormat=RDF/JSON"</a></li>
-    <li>Example: <a href="$contextPath/mapBySetRDF?Uri=$uri2&lensUri=All&rdfFormat=RDF/XML">
-            mapBySetRDF?Uri=$uri2&amp;lensUri=All&amp;rdfFormat=RDF/XML"</a></li>
-    <li>Example: <a href="$contextPath/mapBySetRDF?Uri=$uri2&lensUri=All&rdfFormat=N3">
-            mapBySetRDF?Uri=$uri2&amp;lensUri=All&amp;rdfFormat=N3"</a></li>
-    <li>Example: <a href="$contextPath/mapBySetRDF?Uri=$uri2&lensUri=All&rdfFormat=Turtle">
-            mapBySetRDF?Uri=$uri2&amp;lensUri=All&amp;rdfFormat=Turtle"</a></li>
+    #foreach ($rdfFormat in $rdfFormats)
+        <li>$rdfFormat: <a href="$contextPath/mapBySetRDF&rdfFormat=$rdfFormat?Uri=$uri2">mapBySetRDF?Uri=$uri2&rdfFormat=$rdfFormat</a></li>
+    #end
 </ul>
 
 <h3><a name="UriExists">UriExists</a></h3>
