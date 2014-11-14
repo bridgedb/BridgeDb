@@ -1,16 +1,16 @@
 <div id="content">
 <h2>Support services include:</h2>
 <dl>
-    <dt><a href="$contextPath/BridgeDbApi#mapID">mapID</a></dt>
+    <dt><a href="#mapID">mapID</a></dt>
     <dd>List the Xrefs that map to these Xrefs</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#xrefExists">xrefExists</a></dt>
+    <dt><a href="#xrefExists">xrefExists</a></dt>
     <dd>State if the Xref is know to the Mapping Service or not</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#freeSearch">freeSearch</a></dt>
+    <dt><a href="#freeSearch">freeSearch</a></dt>
     <dd>Searches for Xrefs that have this id.</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#getCapabilities">getCapabilities</a></dt>
+    <dt><a href="#getCapabilities">getCapabilities</a></dt>
     <dd>Gives the Capabilitles as defined by BridgeDB.</dd>
 
     <dt>Close()</dt>
@@ -19,70 +19,70 @@
     <dt>isConnected</dt>
     <dd>Not supported as Close() is not allowed</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#isFreeSearchSupported">isFreeSearchSupported</a></dt>
+    <dt><a href="#isFreeSearchSupported">isFreeSearchSupported</a></dt>
     <dd>Returns True as freeSearch and URLSearch are supported.</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#getSupportedSrcDataSources">getSupportedSrcDataSources</a></dt>
+    <dt><a href="#getSupportedSrcDataSources">getSupportedSrcDataSources</a></dt>
     <dd>Returns Supported Source (BridgeDB)DataSource(s).</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#getSupportedTgtDataSources">getSupportedTgtDataSources</a></dt>
+    <dt><a href="#getSupportedTgtDataSources">getSupportedTgtDataSources</a></dt>
     <dd>Returns Supported Target (BridgeDB)DataSource(s).</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#isMappingSupported">isMappingSupported</a></dt>
+    <dt><a href="#isMappingSupported">isMappingSupported</a></dt>
     <dd>States if two DataSources are mapped at least once.</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#property">property/key</a></dt>
+    <dt><a href="#property">property/key</a></dt>
     <dd>Returns The property value for this key.</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#getKeys">getKeys</a></dt>
+    <dt><a href="#getKeys">getKeys</a></dt>
     <dd>Returns The keys and their property value.</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#map">map</a></dt>
+    <dt><a href="#map">map</a></dt>
     <dd>List the full mappings to this URI (or Xref)</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#mapUri">mapUri</a></dt>
+    <dt><a href="#mapUri">mapUri</a></dt>
     <dd>List the URIs that map to this/these URIs</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#mapUriRDF">mapUriRDF</a></dt>
-    <dd>Same data as <a href="$contextPath/BridgeDbApi#mapUri">mapURI</a> but presented as RDF.</dd>
+    <dt><a href="#mapUriRDF">mapUriRDF</a></dt>
+    <dd>Same data as <a href="#mapUri">mapURI</a> but presented as RDF.</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#mapBySet">mapBySet</a></dt>
-    <dd>DEPRECATED: Use <a href="$contextPath/BridgeDbApi#map">map</a> which gives the required information and more.</dd>
+    <dt><a href="#mapBySet">mapBySet</a></dt>
+    <dd>DEPRECATED: Use <a href="#map">map</a> which gives the required information and more.</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#mapBySetRDF">mapBySetRDF</a></dt>
-    <dd>DEPRECATED: Use <a href="$contextPath/BridgeDbApi#mapUriRDF">mapUriRDF</a> which gives the required information.</dd>
+    <dt><a href="#mapBySetRDF">mapBySetRDF</a></dt>
+    <dd>DEPRECATED: Use <a href="#mapUriRDF">mapUriRDF</a> which gives the required information.</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#UriExists">UriExists</a></dt>
+    <dt><a href="#UriExists">UriExists</a></dt>
     <dd>State if the URI is know to the Mapping Service or not</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#UriSearch">UriSearch</a></dt>
+    <dt><a href="#UriSearch">UriSearch</a></dt>
     <dd>Searches for URIs that have this ending.</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#dataSource">dataSource</a></dt>
+    <dt><a href="#dataSource">dataSource</a></dt>
     <dd>Returns the DataSource and associated UriSpace(s) with a specific id</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#toUris">toUris</a></dt>
-    <dd>Returns the URIs associated with a Xref (specified as <a href="$contextPath/BridgeDbApi#id_code">id</a> and <a href="$contextPath/BridgeDbApi#id_code">code</a>)</dd>
+    <dt><a href="#toUris">toUris</a></dt>
+    <dd>Returns the URIs associated with a Xref (specified as <a href="#id_code">id</a> and <a href="#id_code">code</a>)</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#toXref">toXref</a></dt>
+    <dt><a href="#toXref">toXref</a></dt>
     <dd>Retrns the Xref for this URI</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#SourceInfos">SourceInfos</a></dt>
+    <dt><a href="#SourceInfos">SourceInfos</a></dt>
     <dd>Brings up a table of all the Sources in the system.</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#SourceTargetInfos">SourceTargetInfos</a></dt>
+    <dt><a href="#SourceTargetInfos">SourceTargetInfos</a></dt>
     <dd>Brings up a table of all the Targets for a particular Source.</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#mappingSet">mappingSet</a></dt>
+    <dt><a href="#mappingSet">mappingSet</a></dt>
     <dd>Brings up a table of all the mappings in the system for a particular Source and Target.</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#mappingSet">mappingSet/id</a></dt>
+    <dt><a href="#mappingSet">mappingSet/id</a></dt>
     <dd>Provides the metadata for one mapping set</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#Lens">Lens</a></dt>
+    <dt><a href="#Lens">Lens</a></dt>
     <dd>Brings up a list of the Supported Lens</dd>
 
-    <dt><a href="$contextPath/BridgeDbApi#LensRDF">LensRDF</a></dt>
+    <dt><a href="#LensRDF">LensRDF</a></dt>
     <dd>Brings up the supported Lens in RDF format</dd>
 </dl>
 
@@ -156,11 +156,23 @@ Their behaviour is consistent across all methods, unless stated otherwise
     <li>Only one Uri parameters is supported.</li>
 </ul>
 
+<h4><a name="baseUri">baseUri</a></h4>
+<ul>
+    <li>Used for methods that return RDF.</li>
+    <li>Changes the base of any URIs that refer to the IMS</li>
+    <li>Should be used if the IMS services are used Vai another service</li>
+    <li>The baseUri should include the service name and the final / but not the method name
+    <ul>
+        <li>So if calling http://localhost:8080/BridgeDb/mapUriRDF?... the baseUri would be http://www.example.com/MyBridgeDb/</li>
+        <li>This allows http://www.example.com/MyBridgeDb/ to forward any calls to its BridgeDb service.</li>
+    <ul>    
+</ul>
+
 <h4><a name="lensUri">lensUri</a></h4>
 <ul>
     <li>Determines which types of results are returned</li>
-    <li>If not provided the default lens is used. Except in the <a href="$contextPath/BridgeDbApi#Lens">Lens</a></li>
-    <li> Use <a href="$contextPath/BridgeDbApi#Lens">Lens</a>  method to get a list of the Lens.</li>
+    <li>If not provided the default lens is used. Except in the <a href="#Lens">Lens</a></li>
+    <li> Use <a href="#Lens">Lens</a>  method to get a list of the Lens.</li>
 </ul>
 
 <h4><a name="lensGroup">lensGroup</a></h4>
@@ -214,7 +226,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
         <ul>
             <li>Each TargetURI is added as a new paramter</li>
             <li>In the format targetUriPattern=target1&amp;targetUriPattern=target12&amp;</li>
-            <li>See: <a href="$contextPath/BridgeDbApi#mapUri">mapUri</a> for a working example</li>
+            <li>See: <a href="#mapUri">mapUri</a> for a working example</li>
         </ul>
     </li>
 </ul>
@@ -256,8 +268,8 @@ Their behaviour is consistent across all methods, unless stated otherwise
     <li>Only effects calls that would not naturally return Xref results
         <ul>
             <li>Always considered true for any call with </li>
-            <li><a href="$contextPath/BridgeDbApi#id_code">id</a> and <a href="$contextPath/BridgeDbApi#id_code">code</a> paramtered set</li>
-            <li>Always considered true for any call with <a href="$contextPath/BridgeDbApi#targetCode">targetCode</a>  paramters set</li>
+            <li><a href="#id_code">id</a> and <a href="#id_code">code</a> paramtered set</li>
+            <li>Always considered true for any call with <a href="#targetCode">targetCode</a>  paramters set</li>
             <li>For transitives also allows the Via information to be added.</li>
             <li>In all other cases defaults to false.</li>
         </ul>
@@ -269,9 +281,9 @@ Their behaviour is consistent across all methods, unless stated otherwise
     <li>Ask for the results to include URI results.</li>
     <li>Only effects calls that would not naturally return URI results
         <ul>
-            <li>Always considered true for any call with <a href="$contextPath/BridgeDbApi#Uri">Uri</a> paramter set</li>
-            <li>Always considered true for any call with <a href="$contextPath/BridgeDbApi#graph">graph</a> paramters set</li>
-            <li>Always considered true for any call with <a href="$contextPath/BridgeDbApi#targetUriPattern">targetUriPattern</a> paramters set</li>
+            <li>Always considered true for any call with <a href="#Uri">Uri</a> paramter set</li>
+            <li>Always considered true for any call with <a href="#graph">graph</a> paramters set</li>
+            <li>Always considered true for any call with <a href="#targetUriPattern">targetUriPattern</a> paramters set</li>
             <li>In all other cases defaults to false.</li>
         </ul>
     </li>
@@ -296,13 +308,13 @@ Their behaviour is consistent across all methods, unless stated otherwise
     </li>
     <li>Required arguements: (Only Source Xref considered)
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#id_code">id</a></li>
-            <li><a href="$contextPath/BridgeDbApi#id_code">code</a></li>
+            <li><a href="#id_code">id</a></li>
+            <li><a href="#id_code">code</a></li>
         </ul>
     </li>
     <li>Optional arguments
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#targetCode">targetCode</a></li>
+            <li><a href="#targetCode">targetCode</a></li>
         </ul>
     </li>
     <li>Xref Example: <a href="$contextPath/mapID?id=$id2&code=$code2&id=$id1&code=$code1">
@@ -323,8 +335,8 @@ Their behaviour is consistent across all methods, unless stated otherwise
     <li>There is not media type HTML.</li>
     <li>Required arguements: (Considers both Source and target Xrefs
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#id_code">id</a></li>
-            <li><a href="$contextPath/BridgeDbApi#id_code">code</a></li>
+            <li><a href="#id_code">id</a></li>
+            <li><a href="#id_code">code</a></li>
             <li>Currently only a single id and single code supported.</li>
         </ul>
     </li>
@@ -348,8 +360,8 @@ Their behaviour is consistent across all methods, unless stated otherwise
     </li>
     <li>Required arguements:
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#text">text</a></li>
-            <li><a href="$contextPath/BridgeDbApi#limit">limit</a> (default available)</li>
+            <li><a href="#text">text</a></li>
+            <li><a href="#limit">limit</a> (default available)</li>
         </ul>
     </li>
     <li>Example: <a href="$contextPath/freeSearch?text=$id2&limit=5">
@@ -438,8 +450,8 @@ Their behaviour is consistent across all methods, unless stated otherwise
     <li>There is not media type HTML.</li>
     <li>Required arguements: (One of each)
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#sourceCode">sourceCode</a></li>
-            <li><a href="$contextPath/BridgeDbApi#targetCode">targetCode</a></li>
+            <li><a href="#sourceCode">sourceCode</a></li>
+            <li><a href="#targetCode">targetCode</a></li>
         </ul>
     </li>
     <li>Example: <a href="$contextPath/isMappingSupported?sourceCode=$sourceCode1&targetCode=$targetCode1">
@@ -491,11 +503,11 @@ Their behaviour is consistent across all methods, unless stated otherwise
 <ul>
     <li>List the full mappings to this URI or Xref</li>
     <li>WARNING: Providing both URI and Xref parameters always causes an Exception. Even if they match!</li>
-    <li>Note: it is not recommened to use both <a href="$contextPath/BridgeDbApi#targetCode">targetCode</a>
-        and <a href="$contextPath/BridgeDbApi#targetUriPattern">targetUriPattern</a>.
+    <li>Note: it is not recommened to use both <a href="#targetCode">targetCode</a>
+        and <a href="#targetUriPattern">targetUriPattern</a>.
         If both are supplied the result is the union of the calls with each individually.</li>
-    <li>Note: it is not allowed to use both <a href="$contextPath/BridgeDbApi#graph">graph</a>
-        and <a href="$contextPath/BridgeDbApi#targetUriPattern">targetUriPattern</a>.
+    <li>Note: it is not allowed to use both <a href="#graph">graph</a>
+        and <a href="#targetUriPattern">targetUriPattern</a>.
         If both are supplied an error is thrown.</li>
     <li>This method is available for media types XML, JSON and HTML.
         <ul>
@@ -511,25 +523,25 @@ Their behaviour is consistent across all methods, unless stated otherwise
         <ul>
             <li>URI based
                 <ul>
-                    <li><a href="$contextPath/BridgeDbApi#Uri">Uri</a></li>
+                    <li><a href="#Uri">Uri</a></li>
                 </ul>
             </li>
             <li>Xref based
                 <ul>
-                    <li><a href="$contextPath/BridgeDbApi#id_code">id</a></li>
-                    <li><a href="$contextPath/BridgeDbApi#id_code">code</a></li>  
+                    <li><a href="#id_code">id</a></li>
+                    <li><a href="#id_code">code</a></li>  
                 </ul>
             </li>
         </ul>
     </li>
     <li>Optional arguments
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#lensUri">lensUri</a></li>
-            <li><a href="$contextPath/BridgeDbApi#includeXrefResults">includeXrefResults</a></li>
-            <li><a href="$contextPath/BridgeDbApi#includeUriResults">includeUriResults</a></li>
-            <li><a href="$contextPath/BridgeDbApi#graph">graph</a></li>
-            <li><a href="$contextPath/BridgeDbApi#targetUriPattern">targetUriPattern</a></li>
-            <li><a href="$contextPath/BridgeDbApi#targetCode">targetCode</a></li>
+            <li><a href="#lensUri">lensUri</a></li>
+            <li><a href="#includeXrefResults">includeXrefResults</a></li>
+            <li><a href="#includeUriResults">includeUriResults</a></li>
+            <li><a href="#graph">graph</a></li>
+            <li><a href="#targetUriPattern">targetUriPattern</a></li>
+            <li><a href="#targetCode">targetCode</a></li>
         </ul>
     </li>
     <li>Xref Example: <a href="$contextPath/map?id=$id2&code=$code2&id=$id1&code=$code1">
@@ -559,7 +571,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
 <h3><a name="mapUri">mapUri</a></h3>
 <ul>
     <li>List the URIs that map to this URI(s)</li>
-    <li>Note: it is not allowed to use both <a href="$contextPath/BridgeDbApi#graph">graph</a> and <a href="$contextPath/BridgeDbApi#targetUriPattern">targetUriPattern</a>.
+    <li>Note: it is not allowed to use both <a href="#graph">graph</a> and <a href="#targetUriPattern">targetUriPattern</a>.
          If both are supplied an error is thrown.</li> 
     <li>This method is available for media types XML and JSON.
         <ul>
@@ -573,7 +585,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
     </li>
     <li>Required arguements:
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#Uri">Uri</a>
+            <li><a href="#Uri">Uri</a>
                 <ul>
                     <li>In Contrast to other methods multiple values may be provided</li>
                 </ul>
@@ -582,12 +594,12 @@ Their behaviour is consistent across all methods, unless stated otherwise
     </li>
     <li>Optional arguments
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#lensUri">lensUri</a></li>
-            <li><a href="$contextPath/BridgeDbApi#graph">graph</a></li> 
-            <li><a href="$contextPath/BridgeDbApi#targetUriPattern">targetUriPattern</a></li> 
+            <li><a href="#lensUri">lensUri</a></li>
+            <li><a href="#graph">graph</a></li> 
+            <li><a href="#targetUriPattern">targetUriPattern</a></li> 
         </ul>
     </li>
-    <li>Note: The HTML version of this call is actually based on <a href="$contextPath/BridgeDbApi#map">map</a>
+    <li>Note: The HTML version of this call is actually based on <a href="#map">map</a>
         <ul>
             <li>The id of the mapping set(s) used is added</li>
             <li>The via (intermediate) values of transitives are shown.</li>
@@ -612,7 +624,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
 
 <h3><a name="mapUriRDF">mapUriRDF</a></h3>
 <ul>
-    <li>Same data as <a href="$contextPath/BridgeDbApi#mapUri">mapUri</a> but presented at RDF.</li>
+    <li>Same data as <a href="#mapUri">mapUri</a> but presented at RDF.</li>
     <li>This method is available for media type text/plain.
         <ul>
             <li>Status 204 (no Content) is never returned.</li>
@@ -623,10 +635,11 @@ Their behaviour is consistent across all methods, unless stated otherwise
             <li>Empty RDF is returned if no data available.</li>
         </ul>
     </li>
-    <li>Includes all the same arguements as :<a href="$contextPath/BridgeDbApi#mapUri">mapUri</a></li>
+    <li>Includes all the same arguements as :<a href="#mapUri">mapUri</a></li>
     <li>Plus 
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#rdfFormat">rdfFormat</a></li>
+            <li><a href="#rdfFormat">rdfFormat</a></li>
+            <li><a href="#baseUri">baseUri</a></li>
         </ul>
     </li>
     <li>As Statements: <a href="$contextPath/mapUriRDF?Uri=$uri2">mapUriRDF?Uri=$uri2</a></li>
@@ -642,11 +655,13 @@ Their behaviour is consistent across all methods, unless stated otherwise
                 mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()&linksetInfo=true</a></li>
         #end
     #end
-</ul>
+    <li>With baseuri: <a href="$contextPath/mapUriRDF?Uri=$uri2&linksetInfo=true&baseUri=http://www.example.com/myBridgeDB/">mapUriRDF?Uri=$uri2&linksetinfo=true&baseUri=http://www.example.com/myBridgeDB/</a></li>
+    <li>Note: All the examples shown in <li><a href="#mapUri">mapUri</a> work with mapUriRDF too!</li>
+</ul
 
 <h3><a name="mapBySet">mapBySet</a></h3>
 <ul>
-    <li>DEPRECATED: Use <a href="$contextPath/BridgeDbApi#map">map</a> which gives the required information and more</li>
+    <li>DEPRECATED: Use <a href="#map">map</a> which gives the required information and more</li>
     <li>List the URIs that map to this/these URIs organised into Sets and Source Target pairs.</li>
     <li>This method is available for media types XML, JSON and HTML.
         <ul> 
@@ -658,7 +673,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
             <li>An warning page is returned if no data available.</li>
         </ul>
     </li>
-    <li>Arguements same as:<a href="$contextPath/BridgeDbApi#mapUri">mapUri</a></li>
+    <li>Arguements same as:<a href="#mapUri">mapUri</a></li>
     <li>1 URI: <a href="$contextPath/mapBySet?Uri=$uri2">
             mapBySet?Uri=$uri2</a></li>
     <li>2 URIs: <a href="$contextPath/mapBySet?Uri=$uri2&Uri=$uri1">
@@ -667,8 +682,8 @@ Their behaviour is consistent across all methods, unless stated otherwise
 
 <h3><a name="mapBySetRDF">mapBySetRDF</a></h3>
 <ul>
-    <li>DEPRECATED: Use <a href="$contextPath/BridgeDbApi#mapUriRDF">mapUriRDF</a> which gives the required information.</li>
-    <li>Same data as <a href="$contextPath/BridgeDbApi#mapBySet">mapBySet</a> but presented at RDF.</li>
+    <li>DEPRECATED: Use <a href="#mapUriRDF">mapUriRDF</a> which gives the required information.</li>
+    <li>Same data as <a href="#mapBySet">mapBySet</a> but presented at RDF.</li>
     <li>This method is available for media type text/plain.
         <ul>
             <li>Status 204 (no Content) is never returned.</li>
@@ -679,10 +694,10 @@ Their behaviour is consistent across all methods, unless stated otherwise
             <li>Empty RDF is returned if no data available.</li>
         </ul>
     </li>
-    <li>Includes all the same arguements as :<a href="$contextPath/BridgeDbApi#mapUri">mapUri</a> and <a href="$contextPath/BridgeDbApi#mapBySet">mapBySet</a></li>
+    <li>Includes all the same arguements as :<a href="#mapUri">mapUri</a> and <a href="#mapBySet">mapBySet</a></li>
     <li>Plus 
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#rdfFormat">rdfFormat</a></li>
+            <li><a href="#rdfFormat">rdfFormat</a></li>
         </ul>
     </li>
     #foreach ($rdfFormat in $rdfFormats)
@@ -702,7 +717,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
     <li>There is not media type HTML.</li>
     <li>Required arguements:
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#Uri">Uri</a>
+            <li><a href="#Uri">Uri</a>
                 <ul>
                     <li>Currently limited to single URI</li>
                 </ul>
@@ -728,8 +743,8 @@ Their behaviour is consistent across all methods, unless stated otherwise
     </li>
     <li>Required arguements:
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#text">text</a></li>
-            <li><a href="$contextPath/BridgeDbApi#limit">limit</a> (default available)</li>
+            <li><a href="#text">text</a></li>
+            <li><a href="#limit">limit</a> (default available)</li>
         </ul>
     </li>
     <li>Example: <a href="$contextPath/UriSearch?text=$id2&limit=5">UriSearch?text=$id2&amp;limit=5</a></li>
@@ -771,8 +786,8 @@ Their behaviour is consistent across all methods, unless stated otherwise
     </li>
     <li>Required arguements: 
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#id_code">id</a></li>
-            <li><a href="$contextPath/BridgeDbApi#id_code">code</a></li>
+            <li><a href="#id_code">id</a></li>
+            <li><a href="#id_code">code</a></li>
         </ul>
     </li>
     <li>Example: <a href="$contextPath/toUris?id=$id2&code=$code2">toUris?id=$id2&amp;code=$code2</a></li>
@@ -793,7 +808,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
     </li>
     <li>Required arguements:
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#Uri">Uri</a></li>
+            <li><a href="#Uri">Uri</a></li>
         </ul>
     </li>
     <li>Example: <a href="$contextPath/toXref?Uri=$uri2">toXref?Uri=$uri2</a></li>
@@ -804,7 +819,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
     <li>Brings up a table of all the Sources in the system.</li>
     <li>Optional arguments:
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#lensUri">lensUri</a></li>
+            <li><a href="#lensUri">lensUri</a></li>
         </ul>
     </li>
     <li>Example (Default Lens): <a href="$contextPath/SourceInfos">SourceInfos</a></li>
@@ -816,12 +831,12 @@ Their behaviour is consistent across all methods, unless stated otherwise
     <li>Brings up a table of all the Targets for a particular Source.</li>
     <li>Required arguement:
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#sourceCode">sourceCode</a></li>
+            <li><a href="#sourceCode">sourceCode</a></li>
         </ul>
     </li>
     <li>Optional arguments
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#lensUri">lensUri</a></li>
+            <li><a href="#lensUri">lensUri</a></li>
         </ul>
     </li>
     <li>Example (Default Lens): <a href="$contextPath/SourceTargetInfos?sourceCode=$sourceCode1">SourceTargetInfos?sourceCode=$sourceCode1</a></li>
@@ -851,14 +866,14 @@ Their behaviour is consistent across all methods, unless stated otherwise
         <ul>
             <li>Required arguements:
                 <ul>
-                    <li><a href="$contextPath/BridgeDbApi#sourceCode">sourceCode</a></li>
-                    <li><a href="$contextPath/BridgeDbApi#targetCode">targetCode</a></li> 
+                    <li><a href="#sourceCode">sourceCode</a></li>
+                    <li><a href="#targetCode">targetCode</a></li> 
                     <li>Note: These are required arguements Since April 2014 as this method did not scale well</li>
                 </ul>
             </li>
         <li>Optional arguments
             <ul>
-                <li><a href="$contextPath/BridgeDbApi#lensUri">lensUri</a></li>
+                <li><a href="#lensUri">lensUri</a></li>
             </ul>
         </li>
         <li>Example (Default Lens): <a href="$contextPath/mappingSet?sourceCode=$sourceCode1&targetCode=$targetCode1">
@@ -880,14 +895,14 @@ This method will now always throw an Exception! It did not scale.
     <li>Brings up a list of the Supported Lens</li>
     <li>Optional arguments:
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#lensUri">lensUri</a>
+            <li><a href="#lensUri">lensUri</a>
                 <ul>
-                    <li> If provided <a href="$contextPath/BridgeDbApi#lensGroup">lensGroup</a>  is ignored.</li>
+                    <li> If provided <a href="#lensGroup">lensGroup</a>  is ignored.</li>
                 </ul>
             </li>
-            <li><a href="$contextPath/BridgeDbApi#lensGroup">lensGroup</a>
+            <li><a href="#lensGroup">lensGroup</a>
                 <ul>
-                    <li> If neither this nor <a href="$contextPath/BridgeDbApi#lensUri">lensUri</a> is provided the group public is used. </li>
+                    <li> If neither this nor <a href="#lensUri">lensUri</a> is provided the group public is used. </li>
                 </ul>
             </li>
         </ul>
@@ -902,17 +917,17 @@ This method will now always throw an Exception! It did not scale.
 
 <h3><a name="LensRDF">LensRDF</a></h3>
 <ul>
-    <li>Same data as <a href="$contextPath/BridgeDbApi#Lens">Lens</a> but presented at RDF.</li>
+    <li>Same data as <a href="#Lens">Lens</a> but presented at RDF.</li>
     <li>Required Argument:
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#rdfFormat">rdfFormat</a></li>
+            <li><a href="#rdfFormat">rdfFormat</a></li>
         </ul>
     </li>
     <li>Optional arguments:
         <ul>
-            <li><a href="$contextPath/BridgeDbApi#lensUri">lensUri</a></li>
-            <li><a href="$contextPath/BridgeDbApi#lensGroup">lensGroup</a> </li> 
-            <li>See:<a href="$contextPath/BridgeDbApi#Lens">Lens</a> for argument behaviour and defaults</li>
+            <li><a href="#lensUri">lensUri</a></li>
+            <li><a href="#lensGroup">lensGroup</a> </li> 
+            <li>See:<a href="#Lens">Lens</a> for argument behaviour and defaults</li>
         </ul>
     </li>
     <li>TriX Examples: 
