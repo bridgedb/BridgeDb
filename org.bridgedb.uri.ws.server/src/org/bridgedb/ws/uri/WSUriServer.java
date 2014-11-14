@@ -318,7 +318,8 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
             @Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException{        
         StringBuilder sb = topAndSide ("MappingSet " + idString, httpServletRequest);
-        Set<Statement> statements = getMappingSetStatements(idString, checkBaseUri(baseUri, httpServletRequest));
+        Set<Statement> statements = getMappingSetStatements(idString, checkBaseUri(baseUri, httpServletRequest),
+                 checkContext(baseUri, httpServletRequest));
         sb.append("<h4>Use MediaType.TEXT_PLAIN to return remove HTML stuff</h4>");
         sb.append("<p>Warning MediaType.TEXT_PLAIN version returns status 204 if no mappings found.</p>");
         if (formatName != null || formatName != null){
@@ -342,7 +343,8 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
             @QueryParam(WsUriConstants.RDF_FORMAT) String formatName,
             @Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException{
-        Set<Statement> statements = getMappingSetStatements(idString, checkBaseUri(baseUri, httpServletRequest)); 
+        Set<Statement> statements = getMappingSetStatements(idString, checkBaseUri(baseUri, httpServletRequest), 
+                checkContext(baseUri, httpServletRequest)); 
         if (noConentOnEmpty & statements.isEmpty()){
             return Response.noContent().build();
         } 
@@ -361,25 +363,25 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
      * @return
      * @throws BridgeDBException 
      */
-    protected Set<Statement> getMappingSetStatements(String idString, String baseUri) 
+    protected Set<Statement> getMappingSetStatements(String idString, String baseUri, String context) 
             throws BridgeDBException{
         int[] ids = Mapping.splitId(idString);
         if (ids.length == 1){
-            return UriResultsAsRDF.asRDF(uriMapper.getMappingSetInfo(ids[0]), baseUri);
+            return UriResultsAsRDF.asRDF(uriMapper.getMappingSetInfo(ids[0]), baseUri, context);
         } else  {
             Set<Statement> statements = new HashSet<Statement>();
             for (int id:ids){
-                statements.addAll(UriResultsAsRDF.asRDF(uriMapper.getMappingSetInfo(id), baseUri));
+                statements.addAll(UriResultsAsRDF.asRDF(uriMapper.getMappingSetInfo(id), baseUri, context));
             }
             return statements;       
         }       
      }
     
-    private Set<Statement> getMappingSetStatements(Set<Mapping> mappings, String baseUri) throws BridgeDBException {
+    private Set<Statement> getMappingSetStatements(Set<Mapping> mappings, String baseUri, String context) throws BridgeDBException {
         Set<Statement> results = new HashSet<Statement>();
         for (Mapping mapping:mappings){
             if (mapping.getPredicate() != null){
-                results.addAll(getMappingSetStatements(mapping.combinedId(), baseUri));
+                results.addAll(getMappingSetStatements(mapping.combinedId(), baseUri, context));
             }
         }
         return results;
@@ -392,6 +394,14 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
             return url.substring(0, url.length()- httpServletRequest.getPathInfo().length() + 1);
         }
         return baseUri;       
+    }
+    
+    private String checkContext(String baseUri, HttpServletRequest httpServletRequest) {
+        if (httpServletRequest.getQueryString() == null){
+            return baseUri + httpServletRequest.getPathInfo();
+        } else {
+            return baseUri + httpServletRequest.getPathInfo() + "?" +  httpServletRequest.getQueryString();       
+        }
     }
     
     @GET
@@ -407,32 +417,14 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
             @QueryParam(WsUriConstants.LINKSET_INFO) Boolean linksetInfo,
             @Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException{  
-        Set<Mapping> mappings;
-        if (uris.size() == 1){
-            mappings = uriMapper.mapFull(uris.iterator().next(), lensUri, XREF_DATA_NOT_REQUIRED, graph, targetUriPatterns);
-        } else {
-            mappings = new HashSet<Mapping>();
-            for(String single:uris){
-                mappings.addAll(uriMapper.mapFull(single, lensUri, XREF_DATA_NOT_REQUIRED, graph, targetUriPatterns));
-            }
-        }
-        baseUri = checkBaseUri(baseUri, httpServletRequest);
-        Set<Statement> statements = UriResultsAsRDF.asRDF(mappings, baseUri);
+        Set<Statement> statements = this.mapUriRdfInner(uris, lensUri, graph, targetUriPatterns, baseUri, formatName, 
+                linksetInfo, httpServletRequest);
         StringBuilder sb = topAndSide ( WsUriConstants.MAP_URI + " as RDF", httpServletRequest);
         sb.append("<h4>Use MediaType.TEXT_PLAIN to return remove HTML stuff</h4>");
         sb.append("<p>Warning MediaType.TEXT_PLAIN version returns status 204 if no mappings found.</p>");
         if (formatName != null || formatName != null){
-            RDFFormat rdfFormat = RDFFormat.valueOf(formatName);
-            if (linksetInfo != null && linksetInfo){
-                if (rdfFormat.supportsContexts()){
-                    statements.addAll(getMappingSetStatements(mappings, baseUri));
-                }
-            }
             generateTextarea(sb, "RDF", BridgeDbRdfTools.writeRDF(statements, formatName));
         } else {
-            if (linksetInfo != null && linksetInfo){
-                statements.addAll(getMappingSetStatements(mappings, baseUri));
-            }
             sb.append("<p>Warning MediaType.TEXT_PLAIN version returns RDF using the default format even if no format specified.</p>");
             VelocityContext velocityContext = new VelocityContext();
             velocityContext.put("statements", statements);
@@ -453,8 +445,21 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
             @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns, 
             @QueryParam(WsUriConstants.BASE_URI) String baseUri,
             @QueryParam(WsUriConstants.RDF_FORMAT) String formatName,
+            @QueryParam(WsUriConstants.LINKSET_INFO) Boolean linksetInfo,
             @Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException{  
+        Set<Statement> statements = this.mapUriRdfInner(uris, lensUri, graph, targetUriPatterns, baseUri, formatName, 
+                linksetInfo, httpServletRequest);
+        if (noConentOnEmpty & statements.isEmpty()){
+            return Response.noContent().build();
+        } 
+        String rdfInfo = BridgeDbRdfTools.writeRDF(statements, formatName); 
+        return Response.ok(rdfInfo, MediaType.TEXT_PLAIN_TYPE).build();
+    }
+    
+    private Set<Statement> mapUriRdfInner(List<String> uris, String lensUri, String graph, List<String> targetUriPatterns, 
+            String baseUri, String formatName,
+            Boolean linksetInfo, HttpServletRequest httpServletRequest) throws BridgeDBException{  
         Set<Mapping> mappings;
         if (uris.size() == 1){
             mappings = uriMapper.mapFull(uris.iterator().next(), lensUri, XREF_DATA_NOT_REQUIRED, graph, targetUriPatterns);
@@ -465,12 +470,21 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
             }
         }
         baseUri = checkBaseUri(baseUri, httpServletRequest);
+        String context = checkContext(baseUri, httpServletRequest);
         Set<Statement> statements = UriResultsAsRDF.asRDF(mappings, baseUri);
-        if (noConentOnEmpty & statements.isEmpty()){
-            return Response.noContent().build();
-        } 
-        String rdfInfo = BridgeDbRdfTools.writeRDF(statements, formatName); 
-        return Response.ok(rdfInfo, MediaType.TEXT_PLAIN_TYPE).build();
+        if (formatName != null || formatName != null){
+            RDFFormat rdfFormat = RDFFormat.valueOf(formatName);
+            if (linksetInfo != null && linksetInfo){
+                if (rdfFormat.supportsContexts()){
+                    statements.addAll(getMappingSetStatements(mappings, baseUri, context));
+                }
+            }
+        } else {
+            if (linksetInfo != null && linksetInfo){
+                statements.addAll(getMappingSetStatements(mappings, baseUri, context));
+            }
+        }        
+        return statements;
     }
     
     private String mapUriForm(boolean includeGraph, HttpServletRequest httpServletRequest) throws BridgeDBException{
@@ -634,6 +648,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
     @GET
     @Produces({MediaType.TEXT_HTML})
     @Path("/" + WsUriConstants.MAP_BY_SET + WsUriConstants.RDF)
+    @Deprecated
     public Response mapBySetRdfHtml(@QueryParam(WsUriConstants.URI) List<String> uris,
      		@QueryParam(WsUriConstants.LENS_URI) String lensUri,
             @QueryParam(WsUriConstants.GRAPH) String graph,

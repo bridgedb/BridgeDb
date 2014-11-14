@@ -98,11 +98,11 @@ public class UriResultsAsRDF {
         return toURI(baseUri + UriConstants.MAPPING_SET + UriConstants.RDF + "/" + id);
     }
     
-    public static Set<Statement> asRDF(MappingSetInfo info, String baseUri){
+    public static Set<Statement> asRDF(MappingSetInfo info, String baseUri, String contextString){
         HashSet<Statement> results = new HashSet<Statement>();
         URI linksetId = mappingSetURI(info.getStringId(), baseUri);
         URI source = toURI(info.getMappingSource());
-        URI context = new URIImpl(baseUri);
+        URI context = new URIImpl(contextString);
         results.add(new ContextStatementImpl(linksetId, PavConstants.IMPORTED_FROM, source, context));
         URI predicate = toURI(info.getPredicate());
         results.add(new ContextStatementImpl(linksetId, VoidConstants.LINK_PREDICATE, predicate, context));
