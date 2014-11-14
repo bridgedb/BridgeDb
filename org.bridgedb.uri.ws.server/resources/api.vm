@@ -47,10 +47,10 @@
     <dd>Same data as <a href="$contextPath/BridgeDbApi#mapUri">mapURI</a> but presented as RDF.</dd>
 
     <dt><a href="$contextPath/BridgeDbApi#mapBySet">mapBySet</a></dt>
-    <dd>List the URIs that map to this/these URIs organised into Sets and Source Target pairs.</dd>
+    <dd>DEPRECATED: Use <a href="$contextPath/BridgeDbApi#map">map</a> which gives the required information and more.</dd>
 
     <dt><a href="$contextPath/BridgeDbApi#mapBySetRDF">mapBySetRDF</a></dt>
-    <dd>Same data as <a href="$contextPath/BridgeDbApi#mapBySet">mapBySet</a> but presented as RDF.</dd>
+    <dd>DEPRECATED: Use <a href="$contextPath/BridgeDbApi#mapUriRDF">mapUriRDF</a> which gives the required information.</dd>
 
     <dt><a href="$contextPath/BridgeDbApi#UriExists">UriExists</a></dt>
     <dd>State if the URI is know to the Mapping Service or not</dd>
@@ -158,6 +158,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
 
 <h4><a name="lensUri">lensUri</a></h4>
 <ul>
+    <li>Determines which types of results are returned</li>
     <li>If not provided the default lens is used. Except in the <a href="$contextPath/BridgeDbApi#Lens">Lens</a></li>
     <li> Use <a href="$contextPath/BridgeDbApi#Lens">Lens</a>  method to get a list of the Lens.</li>
 </ul>
@@ -166,6 +167,13 @@ Their behaviour is consistent across all methods, unless stated otherwise
 <ul>
     <li>If not provided the public groups is used </li>
     <li>A list of the current groups is available from <a href="$contextPath/lensGroup">/BridgeDb/lensGroup</a></li>
+</ul>
+
+<h4><a name="linksetInfo">linksetInfo</a></h4>
+<ul>
+    <li>Allows the addition of statements about the linkset(s) used</li>
+    <li>boolean value if not set false is assumed</li>
+    <li>Only works if <a href=#rdfFormat"> is null or supports context.</li>
 </ul>
 
 <h4><a name="graph">graph</a></h4>
@@ -230,15 +238,14 @@ Their behaviour is consistent across all methods, unless stated otherwise
     <li>String Format</li>
     <li>Legal values are:
         <ul>
-            <li>TriX</li>
-            <li>TriG</li>
-            <li>N-Quads</li>
-            <li>N-Triples</li>
-            <li>RDF/JSON</li>
-            <li>RDF/XML</li>
-            <li>N3</li>
-            <li>Turtle</li>
-        </ul>
+            #foreach ($rdfFormat in $rdfFormats)
+                <li>rdfFormat.getName()
+                #if ($rdfFormat.supportsContexts())
+                    &nbsp;&nbsp;(Supports Context)
+                #end
+                </li>
+            #end
+          </ul>
     </li>
     <li>Only one format can be specified.</li>
 </ul>
@@ -624,7 +631,16 @@ Their behaviour is consistent across all methods, unless stated otherwise
     </li>
     <li>As Statements: <a href="$contextPath/mapUriRDF?Uri=$uri2">mapUriRDF?Uri=$uri2</a></li>
     #foreach ($rdfFormat in $rdfFormats)
-        <li>$rdfFormat: <a href="$contextPath/mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat">mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat</a></li>
+        <li>$rdfFormat.getName(): <a href="$contextPath/mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()">
+            mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()</a></li>
+    #end
+    <li>Note: linksetInfo is ignored if rdfFormat does not support context!</li>
+    <li>With info: <a href="$contextPath/mapUriRDF?Uri=$uri2&linksetInfo=true">mapUriRDF?Uri=$uri2&linksetinfo=true</a></li>
+    #foreach ($rdfFormat in $rdfFormats)
+        #if($rdfFormat.supportsContexts())
+            <li>$rdfFormat.getName(): <a href="$contextPath/mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()&linksetInfo=true">
+                mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()&linksetInfo=true</a></li>
+        #end
     #end
 </ul>
 
@@ -670,7 +686,8 @@ Their behaviour is consistent across all methods, unless stated otherwise
         </ul>
     </li>
     #foreach ($rdfFormat in $rdfFormats)
-        <li>$rdfFormat: <a href="$contextPath/mapBySetRDF&rdfFormat=$rdfFormat?Uri=$uri2">mapBySetRDF?Uri=$uri2&rdfFormat=$rdfFormat</a></li>
+        <li>$rdfFormat.getName(): <a href="$contextPath/mapBySetRDF&rdfFormat=$rdfFormat.getName()?Uri=$uri2">
+            mapBySetRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()</a></li>
     #end
 </ul>
 

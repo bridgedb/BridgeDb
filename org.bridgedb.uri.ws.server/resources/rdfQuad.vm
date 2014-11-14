@@ -14,7 +14,11 @@
                 <td>$statement.getSubject().stringValue()</td>
                 <td>$statement.getPredicate().stringValue()</td>
                 <td>$statement.getObject().stringValue()</td>
-                <td>$statement.getContext().stringValue()</td>
+                #if ($statement.getContext())
+                    <td>$statement.getContext().stringValue()</td>
+                #else
+                    <td>No Conext</td>
+                #end    
             </tr>        
         #end
     </tbody>

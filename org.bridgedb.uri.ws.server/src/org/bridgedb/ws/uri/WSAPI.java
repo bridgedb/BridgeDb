@@ -42,6 +42,7 @@ import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.uri.ws.WsUriConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.templates.WebTemplates;
+import org.openrdf.rio.RDFFormat;
 
 /**
  * This class provides the API documentation
@@ -136,7 +137,7 @@ public class WSAPI extends WSUriInterfaceService {
         velocityContext.put("code1", sourceSysCode1);
         velocityContext.put("sourceCode1", sourceSysCode1);
         velocityContext.put("targetCode1", tragetSysCode1);
-       velocityContext.put("rdfFormats", BridgeDbRdfTools.getAvaiableWriters());
+        velocityContext.put("rdfFormats", BridgeDbRdfTools.getAvaiableFormats());
         
         //Exmples for mapping 2
         velocityContext.put("uri2", sourceUri2);

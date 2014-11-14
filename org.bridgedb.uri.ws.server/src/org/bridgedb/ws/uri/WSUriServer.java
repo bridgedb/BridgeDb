@@ -62,6 +62,7 @@ import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WsConstants;
 import org.bridgedb.ws.templates.WebTemplates;
 import org.openrdf.model.Statement;
+import org.openrdf.rio.RDFFormat;
 
 /**
  *
@@ -374,6 +375,16 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         }       
      }
     
+    private Set<Statement> getMappingSetStatements(Set<Mapping> mappings, String baseUri) throws BridgeDBException {
+        Set<Statement> results = new HashSet<Statement>();
+        for (Mapping mapping:mappings){
+            if (mapping.getPredicate() != null){
+                results.addAll(getMappingSetStatements(mapping.combinedId(), baseUri));
+            }
+        }
+        return results;
+    }
+
     private String checkBaseUri(String baseUri, HttpServletRequest httpServletRequest) 
             throws BridgeDBException{
         if (baseUri == null || baseUri.isEmpty()){
@@ -393,6 +404,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
             @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns, 
             @QueryParam(WsUriConstants.BASE_URI) String baseUri,
             @QueryParam(WsUriConstants.RDF_FORMAT) String formatName,
+            @QueryParam(WsUriConstants.LINKSET_INFO) Boolean linksetInfo,
             @Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException{  
         Set<Mapping> mappings;
@@ -410,8 +422,17 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         sb.append("<h4>Use MediaType.TEXT_PLAIN to return remove HTML stuff</h4>");
         sb.append("<p>Warning MediaType.TEXT_PLAIN version returns status 204 if no mappings found.</p>");
         if (formatName != null || formatName != null){
+            RDFFormat rdfFormat = RDFFormat.valueOf(formatName);
+            if (linksetInfo != null && linksetInfo){
+                if (rdfFormat.supportsContexts()){
+                    statements.addAll(getMappingSetStatements(mappings, baseUri));
+                }
+            }
             generateTextarea(sb, "RDF", BridgeDbRdfTools.writeRDF(statements, formatName));
         } else {
+            if (linksetInfo != null && linksetInfo){
+                statements.addAll(getMappingSetStatements(mappings, baseUri));
+            }
             sb.append("<p>Warning MediaType.TEXT_PLAIN version returns RDF using the default format even if no format specified.</p>");
             VelocityContext velocityContext = new VelocityContext();
             velocityContext.put("statements", statements);

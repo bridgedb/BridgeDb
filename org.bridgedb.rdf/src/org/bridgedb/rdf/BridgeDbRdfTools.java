@@ -91,6 +91,18 @@ public class BridgeDbRdfTools {
         }
         return results;
     }
+
+    public static Set<RDFFormat> getAvaiableFormats(){
+        HashSet<RDFFormat> results = new HashSet<RDFFormat>();
+        StringWriter writer = new StringWriter();
+        for (RDFFormat rdfFormat:RDFFormat.values()){
+            RDFWriter rdfWriter = getWriterIfPossible(rdfFormat, writer); 
+            if (rdfWriter != null){
+                results.add(rdfFormat);
+            }
+        }
+        return results;
+    }
     
     /**
      * This method is required as at last check the BinaryRDFWriterFactory was not fully implemeneted.

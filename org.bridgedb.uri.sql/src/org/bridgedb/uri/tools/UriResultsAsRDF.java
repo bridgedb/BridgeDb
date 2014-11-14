@@ -102,11 +102,12 @@ public class UriResultsAsRDF {
         HashSet<Statement> results = new HashSet<Statement>();
         URI linksetId = mappingSetURI(info.getStringId(), baseUri);
         URI source = toURI(info.getMappingSource());
-        results.add(new StatementImpl(linksetId, PavConstants.IMPORTED_FROM, source));
+        URI context = new URIImpl(baseUri);
+        results.add(new ContextStatementImpl(linksetId, PavConstants.IMPORTED_FROM, source, context));
         URI predicate = toURI(info.getPredicate());
-        results.add(new StatementImpl(linksetId, VoidConstants.LINK_PREDICATE, predicate));
+        results.add(new ContextStatementImpl(linksetId, VoidConstants.LINK_PREDICATE, predicate, context));
         URI justification = toURI(info.getJustification());
-        results.add(new StatementImpl(linksetId, BridgeDBConstants.LINKSET_JUSTIFICATION, justification));
+        results.add(new ContextStatementImpl(linksetId, BridgeDBConstants.LINKSET_JUSTIFICATION, justification, context));
         return results;
     }
 
