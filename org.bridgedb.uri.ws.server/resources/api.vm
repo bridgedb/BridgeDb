@@ -79,6 +79,12 @@
     <dt><a href="#mappingSet">mappingSet/id</a></dt>
     <dd>Provides the metadata for one mapping set</dd>
 
+    <dt><a href="#mappingSetRDF">mappingSetRDF</a></dt>
+    <dd>Same data as <a href="#mappingSet">mappingSet/id</a> but presented as RDF.</dd>
+
+    <dt><a href="#mappingSetRDF">mappingSetRDF/id</a></dt>
+    <dd>Same data as <a href="#mappingSet">mappingSet/id</a> but presented as RDF.</dd>
+
     <dt><a href="#Lens">Lens</a></dt>
     <dd>Brings up a list of the Supported Lens</dd>
 
@@ -186,6 +192,9 @@ Their behaviour is consistent across all methods, unless stated otherwise
     <li>Allows the addition of statements about the linkset(s) used</li>
     <li>boolean value if not set false is assumed</li>
     <li>Only works if <a href=#rdfFormat"> is null or supports context.</li>
+    <li>Warning: Setting linksetInfo will increase the number of statements returned by about a factor of 10</li>
+    <li>Warning: Setting linksetInfo will increase response time considerably</li>
+    <li>Only use if provenance data is really required.</li>
 </ul>
 
 <h4><a name="graph">graph</a></h4>
@@ -640,70 +649,51 @@ Their behaviour is consistent across all methods, unless stated otherwise
         <ul>
             <li><a href="#rdfFormat">rdfFormat</a></li>
             <li><a href="#baseUri">baseUri</a></li>
+            <li><a href="#linksetInfo">linksetInfo</a></li>
         </ul>
     </li>
-    <li>As Statements: <a href="$contextPath/mapUriRDF?Uri=$uri2">mapUriRDF?Uri=$uri2</a></li>
-    #foreach ($rdfFormat in $rdfFormats)
-        <li>$rdfFormat.getName(): <a href="$contextPath/mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()">
-            mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()</a></li>
-    #end
+    <li>As Statements: 
+        <ul>
+            <li><a href="$contextPath/mapUriRDF?Uri=$uri2">mapUriRDF?Uri=$uri2</a></li>
+        </ul>
+    </li>
+    <li>As RDF
+        <ul>
+            #foreach ($rdfFormat in $rdfFormats)
+                <li>$rdfFormat.getName(): <a href="$contextPath/mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()">
+                    mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()</a></li>
+            #end
+        </ul>
+    </li>
     <li>Note: linksetInfo is ignored if rdfFormat does not support context!</li>
-    <li>With info: <a href="$contextPath/mapUriRDF?Uri=$uri2&linksetInfo=true">mapUriRDF?Uri=$uri2&linksetinfo=true</a></li>
-    #foreach ($rdfFormat in $rdfFormats)
-        #if($rdfFormat.supportsContexts())
-            <li>$rdfFormat.getName(): <a href="$contextPath/mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()&linksetInfo=true">
-                mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()&linksetInfo=true</a></li>
-        #end
-    #end
-    <li>With baseuri: <a href="$contextPath/mapUriRDF?Uri=$uri2&linksetInfo=true&baseUri=http://www.example.com/myBridgeDB/">mapUriRDF?Uri=$uri2&linksetinfo=true&baseUri=http://www.example.com/myBridgeDB/</a></li>
+    <li>With info: 
+        <ul>
+            <li><a href="$contextPath/mapUriRDF?Uri=$uri2&linksetInfo=true">mapUriRDF?Uri=$uri2&linksetinfo=true</a></li>
+            #foreach ($rdfFormat in $rdfFormats)
+                #if($rdfFormat.supportsContexts())
+                    <li>$rdfFormat.getName(): <a href="$contextPath/mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()&linksetInfo=true">
+                        mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()&linksetInfo=true</a></li>
+                #end
+            #end
+        </ul>
+    </li>
+    <li>With baseuri: 
+        <ul>
+            <li><a href="$contextPath/mapUriRDF?Uri=$uri2&linksetInfo=true&baseUri=http://www.example.com/myBridgeDB/">
+                mapUriRDF?Uri=$uri2&linksetinfo=true&baseUri=http://www.example.com/myBridgeDB/</a></li>
+        </ul>
+    </li>        
     <li>Note: All the examples shown in <li><a href="#mapUri">mapUri</a> work with mapUriRDF too!</li>
 </ul
 
 <h3><a name="mapBySet">mapBySet</a></h3>
 <ul>
     <li>DEPRECATED: Use <a href="#map">map</a> which gives the required information and more</li>
-    <li>List the URIs that map to this/these URIs organised into Sets and Source Target pairs.</li>
-    <li>This method is available for media types XML, JSON and HTML.
-        <ul> 
-            <li>Status 204 (no Content) is return if no data available.</li>
-        </ul>
-    </li>
-    <li>Request for media type HTML will a html formated page.
-        <ul>
-            <li>An warning page is returned if no data available.</li>
-        </ul>
-    </li>
-    <li>Arguements same as:<a href="#mapUri">mapUri</a></li>
-    <li>1 URI: <a href="$contextPath/mapBySet?Uri=$uri2">
-            mapBySet?Uri=$uri2</a></li>
-    <li>2 URIs: <a href="$contextPath/mapBySet?Uri=$uri2&Uri=$uri1">
-            mapBySet?Uri=$uri2&amp;Uri=$uri1</a></li>
 </ul>
 
 <h3><a name="mapBySetRDF">mapBySetRDF</a></h3>
 <ul>
     <li>DEPRECATED: Use <a href="#mapUriRDF">mapUriRDF</a> which gives the required information.</li>
-    <li>Same data as <a href="#mapBySet">mapBySet</a> but presented at RDF.</li>
-    <li>This method is available for media type text/plain.
-        <ul>
-            <li>Status 204 (no Content) is never returned.</li>
-        </ul>
-    </li>
-    <li>Request for media type HTML will return same text in a window.
-        <ul>
-            <li>Empty RDF is returned if no data available.</li>
-        </ul>
-    </li>
-    <li>Includes all the same arguements as :<a href="#mapUri">mapUri</a> and <a href="#mapBySet">mapBySet</a></li>
-    <li>Plus 
-        <ul>
-            <li><a href="#rdfFormat">rdfFormat</a></li>
-        </ul>
-    </li>
-    #foreach ($rdfFormat in $rdfFormats)
-        <li>$rdfFormat.getName(): <a href="$contextPath/mapBySetRDF&rdfFormat=$rdfFormat.getName()?Uri=$uri2">
-            mapBySetRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()</a></li>
-    #end
 </ul>
 
 <h3><a name="UriExists">UriExists</a></h3>
@@ -859,7 +849,14 @@ Their behaviour is consistent across all methods, unless stated otherwise
     </li>
     <li>For a Single Mapping set append /Id.
         <ul>
+            <li>id can be a single integer</li>
             <li>Example (one Set): <a href="$contextPath/mappingSet/1">mappingSet/1</a></li>
+            <li>Or a Transitive mapping as list of integers separated by _ (underrscore)
+                <ul>
+                    <li>Note: No check is done to see if the list of integers makes a legal transitive.</li>
+                </ul>
+            </li>    
+            <li>Transitive: <a href="$contextPath/mappingSet/1">mappingSet/1_3</a></li>
         </ul>
     </li>
     <li>For a Summary table for a Source Target pair.
@@ -885,6 +882,67 @@ Their behaviour is consistent across all methods, unless stated otherwise
         <li>Example (All Lens XML version): <a href="$contextPath/mappingSetXML?sourceCode=$sourceCode1&targetCode=$targetCode1">
                 mappingSetXML?sourceCode=$sourceCode1&amp;targetCode=$targetCode1</a></li>
     </ul></li>
+</ul>
+
+<h3><a name="mappingSetRDF">mappingSetRDF</a></h3>
+<ul>
+    <li>Brings up the information for one mapping.</li>
+    <li>This method is available for media types TEXT and HTML.
+        <ul>
+            <li>Status 204 (no Content) is return if no data available.</li>
+        </ul>
+    </li>
+    <li>Request for media type HTML will a html formated page.
+        <ul>
+            <li>An warning page is returned if no data available.</li>
+        </ul>
+    </li>
+    <li>To use as an Identifier append /Id.
+        <ul>
+            <li>With media type TEXT the default RDF format is used</li> 
+            <li>Single mappingSet: <a href="$contextPath/mappingSetRDF/1">mappingSetRDF/1</a></li>
+            <li>Transitive: <a href="$contextPath/mappingSetRDF/1">mappingSetRDF/1_3</a></li>
+            <li>Note: /id form does not support any optiona arguements</li>
+        </ul>
+    </li>
+    <li>With extra Parameters
+        <ul>
+            <li>Required arguements:
+                <ul>
+                    <li>id (/id paramter)</li>
+                </ul>
+            </li>
+        <li>Optional arguments
+            <ul>
+                <li><a href="#rdfFormat">rdfFormat</a></li>
+                <li><a href="#baseUri">baseUri</a></li>
+            </ul>
+        </li>
+        <li>Note: sourceCode, targetCode and lensUri are NOT supported by this method</li>
+        <li>As Statements: 
+            <ul>
+                <li><a href="$contextPath/mappingSetRDF?id=1">mappingSetRDF?id=1</a></li>
+                <li><a href="$contextPath/mappingSetRDF?id=1_3">mappingSetRDF?id=1_3</a></li>
+            </ul>
+        </li>
+        <li>As RDF:
+            <ul>
+                #foreach ($rdfFormat in $rdfFormats)
+                    <li>$rdfFormat.getName(): <a href="$contextPath/mappingSetRDF?id=1&rdfFormat=$rdfFormat.getName()">
+                        mappingSetRDF?id=1&rdfFormat=$rdfFormat.getName()</a></li>
+                #end
+            </ul>
+        </li>    
+        <li>With baseuri: 
+            <ul>
+                <li><a href="$contextPath/mappingSetRDF?id=1&baseUri=http://www.example.com/myBridgeDB/">mappingSetRDF?id=1&baseUri=http://www.example.com/myBridgeDB/</a></li>
+                #foreach ($rdfFormat in $rdfFormats)
+                    <li>$rdfFormat.getName(): <a href="$contextPath/mappingSetRDF?id=1&rdfFormat=$rdfFormat.getName()&baseUri=http://www.example.com/myBridgeDB/">
+                        mappingSetRDF?id=1&rdfFormat=$rdfFormat.getName()&baseUri=http://www.example.com/myBridgeDB/</a></li>
+                #end
+            </ul>
+        </li>    
+    </ul>
 </ul>
 
 <h3><a name="graphviz">graphviz</a></h3>

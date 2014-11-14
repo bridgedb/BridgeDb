@@ -21,7 +21,7 @@ public class WebTemplates
     public static final String MAP_URI_RESULTS = "mapUriResults.vm";
     public static final String SELECTORS_SCRIPTS = "selectorsScripts.vm";
     public static final String DATA_SOURCE_SCRIPT = "dataSource.vm";
-    public static final String RDF_TRIPLE_SCRIPT = "rdfTriple.vm";
+    //public static final String RDF_TRIPLE_SCRIPT = "rdfTriple.vm";
     public static final String RDF_QUAD_SCRIPT = "rdfQuad.vm";
     public static final String SOURCE_INFO_SCRIPT = "sourceInfos.vm";
     public static final String SOURCE_TARGET_INFO_SCRIPT = "sourceTargetInfos.vm";

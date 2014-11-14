@@ -94,7 +94,7 @@ public class UriResultsAsRDF {
         return BridgeDbRdfTools.writeRDF(statements, formatName);
     }
 
-    private static URI mappingSetURI(String id, String baseUri){
+    public static URI mappingSetURI(String id, String baseUri){
         return toURI(baseUri + UriConstants.MAPPING_SET + UriConstants.RDF + "/" + id);
     }
     

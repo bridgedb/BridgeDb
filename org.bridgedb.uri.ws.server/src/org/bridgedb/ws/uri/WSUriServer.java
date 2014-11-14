@@ -318,8 +318,9 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
             @Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException{        
         StringBuilder sb = topAndSide ("MappingSet " + idString, httpServletRequest);
-        Set<Statement> statements = getMappingSetStatements(idString, checkBaseUri(baseUri, httpServletRequest),
-                 checkContext(baseUri, httpServletRequest));
+        baseUri = checkBaseUri(baseUri, httpServletRequest);
+        String context = checkContext(baseUri, httpServletRequest);
+        Set<Statement> statements = getMappingSetStatements(idString, baseUri, context);
         sb.append("<h4>Use MediaType.TEXT_PLAIN to return remove HTML stuff</h4>");
         sb.append("<p>Warning MediaType.TEXT_PLAIN version returns status 204 if no mappings found.</p>");
         if (formatName != null || formatName != null){
@@ -329,7 +330,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
             VelocityContext velocityContext = new VelocityContext();
             velocityContext.put("statements", statements);
             velocityContext.put("subject", WsUriConstants.MAPPING_SET);
-            sb.append(WebTemplates.getForm(velocityContext, WebTemplates.RDF_TRIPLE_SCRIPT));
+            sb.append(WebTemplates.getForm(velocityContext, WebTemplates.RDF_QUAD_SCRIPT));
         }        
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
@@ -343,8 +344,9 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
             @QueryParam(WsUriConstants.RDF_FORMAT) String formatName,
             @Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException{
-        Set<Statement> statements = getMappingSetStatements(idString, checkBaseUri(baseUri, httpServletRequest), 
-                checkContext(baseUri, httpServletRequest)); 
+        baseUri = checkBaseUri(baseUri, httpServletRequest);
+        String context = checkContext(baseUri, httpServletRequest);
+        Set<Statement> statements = getMappingSetStatements(idString, baseUri, context);
         if (noConentOnEmpty & statements.isEmpty()){
             return Response.noContent().build();
         } 
@@ -365,6 +367,9 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
      */
     protected Set<Statement> getMappingSetStatements(String idString, String baseUri, String context) 
             throws BridgeDBException{
+        if (idString == null || idString.isEmpty()){
+            throw new BridgeDBException (WsConstants.ID + " parameter is missing");
+        }
         int[] ids = Mapping.splitId(idString);
         if (ids.length == 1){
             return UriResultsAsRDF.asRDF(uriMapper.getMappingSetInfo(ids[0]), baseUri, context);
