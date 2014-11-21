@@ -42,7 +42,7 @@ import org.openrdf.rio.helpers.RDFHandlerBase;
 public class LinkHandler extends RDFHandlerBase{
     
     protected final URI linkPredicate;
-    protected final boolean symetric;
+    private boolean symetric;
     protected final UriListener uriListener;
 
     protected int mappingSet;
@@ -55,7 +55,17 @@ public class LinkHandler extends RDFHandlerBase{
         this.symetric = symetric;
     }
     
-        
+    public LinkHandler(UriListener uriListener, URI linkPredicate){
+        this (uriListener, linkPredicate, true);
+    }
+    
+    /**
+     * @param symetric the symetric to set
+     */
+    protected void setSymetric(boolean symetric) {
+        this.symetric = symetric;
+    }
+
     @Override
     public void handleStatement(Statement st) throws RDFHandlerException {
         if (st.getPredicate().equals(linkPredicate)) {
@@ -96,4 +106,4 @@ public class LinkHandler extends RDFHandlerBase{
         return mappingSet;
     }
 
- }
+}
