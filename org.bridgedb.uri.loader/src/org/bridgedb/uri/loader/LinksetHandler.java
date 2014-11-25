@@ -42,9 +42,9 @@ import org.openrdf.rio.RDFHandlerException;
  */
 public class LinksetHandler extends LinkHandler{
     
-    boolean processingFirstStatement = true;
-    private final String justification;
-    private final String backwardJustification;
+    private boolean processingFirstStatement = true;
+    protected final String justification;
+    protected final String backwardJustification;
 
     protected final URI mappingSource;
 
