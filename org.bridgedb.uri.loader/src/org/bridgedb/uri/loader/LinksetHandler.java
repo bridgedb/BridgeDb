@@ -44,6 +44,8 @@ public class LinksetHandler extends LinkHandler{
     
     boolean processingFirstStatement = true;
     private final String justification;
+    private final String backwardJustification;
+
     protected final URI mappingSource;
 
     private int noneLinkStatements;
@@ -53,6 +55,7 @@ public class LinksetHandler extends LinkHandler{
         super(uriListener, linkPredicate);
         this.justification = justification;
         this.mappingSource = mappingSource;
+        backwardJustification = OpsJustificationMaker.getInstance().getInverse(justification);
     }
     
     /**
@@ -112,21 +115,25 @@ public class LinksetHandler extends LinkHandler{
                     Reporter.error("Unable to get a pattern for " + object.stringValue());
                     return;
                 }
-                String backwardJustification = OpsJustificationMaker.getInstance().getInverse(justification);
-                if (backwardJustification == null){
-                    mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), 
-                            justification, targetPattern, mappingSource, false);
-                    this.setSymetric(false);
-                } else {
-                    mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), 
-                            justification, backwardJustification, targetPattern, mappingSource);
-                }
+                registerMappingSet(sourcePattern, targetPattern);
             } catch (BridgeDBException ex) {
                 Reporter.error("Error handling: " + st, ex);
             }
             super.handleStatement(st);
         } else {
             this.noneLinkStatements++;
+        }
+    }
+
+    protected void registerMappingSet(RegexUriPattern sourcePattern, RegexUriPattern targetPattern ) 
+            throws BridgeDBException{
+        if (backwardJustification == null){
+            mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), 
+                    justification, targetPattern, mappingSource, false);
+            this.setSymetric(false);
+        } else {
+            mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), 
+                    justification, backwardJustification, targetPattern, mappingSource);
         }
     }
 
