@@ -53,9 +53,10 @@ import org.bridgedb.uri.api.SetMappings;
 import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.lens.LensTools;
+import org.bridgedb.uri.tools.DirectStatementMaker;
 import org.bridgedb.uri.tools.GraphResolver;
 import org.bridgedb.uri.tools.RegexUriPattern;
-import org.bridgedb.uri.tools.UriResultsAsRDF;
+import org.bridgedb.uri.tools.StatementMaker;
 import org.bridgedb.uri.ws.WsUriConstants;
 import org.bridgedb.uri.ws.bean.URISpacesInGraphBean;
 import org.bridgedb.utils.BridgeDBException;
@@ -79,16 +80,18 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
     private ServletContext context;
 
     private static final HashMap<String,Response> setMappings = new HashMap<String,Response>();
-
+    private final StatementMaker statementMaker;
+    
     static final Logger logger = Logger.getLogger(WSUriServer.class);
 
     public WSUriServer()  throws BridgeDBException   {
-        this(SQLUriMapper.getExisting());
+        this(SQLUriMapper.getExisting(), new DirectStatementMaker());
     }
 
-    public WSUriServer(UriMapper uriMapper) throws BridgeDBException   {
+    public WSUriServer(UriMapper uriMapper, StatementMaker statementMaker) throws BridgeDBException   {
         super(uriMapper);
-        logger.info("WsUriServer setup");        
+        logger.info("WsUriServer setup");    
+        this.statementMaker = statementMaker;
     }
     
     /**
@@ -372,11 +375,11 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         }
         int[] ids = Mapping.splitId(idString);
         if (ids.length == 1){
-            return UriResultsAsRDF.asRDF(uriMapper.getMappingSetInfo(ids[0]), baseUri, context);
+            return statementMaker.asRDF(uriMapper.getMappingSetInfo(ids[0]), baseUri, context);
         } else  {
             Set<Statement> statements = new HashSet<Statement>();
             for (int id:ids){
-                statements.addAll(UriResultsAsRDF.asRDF(uriMapper.getMappingSetInfo(id), baseUri, context));
+                statements.addAll(statementMaker.asRDF(uriMapper.getMappingSetInfo(id), baseUri, context));
             }
             return statements;       
         }       
@@ -476,7 +479,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         }
         baseUri = checkBaseUri(baseUri, httpServletRequest);
         String context = checkContext(baseUri, httpServletRequest);
-        Set<Statement> statements = UriResultsAsRDF.asRDF(mappings, baseUri);
+        Set<Statement> statements = statementMaker.asRDF(mappings, baseUri);
         if (formatName != null || formatName != null){
             RDFFormat rdfFormat = RDFFormat.valueOf(formatName);
             if (linksetInfo != null && linksetInfo){
@@ -635,7 +638,8 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         if (mappingsBySet.isEmpty()){
             return Response.noContent().build();
         } else {
-            String rdf = UriResultsAsRDF.toRDF(mappingsBySet, formatName, getBaseUri(httpServletRequest));     
+            Set<Statement> statements = statementMaker.asRDF(mappingsBySet, getBaseUri(httpServletRequest));
+            String rdf =BridgeDbRdfTools.writeRDF(statements, formatName);     
             return Response.ok(rdf, MediaType.TEXT_PLAIN_TYPE).build();
         }
     }
@@ -668,7 +672,9 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         sb.append(" this method does not include any protential mapping to self.</h2>");
         sb.append("<h4>Use MediaType.TEXT_PLAIN to remove HTML stuff</h4>");
         sb.append("<p>Warning MediaType.TEXT_PLAIN version returns status 204 if no mappings found.</p>");
-        generateTextarea(sb, "RDF", UriResultsAsRDF.toRDF(mappingsBySet, formatName, getBaseUri(httpServletRequest)));
+        Set<Statement> statements = statementMaker.asRDF(mappingsBySet, getBaseUri(httpServletRequest));
+        String rdf =BridgeDbRdfTools.writeRDF(statements, formatName);     
+        generateTextarea(sb, "RDF", rdf);
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }

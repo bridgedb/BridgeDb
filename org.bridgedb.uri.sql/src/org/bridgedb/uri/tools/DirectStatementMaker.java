@@ -33,8 +33,9 @@ import org.openrdf.model.impl.URIImpl;
  *
  * @author christian
  */
-public class UriResultsAsRDF {
-    private static URI toURI(String text){
+public class DirectStatementMaker implements StatementMaker{
+   
+    private URI toURI(String text){
         try {
             return new URIImpl(text);
         } catch (IllegalArgumentException ex){
@@ -42,7 +43,7 @@ public class UriResultsAsRDF {
         }
     }
     
-    private static Set<Statement> asRDF(SetMappings setMappings, String lens, String lensBaseUri) throws BridgeDBException {
+    private Set<Statement> asRDF(SetMappings setMappings, String lens, String lensBaseUri) throws BridgeDBException {
         HashSet<Statement> statements = new HashSet<Statement>();
         URI setUri = new URIImpl(setMappings.getMappingSource());
         URI predicateURI = toURI(setMappings.getPredicate());
@@ -70,7 +71,8 @@ public class UriResultsAsRDF {
         return statements;
     }
     
-    public static Set<Statement> asRDF(MappingsBySet mappingsBySet, String lensBaseUri) throws BridgeDBException{
+    @Override
+    public Set<Statement> asRDF(MappingsBySet mappingsBySet, String lensBaseUri) throws BridgeDBException{
         HashSet<Statement> statements = new HashSet<Statement>();
         for (SetMappings setMapping: mappingsBySet.getSetMappings()){
             Set<Statement> more = asRDF(setMapping, mappingsBySet.getLens(), lensBaseUri);
@@ -89,16 +91,12 @@ public class UriResultsAsRDF {
        return statements;
     }
 
-    public static String toRDF(MappingsBySet mappingsBySet, String formatName, String lensBaseUri) throws BridgeDBException{
-        Set<Statement> statements = asRDF(mappingsBySet, lensBaseUri);
-        return BridgeDbRdfTools.writeRDF(statements, formatName);
-    }
-
-    public static URI mappingSetURI(String id, String baseUri){
+    private URI mappingSetURI(String id, String baseUri){
         return toURI(baseUri + UriConstants.MAPPING_SET + UriConstants.RDF + "/" + id);
     }
     
-    public static Set<Statement> asRDF(MappingSetInfo info, String baseUri, String contextString){
+    @Override
+    public Set<Statement> asRDF(MappingSetInfo info, String baseUri, String contextString){
         HashSet<Statement> results = new HashSet<Statement>();
         URI linksetId = mappingSetURI(info.getStringId(), baseUri);
         URI source = toURI(info.getMappingSource());
@@ -111,7 +109,8 @@ public class UriResultsAsRDF {
         return results;
     }
 
-    public static Set<Statement> asRDF(Set<Mapping> mappings, String baseUri){
+    @Override
+    public Set<Statement> asRDF(Set<Mapping> mappings, String baseUri){
         Set<Statement> statements = new HashSet<Statement>();
         for (Mapping mapping:mappings){
             String predicate = mapping.getPredicate();
