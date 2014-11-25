@@ -44,7 +44,6 @@ public abstract class MappingListenerTest extends IDMapperTest{
      * @throws BridgeDBException
      */
     public static void loadData() throws BridgeDBException{
-        System.out.println("Old loadData called!");
         int mappingSet = listener.registerMappingSet(DataSource1, DataSource2, SYMETRIC);
         listener.insertLink(map1xref1.getId(), map1xref2.getId(), mappingSet, SYMETRIC);
         listener.insertLink(map2xref1.getId(), map2xref2.getId(), mappingSet, SYMETRIC);
