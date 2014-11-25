@@ -93,6 +93,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private static final String PREFIX_COLUMN_NAME = "prefix";
     private static final String POSTFIX_COLUMN_NAME = "postfix";
     protected static final String MAPPING_LINK_COUNT_COLUMN_NAME = "mappingLinkCount";
+    protected static final String MAPPING_RESOURCE_COLUMN_NAME = "resource";
     protected static final String MAPPING_SOURCE_COLUMN_NAME = "source";
     protected static final String MAPPING_SOURCE_COUNT_COLUMN_NAME = "mappingSourceCount";
     protected static final String SYMMETRIC_COLUMN_NAME = "symmetric";
@@ -222,6 +223,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                     + PREDICATE_COLUMN_NAME + " VARCHAR(" + PREDICATE_LENGTH + "), "
                     + JUSTIFICATION_COLUMN_NAME + " VARCHAR(" + JUSTIFICATION_LENGTH + "), "
                     + TARGET_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + "), "
+                    //While not use still adding a MAPPING_RESOURCE_COLUMN_NAME column
+                    //This avoids haveing to overwrite getDirectMapping
+                    + MAPPING_RESOURCE_COLUMN_NAME + " VARCHAR(" + MAPPING_URI_LENGTH + "), "
                     + MAPPING_SOURCE_COLUMN_NAME + " VARCHAR(" + MAPPING_URI_LENGTH + "), "
                     + SYMMETRIC_COLUMN_NAME + " INT, "
                     + MAPPING_LINK_COUNT_COLUMN_NAME + " INT, "
@@ -893,6 +897,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 query.append(JUSTIFICATION_COLUMN_NAME); //3
                 query.append(", ");
                 query.append(TARGET_DATASOURCE_COLUMN_NAME); //4
+                //MAPPING_RESOURCE_COLUMN_NAME is not set by this methods as only used in the IMS
                 query.append(", ");
                 query.append(MAPPING_SOURCE_COLUMN_NAME); //5
                 query.append(", ");
@@ -1597,7 +1602,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     //***************
     
-    private Set<DirectMapping> getDirectMappings(IdSysCodePair sourceRef, PreparedStatement statement, String lensId) throws BridgeDBException {
+    private Set<DirectMapping> getDirectMappings(IdSysCodePair sourceRef, PreparedStatement statement, String lensId) 
+            throws BridgeDBException {
 //        if (sourceRef == null){
 //            return new HashSet<DirectMapping>();
 //        }
@@ -1616,9 +1622,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 Integer symmetric = rs.getInt(SYMMETRIC_COLUMN_NAME);
                 String predicate = rs.getString(PREDICATE_COLUMN_NAME);
                 String justification = rs.getString(JUSTIFICATION_COLUMN_NAME);
+                String mappingResource = rs.getString(MAPPING_RESOURCE_COLUMN_NAME);
                 String mappingSource = rs.getString(MAPPING_SOURCE_COLUMN_NAME);
                 DirectMapping mapping = new DirectMapping(sourceRef, targetRef, mappingSetId, symmetric, predicate, 
-                        justification, mappingSource, lensId);
+                        justification, null, mappingSource, lensId);
                 results.add(mapping);
             }
             //ystem.out.println(results);
@@ -1638,6 +1645,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             + MAPPING_SET_ID_COLUMN_NAME + ", "
             + PREDICATE_COLUMN_NAME + ", "
             + JUSTIFICATION_COLUMN_NAME + ", "
+            + MAPPING_RESOURCE_COLUMN_NAME + ", "
             + MAPPING_SOURCE_COLUMN_NAME + ", "
             + SYMMETRIC_COLUMN_NAME
             + " FROM " + MAPPING_TABLE_NAME + ", " + MAPPING_SET_TABLE_NAME
