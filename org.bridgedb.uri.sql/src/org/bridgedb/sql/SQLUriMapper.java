@@ -75,10 +75,10 @@ import org.openrdf.model.Resource;
 public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener {
 
     private static final int CREATED_BY_LENGTH = 150;
-    private static final int JUSTIFICATION_LENGTH = 150;
+    protected static final int JUSTIFICATION_LENGTH = 150;
     private static final int MIMETYPE_LENGTH = 50;
     private static final int POSTFIX_LENGTH = 100;
-    private static final int PREDICATE_LENGTH = 100;
+    protected static final int PREDICATE_LENGTH = 100;
     private static final int PREFIX_LENGTH = 400;
     private static final int REGEX_LENGTH = 400;
 
@@ -89,14 +89,14 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private static final String CREATED_ON_COLUMN_NAME = "createdOn";
     private static final String DATASOURCE_COLUMN_NAME = "dataSource";
     public static final String JUSTIFICATION_COLUMN_NAME = "justification";
-    private static final String PREDICATE_COLUMN_NAME = "predicate";
+    protected static final String PREDICATE_COLUMN_NAME = "predicate";
     private static final String PREFIX_COLUMN_NAME = "prefix";
     private static final String POSTFIX_COLUMN_NAME = "postfix";
-    static final String MAPPING_LINK_COUNT_COLUMN_NAME = "mappingLinkCount";
-    static final String MAPPING_SOURCE_COLUMN_NAME = "source";
-    static final String MAPPING_SOURCE_COUNT_COLUMN_NAME = "mappingSourceCount";
-    static final String SYMMETRIC_COLUMN_NAME = "symmetric";
-    static final String MAPPING_TARGET_COUNT_COLUMN_NAME = "mappingTargetCount";
+    protected static final String MAPPING_LINK_COUNT_COLUMN_NAME = "mappingLinkCount";
+    protected static final String MAPPING_SOURCE_COLUMN_NAME = "source";
+    protected static final String MAPPING_SOURCE_COUNT_COLUMN_NAME = "mappingSourceCount";
+    protected static final String SYMMETRIC_COLUMN_NAME = "symmetric";
+    protected static final String MAPPING_TARGET_COUNT_COLUMN_NAME = "mappingTargetCount";
     private static final String MIMETYPE_COLUMN_NAME = "mimetype";
     private static final String NAME_COLUMN_NAME = "name";
     private static final String REGEX_COLUMN_NAME = "regex";
@@ -107,13 +107,31 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private static final boolean EXCLUDE_URI_RESULTS = false;
    
     private static SQLUriMapper mapper = null;
-    private final HashMap<Integer, RegexUriPattern> subjectUriPatterns;
-    private final HashMap<Integer, RegexUriPattern> targetUriPatterns;
+    
+    /**
+     * Stores the Pattern for the source of each mappingSet it is currently loading.
+     * 
+     * Pattern is added when an mappingSet is Registered.
+     * Used to quickly check the URIs and extract the ids in insertUriMappings
+     * 
+     * Not used during the map functions.
+     */
+    protected final HashMap<Integer, RegexUriPattern> subjectUriPatterns;
+    /**
+     * Stores the Pattern for the source of each mappingSet it is currently loading.
+     * 
+     * Pattern is added when an mappingSet is Registered.
+     * Used to quickly check the URIs and extract the ids in insertUriMappings
+     * 
+     * Not used during the map functions.
+     */
+    protected final HashMap<Integer, RegexUriPattern> targetUriPatterns;
     private boolean processingRawLinkset = true;
 
     //Currently there is only one of each of these but could be lens dependent
     private final PredicateMaker predicateMaker;
     private final JustificationMaker justificationMaker;
+    private String registerMappingQuery = null;
 
     private static final Logger logger = Logger.getLogger(SQLUriMapper.class);
 
@@ -848,6 +866,11 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             return mappingSetId;
         }
     }
+    
+    @Override
+    public int registerMappingSet(DataSource source, DataSource target, boolean symetric) throws BridgeDBException{
+        throw new BridgeDBException ("Not supported in URI Version.");
+    }
 
     /**
      * One way registration of Mapping Set.
@@ -857,39 +880,45 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      */
     private int registerMappingSet(DataSource source, DataSource target, String predicate,
             String justification, Resource mappingSource, int symmetric) throws BridgeDBException {
-        StringBuilder query = new StringBuilder("INSERT INTO ");
-        query.append(MAPPING_SET_TABLE_NAME);
-        query.append(" (");
-        query.append(SOURCE_DATASOURCE_COLUMN_NAME);
-        query.append(", ");
-        query.append(PREDICATE_COLUMN_NAME);
-        query.append(", ");
-        query.append(JUSTIFICATION_COLUMN_NAME);
-        query.append(", ");
-        query.append(TARGET_DATASOURCE_COLUMN_NAME);
-        query.append(", ");
-        query.append(MAPPING_SOURCE_COLUMN_NAME);
-        query.append(", ");
-        query.append(SYMMETRIC_COLUMN_NAME);
-        query.append(") VALUES ('");
-        query.append(getDataSourceKey(source));
-        query.append("', '");
-        query.append(predicate);
-        query.append("', '");
-        query.append(justification);
-        query.append("', '");
-        query.append(getDataSourceKey(target));
-        query.append("', '");
-        query.append(mappingSource);
-        query.append("', ");
-        query.append(symmetric);
-        query.append(")");
-        int autoinc = registerMappingSet(query.toString());
-        logger.info("Registered new Mapping " + autoinc + " from " + getDataSourceKey(source) + " to " + getDataSourceKey(target));
-        return autoinc;
+        PreparedStatement statement = null;
+        try {
+            if (registerMappingQuery == null){
+                StringBuilder query = new StringBuilder("INSERT INTO ");
+                query.append(MAPPING_SET_TABLE_NAME);
+                query.append(" (");
+                query.append(SOURCE_DATASOURCE_COLUMN_NAME); //1
+                query.append(", ");
+                query.append(PREDICATE_COLUMN_NAME); //2
+                query.append(", ");
+                query.append(JUSTIFICATION_COLUMN_NAME); //3
+                query.append(", ");
+                query.append(TARGET_DATASOURCE_COLUMN_NAME); //4
+                query.append(", ");
+                query.append(MAPPING_SOURCE_COLUMN_NAME); //5
+                query.append(", ");
+                query.append(SYMMETRIC_COLUMN_NAME); //6
+                query.append(") VALUES ( ?, ?, ?, ? , ?, ?)");
+                registerMappingQuery = query.toString();
+            }
+            statement = createPreparedStatement(registerMappingQuery);
+            statement.setString(1, getDataSourceKey(source));
+            statement.setString(2, predicate);
+            statement.setString(3, justification);
+            statement.setString(4, getDataSourceKey(target));
+            statement.setString(5, mappingSource.stringValue());
+            statement.setInt(6, symmetric);
+            statement.executeUpdate();
+            int autoinc = getAutoInc();
+            logger.info("Registered new Mapping " + autoinc + " from " + getDataSourceKey(source) + " to " + getDataSourceKey(target));
+            return autoinc;
+        } catch (SQLException ex) {
+            throw new BridgeDBException ("Error registering mappingSet ", ex);
+        } finally {
+            close(statement, null);
+        }
     }
 
-    private void setSymmetric(int mappingSetId, int symetricId) throws BridgeDBException {
+    protected final void setSymmetric(int mappingSetId, int symetricId) throws BridgeDBException {
         String mappingUri = null;
         StringBuilder query = new StringBuilder("UPDATE ");
         query.append(MAPPING_SET_TABLE_NAME);
@@ -908,7 +937,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
 
-    private void checkUriPattern(RegexUriPattern pattern) throws BridgeDBException {
+    protected final void checkUriPattern(RegexUriPattern pattern) throws BridgeDBException {
         String postfix = pattern.getPostfix();
         if (postfix == null) {
             postfix = "";

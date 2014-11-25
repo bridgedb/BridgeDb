@@ -19,6 +19,7 @@
 //
 package org.bridgedb.sql;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -68,11 +69,11 @@ public class SQLListener extends SQLBase implements MappingListener{
 
     static final String PROPERTY_COLUMN_NAME = "property";
     static final String SCHEMA_VERSION_COLUMN_NAME = "schemaversion"; //Do not change as used by RDG packages as well
-    static final String SOURCE_DATASOURCE_COLUMN_NAME = "sourceDataSource";
+    protected static final String SOURCE_DATASOURCE_COLUMN_NAME = "sourceDataSource";
     static final String SOURCE_ID_COLUMN_NAME = "sourceId";
     static final String SYSCODE_COLUMN_NAME = "sysCode";
     static final String TARGET_ID_COLUMN_NAME = "targetId";
-    static final String TARGET_DATASOURCE_COLUMN_NAME = "targetDataSource";
+    protected static final String TARGET_DATASOURCE_COLUMN_NAME = "targetDataSource";
     static final String TYPE_COLUMN_NAME = "type";
     static final String URL_PATTERN_COLUMN_NAME = "urlPattern";
     static final String URN_BASE_COLUMN_NAME = "urnBase";
@@ -86,7 +87,10 @@ public class SQLListener extends SQLBase implements MappingListener{
     private int doubleCount = 0;  
     private StringBuilder insertQuery;
     protected final String autoIncrement;
-    
+
+    //Must be private so subclasses can have their own query.
+    private String registerMappingQuery = null;
+
     private static final Logger logger = Logger.getLogger(SQLListener.class);
 
     public SQLListener(boolean dropTables) throws BridgeDBException{
@@ -112,16 +116,15 @@ public class SQLListener extends SQLBase implements MappingListener{
     }
         
     @Override
-    public int registerMappingSet(DataSource source, String predicate, String justification, 
-            DataSource target, String mappingName, boolean symetric) throws BridgeDBException {
-        int forwardId = registerMappingSet(source, target, 0);
+    public int registerMappingSet(DataSource source, DataSource target, boolean symetric) throws BridgeDBException {
+        int forwardId = registerMappingSet(source, target);
         if (symetric){
-            int symetricId = registerMappingSet(target, source, forwardId);
+            int symetricId = registerMappingSet(target, source);
         }
         return forwardId;
     }
 
-    final String getDataSourceKey(DataSource dataSource){
+    protected final String getDataSourceKey(DataSource dataSource){
         if (dataSource.getSystemCode() == null){
             return insertEscpaeCharacters(FULL_NAME_PREFIX + dataSource.getFullName());
         } else {
@@ -129,7 +132,7 @@ public class SQLListener extends SQLBase implements MappingListener{
         }
     }
     
-    final DataSource keyToDataSource(String key){
+    private final DataSource keyToDataSource(String key){
         if (key.startsWith(FULL_NAME_PREFIX)){
             String fullName = key.substring(FULL_NAME_PREFIX.length());
             return DataSource.getByFullName(fullName);
@@ -143,32 +146,35 @@ public class SQLListener extends SQLBase implements MappingListener{
      * @param justification 
      * 
      */
-    protected final int registerMappingSet(DataSource source, DataSource target, int symmetric) throws BridgeDBException {
-        String mappingUri = null;
-        StringBuilder query = new StringBuilder("INSERT INTO ");
-        query.append(MAPPING_SET_TABLE_NAME);
-        query.append(" ("); 
-        query.append(SOURCE_DATASOURCE_COLUMN_NAME);
-        query.append(", ");
-        query.append(TARGET_DATASOURCE_COLUMN_NAME); 
-        query.append(") VALUES ('"); 
-        query.append(getDataSourceKey(source));
-        query.append("', '");
-        query.append(getDataSourceKey(target));
-        query.append("')");
-        int autoinc = registerMappingSet(query.toString());
-        logger.info("Registered new Mapping " + autoinc + " from " + getDataSourceKey(source) + " to " + getDataSourceKey(target));
-        return autoinc;
-    }
-    
-    protected final int registerMappingSet(String update) throws BridgeDBException {
-        Statement statement = createStatement();
+    private int registerMappingSet(DataSource source, DataSource target) throws BridgeDBException {
+        PreparedStatement statement = null;
         try {
-            statement.executeUpdate(update);
+            if (registerMappingQuery == null){
+                StringBuilder query = new StringBuilder("INSERT INTO ");
+                query.append(MAPPING_SET_TABLE_NAME);
+                query.append(" (");
+                query.append(SOURCE_DATASOURCE_COLUMN_NAME); //1
+                query.append(", ");
+                query.append(TARGET_DATASOURCE_COLUMN_NAME); //2
+                query.append(") VALUES ( ?, ?)");
+                registerMappingQuery = query.toString();
+            }
+            statement = createPreparedStatement(registerMappingQuery);
+            statement.setString(1, getDataSourceKey(source));
+            statement.setString(2, getDataSourceKey(target));
+            statement.executeUpdate();
+            int autoinc = getAutoInc();
+            logger.info("Registered new Mapping " + autoinc + " from " + getDataSourceKey(source) + " to " + getDataSourceKey(target));
+            return autoinc;
         } catch (SQLException ex) {
-            throw new BridgeDBException ("Error inserting link with " + update, ex);
+            throw new BridgeDBException ("Error registering mappingSet ", ex);
+        } finally {
+            close(statement, null);
         }
-        statement = createStatement();
+    }
+  
+    protected final int getAutoInc() throws BridgeDBException {
+        Statement statement = createStatement();
         int autoinc = 0;
         String getId = "SELECT @@identity";
         ResultSet rs = null;
@@ -178,15 +184,14 @@ public class SQLListener extends SQLBase implements MappingListener{
             {
                 autoinc = rs.getInt(1);
             } else {
-                close(statement, rs);
-                throw new BridgeDBException ("No result getting new indetity with " + getId);
+               throw new BridgeDBException ("No result getting new indetity with " + getId);
             }
+            return autoinc;
         } catch (SQLException ex) {
-            close(statement, rs);
             throw new BridgeDBException ("Error getting new indetity with " + getId, ex);
+        } finally {
+            close(statement, rs);
         }
-        close(statement, rs);
-        return autoinc;
     }
 
     @Override
