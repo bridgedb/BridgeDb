@@ -71,6 +71,13 @@ public class DirectStatementMaker implements StatementMaker{
         return statements;
     }
     
+    /***
+     * @deprecated 
+     * @param mappingsBySet
+     * @param lensBaseUri
+     * @return
+     * @throws BridgeDBException 
+     */
     @Override
     public Set<Statement> asRDF(MappingsBySet mappingsBySet, String lensBaseUri) throws BridgeDBException{
         HashSet<Statement> statements = new HashSet<Statement>();

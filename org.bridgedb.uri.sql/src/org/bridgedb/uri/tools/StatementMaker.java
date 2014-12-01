@@ -19,6 +19,13 @@ import org.openrdf.model.Statement;
  */
 public interface StatementMaker {
  
+    /**
+     * @deprecated 
+     * @param mappingsBySet
+     * @param lensBaseUri
+     * @return
+     * @throws BridgeDBException 
+     */
     public Set<Statement> asRDF(MappingsBySet mappingsBySet, String lensBaseUri) throws BridgeDBException;
 
     public Set<Statement> asRDF(MappingSetInfo info, String baseUri, String contextString);

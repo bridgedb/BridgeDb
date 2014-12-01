@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
  *
  * Does not include everything in the void header but only what is captured in the SQL.
  * @author Christian
+ * @deprecated 
  */
 public class MappingsBySet {
     private final String lens;
@@ -41,6 +42,11 @@ public class MappingsBySet {
      */
     private final Set<UriMapping> mappings;
     
+    /**
+     * @deprecated 
+     * @param lens
+     * @param mappings 
+     */
     public MappingsBySet(String lens, Set<Mapping> mappings){
         this.lens = lens;
         this.setMappings = new HashSet<SetMappings>();
@@ -136,6 +142,10 @@ public class MappingsBySet {
         return null;
     }
     
+    /**
+     * @deprecated 
+     * @return 
+     */
     public Set<String> getTargetUris(){
         HashSet<String> targetUris = new HashSet<String>();
         for (SetMappings setMapping: getSetMappings()){
@@ -148,6 +158,10 @@ public class MappingsBySet {
         return targetUris;
     }
 
+    /**
+     * @deprecated 
+     * @return 
+     */
     public String toString(){
         StringBuilder sb = new StringBuilder("Lens: ");
         sb.append(getLens());
@@ -162,6 +176,7 @@ public class MappingsBySet {
     }
 
     /**
+     * @deprecated 
      * @return the lens
      */
     public String getLens() {
@@ -169,6 +184,7 @@ public class MappingsBySet {
     }
 
     /**
+     * @deprecated 
      * @return the setMappings
      */
     public Set<SetMappings> getSetMappings() {
@@ -176,12 +192,17 @@ public class MappingsBySet {
     }
 
     /**
+     * @deprecated 
      * @return the mappings
      */
     public Set<UriMapping> getMappings() {
         return mappings;
     }
     
+    /**
+     * @deprecated 
+     * @return 
+     */
     public boolean isEmpty(){
         return mappings.isEmpty() && setMappings.isEmpty();
     }
