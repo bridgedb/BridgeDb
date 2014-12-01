@@ -1122,6 +1122,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                         rs.getString(PREDICATE_COLUMN_NAME),
                         targetInfo,
                         rs.getString(JUSTIFICATION_COLUMN_NAME),
+                        rs.getString(MAPPING_RESOURCE_COLUMN_NAME),
                         rs.getString(MAPPING_SOURCE_COLUMN_NAME),
                         rs.getInt(SYMMETRIC_COLUMN_NAME),
                         rs.getInt(MAPPING_LINK_COUNT_COLUMN_NAME),

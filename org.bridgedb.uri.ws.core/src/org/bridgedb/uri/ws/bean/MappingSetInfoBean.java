@@ -35,6 +35,7 @@ public class MappingSetInfoBean {
     private String justification;
     private Integer symmetric;
     private Integer numberOfLinks;
+    private String mappingResource;
     private String mappingSource;    
     private Integer numberOfSources;
     private Integer numberOfTargets;
@@ -52,6 +53,7 @@ public class MappingSetInfoBean {
         predicate = info.getPredicate();
         target = DataSetInfoBean.asBean(info.getTarget());
         justification = info.getJustification();
+        mappingResource = info.getMappingResource();
         mappingSource = info.getMappingSource();
         symmetric = info.getSymmetric();
         numberOfLinks = info.getNumberOfLinks();
@@ -65,6 +67,7 @@ public class MappingSetInfoBean {
                getPredicate(), 
                DataSetInfoBean.asDataSetInfo(getTarget()), 
                getJustification(), 
+               getMappingResource(),
                getMappingSource(),
                getSymmetric(), 
                getNumberOfLinks(),
@@ -196,6 +199,20 @@ public class MappingSetInfoBean {
      */
     public void setNumberOfTargets(Integer numberOfTargets) {
         this.numberOfTargets = numberOfTargets;
+    }
+
+    /**
+     * @return the mappingResource
+     */
+    public String getMappingResource() {
+        return mappingResource;
+    }
+
+    /**
+     * @param mappingResource the mappingResource to set
+     */
+    public void setMappingResource(String mappingResource) {
+        this.mappingResource = mappingResource;
     }
 
     /**
