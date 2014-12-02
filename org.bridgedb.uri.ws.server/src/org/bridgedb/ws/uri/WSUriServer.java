@@ -479,7 +479,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         }
         baseUri = checkBaseUri(baseUri, httpServletRequest);
         String context = checkContext(baseUri, httpServletRequest);
-        Set<Statement> statements = statementMaker.asRDF(mappings, baseUri);
+        Set<Statement> statements = statementMaker.asRDF(mappings, baseUri, linksetInfo);
         if (formatName != null || formatName != null){
             RDFFormat rdfFormat = RDFFormat.valueOf(formatName);
             if (linksetInfo != null && linksetInfo){

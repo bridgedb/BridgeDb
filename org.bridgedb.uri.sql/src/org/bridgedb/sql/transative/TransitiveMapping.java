@@ -95,7 +95,7 @@ public class TransitiveMapping extends IDSysCodePairMapping {
     }
 
 
-    List<DirectMapping> getVia() {
+    public List<DirectMapping> getVia() {
         return via;
     }
     

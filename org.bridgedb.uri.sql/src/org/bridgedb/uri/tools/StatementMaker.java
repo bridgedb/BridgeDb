@@ -28,7 +28,7 @@ public interface StatementMaker {
      */
     public Set<Statement> asRDF(MappingsBySet mappingsBySet, String lensBaseUri) throws BridgeDBException;
 
-    public Set<Statement> asRDF(MappingSetInfo info, String baseUri, String contextString);
+    public Set<Statement> asRDF(MappingSetInfo info, String baseUri, String contextString)  throws BridgeDBException;
 
-    public Set<Statement> asRDF(Set<Mapping> mappings, String baseUri);
+    public Set<Statement> asRDF(Set<Mapping> mappings, String baseUri, boolean linksetInfo)  throws BridgeDBException;
 }

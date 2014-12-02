@@ -73,4 +73,11 @@ public class DirectMapping extends IDSysCodePairMapping {
         setTarget(codeMapper.toXref(getTargetPair()));
     }
 
+    /**
+     * @return the mappingResource
+     */
+    public String getMappingResource() {
+        return mappingResource;
+    }
+
 }
