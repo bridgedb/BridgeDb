@@ -299,27 +299,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return uri.startsWith(pattern);
     }
 
-    private void appendMappingInfo(StringBuilder query) {
-        query.append(", ");
-        query.append(MAPPING_SET_ID_COLUMN_NAME);
-        query.append(", ");
-        query.append(PREDICATE_COLUMN_NAME);
-    }
-
-    private void appendSourceInfo(StringBuilder query) {
-        query.append(", ");
-        query.append(SOURCE_ID_COLUMN_NAME);
-        query.append(", ");
-        query.append(SOURCE_DATASOURCE_COLUMN_NAME);
-    }
-
-   private void appendMappingFrom(StringBuilder query) {
-        query.append(" FROM ");
-        query.append(MAPPING_TABLE_NAME);
-        query.append(", ");
-        query.append(MAPPING_SET_TABLE_NAME);
-    }
-
     /**
      * Adds the WHERE clause conditions for ensuring that the returned mappings
      * are from active linksets.
@@ -552,37 +531,40 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     //@Override too slow
     public List<Mapping> getSampleMapping() throws BridgeDBException {
-        StringBuilder query = new StringBuilder("SELECT ");
-        this.appendTopConditions(query, 0, 5);
-        query.append(TARGET_ID_COLUMN_NAME);
-        query.append(", ");
-        query.append(TARGET_DATASOURCE_COLUMN_NAME);
-        appendMappingInfo(query);
-        appendSourceInfo(query);
-        appendMappingFrom(query);
-        appendMappingJoinMapping(query);
-        this.appendLimitConditions(query, 0, 5);
+        String query = "SELECT * FROM " + MAPPING_TABLE_NAME + ", " + MAPPING_SET_TABLE_NAME 
+            + " WHERE " + MAPPING_TABLE_NAME + "." + MAPPING_SET_ID_COLUMN_NAME 
+            + " = " + MAPPING_SET_TABLE_NAME + ". " + ID_COLUMN_NAME + " LIMIT 10";
         Statement statement = this.createStatement();
+       
         ResultSet rs = null;
-        //if (true) throw new BridgeDBException(query.toString());
         try {
-            rs = statement.executeQuery(query.toString());
+            List<Mapping> results = new ArrayList<Mapping>();
+            rs = statement.executeQuery(query);
+            while (rs.next()) {
+                String id = rs.getString(SOURCE_ID_COLUMN_NAME);
+                String sysCode = rs.getString(SOURCE_DATASOURCE_COLUMN_NAME);
+                IdSysCodePair sourceRef = new IdSysCodePair(id, sysCode);
+                id = rs.getString(TARGET_ID_COLUMN_NAME);
+                sysCode = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
+                IdSysCodePair targetRef = new IdSysCodePair(id, sysCode);
+                //stem.out.println(" = " + targetRef);
+                Integer mappingSetId = rs.getInt(MAPPING_SET_ID_COLUMN_NAME);
+                Integer symmetric = rs.getInt(SYMMETRIC_COLUMN_NAME);
+                String predicate = rs.getString(PREDICATE_COLUMN_NAME);
+                String justification = rs.getString(JUSTIFICATION_COLUMN_NAME);
+                String mappingResource = rs.getString(MAPPING_RESOURCE_COLUMN_NAME);
+                String mappingSource = rs.getString(MAPPING_SOURCE_COLUMN_NAME);
+                DirectMapping mapping = new DirectMapping(sourceRef, targetRef, mappingSetId, symmetric, predicate, 
+                        justification, null, mappingSource, Lens.DEFAULT_LENS_NAME);
+                results.add(mapping);
+            }
+            //ystem.out.println(results);
+            return results;
         } catch (SQLException ex) {
             close(statement, rs);
-            throw new BridgeDBException("Unable to run query. " + query, ex);
-        }
-        try {
-            Set<Mapping> results = resultSetToMappingSet(rs);
-            for (Mapping result : results) {
-                addSourceURIs(result);
-                SQLUriMapper.this.addTargetURIs(result);
-            }
-            ArrayList list = new ArrayList<Mapping>(results);
-            return list;
-        } catch (BridgeDBException ex) {
-            throw ex;
+            throw new BridgeDBException("Error running query " + statement, ex);
         } finally {
-            close(statement, rs);
+            close(null, rs);
         }
     }
 
@@ -1068,33 +1050,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 uriPatterns.add(prefix + "$id" + postfix);
             }
             return uriPatterns;
-        } catch (SQLException ex) {
-            throw new BridgeDBException("Unable to parse results.", ex);
-        }
-    }
-
-    private Set<Mapping> resultSetToMappingSet(ResultSet rs) throws BridgeDBException {
-        HashSet<Mapping> results = new HashSet<Mapping>();
-        try {
-            while (rs.next()) {
-                String targetId = rs.getString(TARGET_ID_COLUMN_NAME);
-                String targetSysCode = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
-                IdSysCodePair targetPair = new IdSysCodePair(targetId, targetSysCode);
-                Xref target = codeMapper.toXref(targetPair);
-                String mappingSetId = rs.getString(MAPPING_SET_ID_COLUMN_NAME);
-                String predicate = rs.getString(PREDICATE_COLUMN_NAME);
-                Xref source;
-                String sourceId = rs.getString(SOURCE_ID_COLUMN_NAME);
-                String sourceSysCode = rs.getString(SOURCE_DATASOURCE_COLUMN_NAME);
-                IdSysCodePair sourcePair = new IdSysCodePair(sourceId, sourceSysCode);
-                source = codeMapper.toXref(sourcePair);
-                ArrayList<String> mappingSetIds = new ArrayList<String>();
-                mappingSetIds.add(mappingSetId);
-                Mapping uriMapping = new Mapping(sourcePair, source, predicate, 
-                        targetPair, target, mappingSetIds, Lens.DEFAULT_LENS_NAME);
-                results.add(uriMapping);
-            }
-            return results;
         } catch (SQLException ex) {
             throw new BridgeDBException("Unable to parse results.", ex);
         }
