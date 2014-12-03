@@ -467,7 +467,13 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
     
     private Set<Statement> mapUriRdfInner(List<String> uris, String lensUri, String graph, List<String> targetUriPatterns, 
             String baseUri, String formatName,
-            Boolean linksetInfo, HttpServletRequest httpServletRequest) throws BridgeDBException{  
+            Boolean linksetInfo, HttpServletRequest httpServletRequest) throws BridgeDBException{ 
+        boolean addLinks;
+        if (linksetInfo == null){
+            addLinks = false;
+        } else {
+            addLinks = linksetInfo;
+        }
         Set<Mapping> mappings;
         if (uris.size() == 1){
             mappings = uriMapper.mapFull(uris.iterator().next(), lensUri, XREF_DATA_NOT_REQUIRED, graph, targetUriPatterns);
@@ -479,7 +485,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         }
         baseUri = checkBaseUri(baseUri, httpServletRequest);
         String context = checkContext(baseUri, httpServletRequest);
-        Set<Statement> statements = statementMaker.asRDF(mappings, baseUri, linksetInfo);
+        Set<Statement> statements = statementMaker.asRDF(mappings, baseUri, addLinks);
         if (formatName != null || formatName != null){
             RDFFormat rdfFormat = RDFFormat.valueOf(formatName);
             if (linksetInfo != null && linksetInfo){
