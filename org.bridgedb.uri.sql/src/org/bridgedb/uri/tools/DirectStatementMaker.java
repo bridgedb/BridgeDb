@@ -16,6 +16,7 @@ import org.bridgedb.rdf.constants.OWLConstants;
 import org.bridgedb.rdf.constants.PavConstants;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.sql.transative.DirectMapping;
+import org.bridgedb.sql.transative.SelfMapping;
 import org.bridgedb.sql.transative.TransitiveMapping;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.uri.api.Mapping;
@@ -138,6 +139,8 @@ public class DirectStatementMaker implements StatementMaker{
             for (DirectMapping via:vias){
                 addMappingVoid(statements, via, mappingSet);            
             }
+        } else if (mapping instanceof SelfMapping){
+            //void to add
         } else {
             throw new BridgeDBException ("Unexpected mapping Type " + mapping.getClass());
         }

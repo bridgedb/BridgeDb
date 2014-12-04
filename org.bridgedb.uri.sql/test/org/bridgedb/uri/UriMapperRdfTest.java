@@ -27,6 +27,9 @@ import org.bridgedb.Xref;
 import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.sql.SQLListener;
 import org.bridgedb.sql.SQLUriMapper;
+import org.bridgedb.sql.transative.DirectMapping;
+import org.bridgedb.sql.transative.SelfMapping;
+import org.bridgedb.sql.transative.TransitiveMapping;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.SourceInfo;
@@ -52,7 +55,6 @@ import org.openrdf.model.Statement;
  * 
  * @author Christian
  */
-@Ignore
 public abstract class UriMapperRdfTest extends UriListenerTest{
            
     public static final String NULL_GRAPH = null;
@@ -62,6 +64,24 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
     public static final String NULL_LENS = null;
     
     public static StatementMaker statementMaker;
+    
+    public void checkMapping(Mapping mapping){
+        if (mapping instanceof SelfMapping){
+            return;
+        } else if (mapping instanceof DirectMapping){
+            checkDirect((DirectMapping)mapping);
+        } else if (mapping instanceof TransitiveMapping) {
+            for (DirectMapping via:((TransitiveMapping)mapping).getVia()){
+                checkDirect(via);
+            }
+        }
+    }
+    
+    protected void checkDirect(DirectMapping directMapping) {
+        if (!directMapping.hasMappingToSelf()){
+            assertNotNull(directMapping.getMappingSource());
+        }
+    }
     
     @Test 
     public void testMapSetInfo1() throws BridgeDBException {
