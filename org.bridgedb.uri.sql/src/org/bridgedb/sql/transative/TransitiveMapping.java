@@ -33,14 +33,14 @@ import org.bridgedb.utils.BridgeDBException;
  *
  * @author christian
  */
-public class TransitiveMapping extends IDSysCodePairMapping {
+public class TransitiveMapping extends ClaimedMapping {
     private final List<DirectMapping> via;
     private static final String NEW_LINE = System.getProperty("line.separator");
     
     private final Set<String> sysCodesToCheck;
     private boolean includesMappingToSelf = false;
 
-    public TransitiveMapping (IDSysCodePairMapping previous, DirectMapping newMapping, String predicate, 
+    public TransitiveMapping (ClaimedMapping previous, DirectMapping newMapping, String predicate, 
             String justification) throws BridgeDBException{
         super(previous.getSourcePair(), newMapping.getTargetPair(), predicate, justification, 
                 mergeIds(previous, newMapping), BridgeDBConstants.TRANSITIVE, newMapping.getLens());
@@ -52,13 +52,13 @@ public class TransitiveMapping extends IDSysCodePairMapping {
         sysCodesToCheck = recordSysCodes(previous, newMapping);
     }
     
-    private static List<String> mergeIds(IDSysCodePairMapping previous, DirectMapping newMapping){
+    private static List<String> mergeIds(ClaimedMapping previous, DirectMapping newMapping){
         ArrayList<String> results = new ArrayList<String>(previous.getMappingSetId());
         results.add(newMapping.getId());
         return results;
     } 
             
-    private List<DirectMapping> createVia(IDSysCodePairMapping previous, DirectMapping newMapping){
+    private List<DirectMapping> createVia(ClaimedMapping previous, DirectMapping newMapping){
         List<DirectMapping> newVia;
         if (previous instanceof DirectMapping ){
             newVia = new ArrayList<DirectMapping>();
@@ -71,7 +71,7 @@ public class TransitiveMapping extends IDSysCodePairMapping {
         return newVia;
     }
 
-    private Set<String> recordSysCodes(IDSysCodePairMapping previous, DirectMapping newMapping) throws BridgeDBException {
+    private Set<String> recordSysCodes(ClaimedMapping previous, DirectMapping newMapping) throws BridgeDBException {
         //Check if new mapping is mapping to self.
         //stem.out.println("recording System codes");
         //ystem.out.println(previous);

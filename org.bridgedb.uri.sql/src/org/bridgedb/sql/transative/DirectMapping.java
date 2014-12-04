@@ -29,7 +29,7 @@ import org.bridgedb.utils.BridgeDBException;
  *
  * @author christian
  */
-public class DirectMapping extends IDSysCodePairMapping {
+public class DirectMapping extends ClaimedMapping {
     private final String id;
     private final int originalId;
     private final String mappingResource;

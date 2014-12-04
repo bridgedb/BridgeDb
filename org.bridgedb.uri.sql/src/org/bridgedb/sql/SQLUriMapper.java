@@ -45,9 +45,10 @@ import org.bridgedb.sql.justification.JustificationMaker;
 import org.bridgedb.sql.justification.OpsJustificationMaker;
 import org.bridgedb.sql.predicate.LoosePredicateMaker;
 import org.bridgedb.sql.predicate.PredicateMaker;
+import org.bridgedb.sql.transative.ClaimedMapping;
 import org.bridgedb.sql.transative.DirectMapping;
-import org.bridgedb.sql.transative.IDSysCodePairMapping;
 import org.bridgedb.sql.transative.MappingsHandlers;
+import org.bridgedb.sql.transative.SelfMapping;
 import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
@@ -255,7 +256,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         Set<Mapping> results = new HashSet<Mapping>();
         Set<String> targets = mapUnkownUri (sourceUri, graph, tgtUriPatterns);
         if (!targets.isEmpty()){
-            results.add(new Mapping(sourceUri, targets));
+            results.add(new SelfMapping(sourceUri, targets));
         }
         return results;
     }
@@ -529,7 +530,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
 
-    //@Override too slow
+    //@Override 
     public List<Mapping> getSampleMapping() throws BridgeDBException {
         String query = "SELECT * FROM " + MAPPING_TABLE_NAME + ", " + MAPPING_SET_TABLE_NAME 
             + " WHERE " + MAPPING_TABLE_NAME + "." + MAPPING_SET_ID_COLUMN_NAME 
@@ -1670,7 +1671,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             Set<DirectMapping> direct = getDirectMappings(sourceRef, statement, lensId);
             mappingsHandler.addMappings(direct);
             while (mappingsHandler.moreToCheck()) {
-                IDSysCodePairMapping toCheck = mappingsHandler.nextToCheck();
+                ClaimedMapping toCheck = mappingsHandler.nextToCheck();
                 if (lens.getAllowedMiddleSysCodes().contains(toCheck.getTargetSysCode())){
                     Set<DirectMapping> transitives = getDirectMappings(toCheck.getTargetPair(), statement, lensId);
                     mappingsHandler.addMappings(toCheck, transitives);
@@ -1701,7 +1702,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             }
         }
         if (allowedCodes.contains(sourceRef.getSysCode())){
-            results.add(new Mapping(sourceRef));
+            results.add(new SelfMapping(sourceRef));
         }
         return results;
     }
@@ -1710,7 +1711,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             IdSysCodePair sourceRef, Collection<RegexUriPattern> targetUriPatterns){
         if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
             Set<Mapping> results = new HashSet<Mapping>(mappings);
-            results.add(new Mapping(sourceRef));
+            results.add(new SelfMapping(sourceRef));
             return results;
         }
         Set<String> allowedCodes = new HashSet<String>();
@@ -1726,7 +1727,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             IdSysCodePair sourceRef, Collection<DataSource> targetDataSources){
         if (targetDataSources == null || targetDataSources.isEmpty()){
             Set<Mapping> results = new HashSet<Mapping>(mappings);
-            results.add(new Mapping(sourceRef));
+            results.add(new SelfMapping(sourceRef));
             return results;
         }
         Set<String> allowedCodes = new HashSet<String>();
@@ -1745,7 +1746,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     private Set<String> filterAndExtractTargetUris(Set<Mapping> mappings, IdSysCodePair sourceRef, Set<RegexUriPattern> targetUriPatterns) throws BridgeDBException {
         if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
-            mappings.add(new Mapping(sourceRef));
+            mappings.add(new SelfMapping(sourceRef));
             return convertToTargetUris(mappings);
         }
         HashSet<String> results = new HashSet<String>();
@@ -1776,7 +1777,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private Set<Mapping> filterAndAddUris(Set<Mapping> mappings, String sourceUri, IdSysCodePair sourceRef, 
             Set<RegexUriPattern> targetUriPatterns) throws BridgeDBException {
         if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
-            mappings.add(new Mapping(sourceUri, sourceRef));
+            mappings.add(new SelfMapping(sourceUri, sourceRef));
             this.addSourceUri(mappings, sourceUri);
             this.addTargetURIs(mappings);
             return mappings;
@@ -1792,7 +1793,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                     }
                 }
                 if (targetUriPattern.getSysCode().equals(sourceRef.getSysCode())) {
-                    Mapping mapping = new Mapping(sourceUri, sourceRef);
+                    Mapping mapping = new SelfMapping(sourceUri, sourceRef);
                     mapping.addTargetUri(targetUriPattern.getUri(sourceRef.getId()));
                     results.add(mapping);
                 }
@@ -1827,8 +1828,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private void addXrefs(Set<Mapping> mappings) throws BridgeDBException {
         for (Mapping mapping : mappings) {
             mapping.setSource(codeMapper.toXref(mapping.getSourcePair()));
-            if (mapping instanceof IDSysCodePairMapping){
-                ((IDSysCodePairMapping)mapping).setTargetXrefs(codeMapper);
+            if (mapping instanceof ClaimedMapping){
+                ((ClaimedMapping)mapping).setTargetXrefs(codeMapper);
             } else {
                 mapping.setTarget(codeMapper.toXref(mapping.getTargetPair()));
             }
