@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.bridgedb.pairs.IdSysCodePair;
+import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
@@ -40,22 +41,8 @@ public class MappingsBySysCodeId {
     private Map<String,Map<String, Set<String>>> allMappings = new HashMap<String,Map<String, Set<String>>>();
     private static final Logger logger = Logger.getLogger(MappingsBySysCodeId.class);
 
-    public MappingsBySysCodeId(Collection<? extends Mapping> mappings){
-        if (mappings != null){
-            for (Mapping mapping:mappings){
-                Map<String, Set<String>> byCode = allMappings.get(mapping.getTargetSysCode());
-                if (byCode == null){
-                    byCode = new HashMap<String, Set<String>>();
-                }
-                Set<String> byId = byCode.get(mapping.getTargetId());
-                if (byId == null){
-                    byId = new HashSet<String>();
-                }
-                byId.addAll(mapping.getTargetUri());
-                byCode.put(mapping.getTargetId(), byId);
-                allMappings.put(mapping.getTargetSysCode(), byCode);
-            }
-        }
+    public MappingsBySysCodeId(Map<String, Map<String, Set<String>>> allMappings) {
+        this.allMappings = allMappings;
     }
     
     public Set<String> getSysCodes(){

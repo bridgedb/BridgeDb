@@ -104,34 +104,6 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     }
     
     @Override
-    /**
-      * @deprecated use mapFull (in fact that is not used under the hood.
-     */
-    public MappingsBySysCodeId mapUriBySysCodeId(String sourceUri, String lensUri, String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
-        Set<Mapping> mappings = mapFull(sourceUri, lensUri, INCLUDE_XREF_RESULTS, graph, tgtUriPatterns);
-        return new MappingsBySysCodeId(mappings);
-    }
-
-    @Override
-    /**
-      * @deprecated use mapFull (in fact that is not used under the hood.
-     */
-    public MappingsBySysCodeId mapUriBySysCodeId(Collection<String> sourceUris, String lensUri, String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
-        if (sourceUris.size() == 1){
-            return mapUriBySysCodeId(sourceUris.iterator().next(), lensUri, graph, tgtUriPatterns);
-        } 
-        if (sourceUris.isEmpty()){
-            return new MappingsBySysCodeId(null);
-        }
-        Iterator<String> iterator = sourceUris.iterator();
-        MappingsBySysCodeId result = mapUriBySysCodeId(iterator.next(), lensUri, graph, tgtUriPatterns);
-        while (iterator.hasNext()){
-            result.merge(mapUriBySysCodeId(iterator.next(), lensUri, graph, tgtUriPatterns));
-        }
-        return result;
-    }
-
-    @Override
     public Set<String> mapUri(Xref sourceXref, String lensUri, String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
         Set<Mapping> beans = mapFull(sourceXref, lensUri, graph, tgtUriPatterns);
         return extractUris(beans);
@@ -381,6 +353,16 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
             }
         }
         return tgtSysCodes;
+    }
+
+    @Override
+    public MappingsBySysCodeId mapUriBySysCodeId(String sourceUri, String lensUri, String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public MappingsBySysCodeId mapUriBySysCodeId(Collection<String> sourceUri, String lensUri, String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

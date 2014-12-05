@@ -19,6 +19,7 @@
 //
 package org.bridgedb.sql;
 
+import org.bridgedb.uri.api.MappingsBySysCodeId;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,6 +30,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,7 +58,6 @@ import org.bridgedb.statistics.SourceInfo;
 import org.bridgedb.statistics.SourceTargetInfo;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.MappingsBySet;
-import org.bridgedb.uri.api.MappingsBySysCodeId;
 import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.lens.LensTools;
@@ -1892,7 +1893,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     public MappingsBySysCodeId mapUriBySysCodeId(String sourceUri, String lensUri, String graph, Collection<String> tgtUriPatterns)
             throws BridgeDBException {
         Set<Mapping> mappings = mapFull(sourceUri, lensUri, false, graph, tgtUriPatterns);
-        return new MappingsBySysCodeId(mappings);
+        return toMappingsBySetCodeId(mappings);
     }
 
     @Override
@@ -2021,7 +2022,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     public MappingsBySysCodeId mapUriBySysCodeId(Collection<String> sourceUris, String lensUri, String graph, Collection<String> tgtUriPatterns)
             throws BridgeDBException {
         Set<Mapping> mappings = mapFull(sourceUris, lensUri, false, graph, tgtUriPatterns);
-        return new MappingsBySysCodeId(mappings);
+        return toMappingsBySetCodeId(mappings);
     }
 
     @Override
@@ -2069,6 +2070,26 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         } finally {
             close(statement, rs);
         }
+    }
+
+    public static MappingsBySysCodeId toMappingsBySetCodeId(Collection<Mapping> mappings){
+        Map<String,Map<String, Set<String>>> allMappings = new HashMap<String,Map<String, Set<String>>>();
+        if (mappings != null){
+            for (Mapping mapping:mappings){
+                Map<String, Set<String>> byCode = allMappings.get(mapping.getTargetSysCode());
+                if (byCode == null){
+                    byCode = new HashMap<String, Set<String>>();
+                }
+                Set<String> byId = byCode.get(mapping.getTargetId());
+                if (byId == null){
+                    byId = new HashSet<String>();
+                }
+                byId.addAll(mapping.getTargetUri());
+                byCode.put(mapping.getTargetId(), byId);
+                allMappings.put(mapping.getTargetSysCode(), byCode);
+            }
+        }
+        return new MappingsBySysCodeId(allMappings);
     }
 
 
