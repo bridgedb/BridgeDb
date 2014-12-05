@@ -130,27 +130,20 @@ public class DirectStatementMaker implements StatementMaker{
     }
     
     protected void addLinksetInfo(Set<Statement> statements, Mapping mapping, URI mappingSet) throws BridgeDBException{
-        if (mapping instanceof DirectMapping){
-            DirectMapping directMapping = (DirectMapping)mapping;
-            addMappingVoid(statements, directMapping, mappingSet);
-        } else if (mapping instanceof TransitiveMapping){
-            TransitiveMapping transitiveMapping = (TransitiveMapping)mapping;
-            List<DirectMapping> vias = transitiveMapping.getVia();
-            for (DirectMapping via:vias){
+        if (mapping.isMappingToSelf()){
+            //No void for mapping to self at the moment.
+        } else if (mapping.isTransitive()){
+            for (Mapping via:mapping.getViaMappings()){
                 addMappingVoid(statements, via, mappingSet);            
             }
-        } else if (mapping instanceof SelfMapping){
-            //void to add
         } else {
-            throw new BridgeDBException ("Unexpected mapping Type " + mapping.getClass());
-        }
-        
-        mapping.getMappingSource();
+            addMappingVoid(statements, mapping, mappingSet);
+        } 
     }
     
-    protected void addMappingVoid(Set<Statement> statements, DirectMapping directMapping, URI mappingSet)
+    protected void addMappingVoid(Set<Statement> statements, Mapping mapping, URI mappingSet)
             throws BridgeDBException {
-        URI sourceUri = toURI(directMapping.getMappingSource());
+        URI sourceUri = toURI(mapping.getMappingSource());
         statements.add(new ContextStatementImpl(mappingSet, PavConstants.DERIVED_FROM, sourceUri, mappingSet));
     }
      
@@ -172,7 +165,8 @@ public class DirectStatementMaker implements StatementMaker{
         for (Mapping mapping:mappings){
             String predicate = mapping.getPredicate();
             if (predicate != null){
-                URI mappingSet = mappingSetURI(mapping.combinedId(), baseUri);
+                String id = mapping.getMappingSetId();
+                URI mappingSet = mappingSetURI(id, baseUri);
                 URI predicateUri = new URIImpl(mapping.getPredicate());
                 addMappingsRDF(statements, mapping, predicateUri, mappingSet);
                 if (linksetInfo){
@@ -185,23 +179,4 @@ public class DirectStatementMaker implements StatementMaker{
         return statements;
     }
     
-    public Set<Statement> asRDFX(Set<Mapping> mappings, String baseUri) throws BridgeDBException{
-         Set<Statement> statements = new HashSet<Statement>();
-         for (Mapping mapping:mappings){
-             String predicate = mapping.getPredicate();
-             if (predicate != null){
-                URI predicateUri = new URIImpl(mapping.getPredicate());
-                URI mappingSet = mappingSetURI(mapping.combinedId(), baseUri);
-                for (String source:mapping.getSourceUri()){
-                    URI sourceUri = new URIImpl(source);
-                    for (String target: mapping.getTargetUri()){
-                        URI targetUri = new URIImpl(target);
-                        statements.add(new ContextStatementImpl(sourceUri, predicateUri, targetUri, mappingSet));
-                    }
-                }
-             }
-         }
-         return statements;
-     }
-
 }

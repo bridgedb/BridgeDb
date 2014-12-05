@@ -19,9 +19,7 @@
 //
 package org.bridgedb.sql.transative;
 
-import java.util.List;
 import java.util.Set;
-import org.bridgedb.pairs.CodeMapper;
 import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.utils.BridgeDBException;
@@ -33,25 +31,22 @@ import org.bridgedb.utils.BridgeDBException;
 public abstract class ClaimedMapping extends Mapping{
 
     public ClaimedMapping(IdSysCodePair idSysCodePairSource, IdSysCodePair idSysCodePairTarget, 
-            String predicate, String justification, int mappingSetId, String mappingSource, String lens){
-        super(idSysCodePairSource, idSysCodePairTarget, predicate, justification, mappingSetId, mappingSource, lens);
+            String predicate, String justification, int mappingSetId, 
+            String mappingResource, String mappingSource, String lens){
+        super(idSysCodePairSource, idSysCodePairTarget, 
+            predicate, justification, mappingSetId, 
+            mappingResource, mappingSource, lens);
     }
     
-    public ClaimedMapping(IdSysCodePair idSysCodePairSource, IdSysCodePair idSysCodePairTarget, 
-            String predicate, String justification, List<String> mappingSetIds, 
-            String mappingSource, String lens){
-        super(idSysCodePairSource, idSysCodePairTarget, predicate, justification, mappingSetIds, mappingSource, lens);
+    public ClaimedMapping (ClaimedMapping previous, DirectMapping newMapping, String predicate, 
+            String justification) throws BridgeDBException{
+        super(previous, newMapping, predicate, justification);
     }
-
-    public ClaimedMapping(IdSysCodePair pair){
-        super(pair);
-    }
-
+    
     public abstract boolean createsLoop(IdSysCodePair targetRef);
 
     public abstract boolean hasMappingToSelf();
 
     public abstract Set<String> getSysCodesToCheck();
 
-    public abstract void setTargetXrefs(CodeMapper codeMapper) throws BridgeDBException;
 }

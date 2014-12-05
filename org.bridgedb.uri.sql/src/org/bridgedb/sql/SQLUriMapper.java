@@ -1828,11 +1828,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private void addXrefs(Set<Mapping> mappings) throws BridgeDBException {
         for (Mapping mapping : mappings) {
             mapping.setSource(codeMapper.toXref(mapping.getSourcePair()));
-            if (mapping instanceof ClaimedMapping){
-                ((ClaimedMapping)mapping).setTargetXrefs(codeMapper);
-            } else {
-                mapping.setTarget(codeMapper.toXref(mapping.getTargetPair()));
-            }
+            mapping.setTargetXrefs(codeMapper);
         }    
     }
 

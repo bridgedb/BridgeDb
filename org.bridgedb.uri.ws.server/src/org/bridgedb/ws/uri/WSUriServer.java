@@ -357,6 +357,21 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         return Response.ok(rdfInfo, MediaType.TEXT_PLAIN_TYPE).build();
     }    
     
+    
+    private int[] splitId(String idString) throws BridgeDBException{
+        String[] stringIds = idString.split("_");
+        int[] ids = new int[stringIds.length];
+        for (int i = 0; i< ids.length; i++){
+            try{
+                ids[i] = Integer.parseInt(stringIds[i]);
+            } catch (NumberFormatException ex){
+                throw new BridgeDBException("Illegal id String: " + idString 
+                        + " Expected 1 or more numbers seperated by underscore. ", ex);
+            }
+        } 
+        return ids;
+    }
+    
     /**
      * Gets known Statements about the mappingSet.
      * 
@@ -373,7 +388,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         if (idString == null || idString.isEmpty()){
             throw new BridgeDBException (WsConstants.ID + " parameter is missing");
         }
-        int[] ids = Mapping.splitId(idString);
+        int[] ids = splitId(idString);
         if (ids.length == 1){
             return statementMaker.asRDF(uriMapper.getMappingSetInfo(ids[0]), baseUri, context);
         } else  {
@@ -389,7 +404,7 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         Set<Statement> results = new HashSet<Statement>();
         for (Mapping mapping:mappings){
             if (mapping.getPredicate() != null){
-                results.addAll(getMappingSetStatements(mapping.combinedId(), baseUri, context));
+                results.addAll(getMappingSetStatements(mapping.getMappingSetId(), baseUri, context));
             }
         }
         return results;

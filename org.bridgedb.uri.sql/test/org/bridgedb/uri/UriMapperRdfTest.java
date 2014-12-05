@@ -66,21 +66,16 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
     public static StatementMaker statementMaker;
     
     public void checkMapping(Mapping mapping){
-        if (mapping instanceof SelfMapping){
-            return;
-        } else if (mapping instanceof DirectMapping){
-            checkDirect((DirectMapping)mapping);
-        } else if (mapping instanceof TransitiveMapping) {
-            for (DirectMapping via:((TransitiveMapping)mapping).getVia()){
-                checkDirect(via);
+        if (!mapping.isMappingToSelf()){
+            for (Mapping via:mapping.getViaMappings()){
+                checkMapping(via);
             }
+            checkDirect((DirectMapping)mapping);
         }
     }
     
-    protected void checkDirect(DirectMapping directMapping) {
-        if (!directMapping.hasMappingToSelf()){
-            assertNotNull(directMapping.getMappingSource());
-        }
+    protected void checkDirect(Mapping mapping) {
+        assertNotNull(mapping.getMappingSource());
     }
     
     @Test 

@@ -30,20 +30,10 @@ import org.bridgedb.utils.BridgeDBException;
  * @author christian
  */
 public class DirectMapping extends ClaimedMapping {
-    private final String id;
-    private final int originalId;
-    private final String mappingResource;
-
+ 
     public DirectMapping (IdSysCodePair source, IdSysCodePair target, int id, int symmetric, String predicate, 
             String justification, String mappingResource, String mappingSource, String lens){
-        super(source, target, predicate, justification, id, mappingSource, lens);
-        this.id = "" + id;
-        if (symmetric < 0){
-            this.originalId = 0 - symmetric;
-        } else {
-            this.originalId = id;
-        }
-        this.mappingResource = mappingResource;
+        super(source, target, predicate, justification, id, mappingResource, mappingSource, lens);
     }
 
     @Override
@@ -62,22 +52,6 @@ public class DirectMapping extends ClaimedMapping {
         sysCodes.add(getSourceSysCode());
         sysCodes.add(getTargetSysCode());
         return sysCodes;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public void setTargetXrefs(CodeMapper codeMapper) throws BridgeDBException {
-        setTarget(codeMapper.toXref(getTargetPair()));
-    }
-
-    /**
-     * @return the mappingResource
-     */
-    public String getMappingResource() {
-        return mappingResource;
     }
 
 }

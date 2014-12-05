@@ -46,12 +46,17 @@ public class MappingBean {
     // Singleton names look better in the xml Bean 
     private Set<String> sourceUri;
     private Set<String> targetUri;
+
+    private String justification;
     private String predicate;
     private String lens;
 
-    private List<String> mappingSetId;
-    private List<XrefBean> viaXref = new ArrayList<XrefBean>();
+    private String mappingResource;
+    private String mappingSource;
+    private String mappingSetId;
     
+    private List<MappingBean> via; 
+        
     /**
      * Default constructor for webService
      */
@@ -60,37 +65,53 @@ public class MappingBean {
     
     public static MappingBean asBean(Mapping mapping){
         MappingBean bean = new MappingBean();
-        bean.setSourceUri(mapping.getSourceUri());
         bean.setSource(XrefBean.asBean(mapping.getSource()));
-        bean.setTargetUri(mapping.getTargetUri());
         bean.setTarget(XrefBean.asBean(mapping.getTarget()));
-        bean.setMappingSetId(mapping.getMappingSetId());
+        
+        //ystem.out.println ("to bean " + mapping.getTarget());
+        //ystem.out.println ("in bean " + bean.getTarget());
+        
+        bean.setSourceUri(mapping.getSourceUri());
+        bean.setTargetUri(mapping.getTargetUri());
+        
+        bean.setJustification(mapping.getJustification());
         bean.setPredicate(mapping.getPredicate());
         bean.setLens(mapping.getLens());
-        for (Xref via:mapping.getViaXref()){
-            bean.viaXref.add(XrefBean.asBean(via));
+ 
+        bean.setMappingResource(mapping.getMappingResource());
+        bean.setMappingSource(mapping.getMappingSource());
+        bean.setMappingSetId(mapping.getMappingSetId());
+        
+        List<MappingBean> vias = new ArrayList<MappingBean>();
+        for (Mapping via:mapping.getViaMappings()){
+            vias.add(asBean(via));
         }
+        bean.setVia(vias);
+
         return bean;
     }
 
     public static Mapping asMapping (MappingBean bean){
-        Mapping result;
-        if (bean.source == null){
-            String sourceUri = bean.getSourceUri().iterator().next();
-            result = new Mapping (sourceUri, bean.getPredicate(), 
-                    bean.getMappingSetId(), bean.getLens());
-        } else {
-            result = new Mapping (bean.getSource().asXref(), bean.getPredicate(),
-                bean.getTarget().asXref(), bean.getMappingSetId(), bean.getLens());
+        Xref source = null;
+        if (bean.getSource() != null){
+            source = bean.getSource().asXref();
         }
-        result.setSourceUri(bean.getSourceUri());
-        result.setTargetUri(bean.getTargetUri());
-        ArrayList<Xref> viaRefs = new ArrayList<Xref>(); 
-        for (XrefBean via:bean.getViaXref()){
-            viaRefs.add(via.asXref());
+        Xref target = null;
+        if (bean.getTarget() != null){
+            target = bean.getTarget().asXref();
         }
-        result.setViaXref(viaRefs);
-        return result;
+        //ystem.out.println("from bean " + target);
+
+        List<Mapping> vias = new ArrayList<Mapping>();
+        for (MappingBean via:bean.getVia()){
+            vias.add(asMapping(via));
+        }
+        
+        Mapping mapping = new Mapping(source, target, bean.sourceUri, bean.targetUri, bean.justification, bean.predicate, bean.lens, 
+            bean.mappingResource, bean.mappingSource, bean.mappingSetId, vias); 
+        //ystem.out.println("in mapping " + target);
+        return mapping;
+        
     }
     
     /**
@@ -150,20 +171,6 @@ public class MappingBean {
     }
 
     /**
-     * @return the mappingSetId
-     */
-    public List<String> getMappingSetId() {
-        return mappingSetId;
-    }
-
-    /**
-     * @param mappingSetId the mappingSetId to set
-     */
-    public void setMappingSetId(List<String> mappingSetId) {
-        this.mappingSetId = mappingSetId;
-    }
-
-    /**
      * @return the predicate
      */
     public String getPredicate() {
@@ -192,17 +199,73 @@ public class MappingBean {
     }
 
     /**
-     * @return the viaXref
+     * @return the justification
      */
-    public List<XrefBean> getViaXref() {
-        return viaXref;
+    public String getJustification() {
+        return justification;
     }
 
     /**
-     * @param vaiXref the viaXref to set
+     * @param justification the justification to set
      */
-    public void setViaXref(List<XrefBean> viaXref) {
-        this.viaXref = viaXref;
+    public void setJustification(String justification) {
+        this.justification = justification;
     }
- 
+
+    /**
+     * @return the mappingSource
+     */
+    public String getMappingSource() {
+        return mappingSource;
+    }
+
+    /**
+     * @param mappingSource the mappingSource to set
+     */
+    public void setMappingSource(String mappingSource) {
+        this.mappingSource = mappingSource;
+    }
+
+    /**
+     * @return the mappingResource
+     */
+    public String getMappingResource() {
+        return mappingResource;
+    }
+
+    /**
+     * @param mappingResource the mappingResource to set
+     */
+    public void setMappingResource(String mappingResource) {
+        this.mappingResource = mappingResource;
+    }
+
+    /**
+     * @return the mappingSetId
+     */
+    public String getMappingSetId() {
+        return mappingSetId;
+    }
+
+    /**
+     * @param mappingSetId the mappingSetId to set
+     */
+    public void setMappingSetId(String mappingSetId) {
+        this.mappingSetId = mappingSetId;
+    }
+
+    /**
+     * @return the via
+     */
+    public List<MappingBean> getVia() {
+        return via;
+    }
+
+    /**
+     * @param via the via to set
+     */
+    public void setVia(List<MappingBean> via) {
+        this.via = via;
+    }
+
  }

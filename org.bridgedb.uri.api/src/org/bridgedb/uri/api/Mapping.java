@@ -21,12 +21,11 @@ package org.bridgedb.uri.api;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import org.bridgedb.Xref;
+import org.bridgedb.pairs.CodeMapper;
 import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.utils.BridgeDBException;
 
@@ -42,44 +41,78 @@ import org.bridgedb.utils.BridgeDBException;
  */
 public class Mapping implements Comparable<Mapping>{
 
+    //USed During Mapping Construction and filling out and transitive calculations
     private final IdSysCodePair idSysCodePairSource;
     private final IdSysCodePair idSysCodePairTarget;
+    
+    //Both ASSERTED and TRANSITIVE mappings have these
     private final String justification;
     private final String lens;
-    private final List<String> mappingSetId;
     private final String predicate;
+
+    //Only ASSERTED mappings have these
+    private final String mappingResource;
     private final String mappingSource;
-        
+    private final String id;
+    
+    //Only TRANSITIVE mappings have these
+    private final List<Mapping> viaMappings;
+    
+    //All three types can have these
     //These are set later if required        
     private Xref source = null;
     private Xref target = null;
     private Set<String> sourceUri = new HashSet<String>();
     private Set<String> targetUri = new HashSet<String>();
     
-    private List<Xref> viaXref = new ArrayList<Xref>();
-    
+    /**
+     * 
+     * @param idSysCodePairSource
+     * @param idSysCodePairTarget
+     * @param predicate
+     * @param justification
+     * @param mappingSetId
+     * @param mappingResource
+     * @param mappingSource
+     * @param lens 
+     */
     public Mapping(IdSysCodePair idSysCodePairSource, IdSysCodePair idSysCodePairTarget, 
-            String predicate, String justification, int mappingSetId, String mappingSource, String lens){
+            String predicate, String justification, int mappingSetId, String mappingResource, String mappingSource, String lens){
         this.idSysCodePairSource = idSysCodePairSource;
         this.idSysCodePairTarget = idSysCodePairTarget;
         this.predicate = predicate;
         this.justification = justification;
-        this.mappingSetId = new ArrayList<String>();
-        this.mappingSetId.add(""+mappingSetId);
+        this.id = "" + mappingSetId;
         this.lens = lens;     
+        this.mappingResource = mappingResource;
         this.mappingSource = mappingSource;
+        viaMappings = new ArrayList<Mapping>();
     }
     
-    public Mapping(IdSysCodePair idSysCodePairSource, IdSysCodePair idSysCodePairTarget, 
-            String predicate, String justification, List<String> mappingSetIds, 
-            String mappingSource, String lens){
-        this.idSysCodePairSource = idSysCodePairSource;
-        this.idSysCodePairTarget = idSysCodePairTarget;
+    public Mapping(Mapping previous, Mapping newMapping, String predicate, String justification){
+        this.idSysCodePairSource = previous.idSysCodePairSource;
+        this.idSysCodePairTarget = newMapping.idSysCodePairTarget;
         this.predicate = predicate;
         this.justification = justification;
-        this.mappingSetId = mappingSetIds;
-        this.lens = lens;
-        this.mappingSource = mappingSource;
+        this.lens = previous.lens;
+ 
+        this.id = previous.id + "_" + newMapping.id;
+        
+        this.mappingResource = null;
+        this.mappingSource = null;
+        
+        viaMappings = new ArrayList<Mapping>();
+        if (previous.isTransitive()){
+            this.viaMappings.addAll(previous.getViaMappings());
+        } else {
+            this.viaMappings.add(previous);
+        }
+
+        if (newMapping.isTransitive()){
+            this.viaMappings.addAll(newMapping.viaMappings);
+        } else {
+            this.viaMappings.add(newMapping);
+        }
     }
     
     public Mapping(IdSysCodePair pair){
@@ -87,86 +120,58 @@ public class Mapping implements Comparable<Mapping>{
         this.idSysCodePairTarget = pair;
         this.predicate = null;
         this.justification = null;
-        this.mappingSetId = new ArrayList<String>();
+        this.id = "self";
         this.lens = null;     
+        this.mappingResource = null;
         this.mappingSource = null;
+        viaMappings = new ArrayList<Mapping>();
     }
 
-     public Mapping (Xref source, String predicate, Xref target, 
-            List<String> mappingSetIds, String lens){
+    //From Bean
+    public Mapping(Xref source, Xref target, Set<String> sourceUri, Set<String> targetUri, 
+            String justification, String predicate, String lens, String mappingResource, String mappingSource, 
+            String mappingSetId, List<Mapping> vias){
         this.idSysCodePairSource = null;
         this.idSysCodePairTarget = null;
-        this.justification = null;
-        this.sourceUri = new HashSet<String>();
         this.source = source;
-        this.targetUri = new HashSet<String>();
         this.target = target;
-        this.mappingSetId = mappingSetIds;
+        this.sourceUri = sourceUri;
+        this.targetUri = targetUri;
         this.predicate = predicate;
+        this.justification = justification;
+        this.id = mappingSetId;
         this.lens = lens;
-        this.mappingSource = null;
-    }
-
-    public Mapping (IdSysCodePair idSysCodePairSource, Xref source, String predicate,
-             IdSysCodePair idSysCodePairTarget, Xref target, 
-            List<String> mappingSetIds, String lens){
-        this.idSysCodePairSource = idSysCodePairSource;
-        this.idSysCodePairTarget = idSysCodePairTarget;
-        this.justification = null;
-        this.sourceUri = new HashSet<String>();
-        this.source = source;
-        this.targetUri = new HashSet<String>();
-        this.target = target;
-        this.mappingSetId = mappingSetIds;
-        this.predicate = predicate;
-        this.lens = lens;
-        this.mappingSource = null;
-    }
-
-    public Mapping (String sourceUri, String predicate, List<String> mappingSetIds, String lens){
-        this.idSysCodePairSource = null;
-        this.idSysCodePairTarget = null;
-        this.justification = null;
-        this.sourceUri = new HashSet<String>();
-        this.sourceUri.add(sourceUri);
-        this.source = null;
-        this.targetUri = new HashSet<String>();
-        this.target = null;
-        this.mappingSetId = mappingSetIds;
-        this.predicate = predicate;
-        this.lens = lens;
-        this.mappingSource = null;
+        this.mappingResource = mappingResource;
+        this.mappingSource = mappingSource;
+        this.viaMappings = vias;
     }
 
      public Mapping (String uri, Set<String> targetUris){
         this.idSysCodePairSource = null;
         this.idSysCodePairTarget = null;
-        this.justification = null;
-        this.sourceUri = new HashSet<String>();
         this.sourceUri.add(uri);
-        this.source = null;
-        this.targetUri.add(uri);
-        this.target = null;
-        this.mappingSetId = new ArrayList<String>();
+        this.targetUri.addAll(targetUris);
         this.predicate = null;
-        this.lens = null;
+        this.justification = null;
+        this.id = "self";
+        this.lens = null;     
+        this.mappingResource = null;
         this.mappingSource = null;
+        viaMappings = new ArrayList<Mapping>();
     }
     
     public Mapping (String uri, IdSysCodePair pair){
         this.idSysCodePairSource = pair;
         this.idSysCodePairTarget = pair;
-        this.justification = null;
-        this.sourceUri = new HashSet<String>();
         this.sourceUri.add(uri);
-        this.source = null;
-        this.targetUri = new HashSet<String>();
         this.targetUri.add(uri);
-        this.target = null;
-        this.mappingSetId = new ArrayList<String>();
         this.predicate = null;
-        this.lens = null;
+        this.justification = null;
+        this.id = null;
+        this.lens = null;     
+        this.mappingResource = null;
         this.mappingSource = null;
+        viaMappings = new ArrayList<Mapping>();
     }
     
     /**
@@ -226,49 +231,14 @@ public class Mapping implements Comparable<Mapping>{
             
         }
         output.append("\n\tMappingSet(id): ");
-        output.append(getMappingSetId());
-        if (this.getViaXref() != null && !this.getViaXref().isEmpty()){
-            output.append("\n\tViaXrefs ");
-            for (Xref xref:this.getViaXref()){
-                output.append("\n\t\t").append(xref);            
-            }
-        }
+        output.append(id);
         output.append("\n");
         return output.toString();
     }
-   
-    /**
-     * @return the mappingSetId
-     */
-    public final List<String> getMappingSetId() {
-        return mappingSetId;
-    }
 
-    public final String combinedId(){
-        if (mappingSetId.size() == 1){
-            return "" + mappingSetId.get(0);
-        }
-        StringBuilder sb = new StringBuilder(mappingSetId.get(0));
-        for (int i = 1; i < mappingSetId.size(); i++){
-            sb.append("_").append(mappingSetId.get(i));
-        }
-        return sb.toString();
+    public final String getMappingSetId(){
+        return id;
     }
-    
-    public static int[] splitId(String idString) throws BridgeDBException{
-        String[] stringIds = idString.split("_");
-        int[] ids = new int[stringIds.length];
-        for (int i = 0; i< ids.length; i++){
-            try{
-                ids[i] = Integer.parseInt(stringIds[i]);
-            } catch (NumberFormatException ex){
-                throw new BridgeDBException("Illegal id String: " + idString 
-                        + " Expected 1 or more numbers seperated by underscore. ", ex);
-            }
-        } 
-        return ids;
-    }
-    
     /**
      * @return the predicate
      */
@@ -330,6 +300,13 @@ public class Mapping implements Comparable<Mapping>{
     }
 
     /**
+     * @return the mappingResource
+     */
+    public String getMappingResource() {
+        return mappingResource;
+    }
+
+    /**
      * @return the mappingSource
      */
     public final String getMappingSource() {
@@ -346,7 +323,7 @@ public class Mapping implements Comparable<Mapping>{
         }
     }
 
-    public final String getSourceId() {
+    private final String getSourceId() {
         if (idSysCodePairSource != null){
             return idSysCodePairSource.getId();
         } else if (source != null) {
@@ -398,7 +375,7 @@ public class Mapping implements Comparable<Mapping>{
         if (idSysCodePairTarget != null){
             return idSysCodePairTarget;
         } else {
-            return new IdSysCodePair(source.getId(), target.getDataSource().getSystemCode());
+            return new IdSysCodePair(target.getId(), target.getDataSource().getSystemCode());
         }
     }
 
@@ -427,25 +404,6 @@ public class Mapping implements Comparable<Mapping>{
         if (this.getTargetId().compareTo(mapping.getTargetId()) != 0){
             return this.getTargetId().compareTo(mapping.getTargetId());
         }
-        ArrayList myIds = new ArrayList(getMappingSetId());
-        Collections.sort(myIds);
-        List otherIds = new ArrayList(mapping.getMappingSetId());
-        Collections.sort(otherIds);
-        Iterator<String> myIt = myIds.iterator();
-        Iterator<String> otherIt = otherIds.iterator();
-        while (myIt.hasNext() && otherIt.hasNext()){
-            String my = myIt.next();
-            String other = otherIt.next();
-            if (my.compareTo(other) != 0) {
-                return my.compareTo(other);
-            }
-        }
-        if (myIt.hasNext()){
-            return +1;
-        }
-        if (otherIt.hasNext()){
-            return -1;
-        }
         return 0;
     }
     
@@ -458,18 +416,30 @@ public class Mapping implements Comparable<Mapping>{
         return false;
     }
 
-    /**
-     * @return the viaXref
-     */
-    public List<Xref> getViaXref() {
-        return viaXref;
+    public final void setTargetXrefs(CodeMapper codeMapper) throws BridgeDBException {
+        //if (idSysCodePairTarget != null){
+            setTarget(codeMapper.toXref(idSysCodePairTarget));
+        //}
+        if (getViaMappings() != null){
+            for (Mapping via:getViaMappings()){
+                via.setTargetXrefs(codeMapper);
+            }
+        }
     }
 
     /**
-     * @param viaXref the viaXref to set
+     * @return the viaMappings
      */
-    public void setViaXref(List<Xref> viaXref) {
-        this.viaXref = viaXref;
+    public List<Mapping> getViaMappings() {
+        return viaMappings;
     }
- 
+
+    public final boolean isMappingToSelf() {
+        return predicate == null;
+    }
+    
+    public final boolean isTransitive() {
+         return !viaMappings.isEmpty();
+    }
+    
 }

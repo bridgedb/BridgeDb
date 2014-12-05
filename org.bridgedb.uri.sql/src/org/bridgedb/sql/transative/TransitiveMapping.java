@@ -23,10 +23,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.bridgedb.Xref;
 import org.bridgedb.pairs.CodeMapper;
 import org.bridgedb.pairs.IdSysCodePair;
-import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
@@ -34,7 +32,6 @@ import org.bridgedb.utils.BridgeDBException;
  * @author christian
  */
 public class TransitiveMapping extends ClaimedMapping {
-    private final List<DirectMapping> via;
     private static final String NEW_LINE = System.getProperty("line.separator");
     
     private final Set<String> sysCodesToCheck;
@@ -42,35 +39,14 @@ public class TransitiveMapping extends ClaimedMapping {
 
     public TransitiveMapping (ClaimedMapping previous, DirectMapping newMapping, String predicate, 
             String justification) throws BridgeDBException{
-        super(previous.getSourcePair(), newMapping.getTargetPair(), predicate, justification, 
-                mergeIds(previous, newMapping), BridgeDBConstants.TRANSITIVE, newMapping.getLens());
+        super(previous, newMapping, predicate, justification);
         //Never expected but just in case
         if (!previous.getTargetPair().equals(newMapping.getSourcePair())){
             throw new BridgeDBException ("Unexpected broken mapping chain");
         }
-        via = createVia(previous, newMapping);
         sysCodesToCheck = recordSysCodes(previous, newMapping);
     }
     
-    private static List<String> mergeIds(ClaimedMapping previous, DirectMapping newMapping){
-        ArrayList<String> results = new ArrayList<String>(previous.getMappingSetId());
-        results.add(newMapping.getId());
-        return results;
-    } 
-            
-    private List<DirectMapping> createVia(ClaimedMapping previous, DirectMapping newMapping){
-        List<DirectMapping> newVia;
-        if (previous instanceof DirectMapping ){
-            newVia = new ArrayList<DirectMapping>();
-            newVia.add((DirectMapping)previous);
-        } else {
-            TransitiveMapping previousT = (TransitiveMapping)previous;  
-            newVia = new ArrayList<DirectMapping>(previousT.getVia());
-        }
-        newVia.add(newMapping);
-        return newVia;
-    }
-
     private Set<String> recordSysCodes(ClaimedMapping previous, DirectMapping newMapping) throws BridgeDBException {
         //Check if new mapping is mapping to self.
         //stem.out.println("recording System codes");
@@ -92,11 +68,6 @@ public class TransitiveMapping extends ClaimedMapping {
         syscodes.add(newMapping.getTargetSysCode());
         //ystem.out.println("==" + syscodes + "==");
         return syscodes;
-    }
-
-
-    public List<DirectMapping> getVia() {
-        return via;
     }
     
     public boolean createsLoop(IdSysCodePair targetRef){
@@ -122,17 +93,6 @@ public class TransitiveMapping extends ClaimedMapping {
     @Override
     public Set<String> getSysCodesToCheck() {
         return sysCodesToCheck;
-    }
-
-    @Override
-    public void setTargetXrefs(CodeMapper codeMapper) throws BridgeDBException {
-        setTarget(codeMapper.toXref(getTargetPair()));
-        List<Xref> vaiXref = new ArrayList<Xref>();
-        for (DirectMapping aVia:via){
-            aVia.setTargetXrefs(codeMapper);
-            vaiXref.add(aVia.getTarget());
-        }
-        this.setViaXref(vaiXref);
     }
 
 }

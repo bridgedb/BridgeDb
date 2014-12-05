@@ -128,6 +128,7 @@ public abstract class UriMapperTestLensTest extends UriListenerTest{
         Set<String> targets = new HashSet<String>();
         targets.add(stringPattern3);
         Set results = uriMapper.mapUri(sourceXref, lensUri, NULL_GRAPH, targets);
+        System.out.println(results);
         assertFalse(results.contains(map3Uri1));
         assertFalse(results.contains(map3Uri2));
         assertFalse(results.contains(map3Uri2a));
