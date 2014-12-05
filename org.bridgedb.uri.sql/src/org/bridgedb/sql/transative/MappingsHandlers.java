@@ -37,7 +37,7 @@ public class MappingsHandlers {
     private final IdSysCodePair sourceRef;
     private final ArrayDeque<ClaimedMapping> toCheck = new ArrayDeque<ClaimedMapping>();
     private final Set<IdSysCodePair> checkedPairs = new HashSet<IdSysCodePair>();
-    private final Set<Mapping> mappings = new HashSet<Mapping>();
+    private final Set<ClaimedMapping> mappings = new HashSet<ClaimedMapping>();
     private final PredicateMaker predicateMaker;
     private final JustificationMaker justificationMaker;
     
@@ -105,7 +105,7 @@ public class MappingsHandlers {
         }
     }
     
-    public final Set<Mapping> getMappings() {
+    public final Set<ClaimedMapping> getMappings() {
         return mappings;
     }
 }

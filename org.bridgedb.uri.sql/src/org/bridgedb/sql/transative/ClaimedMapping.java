@@ -43,6 +43,18 @@ public abstract class ClaimedMapping extends Mapping{
         super(previous, newMapping, predicate, justification);
     }
     
+    public ClaimedMapping (String uri, IdSysCodePair pair){
+        super(uri, pair);
+    }
+
+    public ClaimedMapping (String uri, Set<String> targetUris){
+        super(uri, targetUris);
+    }
+
+    public ClaimedMapping(IdSysCodePair pair){
+        super(pair);
+    }
+    
     public abstract boolean createsLoop(IdSysCodePair targetRef);
 
     public abstract boolean hasMappingToSelf();

@@ -40,7 +40,7 @@ public class MappingsBySysCodeId {
     private Map<String,Map<String, Set<String>>> allMappings = new HashMap<String,Map<String, Set<String>>>();
     private static final Logger logger = Logger.getLogger(MappingsBySysCodeId.class);
 
-    public MappingsBySysCodeId(Collection<Mapping> mappings){
+    public MappingsBySysCodeId(Collection<? extends Mapping> mappings){
         if (mappings != null){
             for (Mapping mapping:mappings){
                 Map<String, Set<String>> byCode = allMappings.get(mapping.getTargetSysCode());

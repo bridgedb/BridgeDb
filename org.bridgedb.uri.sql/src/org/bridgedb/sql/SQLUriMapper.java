@@ -1659,7 +1659,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
 
-    public Set<Mapping> getTransitiveMappings(IdSysCodePair sourceRef, String lensId) throws BridgeDBException {
+    public Set<ClaimedMapping> getTransitiveMappings(IdSysCodePair sourceRef, String lensId) throws BridgeDBException {
         PreparedStatement statement = null;
         try {
             if (lensId == null || lensId.isEmpty()){
@@ -1693,10 +1693,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      *          A filter with a null is consider a filter
     */
  
-    private Set<Mapping> filterBySysCodes (Set<Mapping> mappings, 
+    private Set<ClaimedMapping> filterBySysCodes (Set<ClaimedMapping> mappings, 
             IdSysCodePair sourceRef, Set<String> allowedCodes){
-        Set<Mapping> results = new HashSet<Mapping>();
-        for (Mapping mapping:mappings){
+        Set<ClaimedMapping> results = new HashSet<ClaimedMapping>();
+        for (ClaimedMapping mapping:mappings){
             if (allowedCodes.contains(mapping.getTargetSysCode())){
                 results.add(mapping);
             }
@@ -1707,12 +1707,11 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return results;
     }
     
-    private Set<Mapping> filterByUriPatterns (Set<Mapping> mappings, 
+    private Set<ClaimedMapping> filterByUriPatterns (Set<ClaimedMapping> mappings, 
             IdSysCodePair sourceRef, Collection<RegexUriPattern> targetUriPatterns){
         if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
-            Set<Mapping> results = new HashSet<Mapping>(mappings);
-            results.add(new SelfMapping(sourceRef));
-            return results;
+            mappings.add(new SelfMapping(sourceRef));
+            return mappings;
         }
         Set<String> allowedCodes = new HashSet<String>();
         for (RegexUriPattern targetUriPattern : targetUriPatterns) {
@@ -1723,10 +1722,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return filterBySysCodes (mappings, sourceRef, allowedCodes);
     }
     
-    private Set<Mapping> filterByDataSource (Set<Mapping> mappings, 
+    private Set<ClaimedMapping> filterByDataSource (Set<ClaimedMapping> mappings, 
             IdSysCodePair sourceRef, Collection<DataSource> targetDataSources){
         if (targetDataSources == null || targetDataSources.isEmpty()){
-            Set<Mapping> results = new HashSet<Mapping>(mappings);
+            Set<ClaimedMapping> results = new HashSet<ClaimedMapping>(mappings);
             results.add(new SelfMapping(sourceRef));
             return results;
         }
@@ -1744,7 +1743,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * This is because only a single TargetUri is normally added rather than all the possible Uris
      */
 
-    private Set<String> filterAndExtractTargetUris(Set<Mapping> mappings, IdSysCodePair sourceRef, Set<RegexUriPattern> targetUriPatterns) throws BridgeDBException {
+    private Set<String> filterAndExtractTargetUris(Set<ClaimedMapping> mappings, IdSysCodePair sourceRef, Set<RegexUriPattern> targetUriPatterns) throws BridgeDBException {
         if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
             mappings.add(new SelfMapping(sourceRef));
             return convertToTargetUris(mappings);
@@ -1774,7 +1773,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * @return
      * @throws BridgeDBException 
      */
-    private Set<Mapping> filterAndAddUris(Set<Mapping> mappings, String sourceUri, IdSysCodePair sourceRef, 
+    private Set<ClaimedMapping> filterAndAddUris(Set<ClaimedMapping> mappings, String sourceUri, IdSysCodePair sourceRef, 
             Set<RegexUriPattern> targetUriPatterns) throws BridgeDBException {
         if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
             mappings.add(new SelfMapping(sourceUri, sourceRef));
@@ -1782,10 +1781,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             this.addTargetURIs(mappings);
             return mappings;
         }
-        HashSet<Mapping> results = new HashSet<Mapping>();
+        HashSet<ClaimedMapping> results = new HashSet<ClaimedMapping>();
         for (RegexUriPattern targetUriPattern : targetUriPatterns) {
             if (targetUriPattern != null){
-                for (Mapping mapping : mappings) {
+                for (ClaimedMapping mapping : mappings) {
                     if (mapping.getTargetSysCode().equals(targetUriPattern.getSysCode())) {
                         mapping.addSourceUri(sourceUri);
                         mapping.addTargetUri(targetUriPattern.getUri(mapping.getTargetId()));
@@ -1793,7 +1792,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                     }
                 }
                 if (targetUriPattern.getSysCode().equals(sourceRef.getSysCode())) {
-                    Mapping mapping = new SelfMapping(sourceUri, sourceRef);
+                    SelfMapping mapping = new SelfMapping(sourceUri, sourceRef);
                     mapping.addTargetUri(targetUriPattern.getUri(sourceRef.getId()));
                     results.add(mapping);
                 }
@@ -1802,15 +1801,15 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return results;
     }
 
-    private Set<Xref> convertToXref(Set<Mapping> mappings) throws BridgeDBException {
+    private Set<Xref> convertToXref(Set<ClaimedMapping> mappings) throws BridgeDBException {
         HashSet<Xref> results = new HashSet<Xref>();
-        for (Mapping mapping : mappings) {
+        for (ClaimedMapping mapping : mappings) {
             results.add(codeMapper.toXref(mapping.getTargetPair()));
         }    
         return results;
     }
 
-    private Set<String> convertToTargetUris(Set<Mapping> mappings) throws BridgeDBException {
+    private Set<String> convertToTargetUris(Set<ClaimedMapping> mappings) throws BridgeDBException {
         HashSet<String> results = new HashSet<String>();
         for (Mapping mapping : mappings) {
             results.addAll(toUris(mapping.getTargetPair()));
@@ -1825,8 +1824,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * 2. There is a speed advantage of not generating unrequired data
      */
 
-    private void addXrefs(Set<Mapping> mappings) throws BridgeDBException {
-        for (Mapping mapping : mappings) {
+    private void addXrefs(Set<ClaimedMapping> mappings) throws BridgeDBException {
+        for (ClaimedMapping mapping : mappings) {
             mapping.setSource(codeMapper.toXref(mapping.getSourcePair()));
             mapping.setTargetXrefs(codeMapper);
         }    
@@ -1837,25 +1836,25 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         mapping.addSourceUris(URIs);
     }
 
-    private void addSourceUri(Set<Mapping> mappings, String sourceUri) throws BridgeDBException {
+    private void addSourceUri(Set<ClaimedMapping> mappings, String sourceUri) throws BridgeDBException {
         for (Mapping mapping : mappings) {
             mapping.addSourceUri(sourceUri);
         }
     }
 
-    private void addSourceUris(Set<Mapping> mappings) throws BridgeDBException {
-        for (Mapping mapping : mappings) {
+    private void addSourceUris(Set<ClaimedMapping> mappings) throws BridgeDBException {
+        for (ClaimedMapping mapping : mappings) {
             addSourceURIs(mapping);
         }
     }
 
-    private void addTargetURIs(Mapping mapping) throws BridgeDBException {
+    private void addTargetURIs(ClaimedMapping mapping) throws BridgeDBException {
         Set<String> URIs = toUris(mapping.getTargetPair());
         mapping.addTargetUris(URIs);
     }
 
-    private void addTargetURIs(Set<Mapping> mappings) throws BridgeDBException {
-        for (Mapping mapping : mappings) {
+    private void addTargetURIs(Set<ClaimedMapping> mappings) throws BridgeDBException {
+        for (ClaimedMapping mapping : mappings) {
             SQLUriMapper.this.addTargetURIs(mapping);
         }
     }
@@ -1882,7 +1881,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             return mapUnkownUri(sourceUri, graph, tgtUriPatterns);
         }
         Set<RegexUriPattern> targetUriPatterns = findRegexPatternsWithNulls(graph, tgtUriPatterns);
-        Set<Mapping> mappings = getTransitiveMappings(sourceRef, lensUri);
+        Set<ClaimedMapping> mappings = getTransitiveMappings(sourceRef, lensUri);
         return filterAndExtractTargetUris(mappings, sourceRef, targetUriPatterns);
     }
 
@@ -1904,7 +1903,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             return new HashSet<String>();
         }
         Set<RegexUriPattern> targetUriPatterns = findRegexPatternsWithNulls(graph, tgtUriPatterns);
-        Set<Mapping> mappings = getTransitiveMappings(sourceRef, lensId);
+        Set<ClaimedMapping> mappings = getTransitiveMappings(sourceRef, lensId);
         return this.filterAndExtractTargetUris(mappings, sourceRef, targetUriPatterns);
     }
 
@@ -1914,11 +1913,15 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         if (sourceRef == null) {
             return new HashSet<Xref>();
         }
-        Set<Mapping> mappings = getTransitiveMappings(sourceRef, lensId);
-        Set<Mapping> filteredMappings = filterByDataSource(mappings, sourceRef, tgtDataSources);
+        Set<ClaimedMapping> mappings = getTransitiveMappings(sourceRef, lensId);
+        Set<ClaimedMapping> filteredMappings = filterByDataSource(mappings, sourceRef, tgtDataSources);
         return this.convertToXref(filteredMappings);
     }
 
+    private Set<Mapping> toSuperSet(Set<? extends Mapping> mappings){
+        return new HashSet<Mapping>(mappings);
+    }
+    
     @Override
     public Set<Mapping> mapFull(String sourceUri, String lensId, 
             Collection<DataSource> tgtDataSources) throws BridgeDBException {
@@ -1926,12 +1929,12 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         if (sourceRef == null) {
             return mappingUnkownUri(sourceUri, null, null);
         }
-        Set<Mapping> mappings = getTransitiveMappings(sourceRef, lensId);
-        Set<Mapping> filteredMappings = filterByDataSource(mappings, sourceRef, tgtDataSources);
-         this.addSourceUri(filteredMappings, sourceUri);
+        Set<ClaimedMapping> mappings = getTransitiveMappings(sourceRef, lensId);
+        Set<ClaimedMapping> filteredMappings = filterByDataSource(mappings, sourceRef, tgtDataSources);
+        this.addSourceUri(filteredMappings, sourceUri);
         this.addTargetURIs(filteredMappings);
         this.addXrefs(filteredMappings);
-        return filteredMappings;
+        return toSuperSet(filteredMappings);
     }
  
     @Override
@@ -1943,14 +1946,14 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         if (sourceRef == null) {
             return new HashSet<Mapping>();
         }
-        Set<Mapping> mappings = getTransitiveMappings(sourceRef, lensId);
-        Set<Mapping> filteredMappings = filterByDataSource(mappings, sourceRef, tgtDataSources);
+        Set<ClaimedMapping> mappings = getTransitiveMappings(sourceRef, lensId);
+        Set<ClaimedMapping> filteredMappings = filterByDataSource(mappings, sourceRef, tgtDataSources);
         this.addXrefs(filteredMappings);
         if (includeUriResults != null && includeUriResults){
             this.addSourceUris(filteredMappings);
             this.addTargetURIs(filteredMappings);
         }
-        return filteredMappings;
+        return toSuperSet(filteredMappings);
     }
 
     @Override
@@ -1961,11 +1964,11 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         if (sourceRef == null) {
             return new HashSet<Mapping>();
         }
-        Set<Mapping> mappings = getTransitiveMappings(sourceRef, lensId);
+        Set<ClaimedMapping> mappings = getTransitiveMappings(sourceRef, lensId);
         Set<RegexUriPattern> targetUriPatterns = findRegexPatternsWithNulls(graph, tgtUriPatterns);
-        Set<Mapping> filteredMappings = filterAndAddUris(mappings, null, sourceRef, targetUriPatterns);
+        Set<ClaimedMapping> filteredMappings = filterAndAddUris(mappings, null, sourceRef, targetUriPatterns);
         addXrefs(filteredMappings);
-        return filteredMappings;
+        return toSuperSet(filteredMappings);
     }
 
     public Set<Mapping> mapFull(Collection<String> sourceUris, String lensId, 
@@ -1988,12 +1991,12 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             return mappingUnkownUri(sourceUri, graph, tgtUriPatterns);
         }
         Set<RegexUriPattern> targetUriPatterns = findRegexPatternsWithNulls(graph, tgtUriPatterns);
-        Set<Mapping> mappings = getTransitiveMappings(sourceRef, lensId);
-        Set<Mapping> filteredMappings = filterAndAddUris(mappings, sourceUri, sourceRef, targetUriPatterns);
+        Set<ClaimedMapping> mappings = getTransitiveMappings(sourceRef, lensId);
+        Set<ClaimedMapping> filteredMappings = filterAndAddUris(mappings, sourceUri, sourceRef, targetUriPatterns);
         if (includeXrefResults != null && includeXrefResults){
             addXrefs(filteredMappings);
         }
-        return filteredMappings;
+        return toSuperSet(filteredMappings);
     }
 
     /*

@@ -13,7 +13,7 @@ import org.bridgedb.uri.api.Mapping;
  *
   @author Christian
  */
-public class SelfMapping extends Mapping{
+public class SelfMapping extends ClaimedMapping{
     public SelfMapping (String uri, IdSysCodePair pair){
         super(uri, pair);
     }
@@ -37,6 +37,21 @@ public class SelfMapping extends Mapping{
         } else {
             return 1;
         }
+    }
+
+    @Override
+    public boolean createsLoop(IdSysCodePair targetRef) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean hasMappingToSelf() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Set<String> getSysCodesToCheck() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
