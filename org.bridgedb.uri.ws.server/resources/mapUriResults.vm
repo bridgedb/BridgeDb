@@ -38,22 +38,15 @@
                             #foreach ( $resultUri in $mapping.getTargetUri())
                                 <li><a href=$resultUri>$resultUri</a></li>
                             #end
-                            #if ($mapping.getMappingSetId().size() == 0)
+                            #if ($mapping.isMappingToSelf())
                                 <li>This is an automatic mapping to alternative equals URIs
-                            #elseif ($mapping.getMappingSetId().size() == 1)
-                                <li>Found in mappingSet  
-                                #foreach ( $id in $mapping.getMappingSetId())
-                                    <a href="$contextPath/mappingSet/$id">mappingSet/$id</a>
-                                #end
-                                </li>
-                            #else    
+                            #elseif ($mapping.isTransitive() )
                                 <li>Derived via</li>
                                 <ul>
-                                    #set ($count = $mapping.getMappingSetId().size() - 1)
-                                    #foreach ( $index in [0..$count]) 
-                                        #set ( $id = $mapping.getViaXref().get($index).getId() )
-                                        #set ( $dataSource = $mapping.getViaXref().get($index).getDataSource() )
-                                        #set ( $setId = $mapping.getMappingSetId().get($index) )
+                                    #foreach ( $vai in $mapping.getViaMappings()) 
+                                        #set ( $id = $vai.getTarget().getId() )
+                                        #set ( $dataSource = $vai.getTarget().getDataSource() )
+                                        #set ( $setId = $vai.getMappingSetId())
                                         <li>
                                             <a href="$contextPath/toUris?id=$id&code=$dataSource.getSystemCode()"> 
                                             $dataSource.getFullName():$id</a> in
@@ -61,6 +54,8 @@
                                         </li>
                                     #end
                                 </ul>
+                            #else    
+                                <li>Found in <a href="$contextPath/mappingSet/$mapping.getMappingSetId()">mappingSet/$mapping.getMappingSetId()</a></li>
                             #end
                         </ul>
                     </ul>

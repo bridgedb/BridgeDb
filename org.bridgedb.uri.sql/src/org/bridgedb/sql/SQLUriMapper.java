@@ -558,6 +558,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 String mappingSource = rs.getString(MAPPING_SOURCE_COLUMN_NAME);
                 DirectMapping mapping = new DirectMapping(sourceRef, targetRef, mappingSetId, symmetric, predicate, 
                         justification, null, mappingSource, Lens.DEFAULT_LENS_NAME);
+                mapping.setSource(codeMapper.toXref(sourceRef));
+                mapping.setSourceUri(toUris(sourceRef));
+                mapping.setTarget(codeMapper.toXref(targetRef));
+                mapping.setTargetUri(toUris(targetRef));
                 results.add(mapping);
             }
             //ystem.out.println(results);
@@ -1752,7 +1756,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         HashSet<String> results = new HashSet<String>();
         for (RegexUriPattern targetUriPattern : targetUriPatterns) {
             if (targetUriPattern != null){
-                for (Mapping mapping : mappings) {
+                for (ClaimedMapping mapping : mappings) {
                     if (mapping.getTargetSysCode().equals(targetUriPattern.getSysCode())) {
                         results.add(targetUriPattern.getUri(mapping.getTargetId()));
                     }
@@ -1812,7 +1816,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     private Set<String> convertToTargetUris(Set<ClaimedMapping> mappings) throws BridgeDBException {
         HashSet<String> results = new HashSet<String>();
-        for (Mapping mapping : mappings) {
+        for (ClaimedMapping mapping : mappings) {
             results.addAll(toUris(mapping.getTargetPair()));
         }
         return results;
@@ -1832,7 +1836,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }    
     }
 
-    private void addSourceURIs(Mapping mapping) throws BridgeDBException {
+    private void addSourceURIs(ClaimedMapping mapping) throws BridgeDBException {
         Set<String> URIs = toUris(mapping.getSourcePair());
         mapping.addSourceUris(URIs);
     }
@@ -1892,7 +1896,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      */
     public MappingsBySysCodeId mapUriBySysCodeId(String sourceUri, String lensUri, String graph, Collection<String> tgtUriPatterns)
             throws BridgeDBException {
-        Set<Mapping> mappings = mapFull(sourceUri, lensUri, false, graph, tgtUriPatterns);
+        Set<ClaimedMapping> mappings = mapFullInner(sourceUri, lensUri, false, graph, tgtUriPatterns);
         return toMappingsBySetCodeId(mappings);
     }
 
@@ -1972,7 +1976,18 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return toSuperSet(filteredMappings);
     }
 
-    public Set<Mapping> mapFull(Collection<String> sourceUris, String lensId, 
+    private Set<ClaimedMapping> mapFullClaimed(Collection<String> sourceUris, String lensId, 
+            Boolean includeXrefResults, //Boolean allRoutes, Boolean showVias, 
+            String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
+        Set<ClaimedMapping> results = new HashSet<ClaimedMapping>();
+        for (String sourceUri:sourceUris){
+            results.addAll(mapFullInner(sourceUri, lensId, includeXrefResults,  
+                    graph, tgtUriPatterns));
+        }
+        return results;
+    }
+    
+    private Set<Mapping> mapFull(Collection<String> sourceUris, String lensId, 
             Boolean includeXrefResults, //Boolean allRoutes, Boolean showVias, 
             String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
         Set<Mapping> results = new HashSet<Mapping>();
@@ -1983,6 +1998,22 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return results;
     }
     
+    private Set<ClaimedMapping> mapFullInner(String sourceUri, String lensId, 
+            Boolean includeXrefResults, //Boolean allRoutes, Boolean showVias, 
+            String graph, Collection<String> tgtUriPatterns) throws BridgeDBException {
+        IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
+        if (sourceRef == null) {
+            return new HashSet<ClaimedMapping>();
+        }
+        Set<RegexUriPattern> targetUriPatterns = findRegexPatternsWithNulls(graph, tgtUriPatterns);
+        Set<ClaimedMapping> mappings = getTransitiveMappings(sourceRef, lensId);
+        Set<ClaimedMapping> filteredMappings = filterAndAddUris(mappings, sourceUri, sourceRef, targetUriPatterns);
+        if (includeXrefResults != null && includeXrefResults){
+            addXrefs(filteredMappings);
+        }
+        return filteredMappings;
+    }
+
     @Override
     public Set<Mapping> mapFull(String sourceUri, String lensId, 
             Boolean includeXrefResults, //Boolean allRoutes, Boolean showVias, 
@@ -1991,13 +2022,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         if (sourceRef == null) {
             return mappingUnkownUri(sourceUri, graph, tgtUriPatterns);
         }
-        Set<RegexUriPattern> targetUriPatterns = findRegexPatternsWithNulls(graph, tgtUriPatterns);
-        Set<ClaimedMapping> mappings = getTransitiveMappings(sourceRef, lensId);
-        Set<ClaimedMapping> filteredMappings = filterAndAddUris(mappings, sourceUri, sourceRef, targetUriPatterns);
-        if (includeXrefResults != null && includeXrefResults){
-            addXrefs(filteredMappings);
-        }
-        return toSuperSet(filteredMappings);
+        return toSuperSet(mapFullInner(sourceUri, lensId, includeXrefResults, graph, tgtUriPatterns));
     }
 
     /*
@@ -2021,7 +2046,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      */
     public MappingsBySysCodeId mapUriBySysCodeId(Collection<String> sourceUris, String lensUri, String graph, Collection<String> tgtUriPatterns)
             throws BridgeDBException {
-        Set<Mapping> mappings = mapFull(sourceUris, lensUri, false, graph, tgtUriPatterns);
+        Set<ClaimedMapping> mappings = mapFullClaimed(sourceUris, lensUri, false, graph, tgtUriPatterns);
         return toMappingsBySetCodeId(mappings);
     }
 
@@ -2072,10 +2097,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
 
-    public static MappingsBySysCodeId toMappingsBySetCodeId(Collection<Mapping> mappings){
+    public static MappingsBySysCodeId toMappingsBySetCodeId(Collection<ClaimedMapping> mappings){
         Map<String,Map<String, Set<String>>> allMappings = new HashMap<String,Map<String, Set<String>>>();
         if (mappings != null){
-            for (Mapping mapping:mappings){
+            for (ClaimedMapping mapping:mappings){
                 Map<String, Set<String>> byCode = allMappings.get(mapping.getTargetSysCode());
                 if (byCode == null){
                     byCode = new HashMap<String, Set<String>>();

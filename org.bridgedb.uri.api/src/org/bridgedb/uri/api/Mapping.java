@@ -41,11 +41,7 @@ import org.bridgedb.utils.BridgeDBException;
  */
 public class Mapping implements Comparable<Mapping>{
 
-    //USed During Mapping Construction and filling out and transitive calculations
-    private final IdSysCodePair idSysCodePairSource;
-    private final IdSysCodePair idSysCodePairTarget;
-    
-    //Both ASSERTED and TRANSITIVE mappings have these
+     //Both ASSERTED and TRANSITIVE mappings have these
     private final String justification;
     private final String lens;
     private final String predicate;
@@ -60,15 +56,13 @@ public class Mapping implements Comparable<Mapping>{
     
     //All three types can have these
     //These are set later if required        
-    private Xref source = null;
-    private Xref target = null;
-    private Set<String> sourceUri = new HashSet<String>();
-    private Set<String> targetUri = new HashSet<String>();
+    protected Xref source = null;
+    protected Xref target = null;
+    protected Set<String> sourceUri = new HashSet<String>();
+    protected Set<String> targetUri = new HashSet<String>();
     
     /**
      * 
-     * @param idSysCodePairSource
-     * @param idSysCodePairTarget
      * @param predicate
      * @param justification
      * @param mappingSetId
@@ -76,10 +70,7 @@ public class Mapping implements Comparable<Mapping>{
      * @param mappingSource
      * @param lens 
      */
-    public Mapping(IdSysCodePair idSysCodePairSource, IdSysCodePair idSysCodePairTarget, 
-            String predicate, String justification, int mappingSetId, String mappingResource, String mappingSource, String lens){
-        this.idSysCodePairSource = idSysCodePairSource;
-        this.idSysCodePairTarget = idSysCodePairTarget;
+    public Mapping(String predicate, String justification, int mappingSetId, String mappingResource, String mappingSource, String lens){
         this.predicate = predicate;
         this.justification = justification;
         this.id = "" + mappingSetId;
@@ -90,8 +81,6 @@ public class Mapping implements Comparable<Mapping>{
     }
     
     public Mapping(Mapping previous, Mapping newMapping, String predicate, String justification){
-        this.idSysCodePairSource = previous.idSysCodePairSource;
-        this.idSysCodePairTarget = newMapping.idSysCodePairTarget;
         this.predicate = predicate;
         this.justification = justification;
         this.lens = previous.lens;
@@ -115,9 +104,7 @@ public class Mapping implements Comparable<Mapping>{
         }
     }
     
-    public Mapping(IdSysCodePair pair){
-        this.idSysCodePairSource = pair;
-        this.idSysCodePairTarget = pair;
+    public Mapping(){
         this.predicate = null;
         this.justification = null;
         this.id = "self";
@@ -131,8 +118,6 @@ public class Mapping implements Comparable<Mapping>{
     public Mapping(Xref source, Xref target, Set<String> sourceUri, Set<String> targetUri, 
             String justification, String predicate, String lens, String mappingResource, String mappingSource, 
             String mappingSetId, List<Mapping> vias){
-        this.idSysCodePairSource = null;
-        this.idSysCodePairTarget = null;
         this.source = source;
         this.target = target;
         this.sourceUri = sourceUri;
@@ -147,8 +132,6 @@ public class Mapping implements Comparable<Mapping>{
     }
 
      public Mapping (String uri, Set<String> targetUris){
-        this.idSysCodePairSource = null;
-        this.idSysCodePairTarget = null;
         this.sourceUri.add(uri);
         this.targetUri.addAll(targetUris);
         this.predicate = null;
@@ -161,8 +144,6 @@ public class Mapping implements Comparable<Mapping>{
     }
     
     public Mapping (String uri, IdSysCodePair pair){
-        this.idSysCodePairSource = pair;
-        this.idSysCodePairTarget = pair;
         this.sourceUri.add(uri);
         this.targetUri.add(uri);
         this.predicate = null;
@@ -202,38 +183,6 @@ public class Mapping implements Comparable<Mapping>{
 
     public final void addTargetUris(Collection<String> extraTargetUris){
         getTargetUri().addAll(extraTargetUris);
-    }
-
-    @Override
-    public String toString(){
-        StringBuilder output = new StringBuilder("mapping ");
-        for (String sourceUri:getSourceUri()){
-            output.append("\n\tSourceUri: ");
-            output.append(sourceUri);
-        }
-        output.append("\n\tSource: ");
-        if (getSource() != null){
-            output.append(getSource());
-        } else {
-            output.append(this.idSysCodePairSource);            
-        }
-        output.append("\n\tPredicate(): ");
-        output.append(getPredicate());
-        for (String targetUri:getTargetUri()){
-            output.append("\n\tTargetUri: ");
-            output.append(targetUri);
-        }
-        output.append("\n\tTarget: ");
-        if (getTarget() != null){
-            output.append(getTarget()); 
-        } else {
-            output.append(this.idSysCodePairTarget); 
-            
-        }
-        output.append("\n\tMappingSet(id): ");
-        output.append(id);
-        output.append("\n");
-        return output.toString();
     }
 
     public final String getMappingSetId(){
@@ -313,120 +262,6 @@ public class Mapping implements Comparable<Mapping>{
         return mappingSource;
     }
 
-    public final String getSourceSysCode() {
-        if (idSysCodePairSource != null){
-            return idSysCodePairSource.getSysCode();
-        } else if (source != null) {
-            return source.getDataSource().getSystemCode();
-        } else {
-            return sourceUri.iterator().next();
-        }
-    }
-
-    private final String getSourceId() {
-        if (idSysCodePairSource != null){
-            return idSysCodePairSource.getId();
-        } else if (source != null) {
-            return source.getId();
-        } else {
-            return sourceUri.iterator().next();
-        }
-    }
-    
-    public final IdSysCodePair getSourcePair() {
-        if (idSysCodePairSource != null){
-            return idSysCodePairSource;
-        } else if (source != null) {
-            return new IdSysCodePair(source.getId(), source.getDataSource().getSystemCode());
-        } else {
-            return null;
-        }
-    }
-    
-    public final String getTargetSysCode() {
-        if (idSysCodePairTarget != null){
-            return idSysCodePairTarget.getSysCode();
-        } else if (target != null) {
-            return target.getDataSource().getSystemCode();
-        } else {
-            return targetUri.iterator().next();            
-        }
-    }
-    
-    public final String getTargetName(){
-        if (target != null){
-            return target.getDataSource().getFullName();
-        } else if (idSysCodePairTarget != null) {
-            return idSysCodePairTarget.getSysCode();
-        } else {
-            return targetUri.iterator().next();            
-        }
-    }
-    
-    public final String getTargetId() {
-        if (idSysCodePairTarget != null){
-            return idSysCodePairTarget.getId();
-        } else {
-            return target.getId();
-        }
-    }
-
-    public final IdSysCodePair getTargetPair() {
-        if (idSysCodePairTarget != null){
-            return idSysCodePairTarget;
-        } else {
-            return new IdSysCodePair(target.getId(), target.getDataSource().getSystemCode());
-        }
-    }
-
-    @Override
-    public int compareTo(Mapping mapping) {
-        if (this.sourceUri.size() != 1 || mapping.getSourceUri().size() != 1){
-            if (this.getSourceSysCode().compareTo(mapping.getSourceSysCode()) != 0){
-                return this.getTargetId().compareTo(mapping.getTargetId());
-            }
-            if (this.getSourceId().compareTo(mapping.getSourceId()) != 0){
-                return this.getTargetId().compareTo(mapping.getTargetId());
-            }
-        } else {
-            String aSourceUri = sourceUri.iterator().next();
-            String otherUri = mapping.getSourceUri().iterator().next();
-            if (aSourceUri.compareTo(otherUri) != 0){
-                return aSourceUri.compareTo(otherUri);
-            }
-        }
-        if (this.getTargetName().compareTo(mapping.getTargetName()) != 0){
-            return this.getTargetName().compareTo(mapping.getTargetName());
-        }
-        if (this.getTargetName().compareTo(mapping.getTargetName()) != 0){
-            return this.getTargetName().compareTo(mapping.getTargetName());
-        }
-        if (this.getTargetId().compareTo(mapping.getTargetId()) != 0){
-            return this.getTargetId().compareTo(mapping.getTargetId());
-        }
-        return 0;
-    }
-    
-    @Override 
-    public boolean equals(Object other){
-        if (other instanceof Mapping){
-            Mapping mapping = (Mapping)other;
-            return (compareTo(mapping) == 0);
-        }
-        return false;
-    }
-
-    public final void setTargetXrefs(CodeMapper codeMapper) throws BridgeDBException {
-        //if (idSysCodePairTarget != null){
-            setTarget(codeMapper.toXref(idSysCodePairTarget));
-        //}
-        if (getViaMappings() != null){
-            for (Mapping via:getViaMappings()){
-                via.setTargetXrefs(codeMapper);
-            }
-        }
-    }
-
     /**
      * @return the viaMappings
      */
@@ -440,6 +275,11 @@ public class Mapping implements Comparable<Mapping>{
     
     public final boolean isTransitive() {
          return !viaMappings.isEmpty();
+    }
+
+    @Override
+    public int compareTo(Mapping o) {
+        return 0;
     }
     
 }
