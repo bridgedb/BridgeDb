@@ -1,5 +1,5 @@
 <h2>$subject as RDF </h2>
-<table id="rdf" border=1>
+<table id="$tableId" border=1>
     <thead>
         <tr>
             <th>Subject</th>
@@ -23,10 +23,5 @@
         #end
     </tbody>
 </table>
-<script type="text/javascript" charset="utf8" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
-<script>
-    $(function(){
-        $("#rdf").dataTable();
-    })
-</script>
+
+

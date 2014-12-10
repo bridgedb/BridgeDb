@@ -20,7 +20,11 @@
 package org.bridgedb.ws.uri;
 
 
+import java.io.File;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,6 +44,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
 import org.bridgedb.DataSource;
@@ -49,7 +54,6 @@ import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.MappingsBySet;
-import org.bridgedb.uri.api.SetMappings;
 import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.lens.LensTools;
@@ -69,15 +73,13 @@ import org.openrdf.rio.RDFFormat;
  *
  * @author Christian
  */
-public class WSUriServer extends WSAPI implements ServletContextListener{
+public class WSUriServer extends WSAPI {
     
     private static boolean EXCLUDE_GRAPH = false;
     private static boolean INCLUDE_GRAPH = true;
     private final String GET_BASE_URI_FROM_CONTEXT = null;
     private final String DO_NOT_CONVERT_TO_RDF = null;
     private final boolean XREF_DATA_NOT_REQUIRED = false;
-
-    private ServletContext context;
 
     private static final HashMap<String,Response> setMappings = new HashMap<String,Response>();
     private final StatementMaker statementMaker;
@@ -443,19 +445,48 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         Set<Statement> statements = this.mapUriRdfInner(uris, lensUri, graph, targetUriPatterns, baseUri, formatName, 
                 linksetInfo, httpServletRequest);
         StringBuilder sb = topAndSide ( WsUriConstants.MAP_URI + " as RDF", httpServletRequest);
-        sb.append("<h4>Use MediaType.TEXT_PLAIN to return remove HTML stuff</h4>");
-        sb.append("<p>Warning MediaType.TEXT_PLAIN version returns status 204 if no mappings found.</p>");
         if (formatName != null || formatName != null){
             generateTextarea(sb, "RDF", BridgeDbRdfTools.writeRDF(statements, formatName));
         } else {
-            sb.append("<p>Warning MediaType.TEXT_PLAIN version returns RDF using the default format even if no format specified.</p>");
+            String tableId = WsUriConstants.MAP_URI + WsUriConstants.RDF;
+            addTableSorter(sb, tableId);
+            String contextPath = httpServletRequest.getContextPath();
             VelocityContext velocityContext = new VelocityContext();
             velocityContext.put("statements", statements);
             velocityContext.put("subject", WsUriConstants.MAP_URI);
+            velocityContext.put("tableId", tableId);
+            velocityContext.put("contextPath", contextPath);        
             sb.append(WebTemplates.getForm(velocityContext, WebTemplates.RDF_QUAD_SCRIPT));
+            sb.append("<p>Warning MediaType.TEXT_PLAIN version returns RDF using the default format even if no format specified.</p>");
         }        
+        sb.append("<h4>Use MediaType.TEXT_PLAIN to return remove HTML stuff</h4>");
+        sb.append("<p>Warning MediaType.TEXT_PLAIN version returns status 204 if no mappings found.</p>");
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+    
+    private void addTableSorter(StringBuilder sb, String tableId){
+        addTableCss(sb);    
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("tableId", tableId);
+        sb.append(WebTemplates.getForm(velocityContext, WebTemplates.TABLE_SORTER_SCRIPT));  
+    }
+    
+    //Did not work when tried
+    private void addTableCss(StringBuilder sb){
+        VelocityContext velocityContext = new VelocityContext();
+        sb.append(WebTemplates.getForm(velocityContext, WebTemplates.TABLE_CSS_SCRIPT));  
+    }
+    
+    //Did not work when tried
+    private void addJQuery(StringBuilder sb){
+        VelocityContext velocityContext = new VelocityContext();
+        sb.append(WebTemplates.getForm(velocityContext, WebTemplates.JQUERY_SCRIPT));  
+    }
+    
+    private void addDataTable(StringBuilder sb){
+        VelocityContext velocityContext = new VelocityContext();
+        sb.append(WebTemplates.getForm(velocityContext, WebTemplates.DATATABLE_SCRIPT));  
     }
     
     @GET
@@ -700,11 +731,6 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
-    @Override
-    public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        // TODO Auto-generated method stub	
-    }
-    
     @GET
     @Produces({MediaType.TEXT_PLAIN})
     @Path("/" + Lens.METHOD_NAME + WsUriConstants.RDF) 
@@ -738,15 +764,6 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
     
-    /**
-     * Listen for servlet initialization in web.xml and set the context for use in
-     * the velocity templates
-     */
-    @Override
-    public void contextInitialized(ServletContextEvent servletContextEvent) {
-        this.context = servletContextEvent.getServletContext();
-    }
-
     @GET
     @Produces({MediaType.TEXT_HTML})
     @Path("/" + WsUriConstants.MAP_BY_SET)
@@ -848,6 +865,31 @@ public class WSUriServer extends WSAPI implements ServletContextListener{
        return URISpacesPerGraphAsHtml(httpServletRequest); 
     }
 
+    @GET
+    @Path("/file/{id}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response getFile(@PathParam("id") String idString) throws MalformedURLException {
+        ClassLoader classLoader = this.getClass().getClassLoader();
+        InputStream input = classLoader.getResourceAsStream(idString);
+        ResponseBuilder response;
+        if (input != null){
+            response = Response.ok();
+            response.header("Content-Disposition", "attachment; filename=" + idString);
+            response.entity(input);
+        } else {
+            String message = "File : " + idString  + " not found";
+            response = Response.status(Response.Status.NOT_FOUND).entity(message);
+        }
+        return response.build();
+    }
+ 
+    @GET
+    @Path("/image/{id}")
+	@Produces("image/png")
+	public Response getImage(@PathParam("id") String idString) throws MalformedURLException {
+        return getFile(idString);
+    }
+ 
 }
 
 
