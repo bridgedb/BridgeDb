@@ -1206,4 +1206,54 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     	sb.append("</select>\n");
 	}
 
+    protected final String createHtmlPage(String title, String info){
+        return this.createHtmlPage("", "", title, info);
+    }
+    
+    protected final String createHtmlPage(String style, String javaScript, String title, String info){
+        style += mainStyle();
+        javaScript += mainJavaScript();
+        String top = mainTop(title);
+        String menubar = mainMenuBar();
+        String bottom = mainBottom();
+        return this.createHtmlPage(style, javaScript, title, top, menubar, info, bottom);
+    }
+    
+    protected final String createHtmlPage(String style, String javaScript, String title, String top, String menuBar, 
+            String info, String bottom){
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("title",title);
+        velocityContext.put("style", style);
+        velocityContext.put("java_script", javaScript);
+        velocityContext.put("top", top);
+        velocityContext.put("menubar", menuBar);
+        velocityContext.put("info", info);
+        velocityContext.put("bottom", bottom);
+        return WebTemplates.getForm(velocityContext, "mainFrame.vm");
+    }
+    
+    protected final String mainStyle(){
+        VelocityContext velocityContext = new VelocityContext();
+        return WebTemplates.getForm(velocityContext, "mainStyle.vm");         
+    }
+
+    protected final String mainJavaScript(){
+        VelocityContext velocityContext = new VelocityContext();
+        return WebTemplates.getForm(velocityContext, "mainJavaScript.vm");         
+    }
+     
+    protected final String mainTop(String title){
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("title",title);
+        return WebTemplates.getForm(velocityContext, "mainTop.vm");         
+    }
+
+    protected final String mainMenuBar(){
+        VelocityContext velocityContext = new VelocityContext();
+        return WebTemplates.getForm(velocityContext, "mainMenuBar.vm");         
+    }
+
+    protected final String mainBottom(){
+        return "";
+    }
 }

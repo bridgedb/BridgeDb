@@ -1,0 +1,82 @@
+    #container { 
+        width: 100%; 
+        margin: 10px auto; 
+        background-color: #fff; 
+        color: #333; 
+        border: 1px solid gray; 
+        line-height: 130%; 
+        font-family: perpetua, garamond, serif; 
+        font-size: 110%; 
+        min-width: 40em; 
+    }
+    #top {  
+        padding: .5em; 
+        background-color: #808080; 
+        border-bottom: 1px solid gray; 
+    }
+    #top h1 { 
+        padding: .25em .5em .25em .5em; 
+        margin-left: 200px; 
+        margin-bottom: 0; 
+        margin-right: 0; 
+        margin-top: 0 
+    }
+    #top a { 
+        text-decoration: none; 
+        color: #ffffff; 
+    }
+    #navBar { 
+        float: left; 
+        width: 200px; margin: 0em; 
+        padding: 5px; 
+        min-width: 200px; 
+        min-height: 100%
+    } 
+    #content { 
+        margin-left: 210px; 
+        padding: 1em; min-height: 
+        500px; min-width:80em;
+    }
+    #footer { 
+        clear:both; 
+    }
+    fieldset {
+        border: 1px solid #781351;
+        width: 20em
+    }
+    legend { 
+        color: #fff; 
+        background: #ffa20c; 
+        border: 1px solid #781351; 
+        padding: 2px 6px 
+    }
+    textarea {  
+        width: 100%; 
+        margin: 0; 
+        padding: 0; 
+        border: 1px; 
+    }
+    .texthotlink, 
+    .texthotlink_hilight { 
+        width: 150px; 
+        font-size: 85%; 
+        padding: .25em; 
+        cursor: pointer; 
+        color: black; 
+        font-family: Arial, sans-serif;	
+    }
+    .texthotlink_hilight {
+        background-color: #fff6ac;
+    }
+    .menugroup { 
+        font-size: 150%; 
+        font-weight: bold;
+        padding-top: .25em; 
+    }
+    input { 
+        background-color: #EEEEFF; 
+    } 
+    body, td { 
+        background-color: white; 
+        font-family: sans-serif; 
+    }

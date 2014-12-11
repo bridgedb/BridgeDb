@@ -1,0 +1,35 @@
+<div id="navBar">
+    <div class="menugroup">BridgeDb Service</div>
+    <div id="menuBridgeDb_text" 
+        class="texthotlink" 
+        onmouseout="DHTML_TextRestore('menuBridgeDb_text'); return true; " 
+        onmouseover="DHTML_TextHilight('menuBridgeDb_text'); return true; " 
+        onclick="document.location = &quot;/BridgeDb/BridgeDb&quot;;">
+        Home
+    </div>
+    <div id="menuSourceInfos?lensUri=All_text" 
+        class="texthotlink" 
+        onmouseout="DHTML_TextRestore('menuSourceInfos?lensUri=All_text'); 
+        return true; " 
+        onmouseover="DHTML_TextHilight('menuSourceInfos?lensUri=All_text'); return true; " 
+        onclick="document.location = &quot;/BridgeDb/SourceInfos?lensUri=All&quot;;">
+        All Mappings Summary
+    </div>
+    <div id="menuSourceInfos_text" class="texthotlink" onmouseout="DHTML_TextRestore('menuSourceInfos_text'); return true; " onmouseover="DHTML_TextHilight('menuSourceInfos_text'); return true; " onclick="document.location = &quot;/BridgeDb/SourceInfos&quot;;">Default Mappings Summary</div>
+    <div id="menuLens_text" class="texthotlink" onmouseout="DHTML_TextRestore('menuLens_text'); return true; " onmouseover="DHTML_TextHilight('menuLens_text'); return true; " onclick="document.location = &quot;/BridgeDb/Lens&quot;;">Lens</div>
+    <div id="menuURISpacesPerGraph_text" class="texthotlink" onmouseout="DHTML_TextRestore('menuURISpacesPerGraph_text'); return true; " onmouseover="DHTML_TextHilight('menuURISpacesPerGraph_text'); return true; " onclick="document.location = &quot;/BridgeDb/URISpacesPerGraph&quot;;">UriSpace(s) per Graph</div>
+    <div id="menuBridgeDbApi_text" class="texthotlink" onmouseout="DHTML_TextRestore('menuBridgeDbApi_text'); return true; " onmouseover="DHTML_TextHilight('menuBridgeDbApi_text'); return true; " onclick="document.location = &quot;/BridgeDb/BridgeDbApi&quot;;">Api</div>
+    <div class="menugroup">Statisitics</div>
+    <div id="menugetMappingInfo_text" class="texthotlink" onmouseout="DHTML_TextRestore('menugetMappingInfo_text'); return true; " onmouseover="DHTML_TextHilight('menugetMappingInfo_text'); return true; " onclick="document.location = &quot;/BridgeDb/getMappingInfo&quot;;">30 Mappings</div>
+    <div id="menugetMappingInfo_text" class="texthotlink" onmouseout="DHTML_TextRestore('menugetMappingInfo_text'); return true; " onmouseover="DHTML_TextHilight('menugetMappingInfo_text'); return true; " onclick="document.location = &quot;/BridgeDb/getMappingInfo&quot;;">10 Mapping Sets</div>
+    <div id="menugetSupportedSrcDataSources_text" class="texthotlink" onmouseout="DHTML_TextRestore('menugetSupportedSrcDataSources_text'); return true; " onmouseover="DHTML_TextHilight('menugetSupportedSrcDataSources_text'); return true; " onclick="document.location = &quot;/BridgeDb/getSupportedSrcDataSources&quot;;">3 Source Data Sources</div>
+    <div id="menugetMappingInfo_text" class="texthotlink" onmouseout="DHTML_TextRestore('menugetMappingInfo_text'); return true; " onmouseover="DHTML_TextHilight('menugetMappingInfo_text'); return true; " onclick="document.location = &quot;/BridgeDb/getMappingInfo&quot;;">1 Predicates</div>
+    <div id="menugetSupportedTgtDataSources_text" class="texthotlink" onmouseout="DHTML_TextRestore('menugetSupportedTgtDataSources_text'); return true; " onmouseover="DHTML_TextHilight('menugetSupportedTgtDataSources_text'); return true; " onclick="document.location = &quot;/BridgeDb/getSupportedTgtDataSources&quot;;">3 Target Data Sources </div>
+    <div id="menuLens_text" 
+        class="texthotlink" 
+        onmouseout="DHTML_TextRestore('menuLens_text'); return true; " 
+        onmouseover="DHTML_TextHilight('menuLens_text'); return true; " 
+        onclick="document.location = &quot;/BridgeDb/Lens&quot;;">
+        33 Lenses 
+    </div>
+</div>

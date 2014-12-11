@@ -1,0 +1,42 @@
+    function getObj(id) {
+        return document.getElementById(id)
+    }
+
+    function DHTML_TextHilight(id) {
+        getObj(id).classNameOld = getObj(id).className;
+        getObj(id).className = getObj(id).className + "_hilight";
+    }
+
+    function DHTML_TextRestore(id) {
+        if (getObj(id).classNameOld != "")
+            getObj(id).className = getObj(id).classNameOld;
+    }
+
+    function getItem(id){
+        var itm = false;
+        if(document.getElementById)
+            itm = document.getElementById(id);
+        else if(document.all)
+            itm = document.all[id];
+        else if(document.layers)
+            itm = document.layers[id];
+        return itm;
+    }
+
+    function toggleItem(id) {
+        itm = getItem(id);
+        if(!itm)
+            return false;
+        if(itm.style.display == 'none')
+            itm.style.display = '';
+        else
+            itm.style.display = 'none';
+        return false;
+    }
+
+    function hideDetails() {
+        toggleItem('ops')
+        toggleItem('sparql')
+        return true;
+    }
+

@@ -87,11 +87,8 @@ public class WSAPI extends WSUriInterfaceService {
             apiString = createApiPage(contextPath);
             apiStrings.put(contextPath, apiString);
         }
-        StringBuilder sb = topAndSide ("bridgeDB API", httpServletRequest);
-        sb.append(apiString);
-        //sb.append("<h2>").append(WebTemplates.API_SCRIPT).append(" "+apiString.length()).append("</h2>");
-        footerAndEnd(sb);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        String htmlPage = createHtmlPage("bridgeDB API", apiString);
+        return Response.ok(htmlPage, MediaType.TEXT_HTML).build();
     }
     
     private String createApiPage(String contextPath) throws BridgeDBException, UnsupportedEncodingException{
