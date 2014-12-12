@@ -1,5 +1,5 @@
-<h2>$subject as RDF </h2>
-<table id="$tableId" border=1>
+Before Table
+<table id="sortableTable" class="display" border=1>
     <thead>
         <tr>
             <th>Subject</th>
@@ -7,8 +7,16 @@
             <th>Object</th>
             <th>Context</th>
         </tr>
-        </thead>
-        <tbody>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>Subject</th>
+            <th>Predicate</th>
+            <th>Object</th>
+            <th>Context</th>
+        </tr>
+    </tfoot>
+    <tbody>
         #foreach ($statement in $statements)
             <tr>
                 <td>$statement.getSubject().stringValue()</td>
@@ -23,5 +31,11 @@
         #end
     </tbody>
 </table>
+<p>Warning MediaType.TEXT_PLAIN version bahaves differently:
+<ul>
+    <li>Return RDF using the default format even if no format specified.</li>
+    <li>Removes HTML stuff such as top and menubars.</li>
+    <li>Returns status 204 if no mappings found.</li>
+</ul>
 
 

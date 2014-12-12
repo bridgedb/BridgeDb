@@ -19,12 +19,10 @@
 //
 package org.bridgedb.ws.uri;
 
-
 import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -137,7 +135,6 @@ public class WSUriServer extends WSAPI {
         velocityContext.put("targetUriPatterns", UriPattern.getUriPatterns());
         velocityContext.put("lenses", LensTools.getLens(LensTools.ALL_GROUP_NAME));
         String mapUriScripts = WebTemplates.getForm(velocityContext, WebTemplates.SELECTORS_SCRIPTS);
-        StringBuilder sb = topAndSide ("Home page for BridgeDB WebServer", mapUriScripts, httpServletRequest);
         
         String mapUriForm = mapUriForm(EXCLUDE_GRAPH, httpServletRequest);
         
@@ -147,9 +144,10 @@ public class WSUriServer extends WSAPI {
         velocityContext.put("map",WsUriConstants.MAP);
         velocityContext.put("mapURI", WsUriConstants.MAP_URI);
         velocityContext.put("mapUriForm", mapUriForm);
-        sb.append( WebTemplates.getForm(velocityContext, WebTemplates.BRIDGEDB_HOME));
-         footerAndEnd(sb);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+
+        String mainBody = WebTemplates.getForm(velocityContext, WebTemplates.BRIDGEDB_HOME); 
+        String fullPage = this.createHtmlPage("Home page for BridgeDB WebServer", mainBody, httpServletRequest);
+        return Response.ok(fullPage, MediaType.TEXT_HTML).build();        
     }
 
     @GET
@@ -163,11 +161,10 @@ public class WSUriServer extends WSAPI {
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("targetUriPatterns", UriPattern.getUriPatterns());
         velocityContext.put("lenses", LensTools.getLens(LensTools.ALL_GROUP_NAME));
-        String mapUriScripts = WebTemplates.getForm(velocityContext, WebTemplates.SELECTORS_SCRIPTS);
-        StringBuilder sb = topAndSide ("mapURI Service", mapUriScripts, httpServletRequest);
-        sb.append(mapUriForm(INCLUDE_GRAPH, httpServletRequest));
-        footerAndEnd(sb);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+
+        String mainBody = WebTemplates.getForm(velocityContext, WebTemplates.SELECTORS_SCRIPTS); 
+        String fullPage = this.createHtmlPage("mapURI Service", mainBody, httpServletRequest);
+        return Response.ok(fullPage, MediaType.TEXT_HTML).build();       
     }
     
     @GET
@@ -184,11 +181,10 @@ public class WSUriServer extends WSAPI {
         velocityContext.put("dataSource", ds);
         velocityContext.put("id", "$id");
         velocityContext.put("Patterns", uriPatterns);
-        String dataSourceInfo = WebTemplates.getForm(velocityContext, WebTemplates.DATA_SOURCE_SCRIPT);
-        StringBuilder sb = topAndSide ("Data Source " + id + " Summary", httpServletRequest);
-        sb.append(dataSourceInfo);
-        footerAndEnd(sb);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+
+        String mainBody = WebTemplates.getForm(velocityContext, WebTemplates.DATA_SOURCE_SCRIPT); 
+        String fullPage = this.createHtmlPage("Data Source " + id + " Summary", mainBody, httpServletRequest);
+        return Response.ok(fullPage, MediaType.TEXT_HTML).build();       
     }
     
     @GET
@@ -208,11 +204,10 @@ public class WSUriServer extends WSAPI {
         velocityContext.put("lens", lensUri);
         velocityContext.put("contextPath", httpServletRequest.getContextPath() );
         velocityContext.put("message", message);
-        String sourceInfo = WebTemplates.getForm(velocityContext, WebTemplates.SOURCE_INFO_SCRIPT);
-        StringBuilder sb = topAndSide ("Data Source Summary", httpServletRequest);
-        sb.append(sourceInfo);
-        footerAndEnd(sb);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+
+        String mainBody = WebTemplates.getForm(velocityContext, WebTemplates.SOURCE_INFO_SCRIPT); 
+        String fullPage = this.createHtmlPage("Data Source Summary", mainBody, httpServletRequest);
+        return Response.ok(fullPage, MediaType.TEXT_HTML).build();       
     }
 
     @GET
@@ -239,11 +234,10 @@ public class WSUriServer extends WSAPI {
         velocityContext.put("contextPath", httpServletRequest.getContextPath() );
         velocityContext.put("lens", lensUri);
         velocityContext.put("message", message);
-        String sourceTargetInfo = WebTemplates.getForm(velocityContext, WebTemplates.SOURCE_TARGET_INFO_SCRIPT);
-        StringBuilder sb = topAndSide ("Data Source Summary for " + scrCode, httpServletRequest);
-        sb.append(sourceTargetInfo);
-        footerAndEnd(sb);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+
+        String mainBody = WebTemplates.getForm(velocityContext, WebTemplates.SOURCE_TARGET_INFO_SCRIPT); 
+        String fullPage = this.createHtmlPage("Data Source Summary for " + scrCode, mainBody, httpServletRequest);
+        return Response.ok(fullPage, MediaType.TEXT_HTML).build();       
     }
 
     @GET
@@ -269,11 +263,11 @@ public class WSUriServer extends WSAPI {
         velocityContext.put("targetCode", targetCode);
         velocityContext.put("contextPath", httpServletRequest.getContextPath() );
         velocityContext.put("lens", lensUri);
-        String mappingSetInfo = WebTemplates.getForm(velocityContext, WebTemplates.MAPPING_SET_INFO_SCRIPT);
-        StringBuilder sb = topAndSide ("Mapping Summary for " + scrCode + " -> " + targetCode, httpServletRequest);
-        sb.append(mappingSetInfo);
-        footerAndEnd(sb);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+
+        String mainBody = WebTemplates.getForm(velocityContext, WebTemplates.MAPPING_SET_INFO_SCRIPT);
+        String title = "Mapping Summary for " + scrCode + " -> " + targetCode;
+        String fullPage = this.createHtmlPage(title, mainBody, httpServletRequest);
+        return Response.ok(fullPage, MediaType.TEXT_HTML).build();       
     }
 
     @GET
@@ -291,11 +285,10 @@ public class WSUriServer extends WSAPI {
         MappingSetInfo info = uriMapper.getMappingSetInfo(id);
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("mappingSetInfo", info);
-        String mappingSetInfo = WebTemplates.getForm(velocityContext, WebTemplates.MAPPING_SET_SCRIPT);
-        StringBuilder sb = topAndSide ("Mapping Set " + id, httpServletRequest);
-        sb.append(mappingSetInfo);
-        footerAndEnd(sb);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+
+        String mainBody = WebTemplates.getForm(velocityContext, WebTemplates.MAPPING_SET_SCRIPT); 
+        String fullPage = this.createHtmlPage("Mapping Set " + id, mainBody, httpServletRequest);
+        return Response.ok(fullPage, MediaType.TEXT_HTML).build();       
     }
     
     @GET
@@ -322,7 +315,7 @@ public class WSUriServer extends WSAPI {
             @QueryParam(WsUriConstants.RDF_FORMAT) String formatName,
             @Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException{        
-        StringBuilder sb = topAndSide ("MappingSet " + idString, httpServletRequest);
+        StringBuilder sb = new StringBuilder();
         baseUri = checkBaseUri(baseUri, httpServletRequest);
         String context = checkContext(baseUri, httpServletRequest);
         Set<Statement> statements = getMappingSetStatements(idString, baseUri, context);
@@ -337,8 +330,9 @@ public class WSUriServer extends WSAPI {
             velocityContext.put("subject", WsUriConstants.MAPPING_SET);
             sb.append(WebTemplates.getForm(velocityContext, WebTemplates.RDF_QUAD_SCRIPT));
         }        
-        footerAndEnd(sb);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+
+        String fullPage = this.createHtmlPage("MappingSet " + idString, sb.toString(), httpServletRequest);
+        return Response.ok(fullPage, MediaType.TEXT_HTML).build();       
     }
     
     @GET
@@ -444,38 +438,27 @@ public class WSUriServer extends WSAPI {
             throws BridgeDBException{  
         Set<Statement> statements = this.mapUriRdfInner(uris, lensUri, graph, targetUriPatterns, baseUri, formatName, 
                 linksetInfo, httpServletRequest);
-        StringBuilder sb = topAndSide ( WsUriConstants.MAP_URI + " as RDF", httpServletRequest);
+        String fullPage;
         if (formatName != null || formatName != null){
+            StringBuilder sb = new StringBuilder();
             generateTextarea(sb, "RDF", BridgeDbRdfTools.writeRDF(statements, formatName));
+            fullPage = this.createHtmlPage(WsUriConstants.MAP_URI + " as RDF", sb.toString(), httpServletRequest);
         } else {
-            String tableId = WsUriConstants.MAP_URI + WsUriConstants.RDF;
-            addTableSorter(sb, tableId);
             String contextPath = httpServletRequest.getContextPath();
             VelocityContext velocityContext = new VelocityContext();
             velocityContext.put("statements", statements);
             velocityContext.put("subject", WsUriConstants.MAP_URI);
-            velocityContext.put("tableId", tableId);
             velocityContext.put("contextPath", contextPath);        
-            sb.append(WebTemplates.getForm(velocityContext, WebTemplates.RDF_QUAD_SCRIPT));
-            sb.append("<p>Warning MediaType.TEXT_PLAIN version returns RDF using the default format even if no format specified.</p>");
+            String table = WebTemplates.getForm(velocityContext, WebTemplates.RDF_QUAD_SCRIPT);
+            fullPage = this.createTablePage(WsUriConstants.MAP_URI + " as RDF", table, httpServletRequest);
         }        
-        sb.append("<h4>Use MediaType.TEXT_PLAIN to return remove HTML stuff</h4>");
-        sb.append("<p>Warning MediaType.TEXT_PLAIN version returns status 204 if no mappings found.</p>");
-        footerAndEnd(sb);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        return Response.ok(fullPage, MediaType.TEXT_HTML).build();       
     }
-    
-    private void addTableSorter(StringBuilder sb, String tableId){
-        addTableCss(sb);    
-        VelocityContext velocityContext = new VelocityContext();
-        velocityContext.put("tableId", tableId);
-        sb.append(WebTemplates.getForm(velocityContext, WebTemplates.TABLE_SORTER_SCRIPT));  
-    }
-    
+        
     //Did not work when tried
     private void addTableCss(StringBuilder sb){
         VelocityContext velocityContext = new VelocityContext();
-        sb.append(WebTemplates.getForm(velocityContext, WebTemplates.TABLE_CSS_SCRIPT));  
+        sb.append(WebTemplates.getForm(velocityContext, WebTemplates.TABLE_CSS));  
     }
     
     //Did not work when tried
@@ -589,7 +572,7 @@ public class WSUriServer extends WSAPI {
                 @QueryParam(WsUriConstants.LENS_GROUP) String lensGroup,
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
         List<Lens> lenses = getTheLens(lensUri, lensGroup);
-        StringBuilder sb = topAndSide("Lens Summary",  httpServletRequest);
+        StringBuilder sb = new StringBuilder();
         if (lensUri != null && !lensUri.isEmpty()){
            sb.append("<h2>For ").append(WsUriConstants.LENS_URI).append("=").append(lensUri).append("</h2>");
         }else if (lensGroup != null && !lensGroup.isEmpty()){
@@ -622,18 +605,19 @@ public class WSUriServer extends WSAPI {
         sb.append("XML Format");
         sb.append("</a></p>\n");        
         addLensGroups(sb, httpServletRequest);
-        footerAndEnd(sb);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+
+        String fullPage = createHtmlPage("Lens Summary", sb.toString(), httpServletRequest);
+        return Response.ok(fullPage, MediaType.TEXT_HTML).build();       
     }
     
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/" + WsUriConstants.LENS_GROUP) 
     public Response getLensGroup(@Context HttpServletRequest httpServletRequest) throws BridgeDBException {
-        StringBuilder sb = topAndSide("Lens Groups",  httpServletRequest);
+        StringBuilder sb = new StringBuilder();
         addLensGroups(sb, httpServletRequest);
-        footerAndEnd(sb);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        String fullPage = createHtmlPage("Lens Groups", sb.toString(), httpServletRequest);
+        return Response.ok(fullPage, MediaType.TEXT_HTML).build();       
     }
 
     private void addLensGroups(StringBuilder sb, HttpServletRequest httpServletRequest){
@@ -718,7 +702,7 @@ public class WSUriServer extends WSAPI {
             @Context HttpServletRequest httpServletRequest
             ) throws BridgeDBException {
         MappingsBySet mappingsBySet = mapBySetInner(uris, lensUri, graph, targetUriPatterns);
-        StringBuilder sb = topAndSide("HTML friendly " + WsUriConstants.MAP_BY_SET + WsUriConstants.RDF + " Output",  httpServletRequest);
+        StringBuilder sb = new StringBuilder();
         sb.append("<h2>Warning unlike ");
         sb.append(WsUriConstants.MAP_BY_SET);
         sb.append(" this method does not include any protential mapping to self.</h2>");
@@ -727,8 +711,10 @@ public class WSUriServer extends WSAPI {
         Set<Statement> statements = statementMaker.asRDF(mappingsBySet, getBaseUri(httpServletRequest));
         String rdf =BridgeDbRdfTools.writeRDF(statements, formatName);     
         generateTextarea(sb, "RDF", rdf);
-        footerAndEnd(sb);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+
+        String title = "HTML friendly " + WsUriConstants.MAP_BY_SET + WsUriConstants.RDF + " Output";
+        String fullPage = this.createHtmlPage(title, sb.toString(), httpServletRequest);
+        return Response.ok(fullPage, MediaType.TEXT_HTML).build();       
     }
 
     @GET
@@ -752,7 +738,7 @@ public class WSUriServer extends WSAPI {
             @Context HttpServletRequest httpServletRequest
             ) throws BridgeDBException {
         Set<Statement> statements = LensTools.getLensAsRdf(getBaseUri(httpServletRequest), LensTools.ALL_GROUP_NAME);
-        StringBuilder sb = topAndSide("HTML friendly " + WsUriConstants.MAP_BY_SET + WsUriConstants.RDF + " Output",  httpServletRequest);
+        StringBuilder sb = new StringBuilder();
         sb.append("<h2>Warning unlike ");
         sb.append(WsUriConstants.MAP_BY_SET);
         sb.append(" this method does not include any protential mapping to self.</h2>");
@@ -760,8 +746,10 @@ public class WSUriServer extends WSAPI {
         sb.append("<p>Warning MediaType.TEXT_PLAIN version returns status 204 if no mappings found.</p>");
         String rdf = BridgeDbRdfTools.writeRDF(statements, formatName);   
         generateTextarea(sb, "RDF", rdf);
-        footerAndEnd(sb);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+
+        String title = "HTML friendly " + WsUriConstants.MAP_BY_SET + WsUriConstants.RDF + " Output";
+        String fullPage = this.createHtmlPage(title, sb.toString(), httpServletRequest);
+        return Response.ok(fullPage, MediaType.TEXT_HTML).build();       
     }
     
     @GET
@@ -781,11 +769,12 @@ public class WSUriServer extends WSAPI {
 
     @Override
     protected Response noContentWrapper(HttpServletRequest httpServletRequest) {
-        StringBuilder sb = topAndSide ("Empty Reply", httpServletRequest);
+        StringBuilder sb = new StringBuilder();
         sb.append("<h1>Reply is an Empty Set or Empty Object</h1>\n");
         sb.append("<h2>Note: The XML and Json versions of this request simply return status 204 (No Context)</h2>");
-        footerAndEnd(sb);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+
+        String fullPage = this.createHtmlPage("Empty Reply", sb.toString(), httpServletRequest);
+        return Response.ok(fullPage, MediaType.TEXT_HTML).build();       
    }
 
     private String getBaseUri(HttpServletRequest httpServletRequest) {
@@ -821,40 +810,11 @@ public class WSUriServer extends WSAPI {
     @Path("/" + WsUriConstants.URI_SPACES_PER_GRAPH) 
     public Response URISpacesPerGraphAsHtml(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException {
-//        Map<String, Set<RegexUriPattern>> mappings = 
-//                GraphResolver.getInstance().getAllowedUriPatterns();  
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("mappings", GraphResolver.getInstance().getAllowedUriPatterns());
-        String graphInfo = WebTemplates.getForm(velocityContext, WebTemplates.GRAPH_INFO_SCRIPT);
-        StringBuilder sb = topAndSide ("\"URI Spaces per Graph", httpServletRequest);
-        sb.append(graphInfo);
-        footerAndEnd(sb);
-
-/*        StringBuilder sb = topAndSide("URI Spaces per Graph", httpServletRequest);
-        sb.append("<h2>URISpaces Per Graph</H2>\n"); 
-        sb.append("<p>");
-        sb.append("<table border=\"1\">");
-        sb.append("<tr>");
-        sb.append("<th>Graph</th>");
-        sb.append("<th>NameSpace</th>");
-        sb.append("</tr>");
-        for (String graph:mappings.keySet()){
-           for (RegexUriPattern pattern:mappings.get(graph)){
-                sb.append("<tr>");
-                sb.append("<td>");
-                sb.append(graph);
-                sb.append("</td>");
-                sb.append("<td>");
-                sb.append(pattern.getUriPattern());
-                sb.append("</td>");
-                sb.append("</tr>");
-             }
-            sb.append("<tr>");
-            sb.append("</tr>");
-        }
-        footerAndEnd(sb);
-*/
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        String mainBody = WebTemplates.getForm(velocityContext, WebTemplates.GRAPH_INFO_SCRIPT);
+        String fullPage = this.createHtmlPage("URI Spaces per Graph", mainBody, httpServletRequest);
+        return Response.ok(fullPage, MediaType.TEXT_HTML).build();       
     }
     
     @GET

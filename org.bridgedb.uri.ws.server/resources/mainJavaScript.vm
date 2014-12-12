@@ -1,3 +1,4 @@
+<script language="javascript">
     function getObj(id) {
         return document.getElementById(id)
     }
@@ -39,4 +40,4 @@
         toggleItem('sparql')
         return true;
     }
-
+</script>

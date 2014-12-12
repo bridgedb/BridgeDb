@@ -2,7 +2,7 @@
 <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
 <script>
     $(function(){
-        $("#sortableTable").dataTable();
+        $("#$tableId").dataTable();
     })
 </script>
 

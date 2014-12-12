@@ -1,8 +1,7 @@
+<style>
     #container { 
         width: 100%; 
         margin: 10px auto; 
-        background-color: #fff; 
-        color: #333; 
         border: 1px solid gray; 
         line-height: 130%; 
         font-family: perpetua, garamond, serif; 
@@ -76,7 +75,4 @@
     input { 
         background-color: #EEEEFF; 
     } 
-    body, td { 
-        background-color: white; 
-        font-family: sans-serif; 
-    }
+</style>

@@ -42,7 +42,6 @@ import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.uri.ws.WsUriConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.templates.WebTemplates;
-import org.openrdf.rio.RDFFormat;
 
 /**
  * This class provides the API documentation
@@ -87,7 +86,7 @@ public class WSAPI extends WSUriInterfaceService {
             apiString = createApiPage(contextPath);
             apiStrings.put(contextPath, apiString);
         }
-        String htmlPage = createHtmlPage("bridgeDB API", apiString);
+        String htmlPage = createHtmlPage("bridgeDB API", apiString, httpServletRequest);
         return Response.ok(htmlPage, MediaType.TEXT_HTML).build();
     }
     

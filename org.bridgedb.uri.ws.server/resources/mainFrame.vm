@@ -4,16 +4,16 @@
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"/>
 <head>
 <title>$title</title>
-<style>
 $style
-</style>
-<script language="javascript">
 $java_script
-</script>
 </head>
 <body onload="loadAll();" >
-$top
-$menubar
-$info
-$bottom        
+<div id="container">
+    $top
+    $menubar
+    <div id="content">
+        $info
+    </div>
+    $bottom        
+</div>
 </body>

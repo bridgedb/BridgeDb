@@ -40,6 +40,7 @@ table.dataTable thead .sorting {
   cursor: pointer;
   *cursor: hand;
 }
+/* Redirected to image of the local server */
 table.dataTable thead .sorting {
   background: url("../image/sort_both.png") no-repeat center right;
 }

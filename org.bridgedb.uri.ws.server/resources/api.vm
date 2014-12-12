@@ -1,5 +1,4 @@
-<div id="content">
-<h2>Support services include:</h2>
+<h2>Supported services include:</h2>
 <dl>
     <dt><a href="#mapID">mapID</a></dt>
     <dd>List the Xrefs that map to these Xrefs</dd>
@@ -1044,5 +1043,3 @@ This method will now always throw an Exception! It did not scale.
         </ul>
     </li>
 </ul>
-
-</div><

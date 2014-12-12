@@ -332,7 +332,6 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             String format, HttpServletRequest httpServletRequest, Collection<Mapping> mappingSet, BridgeDBException exception) {
         uris.remove("");
         targetUriPatterns.remove("");
-        StringBuilder sb = topAndSide ("Identity Mapping Service", httpServletRequest);        
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("contextPath", httpServletRequest.getContextPath());
         velocityContext.put("sourceUris", uris);
@@ -352,8 +351,9 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             velocityContext.put("mappings",new ArrayList<Mapping>());            
             velocityContext.put("exception", exception.getMessage());
         }
-        sb.append( WebTemplates.getForm(velocityContext, WebTemplates.MAP_URI_RESULTS)); 
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        String mainBody = WebTemplates.getForm(velocityContext, WebTemplates.MAP_URI_RESULTS); 
+        String fullPage = this.createHtmlPage("Identity Mapping Service", mainBody, httpServletRequest);
+        return Response.ok(fullPage, MediaType.TEXT_HTML).build();
     }
 
     @POST
@@ -548,14 +548,14 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException{
         UriMappings result = toUrisInner(id, scrCode);
         Set<String> uris = result.getTargetUri();
-        StringBuilder sb = topAndSide ("Identity Mapping Service", httpServletRequest);        
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("contextPath", httpServletRequest.getContextPath());
         velocityContext.put("id", id);
         velocityContext.put("sysCode", scrCode);
         velocityContext.put("uris", uris);
-        sb.append( WebTemplates.getForm(velocityContext, WebTemplates.TO_URIS_SCRIPT)); 
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        String mainBody = WebTemplates.getForm(velocityContext, WebTemplates.TO_URIS_SCRIPT); 
+        String fullPage = this.createHtmlPage("Identity Mapping Service", mainBody, httpServletRequest);
+        return Response.ok(fullPage, MediaType.TEXT_HTML).build();
     }
 
     public UriMappings toUrisInner(String id, String scrCode) throws BridgeDBException{
@@ -1085,18 +1085,12 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         return "BridgeDb ";
     }
     
-    public StringBuilder topAndSide(String header, HttpServletRequest httpServletRequest) {
-        return topAndSide(header, "function loadAll(){}\n", httpServletRequest);
-    }
-    
-    public StringBuilder topAndSide(String header, String scriptOther, HttpServletRequest httpServletRequest) {
-        VelocityContext velocityContext = new VelocityContext();
-        velocityContext.put("TITLE", serviceName() + header);
-        velocityContext.put("SCRIPT_OTHER", scriptOther);            
-        StringBuilder sb = new StringBuilder(WebTemplates.getForm(velocityContext, WebTemplates.FRAME));
-        sideBar(sb, httpServletRequest);
-        sb.append("<div id=\"content\">");
-        return sb;
+    protected String sideBar(HttpServletRequest httpServletRequest) {
+        StringBuilder sb = new StringBuilder("<div id=\"navBar\">");
+        addSideBarMiddle(sb, httpServletRequest);
+        addSideBarStatisitics(sb, httpServletRequest);
+        sb.append("</div>\n");        
+        return sb.toString();
     }
     
     protected void sideBar(StringBuilder sb, HttpServletRequest httpServletRequest) {
@@ -1206,15 +1200,28 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     	sb.append("</select>\n");
 	}
 
-    protected final String createHtmlPage(String title, String info){
-        return this.createHtmlPage("", "", title, info);
+    //html page stuff 
+
+    protected final String createTablePage(String title, String table, HttpServletRequest httpServletRequest){
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("title",title);
+        String tableStyle =  WebTemplates.getForm(velocityContext, WebTemplates.TABLE_CSS);         
+        String tableScript = WebTemplates.getForm(velocityContext, WebTemplates.TABLE_SORTER);         
+        return this.createHtmlPage(tableStyle, tableScript, title, table, httpServletRequest);
     }
     
-    protected final String createHtmlPage(String style, String javaScript, String title, String info){
-        style += mainStyle();
-        javaScript += mainJavaScript();
-        String top = mainTop(title);
-        String menubar = mainMenuBar();
+    protected final String createHtmlPage(String title, String info, HttpServletRequest httpServletRequest){
+        return this.createHtmlPage("", "", title, info, httpServletRequest);
+    }
+    
+    protected final String createHtmlPage(String style, String javaScript, String title, String info, 
+        HttpServletRequest httpServletRequest){
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("title",title);
+        style +=  WebTemplates.getForm(velocityContext,  WebTemplates.MAIN_STYLE);         
+        javaScript += WebTemplates.getForm(velocityContext, WebTemplates.MAIN_JAVASCRIPT);         
+        String top = WebTemplates.getForm(velocityContext, WebTemplates.MAIN_TOP);         
+        String menubar = sideBar(httpServletRequest);
         String bottom = mainBottom();
         return this.createHtmlPage(style, javaScript, title, top, menubar, info, bottom);
     }
@@ -1229,30 +1236,9 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         velocityContext.put("menubar", menuBar);
         velocityContext.put("info", info);
         velocityContext.put("bottom", bottom);
-        return WebTemplates.getForm(velocityContext, "mainFrame.vm");
+        return WebTemplates.getForm(velocityContext, WebTemplates.MAIN_FRAME);
     }
     
-    protected final String mainStyle(){
-        VelocityContext velocityContext = new VelocityContext();
-        return WebTemplates.getForm(velocityContext, "mainStyle.vm");         
-    }
-
-    protected final String mainJavaScript(){
-        VelocityContext velocityContext = new VelocityContext();
-        return WebTemplates.getForm(velocityContext, "mainJavaScript.vm");         
-    }
-     
-    protected final String mainTop(String title){
-        VelocityContext velocityContext = new VelocityContext();
-        velocityContext.put("title",title);
-        return WebTemplates.getForm(velocityContext, "mainTop.vm");         
-    }
-
-    protected final String mainMenuBar(){
-        VelocityContext velocityContext = new VelocityContext();
-        return WebTemplates.getForm(velocityContext, "mainMenuBar.vm");         
-    }
-
     protected final String mainBottom(){
         return "";
     }
