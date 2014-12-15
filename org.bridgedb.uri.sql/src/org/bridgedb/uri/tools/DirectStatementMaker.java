@@ -46,21 +46,25 @@ public class DirectStatementMaker implements StatementMaker{
         }
     }
     
-    private Set<Statement> asRDF(SetMappings setMappings, String lens, String lensBaseUri) throws BridgeDBException {
+    private Set<Statement> asRDF(SetMappings setMappings, String lens, String baseUri, String methodName) throws BridgeDBException {
         HashSet<Statement> statements = new HashSet<Statement>();
-        URI setUri = new URIImpl(setMappings.getMappingSource());
+        URI setUri;
+        setUri = new URIImpl(baseUri + methodName + "/" + setMappings.getId());
         URI predicateURI = toURI(setMappings.getPredicate());
         Statement statement = new StatementImpl(setUri, VoidConstants.LINK_PREDICATE, predicateURI);
         statements.add(statement);
         URI justifcationURI = toURI(setMappings.getJustification());
         statement = new StatementImpl(setUri, DulConstants.EXPRESSES, justifcationURI);
         statements.add(statement);
-        URI mappingSourceURI = toURI(setMappings.getMappingSource());
-        statement = new StatementImpl(setUri, VoidConstants.DATA_DUMP, mappingSourceURI);
-        statements.add(statement);
+        String source = setMappings.getMappingSource();
+        if (source != null && !source.isEmpty()){
+            URI mappingSourceURI = toURI(setMappings.getMappingSource());
+            statement = new StatementImpl(setUri, VoidConstants.DATA_DUMP, mappingSourceURI);
+            statements.add(statement);
+        }
         if (lens != null){
             Lens theLens = LensTools.byId(lens);
-            URI lensUri = new URIImpl(theLens.toUri(lensBaseUri));
+            URI lensUri = new URIImpl(theLens.toUri(baseUri));
             URI hasLensUri = BridgeDBConstants.FULFILLS_LENS;
             statement = new StatementImpl(setUri, hasLensUri, lensUri);
             statements.add(statement);
@@ -82,10 +86,10 @@ public class DirectStatementMaker implements StatementMaker{
      * @throws BridgeDBException 
      */
     @Override
-    public Set<Statement> asRDF(MappingsBySet mappingsBySet, String lensBaseUri) throws BridgeDBException{
+    public Set<Statement> asRDF(MappingsBySet mappingsBySet, String baseUri, String methodName) throws BridgeDBException{
         HashSet<Statement> statements = new HashSet<Statement>();
         for (SetMappings setMapping: mappingsBySet.getSetMappings()){
-            Set<Statement> more = asRDF(setMapping, mappingsBySet.getLens(), lensBaseUri);
+            Set<Statement> more = asRDF(setMapping, mappingsBySet.getLens(), baseUri, methodName);
             statements.addAll(more);          
         }
         for (UriMapping mapping:mappingsBySet.getMappings()){

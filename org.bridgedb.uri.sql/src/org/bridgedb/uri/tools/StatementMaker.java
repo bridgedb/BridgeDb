@@ -26,7 +26,7 @@ public interface StatementMaker {
      * @return
      * @throws BridgeDBException 
      */
-    public Set<Statement> asRDF(MappingsBySet mappingsBySet, String lensBaseUri) throws BridgeDBException;
+    public Set<Statement> asRDF(MappingsBySet mappingsBySet, String baseUri, String methodName) throws BridgeDBException;
 
     public Set<Statement> asRDF(MappingSetInfo info, String baseUri, String contextString)  throws BridgeDBException;
 

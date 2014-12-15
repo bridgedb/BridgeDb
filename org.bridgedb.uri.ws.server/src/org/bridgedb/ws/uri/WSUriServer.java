@@ -664,6 +664,7 @@ public class WSUriServer extends WSAPI {
     @GET
     @Produces({MediaType.TEXT_PLAIN})
     @Path("/" + WsUriConstants.MAP_BY_SET + WsUriConstants.RDF)
+    @Deprecated
     public Response mapBySetRdfText(@QueryParam(WsUriConstants.URI) List<String> uris,
      		@QueryParam(WsUriConstants.LENS_URI) String lensUri,
             @QueryParam(WsUriConstants.GRAPH) String graph,
@@ -674,7 +675,8 @@ public class WSUriServer extends WSAPI {
         if (mappingsBySet.isEmpty()){
             return Response.noContent().build();
         } else {
-            Set<Statement> statements = statementMaker.asRDF(mappingsBySet, getBaseUri(httpServletRequest));
+            Set<Statement> statements = statementMaker.asRDF(mappingsBySet, getBaseUri(httpServletRequest), 
+                    WsUriConstants.MAPPING_SET + WsUriConstants.RDF);
             String rdf =BridgeDbRdfTools.writeRDF(statements, formatName);     
             return Response.ok(rdf, MediaType.TEXT_PLAIN_TYPE).build();
         }
@@ -684,7 +686,7 @@ public class WSUriServer extends WSAPI {
         sb.append("<p>").append(fieldName);
     	sb.append("<br/><textarea rows=\"40\" name=\"").append(fieldName)
                 .append("\" style=\"width:100%; background-color: #EEEEFF;\">");
-        if (text != null){
+    if (text != null){
             sb.append(text);
         }
         sb.append("</textarea></p>\n");
@@ -708,7 +710,11 @@ public class WSUriServer extends WSAPI {
         sb.append(" this method does not include any protential mapping to self.</h2>");
         sb.append("<h4>Use MediaType.TEXT_PLAIN to remove HTML stuff</h4>");
         sb.append("<p>Warning MediaType.TEXT_PLAIN version returns status 204 if no mappings found.</p>");
-        Set<Statement> statements = statementMaker.asRDF(mappingsBySet, getBaseUri(httpServletRequest));
+        String fullBaseUri = getBaseUri(httpServletRequest);
+        int pureLenght = fullBaseUri.length() - WsUriConstants.MAP_BY_SET.length() - WsUriConstants.RDF.length();
+        String pureBaseUri = fullBaseUri.substring(0, pureLenght);
+        Set<Statement> statements = statementMaker.asRDF(mappingsBySet, pureBaseUri, 
+                WsUriConstants.MAPPING_SET + WsUriConstants.RDF);
         String rdf =BridgeDbRdfTools.writeRDF(statements, formatName);     
         generateTextarea(sb, "RDF", rdf);
 
