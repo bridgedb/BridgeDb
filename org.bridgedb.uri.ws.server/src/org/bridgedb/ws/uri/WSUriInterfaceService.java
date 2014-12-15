@@ -1210,7 +1210,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         return this.createHtmlPage(tableStyle, tableScript, title, table, httpServletRequest);
     }
     
-    protected final String createHtmlPage(String title, String info, HttpServletRequest httpServletRequest){
+    public final String createHtmlPage(String title, String info, HttpServletRequest httpServletRequest){
         return this.createHtmlPage("", "", title, info, httpServletRequest);
     }
     
