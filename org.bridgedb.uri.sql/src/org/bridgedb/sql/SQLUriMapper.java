@@ -110,7 +110,12 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private static final boolean EXCLUDE_URI_RESULTS = false;
    
     private static SQLUriMapper mapper = null;
-    
+
+    //Queuries as String saved for speed
+    private final HashMap<String, String> directMappingQueries = new HashMap<String, String>();
+    private final String uriToIdSysCodePairQuery = "SELECT * FROM " + URI_TABLE_NAME + " WHERE ? LIKE CONCAT(" 
+            + PREFIX_COLUMN_NAME + ",'%'," + POSTFIX_COLUMN_NAME + ")";
+
     /**
      * Stores the Pattern for the source of each mappingSet it is currently loading.
      * 
@@ -158,11 +163,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      *
      * @param dropTables Flag to determine if any existing tables should be
      * dropped and new empty tables created.
-     * @param sqlAccess The connection to the actual database. This could be
-     * MySQL, Virtuoso ect. It could also be the live database, the loading
-     * database or the test database.
-     * @param specific Code to hold the things that are different between
-     * different SQL implementaions.
      * @throws BridgeDBException
      */
     protected SQLUriMapper(boolean dropTables, CodeMapper codeMapper) throws BridgeDBException {
@@ -213,6 +213,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
 
+    @Override
     protected void createMappingSetTable() throws BridgeDBException {
         //"IF NOT EXISTS " is not supported
         String query = "";
@@ -398,72 +399,78 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         if (uri == null || uri.isEmpty()) {
             return null;
         }
-        StringBuilder query = new StringBuilder();
-        query.append("SELECT * FROM ");
-        query.append(URI_TABLE_NAME);
-        query.append(" WHERE '");
-        query.append(insertEscpaeCharacters(uri));
-        query.append("' LIKE CONCAT(");
-        query.append(PREFIX_COLUMN_NAME);
-        query.append(",'%',");
-        query.append(POSTFIX_COLUMN_NAME);
-        query.append(")");
 
-        Statement statement = this.createStatement();
+        PreparedStatement statement = this.createPreparedStatement(uriToIdSysCodePairQuery);
         ResultSet rs = null;
         try {
-            rs = statement.executeQuery(query.toString());
+            statement.setString(1, uri);
+            rs = statement.executeQuery();
         } catch (SQLException ex) {
             close(statement, rs);
-            throw new BridgeDBException("Unable to run query. " + query, ex);
+            throw new BridgeDBException("Unable to run query. " + statement, ex);
         }
         try {
-            String prefix = null;
-            String oldPrefix = "";
-            String postfix = null;
-            String regex = null;
-            String id = null;
             IdSysCodePair result = null;
+            String oldPrefix = "";
+            String oldPostfix = "";
             while (rs.next()) {
                 String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
-                prefix = rs.getString(PREFIX_COLUMN_NAME);
-                postfix = rs.getString(POSTFIX_COLUMN_NAME);
-                regex = rs.getString(REGEX_COLUMN_NAME);
-                if (result == null || DataSourceMetaDataProvidor.compare(result.getSysCode(), sysCode) >= 0) {
-                    if (oldPrefix.length() < prefix.length()) {
-                        result = this.getValidPair(uri, sysCode, prefix, postfix, regex);
-                        if (result != null) {
-                            oldPrefix = prefix;
-                        }
-                    } else if (oldPrefix.length() > prefix.length()) {
-                        //ignore this one
-                    } else {  //same length prefix
+                String prefix = rs.getString(PREFIX_COLUMN_NAME);
+                String postfix = rs.getString(POSTFIX_COLUMN_NAME);
+                String regex = rs.getString(REGEX_COLUMN_NAME);
+                if (result == null){
+                    result = this.getValidPair(uri, sysCode, prefix, postfix, regex);
+                    if (result != null) {
+                        oldPrefix = prefix;
+                        oldPostfix = postfix;
+                    }                    
+                } else {
+                    //take the one with the longest prefix
+                    if (oldPrefix.length() <= prefix.length()) {
                         IdSysCodePair second = this.getValidPair(uri, sysCode, prefix, postfix, regex);
                         if (second != null) {
-                            DataSourceMetaDataProvidor originalProvider = DataSourceMetaDataProvidor.getProvider(result.getSysCode());
-                            DataSourceMetaDataProvidor secondProvider = DataSourceMetaDataProvidor.getProvider(second.getSysCode());
-                            if (secondProvider.compareTo(originalProvider) < 0) {
+                            result = second;
+                            oldPrefix = prefix;
+                        }
+                    //otherwise the one with the shorter prefix
+                    } else if (oldPrefix.length() > prefix.length()) {
+                    //Take the one with the longer postfix
+                    } else if (oldPostfix.length() < postfix.length()){
+                        IdSysCodePair second = this.getValidPair(uri, sysCode, prefix, postfix, regex);
+                        if (second != null) {
+                            result = second;
+                            oldPrefix = prefix;
+                        }
+                    } else {
+                        //same prefix so for multiple DataSources 
+                        //So we will take the one define in the BIO module first, then one defined in RDF
+                        //Ignoring the duplicates from the miriam registry.
+                        //Know dulicate prefixes of this type include
+                        //http://www.kegg.jp/entry/
+                        //http://www.ebi.ac.uk/ontology-lookup/?termId=
+                        //http://www.gramene.org/db/ontology/search?id=
+                        //http://stke.sciencemag.org/cgi/cm/stkecm;
+                        //http://purl.uniprot.org/uniprot/
+                        //http://antirrhinum.net/cgi-bin/ace/generic/tree/DragonDB?name=
+                        //http://www.uniprot.org/uniprot/
+                        //http://www.ncbi.nlm.nih.gov/nucest/
+                        //http://arabidopsis.org/servlets/TairObject?accession=
+                        //http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=
+                        //https://www.proteomicsdb.org/#human/proteinDetails/
+                        //http://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/
+                        if (DataSourceMetaDataProvidor.compare(result.getSysCode(), sysCode) >= 0) { 
+                            IdSysCodePair second = this.getValidPair(uri, sysCode, prefix, postfix, regex);
+                            if (second != null) {
                                 result = second;
+                                oldPrefix = prefix;
                             }
                         }
                     }
                 }
             }
-            //Should do some checking here but until there is a reason
-            //if (result != null){
             return result;
-            //}
-            //if (prefix == null){
-            //    throw new BridgeDBException("Unknown uri " + uri);
-            //} else if (postfix == null || postfix.isEmpty()){
-            //    throw new BridgeDBException("Unknown uri " + uri + ". " + id + " does not match the regex pattern " + regex 
-            //            + " with prefix: " + prefix);                
-            //} else {
-            //    throw new BridgeDBException("Unknown uri " + uri + ". " + id + " does not match the regex pattern " + regex 
-            //            + " with prefix: " + prefix + " and postfix " + postfix);                
-            //}
         } catch (SQLException ex) {
-            throw new BridgeDBException("Error getting IdSysCodePair using. " + query, ex);
+            throw new BridgeDBException("Error getting IdSysCodePair using. " + statement, ex);
         } finally {
             close(statement, rs);
         }
@@ -1637,8 +1644,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
         return query.toString();
     }
-
-    HashMap<String, String> directMappingQueries = new HashMap<String, String>();
 
     private String directQuery(String lensId) throws BridgeDBException {
         String result = directMappingQueries.get(lensId);
