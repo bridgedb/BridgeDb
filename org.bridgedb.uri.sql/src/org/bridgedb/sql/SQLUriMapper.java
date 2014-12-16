@@ -535,7 +535,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     public List<Mapping> getSampleMapping() throws BridgeDBException {
         String query = "SELECT * FROM " + MAPPING_TABLE_NAME + ", " + MAPPING_SET_TABLE_NAME 
             + " WHERE " + MAPPING_TABLE_NAME + "." + MAPPING_SET_ID_COLUMN_NAME 
-            + " = " + MAPPING_SET_TABLE_NAME + ". " + ID_COLUMN_NAME + " LIMIT 10";
+            + " = " + MAPPING_SET_TABLE_NAME + ". " + ID_COLUMN_NAME 
+            +  lensClause(Lens.DEFAULT_LENS_NAME)
+            + " LIMIT 10";
         Statement statement = this.createStatement();
        
         ResultSet rs = null;
@@ -1615,7 +1617,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             + " AND " + SOURCE_ID_COLUMN_NAME + " = ? "
             + " AND " + SOURCE_DATASOURCE_COLUMN_NAME + " = ?";
 
-    private String lensClause(String lensId, boolean whereAdded) throws BridgeDBException {
+    private String lensClause(String lensId) throws BridgeDBException {
         StringBuilder query = new StringBuilder();
         if (lensId == null) {
             lensId = Lens.DEFAULT_LENS_NAME;
@@ -1625,11 +1627,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             if (justifications.isEmpty()) {
                 throw new BridgeDBException("No  justifications found for Lens " + lensId);
             }
-            if (whereAdded) {
-                query.append(" AND ");
-            } else {
-                query.append(" OR ");
-            }
+            query.append(" AND ");
             query.append(JUSTIFICATION_COLUMN_NAME);
             query.append(" IN (");
             for (int i = 0; i < justifications.size() - 1; i++) {
@@ -1645,7 +1643,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private String directQuery(String lensId) throws BridgeDBException {
         String result = directMappingQueries.get(lensId);
         if (result == null) {
-            result = DIRECT_MAPPING_QUERY + lensClause(lensId, true);
+            result = DIRECT_MAPPING_QUERY + lensClause(lensId);
             directMappingQueries.put(lensId, result);
         }
         return result;
