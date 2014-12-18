@@ -61,6 +61,7 @@ public class MappingBean {
      * Default constructor for webService
      */
     public MappingBean(){
+        via = new ArrayList<MappingBean>();
     }
     
     public static MappingBean asBean(Mapping mapping){

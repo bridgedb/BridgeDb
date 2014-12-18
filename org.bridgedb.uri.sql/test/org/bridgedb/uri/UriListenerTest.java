@@ -123,8 +123,8 @@ public abstract class UriListenerTest extends IDMapperTestBase{
     protected static String mapBadUri2;
     protected static String mapBadUri3;
         
-    protected static int mappingSet1to2;
-    protected static int mappingSet2to3;
+    protected static int mappingSet1to2 = 1;
+    protected static int mappingSet2to3 = 3;
     protected static int mappingSet3to3Lensed;
     protected static int mappingSet1to2Lensed;
     protected static int mappingSet2to3Lensed;
