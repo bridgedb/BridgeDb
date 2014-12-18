@@ -259,7 +259,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
     <li>Legal values are:
         <ul>
             #foreach ($rdfFormat in $rdfFormats)
-                <li>rdfFormat.getName()
+                <li>$rdfFormat.getName()
                 #if ($rdfFormat.supportsContexts())
                     &nbsp;&nbsp;(Supports Context)
                 #end
@@ -268,6 +268,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
           </ul>
     </li>
     <li>Only one format can be specified.</li>
+    <li>The default format $rdfDefaultFormat is used if  MediaType.TEXT_PLAIN is requested</li>
 </ul>
 
 <h4><a name="includeXrefResults">includeXrefResults</a></h4>
@@ -658,6 +659,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
     </li>
     <li>As RDF
         <ul>
+            <li>The default format $rdfDefaultFormat is used if MediaType.TEXT_PLAIN is requested</li>
             #foreach ($rdfFormat in $rdfFormats)
                 <li>$rdfFormat.getName(): <a href="$contextPath/mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()">
                     mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()</a></li>

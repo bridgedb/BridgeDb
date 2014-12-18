@@ -38,10 +38,12 @@ public class BridgeDbRdfTools {
     
     static final Logger logger = Logger.getLogger(BridgeDbRdfTools.class);
 
+    public static final String DEFAULT_FORMAT = "TriX";
+    
     public static String writeRDF(Set<Statement> statements, String formatName) throws BridgeDBException{
         StringWriter writer = new StringWriter();
         if (formatName == null){
-            formatName = "TriX";
+            formatName = DEFAULT_FORMAT;
         }
         RDFFormat rdfFormat = RDFFormat.valueOf(formatName);
         writeRDF(statements,  rdfFormat, writer);
