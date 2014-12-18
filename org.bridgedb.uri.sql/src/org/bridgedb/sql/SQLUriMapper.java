@@ -393,7 +393,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
         return null;
     }
-
+    
     @Override
     public IdSysCodePair toIdSysCodePair(String uri) throws BridgeDBException {
         if (uri == null || uri.isEmpty()) {
@@ -481,24 +481,14 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         if (uri == null || uri.isEmpty()) {
             return null;
         }
-        StringBuilder query = new StringBuilder();
-        query.append("SELECT * FROM ");
-        query.append(URI_TABLE_NAME);
-        query.append(" WHERE '");
-        query.append(insertEscpaeCharacters(uri));
-        query.append("' LIKE CONCAT(");
-        query.append(PREFIX_COLUMN_NAME);
-        query.append(",'%',");
-        query.append(POSTFIX_COLUMN_NAME);
-        query.append(")");
-
-        Statement statement = this.createStatement();
+        PreparedStatement statement = this.createPreparedStatement(uriToIdSysCodePairQuery);
         ResultSet rs = null;
         try {
-            rs = statement.executeQuery(query.toString());
+            statement.setString(1, uri);
+            rs = statement.executeQuery();
         } catch (SQLException ex) {
             close(statement, rs);
-            throw new BridgeDBException("Unable to run query. " + query, ex);
+            throw new BridgeDBException("Unable to run query. " + statement, ex);
         }
         RegexUriPattern result = null;
         try {
@@ -532,7 +522,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             }
             return result;
         } catch (SQLException ex) {
-            throw new BridgeDBException("Unable to get uriSpace. " + query, ex);
+            throw new BridgeDBException("Unable to get uriSpace. " + statement, ex);
         } finally {
             close(statement, rs);
         }

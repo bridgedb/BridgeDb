@@ -126,9 +126,9 @@ public class SQLListener extends SQLBase implements MappingListener{
 
     protected final String getDataSourceKey(DataSource dataSource){
         if (dataSource.getSystemCode() == null){
-            return insertEscpaeCharacters(FULL_NAME_PREFIX + dataSource.getFullName());
+            return FULL_NAME_PREFIX + dataSource.getFullName();
         } else {
-            return insertEscpaeCharacters(dataSource.getSystemCode());
+            return dataSource.getSystemCode();
         }
     }
     
