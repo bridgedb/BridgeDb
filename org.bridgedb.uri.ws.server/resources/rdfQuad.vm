@@ -1,4 +1,3 @@
-Before Table
 <table id="sortableTable" class="display" border=1>
     <thead>
         <tr>
