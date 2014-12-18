@@ -3,15 +3,16 @@
         width: 100%; 
         margin: 10px auto; 
         border: 1px solid gray; 
-        line-height: 130%; 
         font-family: perpetua, garamond, serif; 
-        font-size: 110%; 
         min-width: 40em; 
     }
     #top {  
         padding: .5em; 
         background-color: #808080; 
         border-bottom: 1px solid gray; 
+        -webkit-box-sizing:border-box;
+        -moz-box-sizing:border-box;
+        box-sizing:border-box
     }
     #top h1 { 
         padding: .25em .5em .25em .5em; 
@@ -28,13 +29,22 @@
         float: left; 
         width: 200px; margin: 0em; 
         padding: 5px; 
-        min-width: 200px; 
+        min-width: 100px; 
         min-height: 100%
+        -webkit-box-sizing:border-box;
+        -moz-box-sizing:border-box;
+        box-sizing:border-box
     } 
     #content { 
-        margin-left: 210px; 
-        padding: 1em; min-height: 
-        500px; min-width:80em;
+        float:right;
+        padding:0 1em;
+        width: -moz-calc(200% - 100px);
+        width: -webkit-calc(200% - 100px);
+        width: calc(100% - 200px);
+        -webkit-box-sizing:border-box;
+        -moz-box-sizing:border-box;
+        box-sizing:border-box;
+        position:relative
     }
     #footer { 
         clear:both; 
