@@ -126,6 +126,8 @@ public class WSAPI extends WSUriInterfaceService {
 
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("contextPath", contextPath);
+        velocityContext.put("rdfDefaultFormat", BridgeDbRdfTools.DEFAULT_FORMAT);
+        velocityContext.put("rdfFormats", BridgeDbRdfTools.getAvaiableFormats());
         
         //Examples for mapping 1
         velocityContext.put("uri1", sourceUri1);
@@ -133,7 +135,6 @@ public class WSAPI extends WSUriInterfaceService {
         velocityContext.put("code1", sourceSysCode1);
         velocityContext.put("sourceCode1", sourceSysCode1);
         velocityContext.put("targetCode1", tragetSysCode1);
-        velocityContext.put("rdfFormats", BridgeDbRdfTools.getAvaiableFormats());
         
         //Exmples for mapping 2
         velocityContext.put("uri2", sourceUri2);
