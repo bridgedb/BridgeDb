@@ -170,7 +170,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
     <ul>
         <li>So if calling http://localhost:8080/BridgeDb/mapUriRDF?... the baseUri would be http://www.example.com/MyBridgeDb/</li>
         <li>This allows http://www.example.com/MyBridgeDb/ to forward any calls to its BridgeDb service.</li>
-    <ul>    
+    </ul>    
 </ul>
 
 <h4><a name="lensUri">lensUri</a></h4>
