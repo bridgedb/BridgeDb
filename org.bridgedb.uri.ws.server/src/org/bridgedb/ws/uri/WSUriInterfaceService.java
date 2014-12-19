@@ -1141,12 +1141,12 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             statistics = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
             //sb.append("\n<div class=\"menugroup\">All Statisitics</div>");
             sb.append("\n<div class=\"menugroup\">Statisitics</div>");
-            addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappings()) + " Mappings", httpServletRequest);
-            addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappingSets()) + " Mapping Sets", httpServletRequest);
-            addSideBarItem(sb, "getSupportedSrcDataSources", formatter.format(statistics.getNumberOfSourceDataSources()) 
+            addSideBarItem(sb, WsUriConstants.MAPPING_SET, formatter.format(statistics.getNumberOfMappings()) + " Mappings", httpServletRequest);
+            addSideBarItem(sb, WsUriConstants.MAPPING_SET, formatter.format(statistics.getNumberOfMappingSets()) + " Mapping Sets", httpServletRequest);
+            addSideBarItem(sb, WsUriConstants.GET_SUPPORTED_SOURCE_DATA_SOURCES, formatter.format(statistics.getNumberOfSourceDataSources()) 
                     + " Source Data Sources", httpServletRequest);
-            addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfPredicates()) + " Predicates", httpServletRequest);
-            addSideBarItem(sb, "getSupportedTgtDataSources", formatter.format(statistics.getNumberOfTargetDataSources()) 
+            addSideBarItem(sb, WsUriConstants.MAPPING_SET, formatter.format(statistics.getNumberOfPredicates()) + " Predicates", httpServletRequest);
+            addSideBarItem(sb, WsUriConstants.GET_SUPPORTED_TARGET_DATA_SOURCES, formatter.format(statistics.getNumberOfTargetDataSources()) 
                     + " Target Data Sources ", httpServletRequest);
             addSideBarItem(sb, Lens.METHOD_NAME, formatter.format(statistics.getNumberOfLenses())
                     + " Lenses ", httpServletRequest);
