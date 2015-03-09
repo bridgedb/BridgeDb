@@ -6,24 +6,21 @@
 
 package org.bridgedb.uri.tools;
 
-import org.bridgedb.uri.lens.Lens;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.DulConstants;
 import org.bridgedb.rdf.constants.OWLConstants;
 import org.bridgedb.rdf.constants.PavConstants;
 import org.bridgedb.rdf.constants.VoidConstants;
-import org.bridgedb.sql.transative.DirectMapping;
-import org.bridgedb.sql.transative.SelfMapping;
-import org.bridgedb.sql.transative.TransitiveMapping;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.SetMappings;
 import org.bridgedb.uri.api.UriConstants;
 import org.bridgedb.uri.api.UriMapping;
+import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.lens.LensTools;
 import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Statement;
@@ -151,23 +148,30 @@ public class DirectStatementMaker implements StatementMaker{
         statements.add(new ContextStatementImpl(mappingSet, PavConstants.DERIVED_FROM, sourceUri, mappingSet));
     }
      
-    private void addSelfMappingsRDF(Set<Statement> statements, Mapping mapping) throws BridgeDBException{
-        for (String source:mapping.getSourceUri()){
+    private void addSelfMappingsRDF(Set<Statement> statements, Mapping mapping, String selfMappingPredicateURI) throws BridgeDBException{
+        URI predicate;
+		if (selfMappingPredicateURI == null || selfMappingPredicateURI.isEmpty()) {
+        	predicate = OWLConstants.SAMEAS_URI;
+        } else {
+        	predicate = new URIImpl(selfMappingPredicateURI);
+        }
+    	
+    	for (String source:mapping.getSourceUri()){
             URI sourceUri = new URIImpl(source);
             for (String target: mapping.getTargetUri()){
                 if (!source.equals(target)){
                     URI targetUri = new URIImpl(target);
-                    statements.add(new StatementImpl(sourceUri, OWLConstants.SAMEAS_URI, targetUri));
+                    statements.add(new StatementImpl(sourceUri, predicate, targetUri));
                 }
             }
         }
     }
 
     @Override
-    public Set<Statement> asRDF(Set<Mapping> mappings, String baseUri, boolean linksetInfo) throws BridgeDBException{
+    public Set<Statement> asRDF(Set<Mapping> mappings, String baseUri, boolean linksetInfo, String selfMappingPredicateURI) throws BridgeDBException{
         Set<Statement> statements = new HashSet<Statement>();
         for (Mapping mapping:mappings){
-            String predicate = mapping.getPredicate();
+        	String predicate = mapping.getPredicate();
             if (predicate != null){
                 String id = mapping.getMappingSetId();
                 URI mappingSet = mappingSetURI(id, baseUri);
@@ -177,7 +181,7 @@ public class DirectStatementMaker implements StatementMaker{
                     addLinksetInfo(statements, mapping, mappingSet);   
                 }
             } else {
-                addSelfMappingsRDF(statements, mapping);
+                addSelfMappingsRDF(statements, mapping, selfMappingPredicateURI);
             }
         }
         return statements;

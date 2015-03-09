@@ -7,6 +7,7 @@
 package org.bridgedb.uri.tools;
 
 import java.util.Set;
+
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.MappingsBySet;
@@ -17,6 +18,7 @@ import org.openrdf.model.Statement;
  *
  * @author christian
  */
+@SuppressWarnings("deprecation")
 public interface StatementMaker {
  
     /**
@@ -30,5 +32,5 @@ public interface StatementMaker {
 
     public Set<Statement> asRDF(MappingSetInfo info, String baseUri, String contextString)  throws BridgeDBException;
 
-    public Set<Statement> asRDF(Set<Mapping> mappings, String baseUri, boolean linksetInfo)  throws BridgeDBException;
+    public Set<Statement> asRDF(Set<Mapping> mappings, String baseUri, boolean linksetInfo, String selfMappingPredicateURI)  throws BridgeDBException;
 }
