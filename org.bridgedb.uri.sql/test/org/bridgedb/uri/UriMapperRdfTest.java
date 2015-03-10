@@ -89,13 +89,13 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
     public void testMappingNoLink() throws BridgeDBException {
         report("MapSetInfoNoLink");
         Set<Mapping> mappings = uriMapper.mapFull(map1Uri1,  null, false, null, null);
-        statementMaker.asRDF(mappings, "http://example.com/testContext", false);
+        statementMaker.asRDF(mappings, "http://example.com/testContext", false, null);
     }
 
     @Test 
     public void testMappingWithLink() throws BridgeDBException {
         report("MapSetInfoWithLink");
         Set<Mapping> mappings = uriMapper.mapFull(map1Uri1,  null, true, null, null);
-        statementMaker.asRDF(mappings, "http://example.com/testContext", false);
+        statementMaker.asRDF(mappings, "http://example.com/testContext", false, null);
     }
 }

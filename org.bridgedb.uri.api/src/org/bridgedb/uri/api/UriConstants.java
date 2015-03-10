@@ -12,4 +12,5 @@ package org.bridgedb.uri.api;
 public class UriConstants {
     public static final String MAPPING_SET = "mappingSet";
     public static final String RDF = "RDF";
+	public static final String QUERY_PREDICATE = "predicate";
 }

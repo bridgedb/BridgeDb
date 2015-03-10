@@ -32,5 +32,5 @@ public interface StatementMaker {
 
     public Set<Statement> asRDF(MappingSetInfo info, String baseUri, String contextString)  throws BridgeDBException;
 
-    public Set<Statement> asRDF(Set<Mapping> mappings, String baseUri, boolean linksetInfo, String selfMappingPredicateURI)  throws BridgeDBException;
+    public Set<Statement> asRDF(Set<Mapping> mappings, String baseUri, boolean linksetInfo, String overridePredicateURI)  throws BridgeDBException;
 }

@@ -9,6 +9,8 @@ package org.bridgedb.uri.tools;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.httpclient.URIException;
+import org.apache.commons.httpclient.util.URIUtil;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.DulConstants;
 import org.bridgedb.rdf.constants.OWLConstants;
@@ -102,14 +104,24 @@ public class DirectStatementMaker implements StatementMaker{
        return statements;
     }
 
-    protected URI mappingSetURI(String id, String baseUri){
-        return toURI(baseUri + UriConstants.MAPPING_SET + UriConstants.RDF + "/" + id);
+    protected URI mappingSetURI(String id, String baseUri, String predicateURI){
+        String uriStr = baseUri + UriConstants.MAPPING_SET + UriConstants.RDF + "/" + id;
+        if (predicateURI != null) {
+        	String p;
+			try {
+				p = URIUtil.encodeWithinQuery(predicateURI, "UTF-8");
+			} catch (URIException e) {
+				throw new IllegalStateException("UTF-8 not supported by URIUtil");
+			}
+        	uriStr += "?" + UriConstants.QUERY_PREDICATE + "=" + p;
+        }
+		return toURI(uriStr);
     }
     
     @Override
     public Set<Statement> asRDF(MappingSetInfo info, String baseUri, String contextString) throws BridgeDBException{
         HashSet<Statement> results = new HashSet<Statement>();
-        URI linksetId = mappingSetURI(info.getStringId(), baseUri);
+        URI linksetId = mappingSetURI(info.getStringId(), baseUri, null);
         URI source = toURI(info.getMappingSource());
         URI context = new URIImpl(contextString);
         results.add(new ContextStatementImpl(linksetId, PavConstants.IMPORTED_FROM, source, context));
@@ -168,20 +180,26 @@ public class DirectStatementMaker implements StatementMaker{
     }
 
     @Override
-    public Set<Statement> asRDF(Set<Mapping> mappings, String baseUri, boolean linksetInfo, String selfMappingPredicateURI) throws BridgeDBException{
+    public Set<Statement> asRDF(Set<Mapping> mappings, String baseUri, boolean linksetInfo, String overridePredicateURI) throws BridgeDBException{
         Set<Statement> statements = new HashSet<Statement>();
         for (Mapping mapping:mappings){
-        	String predicate = mapping.getPredicate();
+        	String predicate;	
+        	if (overridePredicateURI != null) {
+        		// If given, always override
+        		predicate = overridePredicateURI;
+        	} else {
+        		predicate = mapping.getPredicate();
+        	}
             if (predicate != null){
                 String id = mapping.getMappingSetId();
-                URI mappingSet = mappingSetURI(id, baseUri);
+                URI mappingSet = mappingSetURI(id, baseUri, overridePredicateURI);
                 URI predicateUri = new URIImpl(mapping.getPredicate());
                 addMappingsRDF(statements, mapping, predicateUri, mappingSet);
                 if (linksetInfo){
                     addLinksetInfo(statements, mapping, mappingSet);   
                 }
             } else {
-                addSelfMappingsRDF(statements, mapping, selfMappingPredicateURI);
+                addSelfMappingsRDF(statements, mapping, overridePredicateURI);
             }
         }
         return statements;
