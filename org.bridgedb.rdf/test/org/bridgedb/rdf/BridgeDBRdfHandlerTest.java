@@ -60,7 +60,7 @@ public class BridgeDBRdfHandlerTest {
         assertThat(result, hasItem(expected));
         assertThat(result.size(), greaterThanOrEqualTo(1));
         
-        File file = new File ("test-data/GeneratedDataSource.ttl");
+        File file = File.createTempFile("GeneratedDataSource", ".ttl");
         Reporter.println("writing to " + file.getAbsolutePath());
         BridgeDBRdfHandler.writeRdfToFile(file);
         
