@@ -4,6 +4,16 @@
 @prefix : <http://no/BaseURI/Set/> .
 
 
+bridgeDB:DataSource_bysysCode_DataSourceUrisTest_testCompare4 a bridgeDB:DataSource ;
+	bridgeDB:systemCode "DataSourceUrisTest_testCompare4" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_DataSourceUrisTest_testCompare5 a bridgeDB:DataSource ;
+	bridgeDB:systemCode "DataSourceUrisTest_testCompare5" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
 bridgeDB:DataSource_AERS a bridgeDB:DataSource ;
 	bridgeDB:fullName "AERS" ;
 	bridgeDB:systemCode "AERS" ;
@@ -311,6 +321,28 @@ bridgeDB:DataSource_Database_of_Interacting_Proteins a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/dip/$id> ;
 	bridgeDB:hasRegexPattern "^DIP[\\:\\-]\\d{3}[EN]$" ;
 	dcterms:alternative "Database of Interacting Proteins" .
+
+bridgeDB:DataSource_DataSourceUrisTest_testCompare1 a bridgeDB:DataSource ;
+	bridgeDB:fullName "DataSourceUrisTest_testCompare1" ;
+	bridgeDB:systemCode "DataSourceUrisTest_testCompare1" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_DataSourceUrisTest_testCompare2 a bridgeDB:DataSource ;
+	bridgeDB:fullName "DataSourceUrisTest_testCompare2" ;
+	bridgeDB:systemCode "DataSourceUrisTest_testCompare2" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_dataSourceUrisTest_testCompare3 a bridgeDB:DataSource ;
+	bridgeDB:fullName "dataSourceUrisTest_testCompare3" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_DataSourceUrisTest_testGetResourceId a bridgeDB:DataSource ;
+	bridgeDB:fullName "DataSourceUrisTest_testGetResourceId" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
 
 bridgeDB:DataSource_dbSNP a bridgeDB:DataSource ;
 	bridgeDB:fullName "dbSNP" ;
