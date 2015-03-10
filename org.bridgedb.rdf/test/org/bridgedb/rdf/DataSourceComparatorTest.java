@@ -111,7 +111,7 @@ public class DataSourceComparatorTest {
         Reporter.println("GetUriPatterns");
         BridgeDBRdfHandler.parseRdfFile(file1);
         Set<UriPattern> result = UriPattern.byCodeAndType("Cs", UriPatternType.dataSourceUriPattern);
-        UriPattern pattern = UriPattern.existingByPattern("http://www.chemspider.com/Chemical-Structure.$id.rdf");
+        UriPattern pattern = UriPattern.existingByPattern("http://www.chemspider.com/Chemical-Structure.$id.html");
         assertThat (result, hasItem(pattern));
 //        pattern = UriPattern.existingOrCreateByPattern("http://identifiers.org/chemspider/$id");
 //        assertThat (result, hasItem(pattern));
