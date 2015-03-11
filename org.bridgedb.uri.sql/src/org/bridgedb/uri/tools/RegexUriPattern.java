@@ -286,7 +286,7 @@ public class RegexUriPattern {
     
     @Override
     public int hashCode() {
-        String full = sysCode + "£" + prefix;
+        String full = sysCode + "--" + prefix;
         if (regex != null){
             full = full + regex;
         }
