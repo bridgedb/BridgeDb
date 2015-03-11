@@ -19,34 +19,26 @@
 //
 package org.bridgedb.uri;
 
-import java.util.HashSet;
-import java.util.List;
+import static org.junit.Assert.*;
+
 import java.util.Set;
+
 import org.bridgedb.DataSource;
-import org.bridgedb.Xref;
-import org.bridgedb.pairs.IdSysCodePair;
-import org.bridgedb.sql.SQLListener;
-import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.transative.DirectMapping;
-import org.bridgedb.sql.transative.SelfMapping;
-import org.bridgedb.sql.transative.TransitiveMapping;
 import org.bridgedb.statistics.MappingSetInfo;
-import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.statistics.SourceInfo;
-import org.bridgedb.statistics.SourceTargetInfo;
 import org.bridgedb.uri.api.Mapping;
-import org.bridgedb.uri.lens.Lens;
-import org.bridgedb.uri.tools.DirectStatementMaker;
-import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.StatementMaker;
 import org.bridgedb.utils.BridgeDBException;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.openrdf.model.Model;
 import org.openrdf.model.Statement;
+import org.openrdf.model.URI;
+import org.openrdf.model.impl.TreeModel;
+import org.openrdf.model.impl.URIImpl;
+import org.openrdf.rio.RDFFormat;
+import org.openrdf.rio.RDFHandlerException;
+import org.openrdf.rio.Rio;
+import org.openrdf.rio.turtle.TurtleWriter;
 
 /**
  * Tests the UriMapper interface (and by loading the UriListener interface)
@@ -64,6 +56,19 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
     public static final String NULL_LENS = null;
     
     public static StatementMaker statementMaker;
+
+    URI mappingSet1 = new URIImpl("http://example.com/testBasemappingSetRDF/1");
+    URI linksetJustification = new URIImpl("http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#linksetJustification");
+    URI inChlKey = new URIImpl("http://semanticscience.org/resource/CHEMINF_000059");
+
+    URI importedFrom = new URIImpl("http://purl.org/pav/importedFrom");
+    URI example1to2 = new URIImpl("http://example.com/1to2");
+    URI linkPredicate = new URIImpl("http://rdfs.org/ns/void#linkPredicate");
+    URI exactMatch = new URIImpl("http://www.w3.org/2004/02/skos/core#exactMatch");
+    
+    URI sameAs = new URIImpl("http://www.w3.org/2002/07/owl#sameAs");
+    URI concept = new URIImpl("http://www.conceptwiki.org/concept/f25a234e-df03-419f-8504-cde8689a4d1f");
+
     
     public void checkMapping(Mapping mapping){
         if (!mapping.isMappingToSelf()){
@@ -79,23 +84,86 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
     }
     
     @Test 
-    public void testMapSetInfo1() throws BridgeDBException {
+    public void testMapSetInfo1() throws Exception {
         report("MapSetInfo1");
         MappingSetInfo info = uriMapper.getMappingSetInfo(1);
-        statementMaker.asRDF(info, "http://example.com/testBase", "http://example.com/testContext");
+        Set<Statement> rdf = statementMaker.asRDF(info, "http://example.com/testBase", "http://example.com/testContext");
+        Model m = asModel(rdf);
+        assertTrue(m.contains(mappingSet1, linksetJustification, inChlKey));
+        assertTrue(m.contains(mappingSet1, importedFrom, example1to2));
+        assertTrue(m.contains(mappingSet1, linkPredicate, exactMatch));
+
     }
 
-    @Test 
-    public void testMappingNoLink() throws BridgeDBException {
+    private Model asModel(Set<Statement> rdf) throws RDFHandlerException {
+        Model m = new TreeModel(rdf);
+        m.setNamespace("ds", "http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#");
+        m.setNamespace("pav", "http://purl.org/pav/");
+        m.setNamespace("skos", "http://www.w3.org/2004/02/skos/core#");
+        m.setNamespace("void", "http://rdfs.org/ns/void#");
+        m.setNamespace("owl", "http://www.w3.org/2002/07/owl#");
+        Rio.write(m, System.out, RDFFormat.TURTLE);
+        return m;
+	}
+
+	@Test 
+    public void testMappingNoLink() throws Exception {
         report("MapSetInfoNoLink");
         Set<Mapping> mappings = uriMapper.mapFull(map1Uri1,  null, false, null, null);
-        statementMaker.asRDF(mappings, "http://example.com/testContext", false, null);
+        System.out.println(mappings.size());
+        System.out.println(mappings);
+
+        Set<Statement> rdf = statementMaker.asRDF(mappings, "http://example.com/testContext", false, null);
+        Model m = asModel(rdf);
+
+        assertTrue(m.contains(concept, sameAs, new URIImpl("http://www.conceptwiki.org/concept/index/f25a234e-df03-419f-8504-cde8689a4d1f")));
+        assertTrue(m.contains(concept, sameAs, new URIImpl("http://www.conceptwiki.org/web-ws/concept/get?uuid=f25a234e-df03-419f-8504-cde8689a4d1f")));
+        
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://identifiers.org/chemspider/28509384")));
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://info.identifiers.org/chemspider/28509384")));
+        
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://ops.rsc.org/Compounds/Get/8")));
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://ops.rsc-us.org/OPS8")));
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://ops.rsc.org/OPS8")));
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://ops.rsc.org/OPS8/rdf")));
+        
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://rdf.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384")));
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.html")));
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.rdf")));
+        
     }
 
     @Test 
-    public void testMappingWithLink() throws BridgeDBException {
+    public void testMappingWithLink() throws Exception {
         report("MapSetInfoWithLink");
         Set<Mapping> mappings = uriMapper.mapFull(map1Uri1,  null, true, null, null);
-        statementMaker.asRDF(mappings, "http://example.com/testContext", false, null);
+        System.out.println(mappings.size());
+        System.out.println(mappings);
+        Set<Statement> rdf = statementMaker.asRDF(mappings, "http://example.com/testContext", false, null);
+        Model m = asModel(rdf);
+        assertTrue(m.contains(concept, sameAs, new URIImpl("http://www.conceptwiki.org/concept/index/f25a234e-df03-419f-8504-cde8689a4d1f")));
+        assertTrue(m.contains(concept, sameAs, new URIImpl("http://www.conceptwiki.org/web-ws/concept/get?uuid=f25a234e-df03-419f-8504-cde8689a4d1f")));
+        
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://identifiers.org/chemspider/28509384")));
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://info.identifiers.org/chemspider/28509384")));
+        
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://ops.rsc.org/Compounds/Get/8")));
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://ops.rsc-us.org/OPS8")));
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://ops.rsc.org/OPS8")));
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://ops.rsc.org/OPS8/rdf")));
+        
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://rdf.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384")));
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.html")));
+        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.rdf")));
+        
+        
+        
+        
+
     }
 }
+ 
