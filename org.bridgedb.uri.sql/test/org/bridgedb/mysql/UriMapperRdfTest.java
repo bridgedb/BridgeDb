@@ -19,18 +19,12 @@
 //
 package org.bridgedb.mysql;
 
-import java.util.Date;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
-import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.tools.DirectStatementMaker;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
-import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.URIImpl;
 
 /**
  * Runs the UriMapper interface tests over SQLUriMapper class

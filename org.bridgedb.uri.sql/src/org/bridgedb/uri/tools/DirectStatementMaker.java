@@ -6,11 +6,12 @@
 
 package org.bridgedb.uri.tools;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
-import org.apache.commons.httpclient.URIException;
-import org.apache.commons.httpclient.util.URIUtil;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.DulConstants;
 import org.bridgedb.rdf.constants.OWLConstants;
@@ -108,17 +109,24 @@ public class DirectStatementMaker implements StatementMaker{
         String uriStr = baseUri + UriConstants.MAPPING_SET + UriConstants.RDF + "/" + id;
         if (predicateURI != null) {
         	String p;
-			try {
-				p = URIUtil.encodeWithinQuery(predicateURI, "UTF-8");
-			} catch (URIException e) {
-				throw new IllegalStateException("UTF-8 not supported by URIUtil");
-			}
+			p = encodeWithinQuery(predicateURI);
         	uriStr += "?" + UriConstants.QUERY_PREDICATE + "=" + p;
         }
 		return toURI(uriStr);
     }
     
-    @Override
+    private String encodeWithinQuery(String str) {
+    	String space = UUID.randomUUID().toString();
+    	str = str.replace(" ", space);
+    	try {
+			str = URLEncoder.encode(str, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new IllegalStateException("UTF-8 was not a supported encoding");
+		}
+    	return str.replace(space, "%20");
+	}
+
+	@Override
     public Set<Statement> asRDF(MappingSetInfo info, String baseUri, String contextString) throws BridgeDBException{
         HashSet<Statement> results = new HashSet<Statement>();
         URI linksetId = mappingSetURI(info.getStringId(), baseUri, null);
@@ -193,7 +201,7 @@ public class DirectStatementMaker implements StatementMaker{
             if (predicate != null){
                 String id = mapping.getMappingSetId();
                 URI mappingSet = mappingSetURI(id, baseUri, overridePredicateURI);
-                URI predicateUri = new URIImpl(mapping.getPredicate());
+                URI predicateUri = new URIImpl(predicate);
                 addMappingsRDF(statements, mapping, predicateUri, mappingSet);
                 if (linksetInfo){
                     addLinksetInfo(statements, mapping, mappingSet);   

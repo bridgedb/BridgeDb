@@ -19,7 +19,8 @@
 //
 package org.bridgedb.uri;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
 
@@ -28,7 +29,6 @@ import org.bridgedb.sql.transative.DirectMapping;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.tools.StatementMaker;
-import org.bridgedb.utils.BridgeDBException;
 import org.junit.Test;
 import org.openrdf.model.Model;
 import org.openrdf.model.Statement;
@@ -38,7 +38,6 @@ import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.Rio;
-import org.openrdf.rio.turtle.TurtleWriter;
 
 /**
  * Tests the UriMapper interface (and by loading the UriListener interface)
@@ -62,6 +61,7 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
     URI inChlKey = new URIImpl("http://semanticscience.org/resource/CHEMINF_000059");
 
     URI importedFrom = new URIImpl("http://purl.org/pav/importedFrom");
+    URI derivedFrom = new URIImpl("http://purl.org/pav/derivedFrom");
     URI example1to2 = new URIImpl("http://example.com/1to2");
     URI linkPredicate = new URIImpl("http://rdfs.org/ns/void#linkPredicate");
     URI exactMatch = new URIImpl("http://www.w3.org/2004/02/skos/core#exactMatch");
@@ -69,6 +69,7 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
     URI sameAs = new URIImpl("http://www.w3.org/2002/07/owl#sameAs");
     URI concept = new URIImpl("http://www.conceptwiki.org/concept/f25a234e-df03-419f-8504-cde8689a4d1f");
 
+    URI override = new URIImpl("http://example.com/override");
     
     public void checkMapping(Mapping mapping){
         if (!mapping.isMappingToSelf()){
@@ -92,17 +93,12 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
         assertTrue(m.contains(mappingSet1, linksetJustification, inChlKey));
         assertTrue(m.contains(mappingSet1, importedFrom, example1to2));
         assertTrue(m.contains(mappingSet1, linkPredicate, exactMatch));
-
     }
+    
 
     private Model asModel(Set<Statement> rdf) throws RDFHandlerException {
         Model m = new TreeModel(rdf);
-        m.setNamespace("ds", "http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#");
-        m.setNamespace("pav", "http://purl.org/pav/");
-        m.setNamespace("skos", "http://www.w3.org/2004/02/skos/core#");
-        m.setNamespace("void", "http://rdfs.org/ns/void#");
-        m.setNamespace("owl", "http://www.w3.org/2002/07/owl#");
-        Rio.write(m, System.out, RDFFormat.TURTLE);
+        Rio.write(m, System.out, RDFFormat.NTRIPLES);
         return m;
 	}
 
@@ -110,8 +106,6 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
     public void testMappingNoLink() throws Exception {
         report("MapSetInfoNoLink");
         Set<Mapping> mappings = uriMapper.mapFull(map1Uri1,  null, false, null, null);
-        System.out.println(mappings.size());
-        System.out.println(mappings);
 
         Set<Statement> rdf = statementMaker.asRDF(mappings, "http://example.com/testContext", false, null);
         Model m = asModel(rdf);
@@ -135,12 +129,67 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
         
     }
 
+	@Test 
+    public void testMappingNoLinkFixedPredicate() throws Exception {
+        report("MapSetInfoNoLinkFixedPredicate");
+        Set<Mapping> mappings = uriMapper.mapFull(map1Uri1,  null, false, null, null);
+
+        Set<Statement> rdf = statementMaker.asRDF(mappings, "http://example.com/testContext", true, "http://example.com/override");
+        Model m = asModel(rdf);
+
+        assertTrue(m.contains(concept, override, new URIImpl("http://www.conceptwiki.org/concept/index/f25a234e-df03-419f-8504-cde8689a4d1f")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://www.conceptwiki.org/web-ws/concept/get?uuid=f25a234e-df03-419f-8504-cde8689a4d1f")));
+        
+        assertTrue(m.contains(concept, override, new URIImpl("http://identifiers.org/chemspider/28509384")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://info.identifiers.org/chemspider/28509384")));
+        
+        assertTrue(m.contains(concept, override, new URIImpl("http://ops.rsc.org/Compounds/Get/8")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://ops.rsc-us.org/OPS8")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://ops.rsc.org/OPS8")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://ops.rsc.org/OPS8/rdf")));
+        
+        assertTrue(m.contains(concept, override, new URIImpl("http://rdf.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://www.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.html")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.rdf")));
+        
+        URI mapSet1Override = new URIImpl("http://example.com/testContextmappingSetRDF/1?predicate=http%3A%2F%2Fexample.com%2Foverride");
+        URI mapSet1_3Override = new URIImpl("http://example.com/testContextmappingSetRDF/1_3?predicate=http%3A%2F%2Fexample.com%2Foverride");
+        URI example1to2 = new URIImpl("http://example.com/1to2");
+        URI example2to3 = new URIImpl("http://example.com/2to3");
+        
+        
+    }
+	
     @Test 
     public void testMappingWithLink() throws Exception {
         report("MapSetInfoWithLink");
         Set<Mapping> mappings = uriMapper.mapFull(map1Uri1,  null, true, null, null);
-        System.out.println(mappings.size());
-        System.out.println(mappings);
+        Set<Statement> rdf = statementMaker.asRDF(mappings, "http://example.com/testContext", false, "http://example.com/override");
+        Model m = asModel(rdf);
+        assertTrue(m.contains(concept, override, new URIImpl("http://www.conceptwiki.org/concept/index/f25a234e-df03-419f-8504-cde8689a4d1f")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://www.conceptwiki.org/web-ws/concept/get?uuid=f25a234e-df03-419f-8504-cde8689a4d1f")));
+        
+        assertTrue(m.contains(concept, override, new URIImpl("http://identifiers.org/chemspider/28509384")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://info.identifiers.org/chemspider/28509384")));
+        
+        assertTrue(m.contains(concept, override, new URIImpl("http://ops.rsc.org/Compounds/Get/8")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://ops.rsc-us.org/OPS8")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://ops.rsc.org/OPS8")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://ops.rsc.org/OPS8/rdf")));
+        
+        assertTrue(m.contains(concept, override, new URIImpl("http://rdf.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://www.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.html")));
+        assertTrue(m.contains(concept, override, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.rdf")));
+    }
+    
+    @Test 
+    public void testMappingWithLinkOverride() throws Exception {
+        report("MapSetInfoWithLink");
+        Set<Mapping> mappings = uriMapper.mapFull(map1Uri1,  null, true, null, null);
         Set<Statement> rdf = statementMaker.asRDF(mappings, "http://example.com/testContext", false, null);
         Model m = asModel(rdf);
         assertTrue(m.contains(concept, sameAs, new URIImpl("http://www.conceptwiki.org/concept/index/f25a234e-df03-419f-8504-cde8689a4d1f")));
@@ -159,11 +208,6 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
         assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384")));
         assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.html")));
         assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.rdf")));
-        
-        
-        
-        
-
     }
 }
  
