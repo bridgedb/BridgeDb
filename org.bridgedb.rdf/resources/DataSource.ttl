@@ -390,6 +390,7 @@ bridgeDB:CodeMapper_GeneOntology a bridgeDB:CodeMapper ;
     bridgeDB:xrefPrefix "GO:";
 	bridgeDB:hasUriPattern <http://identifiers.org/obo.go/GO:$id> ; #Deprecated
         bridgeDB:hasUriPattern <http://purl.uniprot.org/go/$id>;
+        bridgeDB:hasUriPattern <http://purl.obolibrary.org/obo/GO_$id>;
 	bridgeDB:hasUriPattern <http://purl.org/obo/owl/GO#GO_$id> .
 
 bridgeDB:DataSource_GOA a bridgeDB:DataSource ;
