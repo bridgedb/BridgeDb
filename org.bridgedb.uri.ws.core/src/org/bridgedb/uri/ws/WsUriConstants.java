@@ -45,6 +45,7 @@ public class WsUriConstants extends WsConstants{
     public static final String LENS_URI = "lensUri";
     public static final String LENS_GROUP = "lensGroup";
     public static final String LINKSET_INFO = "linksetInfo";
+    public static final String OVERRIDE_PREDICATE_URI = "overridePredicateURI";
     public static final String RDF = UriConstants.RDF;
     public static final String RDF_FORMAT = "rdfFormat";
     public static final String SQL_COMPAT_VERSION = "SqlCompatVersion";

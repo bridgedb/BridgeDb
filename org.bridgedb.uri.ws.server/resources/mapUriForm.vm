@@ -40,6 +40,10 @@
             </p>
         #end
         <p>
+          <label for="overridePredicateURI">Override predicate URI</label> <small>(optional)</small>:
+          <input type="input" name="overridePredicateURI" size="40" type="url" placeholder="http://www.w3.org/2004/02/skos/core#exactMatch" />
+        </p>
+        <p>
             <input type="radio" name=$formatName value="application/xml">XML Output
             <input type="radio" name=$formatName value="application/json">JSON Output
             <input type="radio" name=$formatName value="text/html" checked>HTML Output<br>

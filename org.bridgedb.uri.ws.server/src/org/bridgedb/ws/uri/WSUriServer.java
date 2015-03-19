@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -43,6 +44,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
+
 import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
 import org.bridgedb.DataSource;
@@ -434,10 +436,11 @@ public class WSUriServer extends WSAPI {
             @QueryParam(WsUriConstants.BASE_URI) String baseUri,
             @QueryParam(WsUriConstants.RDF_FORMAT) String formatName,
             @QueryParam(WsUriConstants.LINKSET_INFO) Boolean linksetInfo,
+            @QueryParam(WsUriConstants.OVERRIDE_PREDICATE_URI) String overridePredicateURI,
             @Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException{  
         Set<Statement> statements = this.mapUriRdfInner(uris, lensUri, graph, targetUriPatterns, baseUri, formatName, 
-                linksetInfo, httpServletRequest);
+                linksetInfo, overridePredicateURI, httpServletRequest);
         String fullPage;
         if (formatName != null || formatName != null){
             StringBuilder sb = new StringBuilder();
@@ -483,10 +486,11 @@ public class WSUriServer extends WSAPI {
             @QueryParam(WsUriConstants.BASE_URI) String baseUri,
             @QueryParam(WsUriConstants.RDF_FORMAT) String formatName,
             @QueryParam(WsUriConstants.LINKSET_INFO) Boolean linksetInfo,
+            @QueryParam(WsUriConstants.OVERRIDE_PREDICATE_URI) String overridePredicateURI,
             @Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException{  
         Set<Statement> statements = this.mapUriRdfInner(uris, lensUri, graph, targetUriPatterns, baseUri, formatName, 
-                linksetInfo, httpServletRequest);
+                linksetInfo, overridePredicateURI, httpServletRequest);
         if (noConentOnEmpty & statements.isEmpty()){
             return Response.noContent().build();
         } 
@@ -496,12 +500,15 @@ public class WSUriServer extends WSAPI {
     
     private Set<Statement> mapUriRdfInner(List<String> uris, String lensUri, String graph, List<String> targetUriPatterns, 
             String baseUri, String formatName,
-            Boolean linksetInfo, HttpServletRequest httpServletRequest) throws BridgeDBException{ 
+            Boolean linksetInfo, String overridePredicateURI, HttpServletRequest httpServletRequest) throws BridgeDBException{ 
         boolean addLinks;
         if (linksetInfo == null){
             addLinks = false;
         } else {
             addLinks = linksetInfo;
+        }
+        if (overridePredicateURI != null && overridePredicateURI.isEmpty()) {
+        	overridePredicateURI = null;
         }
         Set<Mapping> mappings;
         if (uris.size() == 1){
@@ -514,7 +521,7 @@ public class WSUriServer extends WSAPI {
         }
         baseUri = checkBaseUri(baseUri, httpServletRequest);
         String context = checkContext(baseUri, httpServletRequest);
-        Set<Statement> statements = statementMaker.asRDF(mappings, baseUri, addLinks);
+        Set<Statement> statements = statementMaker.asRDF(mappings, baseUri, addLinks, overridePredicateURI);
         if (formatName != null || formatName != null){
             RDFFormat rdfFormat = RDFFormat.valueOf(formatName);
             if (linksetInfo != null && linksetInfo){

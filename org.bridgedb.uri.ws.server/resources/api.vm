@@ -151,7 +151,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
     <li>Note this is for searching for text in Identifiers not for mapping between text and Identifiers.</li>
 </ul>
 
-<h3>Ops Exstension Parameters</h3>
+<h3>Ops Extension Parameters</h3>
 
 <h4><a name="Uri">Uri</a></h4>
 <ul>
@@ -195,6 +195,17 @@ Their behaviour is consistent across all methods, unless stated otherwise
     <li>Warning: Setting linksetInfo will increase response time considerably</li>
     <li>Only use if provenance data is really required.</li>
 </ul>
+
+<h4><a name="overridePredicateURI">overridePredicateURI</a></h4>
+<ul>
+  <li>Override the link predicate URI returned by <a href="mapUri">mapUri</a> and <a href="mapUriRDF">mapUriRDF</a></li>
+  <li>The default (if the parameter is not given or is an empty string) is to return links using the predicates from the original linksets</li>
+  <li>Parameter must be an absolute URI of the term to use, e.g. <code>http://www.w3.org/2004/02/skos/core#exactMatch</code> or 
+  	<code>http://www.w3.org/2002/07/owl#sameAs</code></li>
+  <li>If combined with <a href="#linksetInfo">linksetInfo</a>=<code>true</code>, the returned linkset info will describe
+   derived linksets with the overridden <code>void:linkPredicate</code></li>
+</ul>
+
 
 <h4><a name="graph">graph</a></h4>
 <ul>
@@ -606,6 +617,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
             <li><a href="#lensUri">lensUri</a></li>
             <li><a href="#graph">graph</a></li> 
             <li><a href="#targetUriPattern">targetUriPattern</a></li> 
+            <li><a href="#overridePredicateURI">targetUriPattern</a></li>
         </ul>
     </li>
     <li>Note: The HTML version of this call is actually based on <a href="#map">map</a>
