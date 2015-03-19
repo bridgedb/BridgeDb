@@ -173,7 +173,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         MappingsBean result = mapFull(id, scrCode, uri, lensUri, 
                 includeXrefResults, includeUriResults, 
                 targetCodes, graph, targetUriPatterns);
-        if (noConentOnEmpty & result.asMappings().isEmpty()){
+        if (noContentOnEmpty & result.asMappings().isEmpty()){
             return Response.status(Response.Status.NO_CONTENT).build();
         } 
         return Response.ok(result, MediaType.APPLICATION_XML_TYPE).build();
@@ -195,7 +195,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         MappingsBean result = mapFull(id, scrCode, uri, lensUri, 
                  includeXrefResults, includeUriResults, 
                 targetCodes, graph, targetUriPatterns);
-        if (noConentOnEmpty & result.asMappings().isEmpty()){
+        if (noContentOnEmpty & result.asMappings().isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(result, MediaType.APPLICATION_JSON_TYPE).build();
@@ -218,7 +218,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         MappingsBean result = mapFull (id, scrCode, uri, lensUri, 
                 includeXrefResults, includeUriResults, 
                 targetCodes, graph, targetUriPatterns);
-        if (noConentOnEmpty & result.asMappings().isEmpty()){
+        if (noContentOnEmpty & result.asMappings().isEmpty()){
             return noContentWrapper(httpServletRequest);
         } 
         return Response.ok(result, MediaType.APPLICATION_XML_TYPE).build();
@@ -265,7 +265,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @QueryParam(WsUriConstants.GRAPH) String graph,
             @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns) throws BridgeDBException {
         UriMappings result = mapUriInner(uris, lensUri, graph, targetUriPatterns);
-        if (noConentOnEmpty & result.isEmpty()){
+        if (noContentOnEmpty & result.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(result, MediaType.APPLICATION_XML_TYPE).build();
@@ -280,7 +280,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @QueryParam(WsUriConstants.GRAPH) String graph,
             @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns) throws BridgeDBException {
         UriMappings result = mapUriInner(uris, lensUri, graph, targetUriPatterns);
-        if (noConentOnEmpty & result.isEmpty()){
+        if (noContentOnEmpty & result.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(result, MediaType.APPLICATION_JSON_TYPE).build();
@@ -313,14 +313,14 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             format = MediaType.TEXT_HTML;
         }
         if (format.equals("application/xml")){
-            if (noConentOnEmpty & mappings.isEmpty()){
+            if (noContentOnEmpty & mappings.isEmpty()){
                 return noContentWrapper(httpServletRequest);
             } 
             
             return Response.ok(UriMappings.toBean(mappings), MediaType.APPLICATION_XML_TYPE).build();
         }
         else if (format.equals("application/json")){
-            if (noConentOnEmpty & mappings.isEmpty()){
+            if (noContentOnEmpty & mappings.isEmpty()){
                 return noContentWrapper(httpServletRequest);
             } 
             return Response.ok(UriMappings.toBean(mappings), MediaType.APPLICATION_JSON_TYPE).build();
@@ -382,7 +382,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @QueryParam(WsUriConstants.GRAPH) String graph,
             @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns) throws BridgeDBException {
         MappingsBySet mappingsBySet = mapBySetInner(uris, lensUri, graph, targetUriPatterns);
-        if (noConentOnEmpty & mappingsBySet.isEmpty()){
+        if (noContentOnEmpty & mappingsBySet.isEmpty()){
             return Response.noContent().build();
         } 
         MappingsBySetBean result = new MappingsBySetBean(mappingsBySet);
@@ -397,7 +397,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @QueryParam(WsUriConstants.GRAPH) String graph,
             @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns) throws BridgeDBException {
         MappingsBySet mappingsBySet = mapBySetInner(uris, lensUri, graph, targetUriPatterns);
-        if (noConentOnEmpty & mappingsBySet.isEmpty()){
+        if (noContentOnEmpty & mappingsBySet.isEmpty()){
             return Response.noContent().build();
         } 
         MappingsBySetBean result = new MappingsBySetBean(mappingsBySet);
@@ -413,7 +413,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns,
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
         MappingsBySet mappingsBySet = mapBySetInner(uris, lensUri, graph, targetUriPatterns);
-        if (noConentOnEmpty & mappingsBySet.isEmpty()){
+        if (noContentOnEmpty & mappingsBySet.isEmpty()){
             return noContentWrapper(httpServletRequest);
         } 
         MappingsBySetBean result = new MappingsBySetBean(mappingsBySet);
@@ -465,7 +465,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     public Response UriSearch(@QueryParam(WsUriConstants.TEXT) String text,
             @QueryParam(WsUriConstants.LIMIT) String limitString) throws BridgeDBException {
         UriSearchBean bean = UriSearchInner(text, limitString);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -477,7 +477,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     public Response UriSearchJson(@QueryParam(WsUriConstants.TEXT) String text,
             @QueryParam(WsUriConstants.LIMIT) String limitString) throws BridgeDBException {
         UriSearchBean bean = UriSearchInner(text, limitString);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
@@ -490,7 +490,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @QueryParam(WsUriConstants.LIMIT) String limitString,
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
         UriSearchBean bean = UriSearchInner(text, limitString);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return noContentWrapper(httpServletRequest);
         } 
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -509,7 +509,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Override
     public Response toXref(@QueryParam(WsUriConstants.URI) String URI) throws BridgeDBException {     
         XrefBean bean = toXrefInner(URI);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -522,7 +522,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     public Response toUris(@QueryParam(WsConstants.ID) String id,
             @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) String scrCode) throws BridgeDBException{
         UriMappings result = toUrisInner(id, scrCode);
-        if (noConentOnEmpty & result.isEmpty()){
+        if (noContentOnEmpty & result.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(result, MediaType.APPLICATION_XML_TYPE).build();
@@ -534,7 +534,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     public Response toUrisJSon(@QueryParam(WsConstants.ID) String id,
             @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) String scrCode) throws BridgeDBException{
         UriMappings result = toUrisInner(id, scrCode);
-        if (noConentOnEmpty & result.isEmpty()){
+        if (noContentOnEmpty & result.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(result, MediaType.APPLICATION_JSON_TYPE).build();
@@ -581,7 +581,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Path("/" + WsUriConstants.TO_XREF)
     public Response toXrefJson(@QueryParam(WsUriConstants.URI) String URI) throws BridgeDBException {     
         XrefBean bean = toXrefInner(URI);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
@@ -593,7 +593,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     public Response toXrefHtml(@QueryParam(WsUriConstants.URI) String URI,
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException {     
         XrefBean bean = toXrefInner(URI);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return noContentWrapper(httpServletRequest);
         } 
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -626,7 +626,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Path("/" + WsUriConstants.SOURCE_INFOS) 
     public Response getSourceInfos(@QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
         SourceInfosBean bean = getSourceInfosInner(lensUri);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -637,7 +637,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Path("/" + WsUriConstants.SOURCE_INFOS) 
     public Response getSourceInfosJson(@QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
         SourceInfosBean bean = getSourceInfosInner(lensUri);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
@@ -659,7 +659,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     public Response getSourceTargetInfos(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
             @QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
         SourceTargetInfosBean bean = getSourceTargetInfosInner(scrCode, lensUri);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -671,7 +671,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     public Response getSourceTargetInfosJson(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
             @QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
         SourceTargetInfosBean bean = getSourceTargetInfosInner(scrCode, lensUri);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
@@ -712,7 +712,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
      		@QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
         MappingSetInfosBean bean = getMappingSetInfosInner(scrCode, targetCode, lensUri);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -725,7 +725,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
      		@QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
         MappingSetInfosBean bean = getMappingSetInfosInner(scrCode, targetCode, lensUri);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
@@ -742,7 +742,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Override
 	public Response getLens(@PathParam("id") String id) throws BridgeDBException {
 		LensBean bean = getLensInner(id);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -753,7 +753,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 	@Path(Lens.URI_PREFIX + "{id}")
 	public Response getLensJson(@PathParam("id") String id) throws BridgeDBException {
 		LensBean bean = getLensInner(id);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
@@ -765,7 +765,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 	public Response getLensHtml(@PathParam("id") String id,
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
 		LensBean bean = getLensInner(id);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return noContentWrapper(httpServletRequest);
         } 
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -798,7 +798,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
                 @QueryParam(WsUriConstants.LENS_GROUP) String lensGroup) throws BridgeDBException {
         List<Lens> lenses = getTheLens(lensUri, lensGroup);
 		LensesBean bean = new LensesBean(lenses, null);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -811,7 +811,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
                 @QueryParam(WsUriConstants.LENS_GROUP) String lensGroup) throws BridgeDBException {
         List<Lens> lenses = getTheLens(lensUri, lensGroup);
 		LensesBean bean = new LensesBean(lenses, null);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
@@ -825,7 +825,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
         List<Lens> lenses = getTheLens(lensUri, lensGroup);
 		LensesBean bean = new LensesBean(lenses, null);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return noContentWrapper(httpServletRequest);
         } 
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -849,7 +849,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Override
     public Response getMappingSetInfo(@PathParam("id") String idString) throws BridgeDBException {  
         MappingSetInfoBean bean = getMappingSetInfoInner(idString);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -860,7 +860,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Path("/" + WsUriConstants.MAPPING_SET + "/{id}")
     public Response getMappingSetInfoJson(@PathParam("id") String idString) throws BridgeDBException {  
         MappingSetInfoBean bean = getMappingSetInfoInner(idString);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
@@ -890,7 +890,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Path("/" + WsUriConstants.DATA_SOURCE + "/{id}")
     public Response getDataSource(@PathParam("id") String id) throws BridgeDBException {
         DataSourceUriPatternBean bean = getDataSourceInner(id);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -901,7 +901,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Path("/" + WsUriConstants.DATA_SOURCE + "/{id}")
     public Response getDataSourceJson(@PathParam("id") String id) throws BridgeDBException {
         DataSourceUriPatternBean bean = getDataSourceInner(id);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         } 
         return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();

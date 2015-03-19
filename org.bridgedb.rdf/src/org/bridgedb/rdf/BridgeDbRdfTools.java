@@ -51,7 +51,10 @@ public class BridgeDbRdfTools {
     }
     
     public static void writeRDF(Set<Statement> statements,  RDFFormat format, Writer writer) throws BridgeDBException{        
-        RDFWriter rdfWriter = getWriterIfPossible(format, writer); 
+    	RDFWriter rdfWriter = null;
+        if (format != null) {
+			rdfWriter = getWriterIfPossible(format, writer);
+        }
         try {
             if (rdfWriter != null){
                 rdfWriter.startRDF();
@@ -64,9 +67,7 @@ public class BridgeDbRdfTools {
                 rdfWriter.endRDF();
             } else {
                 writer.flush();
-                writer.write("No Writer available for ");
-                writer.write(format.toString());
-                writer.write("\n");
+                writer.write("No Writer available for format: " + format + "\n");
             }
        } catch (RDFHandlerException ex) {
             throw new BridgeDBException("Error writing RDF. ", ex);

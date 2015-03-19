@@ -62,7 +62,7 @@ import org.bridgedb.ws.bean.XrefsBean;
 public class WSCoreService implements WSCoreInterface {
 
     static final String NO_CONTENT_ON_EMPTY = "no.content.on.empty";
-    protected final boolean noConentOnEmpty;
+    protected final boolean noContentOnEmpty;
             
     static final Logger logger = Logger.getLogger(WSCoreService.class);
     
@@ -80,7 +80,7 @@ public class WSCoreService implements WSCoreInterface {
     public WSCoreService(IDMapper idMapper) throws BridgeDBException {
         this.idMapper = idMapper;
         String property = ConfigReader.getProperty(NO_CONTENT_ON_EMPTY);
-        noConentOnEmpty = Boolean.valueOf(property);
+        noContentOnEmpty = Boolean.valueOf(property);
         logger.info("WS Service running using supplied idMapper");
     }
         
@@ -100,7 +100,7 @@ public class WSCoreService implements WSCoreInterface {
     @Override
     public Response getSupportedSrcDataSources() throws BridgeDBException {
         DataSourcesBean bean = getSupportedSrcDataSourcesInner();
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         }
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -111,7 +111,7 @@ public class WSCoreService implements WSCoreInterface {
     @Path("/" + WsConstants.GET_SUPPORTED_SOURCE_DATA_SOURCES)
     public Response getSupportedSrcDataSourcesJson() throws BridgeDBException {
         DataSourcesBean bean = getSupportedSrcDataSourcesInner();
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         }
         return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
@@ -122,7 +122,7 @@ public class WSCoreService implements WSCoreInterface {
     @Path("/" + WsConstants.GET_SUPPORTED_SOURCE_DATA_SOURCES)
     public Response getSupportedSrcDataSources(@Context HttpServletRequest httpServletRequest) throws BridgeDBException {
         DataSourcesBean bean = getSupportedSrcDataSourcesInner();
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             noContentWrapper(httpServletRequest);
         }
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -154,7 +154,7 @@ public class WSCoreService implements WSCoreInterface {
             @QueryParam(WsConstants.TEXT) String text,
             @QueryParam(WsConstants.LIMIT) String limitString) throws BridgeDBException {
         XrefsBean bean = freeSearchInner(text, limitString);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         }
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -167,7 +167,7 @@ public class WSCoreService implements WSCoreInterface {
             @QueryParam(WsConstants.TEXT) String text,
             @QueryParam(WsConstants.LIMIT) String limitString) throws BridgeDBException {
         XrefsBean bean = freeSearchInner(text, limitString);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         }
         return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
@@ -181,7 +181,7 @@ public class WSCoreService implements WSCoreInterface {
             @QueryParam(WsConstants.LIMIT) String limitString,
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
         XrefsBean bean = freeSearchInner(text, limitString);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return noContentWrapper(httpServletRequest);
         }
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -236,7 +236,7 @@ public class WSCoreService implements WSCoreInterface {
             @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) List<String> scrCode,
             @QueryParam(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE) List<String> targetCodes) throws BridgeDBException {
         XrefMapsBean bean = mapIDInner(id, scrCode, targetCodes);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         }
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -250,7 +250,7 @@ public class WSCoreService implements WSCoreInterface {
             @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) List<String> scrCode,
             @QueryParam(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE) List<String> targetCodes) throws BridgeDBException {
         XrefMapsBean bean = mapIDInner(id, scrCode, targetCodes);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         }
         return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
@@ -265,7 +265,7 @@ public class WSCoreService implements WSCoreInterface {
             @QueryParam(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE) List<String> targetCodes,
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
         XrefMapsBean bean = mapIDInner(id, scrCode, targetCodes);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return noContentWrapper(httpServletRequest);
         }
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -329,7 +329,7 @@ public class WSCoreService implements WSCoreInterface {
     @Override
     public Response getSupportedTgtDataSources() throws BridgeDBException {
         DataSourcesBean bean = getSupportedTgtDataSourcesInner();
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         }
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -340,7 +340,7 @@ public class WSCoreService implements WSCoreInterface {
     @Path("/" + WsConstants.GET_SUPPORTED_TARGET_DATA_SOURCES)
     public Response getSupportedTgtDataSourcesJson() throws BridgeDBException {
         DataSourcesBean bean = getSupportedTgtDataSourcesInner();
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         }
         return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
@@ -351,7 +351,7 @@ public class WSCoreService implements WSCoreInterface {
     @Path("/" + WsConstants.GET_SUPPORTED_TARGET_DATA_SOURCES)
     public Response getSupportedTgtDataSources(@Context HttpServletRequest httpServletRequest) throws BridgeDBException {
         DataSourcesBean bean = getSupportedTgtDataSourcesInner();
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return noContentWrapper(httpServletRequest);
         }
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -426,7 +426,7 @@ public class WSCoreService implements WSCoreInterface {
     @Override
     public Response getProperty(@PathParam("key")String key) {
         PropertyBean bean = getPropertyInner(key);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         }
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -437,7 +437,7 @@ public class WSCoreService implements WSCoreInterface {
     @Path("/" + WsConstants.PROPERTY + "/{key}")
     public Response getPropertyJson(@PathParam("key")String key) {
         PropertyBean bean = getPropertyInner(key);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         }
         return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
@@ -449,7 +449,7 @@ public class WSCoreService implements WSCoreInterface {
     public Response getProperty(@PathParam("key")String key,
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
         PropertyBean bean = getPropertyInner(key);
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return noContentWrapper(httpServletRequest);
         }
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -471,7 +471,7 @@ public class WSCoreService implements WSCoreInterface {
     @Override
     public Response getKeys() {
         PropertiesBean bean = getKeysInner();
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         }
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
@@ -482,7 +482,7 @@ public class WSCoreService implements WSCoreInterface {
     @Path("/" + WsConstants.GET_KEYS)
     public Response getKeysJson() {
         PropertiesBean bean = getKeysInner();
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return Response.noContent().build();
         }
         return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
@@ -493,7 +493,7 @@ public class WSCoreService implements WSCoreInterface {
     @Path("/" + WsConstants.GET_KEYS)
     public Response getKeys(@Context HttpServletRequest httpServletRequest) throws BridgeDBException {
         PropertiesBean bean = getKeysInner();
-        if (noConentOnEmpty & bean.isEmpty()){
+        if (noContentOnEmpty & bean.isEmpty()){
             return noContentWrapper(httpServletRequest);
         }
         return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
