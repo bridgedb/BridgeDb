@@ -55,7 +55,7 @@ public class SQLBase {
 		} else if (supportsIsValid && !possibleOpenConnection.isValid(SQL_TIMEOUT)){
 			possibleOpenConnection.close();
 			possibleOpenConnection = sqlAccess.getConnection();
-		}
+		}		
 	}
 
     public void closeConnection() { 

@@ -52,7 +52,7 @@ public class SQLListener extends SQLBase implements MappingListener{
 
     private static final int KEY_LENGTH= 100; 
     private static final int PROPERTY_LENGTH = 100;
-    private static final int MAX_BLOCK_SIZE = 1000;
+    private static final int MAX_BLOCK_SIZE = 10000;
     protected static final int MAPPING_URI_LENGTH = 200;
     
     //static final String DATASOURCE_TABLE_NAME = "DataSource";
@@ -85,7 +85,7 @@ public class SQLListener extends SQLBase implements MappingListener{
     private int blockCount = 0;
     private int insertCount = 0;
     private int doubleCount = 0;  
-    private StringBuilder insertQuery;
+    private PreparedStatement insertQuery;
     protected final String autoIncrement;
 
     //Must be private so subclasses can have their own query.
@@ -197,6 +197,14 @@ public class SQLListener extends SQLBase implements MappingListener{
     @Override
     public void closeInput() throws BridgeDBException {
         runInsert();
+        try {
+        	if (insertQuery != null) {
+        		commitTransaction();
+        		insertQuery.close();
+        	}
+		} catch (SQLException e) {
+			throw new BridgeDBException ("Error closing insert query", e);
+		}
         Statement statement = createStatement();
         try {
             statement.execute("analyze table mapping");
@@ -230,45 +238,42 @@ public class SQLListener extends SQLBase implements MappingListener{
         }
     }
     
-    public static String addEscapeCharacters(String original){
-        String result = original.replaceAll("\\\\", "\\\\\\\\");
-        result = result.replaceAll("'", "\\\\'");
-        result = result.replaceAll("\"", "\\\\\"");
-        return result;
-    }
     /**
      * One way insertion of a link.
      * <p>
      * May store link updates in a StringBuilder to make one large call rather than many small calls.
      */
     private void insertLink(String sourceId, String targetId, int mappingSetId) throws BridgeDBException{
-        if (blockCount >= blockSize){
-            runInsert();
-            insertQuery = new StringBuilder("INSERT INTO ");
-            insertQuery.append(MAPPING_TABLE_NAME);
-            insertQuery.append(" (");
-            insertQuery.append(SOURCE_ID_COLUMN_NAME);
-            insertQuery.append(", ");
-            insertQuery.append(TARGET_ID_COLUMN_NAME);
-            insertQuery.append(", ");
-            insertQuery.append(MAPPING_SET_ID_COLUMN_NAME);
-            insertQuery.append(") VALUES ");
-        } else {
-            try {
-                insertQuery.append(", ");        
-            } catch (NullPointerException ex){
-                throw new BridgeDBException("Please run openInput() before insertLink");
-            }
+        if (insertQuery == null) {
+        	this.startTransaction();
+	    	StringBuilder sql = new StringBuilder("INSERT INTO ");
+	        sql.append(MAPPING_TABLE_NAME);
+	        sql.append(" (");
+	        sql.append(SOURCE_ID_COLUMN_NAME);
+	        sql.append(", ");
+	        sql.append(TARGET_ID_COLUMN_NAME);
+	        sql.append(", ");
+	        sql.append(MAPPING_SET_ID_COLUMN_NAME);
+	        sql.append(") VALUES ");
+	        sql.append("(?,?,?)");
+	        insertQuery = this.createPreparedStatement(sql.toString());
+	        
         }
+        		
+    	if (blockCount >= blockSize){
+    		runInsert();
+    	}
         blockCount++;
-        insertQuery.append("('");
-        insertQuery.append(addEscapeCharacters(sourceId));
-        insertQuery.append("', '");
-        insertQuery.append(addEscapeCharacters(targetId));
-        insertQuery.append("', ");
-        insertQuery.append(mappingSetId);
-        insertQuery.append(")");
-
+        try {
+			insertQuery.setString(1, sourceId);
+			insertQuery.setString(2, targetId);
+			insertQuery.setInt(3, mappingSetId);			
+			insertQuery.addBatch();
+		} catch (SQLException e) {
+            System.err.println(e);
+            throw new BridgeDBException ("Error inserting link ", e, 
+            		String.format("%s %s %s", sourceId, targetId, mappingSetId));
+		}
     }
 
     /**
@@ -277,22 +282,20 @@ public class SQLListener extends SQLBase implements MappingListener{
      */
     private void runInsert() throws BridgeDBException{
         if (insertQuery != null) {
-           Statement statement = null;
-           try {
-                statement = createStatement();
-                //long start = new Date().getTime();
-                int changed = statement.executeUpdate(insertQuery.toString());
-                //Reporter.report("insertTook " + (new Date().getTime() - start));
-                insertCount += changed;
-                doubleCount += blockCount - changed;
+           try { 
+               int[] changedPerInsert = insertQuery.executeBatch();
+               blockCount = 0;
+               
+               for (int changed : changedPerInsert) {
+            	   insertCount += changed;
+		           doubleCount += blockCount - changed;
+               }
            } catch (SQLException ex) {
                 System.err.println(ex);
                 throw new BridgeDBException ("Error inserting link ", ex, insertQuery.toString());
            } finally {
-               close (statement, null);
            }
         }   
-        insertQuery = null;
         blockCount = 0;
     }
     
