@@ -198,7 +198,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
 
 <h4><a name="overridePredicateURI">overridePredicateURI</a></h4>
 <ul>
-  <li>Override the link predicate URI returned by <a href="mapUri">mapUri</a> and <a href="mapUriRDF">mapUriRDF</a></li>
+  <li>Override the link predicate URI returned by <a href="#mapUri">mapUri</a> and <a href="#mapUriRDF">mapUriRDF</a></li>
   <li>The default (if the parameter is not given or is an empty string) is to return links using the predicates from the original linksets</li>
   <li>Parameter must be an absolute URI of the term to use, e.g. <code>http://www.w3.org/2004/02/skos/core#exactMatch</code> or 
   	<code>http://www.w3.org/2002/07/owl#sameAs</code></li>
@@ -617,7 +617,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
             <li><a href="#lensUri">lensUri</a></li>
             <li><a href="#graph">graph</a></li> 
             <li><a href="#targetUriPattern">targetUriPattern</a></li> 
-            <li><a href="#overridePredicateURI">targetUriPattern</a></li>
+            <li><a href="#overridePredicateURI">overridePredicateURI</a></li>
         </ul>
     </li>
     <li>Note: The HTML version of this call is actually based on <a href="#map">map</a>
@@ -661,7 +661,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
         <ul>
             <li><a href="#rdfFormat">rdfFormat</a></li>
             <li><a href="#baseUri">baseUri</a></li>
-            <li><a href="#linksetInfo">linksetInfo</a></li>
+            <li><a href="#c">linksetInfo</a></li>
         </ul>
     </li>
     <li>As Statements: 
