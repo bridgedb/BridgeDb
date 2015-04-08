@@ -53,6 +53,7 @@ BridgeDb and related tools are developed by (alphabetic order):
  * Isaac Ho
  * Martijn van Iersel
  * Alex Pico
+ * Stian Soiland-Reyes
  * Egon Willighagen
 
 The lead teams at this moment are (alphabetic order):
