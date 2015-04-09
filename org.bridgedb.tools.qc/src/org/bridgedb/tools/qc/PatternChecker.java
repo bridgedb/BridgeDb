@@ -72,7 +72,7 @@ public class PatternChecker
 		while (rs.next())
 		{
 			String id = rs.getString(1);
-			DataSource ds = DataSource.getBySystemCode(rs.getString(2));
+			DataSource ds = DataSource.getExistingBySystemCode(rs.getString(2));
 			if (patterns.get(ds) == null) continue; // skip if there is no pattern defined.
 			
 			Set<DataSource> matches = DataSourcePatterns.getDataSourceMatches(id);
