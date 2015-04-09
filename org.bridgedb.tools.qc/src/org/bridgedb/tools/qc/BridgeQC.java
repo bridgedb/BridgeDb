@@ -1,9 +1,9 @@
 package org.bridgedb.tools.qc;
 import java.io.File;
 import java.sql.Connection;
-import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,7 +13,7 @@ import java.util.Set;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.bio.BioDataSource;
+import org.bridgedb.bio.DataSourceTxt;
 import org.bridgedb.bio.Organism;
 import org.bridgedb.rdb.SimpleGdb;
 import org.bridgedb.rdb.SimpleGdbFactory;
@@ -287,6 +287,7 @@ public class BridgeQC
 	{
 		if (args.length != 2) { printUsage(); return; }
 		BridgeQC main = new BridgeQC (new File(args[0]), new File(args[1]));
+		DataSourceTxt.init();
 		main.run();
 		
 		PatternChecker checker = new PatternChecker();
