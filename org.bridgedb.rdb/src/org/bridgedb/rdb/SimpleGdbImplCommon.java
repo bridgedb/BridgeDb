@@ -167,7 +167,7 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 				ResultSet rs = pst.executeQuery();
 				while (rs.next())
 				{
-					DataSource ds = DataSource.getBySystemCode(rs.getString(2));
+					DataSource ds = DataSource.getExistingBySystemCode(rs.getString(2));
 					if (resultDs.length == 0 || dsFilter.contains(ds))
 					{
 						refs.add (new Xref (rs.getString(1), ds));
@@ -197,7 +197,7 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 				pst.setString(2, attrValue);
 				ResultSet r = pst.executeQuery();
 				while(r.next()) {
-					Xref ref = new Xref(r.getString(1), DataSource.getBySystemCode(r.getString(2)));
+					Xref ref = new Xref(r.getString(1), DataSource.getExistingBySystemCode(r.getString(2)));
 					refs.add(ref);
 				}
 			} catch(SQLException e) {
@@ -221,7 +221,7 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 				ResultSet r = pst.executeQuery();
 				while(r.next()) {
 					String id = r.getString(1);
-					DataSource ds = DataSource.getBySystemCode(r.getString(2));
+					DataSource ds = DataSource.getExistingBySystemCode(r.getString(2));
 					Xref ref = new Xref (id, ds);
 					result.add (ref);
 				}			
@@ -250,7 +250,7 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 	    	 	ResultSet rs = pst.executeQuery();
 	    	 	while (rs.next())
 	    	 	{
-	    	 		DataSource ds = DataSource.getBySystemCode(rs.getString(1)); 
+	    	 		DataSource ds = DataSource.getExistingBySystemCode(rs.getString(1)); 
 	    	 		result.add (ds);
 	    	 	}
 	    	}
@@ -318,7 +318,7 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 					String id = r.getString("id");
 					String code = r.getString("code");
 					String symbol = r.getString("attrValue");
-					result.put(new Xref (id, DataSource.getBySystemCode(code)), symbol);
+					result.put(new Xref (id, DataSource.getExistingBySystemCode(code)), symbol);
 				}
 			} catch (SQLException e) {
 				throw new IDMapperException (e);
@@ -345,7 +345,7 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 					String id = r.getString("id");
 					String code = r.getString("code");
 					String symbol = r.getString("attrValue");
-					Xref ref = new Xref (id, DataSource.getBySystemCode(code));
+					Xref ref = new Xref (id, DataSource.getExistingBySystemCode(code));
 					InternalUtils.multiMapPut(result, ref, symbol);
 				}
 			} catch (SQLException e) {
@@ -391,7 +391,7 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 	    	 	ResultSet rs = pst.executeQuery();
 	    	 	while (rs.next())
 	    	 	{
-	    	 		xrefs.add(new Xref(rs.getString(1), DataSource.getBySystemCode(rs.getString(2))));
+	    	 		xrefs.add(new Xref(rs.getString(1), DataSource.getExistingBySystemCode(rs.getString(2))));
 	    	 	}
 	    	}
 	    	catch (SQLException ignore)
