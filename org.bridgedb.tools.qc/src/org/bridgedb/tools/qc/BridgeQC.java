@@ -94,7 +94,12 @@ public class BridgeQC
 			{
 				int oldGenes = oldSet.get(ds);
 				double delta = (double)(newGenes - oldGenes) / (double)newGenes; 
-				System.out.printf ("INFO: Number of ids in %s: %d (changed %+3.1f%%)\n", ds.getSystemCode(), newGenes, (delta * 100)); 
+				System.out.printf(
+					"INFO: Number of ids in %s%s: %d (changed %+3.1f%%)\n",
+					ds.getSystemCode(),
+					(ds.getFullName() != null && ds.getFullName().length() > 0) ?
+						" (" + ds.getFullName() + ")" : "",
+					newGenes, (delta * 100));
 				if (delta < -0.1) 
 					System.out.println ("WARNING: Number of ids in " + ds.getSystemCode() + " has shrunk by more than 10%");
 			}
