@@ -289,7 +289,6 @@ public class BridgeQC
 		BridgeQC main = new BridgeQC (new File(args[0]), new File(args[1]));
 		main.run();
 		
-		BioDataSource.init();
 		PatternChecker checker = new PatternChecker();
 		checker.run(new File(args[0]));
 	}
