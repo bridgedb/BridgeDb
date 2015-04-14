@@ -1,8 +1,8 @@
 @prefix bridgeDB: <http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#> .
-@prefix ChemInf : <http://semanticscience.org/resource/> .
+@prefix ChemInf: <http://semanticscience.org/resource/> .
 @prefix : <http://no/BaseURI/Set/> .
 
-bridgeDB:bridgeDB:DataSource_AERS a bridgeDB:DataSource ;
+bridgeDB:DataSource_AERS a bridgeDB:DataSource ;
 	bridgeDB:fullName "AERS" ;
 	bridgeDB:systemCode "AERS" ;
 	bridgeDB:idExample "ADENINE" ;
@@ -173,7 +173,7 @@ bridgeDB:DataSource_Chembl_Protclass a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://rdf.ebi.ac.uk/resource/chembl/protclass/$id> ;
-        bridgeDB:hasRegexPattern "^CHEMBL_PC_\\d+$" .
+  bridgeDB:hasRegexPattern "^CHEMBL_PC_\\d+$" .
 
 bridgeDB:DataSource_Chembl_Target a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl Target" ;
@@ -270,7 +270,8 @@ bridgeDB:DataSource_drugbankTarget a bridgeDB:DataSource ;
 bridgeDB:DataSource_drugbankv4Target a bridgeDB:DataSource ;
 	bridgeDB:fullName "Drugbank Target v4" ;
 	bridgeDB:systemCode "drugbankv4.target" ;
-	bridgeDB:idExample "BE0000938" ;  #  "^BE\\d{7}$"
+	bridgeDB:idExample "BE0000938" ;
+  bridgeDB:hasRegexPattern "^BE\\d{7}$" ;
 	bridgeDB:mainUrl "http://www.drugbank.ca/" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
