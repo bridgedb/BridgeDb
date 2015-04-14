@@ -81,14 +81,31 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
                 <executions>
                     <execution>
                         <goals>
+                            <goal>jar</goal>
                             <goal>test-jar</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>2.4</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>jar</goal>
+                  <goal>test-jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
         </plugins>
 	</build>
 	
@@ -120,7 +137,7 @@
 		</profile>
 		<profile>
 			<id>openphacts</id>
-			<!-- use as: mvn deploy -Popenphacts-->
+			<!-- use as: mvn release:prepare -Popenphacts-->
       <distributionManagement>
           <repository>
               <id>myGrid ops</id>
@@ -165,4 +182,18 @@
 			<layout>default</layout>
 		</repository-->
 	</repositories>
+  <scm>
+    <connection>scm:git:https://github.com/bridgedb/BridgeDb.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/bridgedb/BridgeDb.git</developerConnection>
+    <url>https://github.com/bridgedb/BridgeDb/</url>
+    <tag>OpenPHACTS/develop</tag>
+  </scm>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
 </project>
