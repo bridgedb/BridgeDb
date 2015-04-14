@@ -267,6 +267,17 @@ bridgeDB:DataSource_drugbankTarget a bridgeDB:DataSource ;
         bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/drugbank.target/$id> ;
 	bridgeDB:hasUriPattern <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/$id> .
 
+bridgeDB:DataSource_drugbankv4Target a bridgeDB:DataSource ;
+	bridgeDB:fullName "Drugbank Target v4" ;
+	bridgeDB:systemCode "drugbankv4.target" ;
+	bridgeDB:idExample "BE0000938" ;  #  "^BE\\d{7}$"
+	bridgeDB:mainUrl "http://www.drugbank.ca/" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasUrlPattern <http://www.drugbank.ca/biodb/bio_entities/$id> ;
+  bridgeDB:hasUriPattern <http://bio2rdf.org/drugbank:$id> ;
+  bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/drugbankv4.target/$id> .
+
 bridgeDB:DataSource_drugbankDrugs a bridgeDB:DataSource ;
 	bridgeDB:fullName "DrugBank" ;
 	bridgeDB:systemCode "Dr" ;
