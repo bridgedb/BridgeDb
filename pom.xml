@@ -118,6 +118,22 @@
 				</repository>
 			</distributionManagement>
 		</profile>
+		<profile>
+			<id>openphacts</id>
+			<!-- use as: mvn deploy -Popenphacts-->
+      <distributionManagement>
+          <repository>
+              <id>myGrid ops</id>
+              <name>myGrid Open PHACTS repository</name>
+              <url>http://repository.mygrid.org.uk/artifactory/ops</url>
+          </repository>
+          <snapshotRepository>
+              <id>myGrid ops</id>
+              <name>myGrid Open PHACTS repository</name>
+              <url>http://repository.mygrid.org.uk/artifactory/ops</url>
+          </snapshotRepository>
+      </distributionManagement>
+		</profile>
 	</profiles>
   	<repositories>
 		<repository>
@@ -131,6 +147,17 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+    <repository>
+        <id>myGrid ops</id>
+        <name>myGrid Open PHACTS repository</name>
+        <url>http://repository.mygrid.org.uk/artifactory/ops</url>
+        <releases>
+          <enabled>true</enabled>
+        </releases>
+        <snapshots>
+          <enabled>true</enabled>
+        </snapshots>
+    </repository>
 		<!--repository>
 			<id>maven2-repository.java.net</id>
 			<name>Java.net Repository for Maven</name>
