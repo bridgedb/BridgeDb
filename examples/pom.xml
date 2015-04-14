@@ -7,7 +7,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bridgedb</groupId>
   <artifactId>examples</artifactId>
-  <name>Bridge DB Examples</name>
+  <name>BridgeDb Examples</name>
   
   	<build>
 		<directory>target</directory>
