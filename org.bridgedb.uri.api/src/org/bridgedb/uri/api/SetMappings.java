@@ -29,23 +29,17 @@ import java.util.Set;
  * @author Christian
  */
 public class SetMappings {
-    private final int id;
+    private final String id;
     private final String predicate;
     private final String justification;
     private final String mappingSource;
-    private final String mappingResource;
     private final Set<UriMapping> mappings;
-    
-    public static final String METHOD_NAME = "mappingSet";
-    public static final String URI_PREFIX = "/" + METHOD_NAME + "/";
-    public static final String HAS_LENS = "http://www.bridgedb.org/rdf/fulfillsLens" ;
-    
-    public SetMappings(int id, String predicate, String justification, String mappingSource, String mappingResource){
+        
+    public SetMappings(String id, String predicate, String justification, String mappingSource){
         this.id = id;
         this.predicate = predicate;
         this.justification = justification;
         this.mappingSource = mappingSource;
-        this.mappingResource = mappingResource;
         this.mappings = new HashSet<UriMapping>();
     }
     
@@ -56,7 +50,7 @@ public class SetMappings {
     /**
      * @return the intId
      */
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -109,13 +103,5 @@ public class SetMappings {
             mapping.append(sb);
         }
     }
-
-    /**
-     * @return the mappingResource
-     */
-    public String getMappingResource() {
-        return mappingResource;
-    }
-
 
   }

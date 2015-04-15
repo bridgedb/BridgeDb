@@ -1,0 +1,1059 @@
+<h2>Supported services include:</h2>
+<dl>
+    <dt><a href="#mapID">mapID</a></dt>
+    <dd>List the Xrefs that map to these Xrefs</dd>
+
+    <dt><a href="#xrefExists">xrefExists</a></dt>
+    <dd>State if the Xref is know to the Mapping Service or not</dd>
+
+    <dt><a href="#freeSearch">freeSearch</a></dt>
+    <dd>Searches for Xrefs that have this id.</dd>
+
+    <dt><a href="#getCapabilities">getCapabilities</a></dt>
+    <dd>Gives the Capabilitles as defined by BridgeDB.</dd>
+
+    <dt>Close()</dt>
+    <dd>Not supported as clients should not be able to close the server.</dd>
+
+    <dt>isConnected</dt>
+    <dd>Not supported as Close() is not allowed</dd>
+
+    <dt><a href="#isFreeSearchSupported">isFreeSearchSupported</a></dt>
+    <dd>Returns True as freeSearch and URLSearch are supported.</dd>
+
+    <dt><a href="#getSupportedSrcDataSources">getSupportedSrcDataSources</a></dt>
+    <dd>Returns Supported Source (BridgeDB)DataSource(s).</dd>
+
+    <dt><a href="#getSupportedTgtDataSources">getSupportedTgtDataSources</a></dt>
+    <dd>Returns Supported Target (BridgeDB)DataSource(s).</dd>
+
+    <dt><a href="#isMappingSupported">isMappingSupported</a></dt>
+    <dd>States if two DataSources are mapped at least once.</dd>
+
+    <dt><a href="#property">property/key</a></dt>
+    <dd>Returns The property value for this key.</dd>
+
+    <dt><a href="#getKeys">getKeys</a></dt>
+    <dd>Returns The keys and their property value.</dd>
+
+    <dt><a href="#map">map</a></dt>
+    <dd>List the full mappings to this URI (or Xref)</dd>
+
+    <dt><a href="#mapUri">mapUri</a></dt>
+    <dd>List the URIs that map to this/these URIs</dd>
+
+    <dt><a href="#mapUriRDF">mapUriRDF</a></dt>
+    <dd>Same data as <a href="#mapUri">mapURI</a> but presented as RDF.</dd>
+
+    <dt><a href="#mapBySet">mapBySet</a></dt>
+    <dd>DEPRECATED: Use <a href="#map">map</a> which gives the required information and more.</dd>
+
+    <dt><a href="#mapBySetRDF">mapBySetRDF</a></dt>
+    <dd>DEPRECATED: Use <a href="#mapUriRDF">mapUriRDF</a> which gives the required information.</dd>
+
+    <dt><a href="#UriExists">UriExists</a></dt>
+    <dd>State if the URI is know to the Mapping Service or not</dd>
+
+    <dt><a href="#UriSearch">UriSearch</a></dt>
+    <dd>Searches for URIs that have this ending.</dd>
+
+    <dt><a href="#dataSource">dataSource</a></dt>
+    <dd>Returns the DataSource and associated UriSpace(s) with a specific id</dd>
+
+    <dt><a href="#toUris">toUris</a></dt>
+    <dd>Returns the URIs associated with a Xref (specified as <a href="#id_code">id</a> and <a href="#id_code">code</a>)</dd>
+
+    <dt><a href="#toXref">toXref</a></dt>
+    <dd>Retrns the Xref for this URI</dd>
+
+    <dt><a href="#SourceInfos">SourceInfos</a></dt>
+    <dd>Brings up a table of all the Sources in the system.</dd>
+
+    <dt><a href="#SourceTargetInfos">SourceTargetInfos</a></dt>
+    <dd>Brings up a table of all the Targets for a particular Source.</dd>
+
+    <dt><a href="#mappingSet">mappingSet</a></dt>
+    <dd>Brings up a table of all the mappings in the system for a particular Source and Target.</dd>
+
+    <dt><a href="#mappingSet">mappingSet/id</a></dt>
+    <dd>Provides the metadata for one mapping set</dd>
+
+    <dt><a href="#mappingSetRDF">mappingSetRDF</a></dt>
+    <dd>Same data as <a href="#mappingSet">mappingSet/id</a> but presented as RDF.</dd>
+
+    <dt><a href="#mappingSetRDF">mappingSetRDF/id</a></dt>
+    <dd>Same data as <a href="#mappingSet">mappingSet/id</a> but presented as RDF.</dd>
+
+    <dt><a href="#Lens">Lens</a></dt>
+    <dd>Brings up a list of the Supported Lens</dd>
+
+    <dt><a href="#LensRDF">LensRDF</a></dt>
+    <dd>Brings up the supported Lens in RDF format</dd>
+</dl>
+
+<h2>Parameters </h2>
+The following parameters may be applicable to the methods.
+See the individual method description for which are required and which are optional.
+Their behaviour is consistent across all methods, unless stated otherwise
+<h3>BridgeDB Parameters</h3>
+
+<h4><a name="id_code">id and code</a></h4>
+<ul>
+    <li>Limits the results to ones with this/these Xrefs.</li>
+    <li>code is the SystemCode of the Xref's DataSource)</li>
+    <li>id is the identifier part of the Xref</li>
+    <li>Typically There can be multiple "id" and "code" values
+        <ul>
+            <li>There must be at least one of each.</li>
+            <li>There must be the same number of each.</li>
+            <li>They will be paired by order.</li>
+            <li>If multiple Xref's have the same DataSource their code must be repeated.</li>
+        </ul>
+    </li>
+    <li>Note: Other methods may obtain a different id by following the method name with a slash // id. These do not require a "code"</li>
+</ul>
+
+<h4><a name="key">key</a></h4>
+<ul>
+    <li>Selects which property to return.</li>
+    <li>Only one key parameter is supported.</li>
+</ul>
+
+<h4><a name="limit">limit</a></h4>
+<ul>
+    <li>Limits the number of results.</li>
+    <li>Must be a positive Integer in String Format</li>
+    <li>If less than limit results are available limit will have no effect.</li>
+    <li>Only one limit parameter is supported.</li>
+    <li>If no limit is set a default limit will be used.</li>
+    <li>If too high a limit is set the default limit will be used.</li>
+    <li>To obtain a full data dump please contact the admins.</li>
+</ul>
+
+<h4><a name="sourceCode">sourceCode</a></h4>
+<ul>
+    <li>Limits the results to ones with those Source Xref's DataSource has this sysCode.</li>
+    <li>String Format</li>
+    <li>Typically there must be exactly one sourceCode when used.</li>
+</ul>
+
+<h4><a name="targetCode">targetCode</a></h4>
+<ul>
+    <li>Limits the results to ones with those Target Xref's DataSource has this sysCode.</li>
+    <li>String Format</li><li>Typically there can but need not be more than one.</li>
+</ul>
+
+<h4><a name="text">text</a></h4>
+<ul>
+    <li>A bit of text that will be searched for.</li>
+    <li>String Format</li>
+    <li>Only one text parameter is supported.</li>
+    <li>Note this is for searching for text in Identifiers not for mapping between text and Identifiers.</li>
+</ul>
+
+<h3>Ops Extension Parameters</h3>
+
+<h4><a name="Uri">Uri</a></h4>
+<ul>
+    <li>Limits the results to ones with this URI.</li>
+    <li>String Format</li>
+    <li>Do NOT include the &lt; and &gt; seen around URIs in RDF</li>
+    <li>Only one Uri parameters is supported.</li>
+</ul>
+
+<h4><a name="baseUri">baseUri</a></h4>
+<ul>
+    <li>Used for methods that return RDF.</li>
+    <li>Changes the base of any URIs that refer to the IMS</li>
+    <li>Should be used if the IMS services are used Vai another service</li>
+    <li>The baseUri should include the service name and the final / but not the method name
+    <ul>
+        <li>So if calling http://localhost:8080/BridgeDb/mapUriRDF?... the baseUri would be http://www.example.com/MyBridgeDb/</li>
+        <li>This allows http://www.example.com/MyBridgeDb/ to forward any calls to its BridgeDb service.</li>
+    </ul>    
+</ul>
+
+<h4><a name="lensUri">lensUri</a></h4>
+<ul>
+    <li>Determines which types of results are returned</li>
+    <li>If not provided the default lens is used. Except in the <a href="#Lens">Lens</a></li>
+    <li> Use <a href="#Lens">Lens</a>  method to get a list of the Lens.</li>
+</ul>
+
+<h4><a name="lensGroup">lensGroup</a></h4>
+<ul>
+    <li>If not provided the public groups is used </li>
+    <li>A list of the current groups is available from <a href="$contextPath/lensGroup">/BridgeDb/lensGroup</a></li>
+</ul>
+
+<h4><a name="linksetInfo">linksetInfo</a></h4>
+<ul>
+    <li>Allows the addition of statements about the linkset(s) used</li>
+    <li>boolean value if not set false is assumed</li>
+    <li>Only works if <a href=#rdfFormat"> is null or supports context.</li>
+    <li>Warning: Setting linksetInfo will increase the number of statements returned by about a factor of 10</li>
+    <li>Warning: Setting linksetInfo will increase response time considerably</li>
+    <li>Only use if provenance data is really required.</li>
+</ul>
+
+<h4><a name="overridePredicateURI">overridePredicateURI</a></h4>
+<ul>
+  <li>Override the link predicate URI returned by <a href="#mapUri">mapUri</a> and <a href="#mapUriRDF">mapUriRDF</a></li>
+  <li>The default (if the parameter is not given or is an empty string) is to return links using the predicates from the original linksets</li>
+  <li>Parameter must be an absolute URI of the term to use, e.g. <code>http://www.w3.org/2004/02/skos/core#exactMatch</code> or 
+  	<code>http://www.w3.org/2002/07/owl#sameAs</code></li>
+  <li>If combined with <a href="#linksetInfo">linksetInfo</a>=<code>true</code>, the returned linkset info will describe
+   derived linksets with the overridden <code>void:linkPredicate</code></li>
+</ul>
+
+
+<h4><a name="graph">graph</a></h4>
+<ul>
+    <li>Limits the results to ones required for this OpenRdf context/graph.</li>
+    <li>This works by looking up the required targetUriPattern(s) in the graph.properties configuration file.</li>
+    <li>There can only one parameter graph and ONLY if NO paramters targetUriPattern are supplied.</li>
+</ul>
+
+<h4><a name="targetUriPattern">targetUriPattern</a></h4>
+<ul>
+    <li>Limits the results to ones with URIs with this pattern.</li>
+    <li>The URI pattern must match on of the Patterns specified in the System.</li>
+    <li>String Format</li>
+    <li>Do NOT include the &lt; and &gt; seen around URIs in RDF</li>
+    <li>There are two supported formats 
+        <ul>
+            <li>prefix$idpostfix 
+                <ul>
+                    <li>Only selects URIs which have exactlty that pattern</li>
+                    <li>Must be exactly a known pattern or an exception is thrown.</li>
+                    <li>Where $id represent the id part of the URI</li><li>The whole postfix part must be provided.</li>
+                    <li>It the pattern has nothing after the $id no postfix is included.</li>
+                </ul>
+            </li>
+            <li>startsWith 
+                <ul>
+                    <li>Returns any URIs whose prefixt start with the provided pattern.</li>
+                    <li>Can not include any part of the id section of the URI.</li>
+                    <li>For example targetUriPattern=http://identifiers.org returns all indentifiers.org URIs</li>
+                </ul>       
+            </li>
+            <li>No wildcard or regex support is currently available.</li>
+            <li>An Empty String is considered a null and returns an empty set</li>
+        </ul>
+    </li>
+    <li>Typically there can but need not be more than one.
+        <ul>
+            <li>Each TargetURI is added as a new paramter</li>
+            <li>In the format targetUriPattern=target1&amp;targetUriPattern=target12&amp;</li>
+            <li>See: <a href="#mapUri">mapUri</a> for a working example</li>
+        </ul>
+    </li>
+</ul>
+
+<h4><a name="targetCode">targetCode</a></h4>
+<ul>
+    <li>Acts in exactly the same way as non URI based methods.</li>
+    <li>Note: If both targetUriPattern and  targetCode are specified the result is the union of results of running this method twice with each parameter individually.</li>
+    <li>String Format</li>
+    <li>Typically there can but need not be more than one.</li>
+</ul>
+
+<h4><a name="rdfFormat">rdfFormat</a></h4>
+<ul>
+    <li>Specifies the RDF format that should be used.
+        <ul>
+            <li>WARNING: Not all RDF formats supports contexts/graphs.</li>
+            <li>So some formats will not have the mappings in Set contexts.</li>
+        </ul>
+    </li>
+    <li>String Format</li>
+    <li>Legal values are:
+        <ul>
+            #foreach ($rdfFormat in $rdfFormats)
+                <li>$rdfFormat.getName()
+                #if ($rdfFormat.supportsContexts())
+                    &nbsp;&nbsp;(Supports Context)
+                #end
+                </li>
+            #end
+          </ul>
+    </li>
+    <li>Only one format can be specified.</li>
+    <li>The default format $rdfDefaultFormat is used if  MediaType.TEXT_PLAIN is requested</li>
+</ul>
+
+<h4><a name="includeXrefResults">includeXrefResults</a></h4>
+<ul>
+    <li>Ask for the results to include Bridgb Xref results.</li>
+    <li>Only effects calls that would not naturally return Xref results
+        <ul>
+            <li>Always considered true for any call with </li>
+            <li><a href="#id_code">id</a> and <a href="#id_code">code</a> paramtered set</li>
+            <li>Always considered true for any call with <a href="#targetCode">targetCode</a>  paramters set</li>
+            <li>For transitives also allows the Via information to be added.</li>
+            <li>In all other cases defaults to false.</li>
+        </ul>
+    </li>
+</ul>
+
+<h4><a name="includeUriResults">includeUriResults</a></h4>
+<ul>
+    <li>Ask for the results to include URI results.</li>
+    <li>Only effects calls that would not naturally return URI results
+        <ul>
+            <li>Always considered true for any call with <a href="#Uri">Uri</a> paramter set</li>
+            <li>Always considered true for any call with <a href="#graph">graph</a> paramters set</li>
+            <li>Always considered true for any call with <a href="#targetUriPattern">targetUriPattern</a> paramters set</li>
+            <li>In all other cases defaults to false.</li>
+        </ul>
+    </li>
+</ul>
+
+<h2>Implementations of BridgeDB's IDMapper methods</h2>
+
+<h3><a name="mapID">mapID</a></h3>
+<ul>
+    <li>List the Xrefs that map to these Xrefs</li>
+    <li>Implements:  Map&lt;Xref, Set&lt;Xref&gt;&gt; mapID(Collection&lt;Xref&gt; srcXrefs, DataSource... tgtDataSources)</li>
+    <li>Implements:  Set&lt;Xref&gt; mapID(Xref srcXrefs, DataSource... tgtDataSources)</li>
+    <li>This method is available for media types XML, JSON and HTML.
+        <ul>
+            <li>Status 204 (no Content) is return if no data available.</li>
+        </ul>
+    </li>
+    <li>Request for media type HTML will a html formated page.
+        <ul>
+            <li>An warning page is returned if no data available.</li>
+        </ul>
+    </li>
+    <li>Required arguements: (Only Source Xref considered)
+        <ul>
+            <li><a href="#id_code">id</a></li>
+            <li><a href="#id_code">code</a></li>
+        </ul>
+    </li>
+    <li>Optional arguments
+        <ul>
+            <li><a href="#targetCode">targetCode</a></li>
+        </ul>
+    </li>
+    <li>Xref Example: <a href="$contextPath/mapID?id=$id2&code=$code2&id=$id1&code=$code1">
+            mapID?id=$id2&amp;code=$code2&amp;id=$id1&amp;code=$code1</a></li>
+    <li>Target Code: <a href="$contextPath/mapID?id=$id2&code=$code2&id=$id1&code=$code1&targetCode=$targetCode1">
+            mapID?id=$id2&amp;code=$code2&amp;id=$id1&amp;code=$code1&amp;targetCode=$targetCode1</a></li>
+</ul>
+
+<h3><a name="xrefExists">xrefExists</a></h3>
+<ul>
+    <li>Implements:  boolean xrefExists(Xref xref)</li>
+    <li>State if the Xref is know to the Mapping Service or not</li>
+    <li>This method is available for media types XML and JSON.
+        <ul>
+            <li>Status 204 (no Content) is never returned.</li>
+        </ul>
+    </li>
+    <li>There is not media type HTML.</li>
+    <li>Required arguements: (Considers both Source and target Xrefs
+        <ul>
+            <li><a href="#id_code">id</a></li>
+            <li><a href="#id_code">code</a></li>
+            <li>Currently only a single id and single code supported.</li>
+        </ul>
+    </li>
+    <li>Example: <a href="$contextPath/xrefExists?id=$id2&code=$code2">
+            xrefExists?id=$id2?id=Cs</a></li>
+</ul>
+
+<h3><a name="freeSearch">freeSearch</a></h3>
+<ul>
+    <li>Searches for Xrefs that have this id.</li>
+    <li>Implements:  Set&lt;Xref&gt; freeSearch (String text, int limit)</li>
+    <li>This method is available for media types XML, JSON and HTML.
+        <ul>
+            <li>Status 204 (no Content) is return if no data available.</li>
+        </ul>
+    </li>
+    <li>Request for media type HTML result in a framed page.
+        <ul>
+            <li>An warning page is returned if no data available.</li>
+        </ul>
+    </li>
+    <li>Required arguements:
+        <ul>
+            <li><a href="#text">text</a></li>
+            <li><a href="#limit">limit</a> (default available)</li>
+        </ul>
+    </li>
+    <li>Example: <a href="$contextPath/freeSearch?text=$id2&limit=5">
+            freeSearch?text=$id2&amp;limit=5</a></li>
+</ul>
+
+<h3><a name="getCapabilities">getCapabilities</a></h3>
+<ul>
+    <li>Implements:  IDMapperCapabilities getCapabilities()</li>
+    <li>Gives the Capabilitles as defined by BridgeDB.</li>
+    <li>This method is available for media types XML and JSON.
+        <ul>
+            <li>Status 204 (no Content) is never returned.</li>
+        </ul>
+    </li>
+    <li>There is not media type HTML.</li>
+    <li>Example: <a href="$contextPath/getCapabilities">getCapabilities</a></li>
+</ul>
+
+<h3>Other IDMapper Functions</h3>
+<dl>
+    <dt>Close()</dt>
+    <dd>Not supported as clients should not be able to close the server.</dd>
+    <dt>isConnected</dt>
+    <dd>Not supported as Close() is not allowed</dd>
+</dl>
+
+<h2>Implementations of BridgeDB's IDMapperCapabilities methods</h2>
+
+<h3><a name="isFreeSearchSupported">isFreeSearchSupported</a></h3>
+<ul>
+    <li>Implements:  boolean isFreeSearchSupported()</li>
+    <li>Returns True as freeSearch and URISearch are supported.</li>
+    <li>This method is available for media types XML and JSON.
+        <ul>
+            <li>Status 204 (no Content) is never returned.</li>
+        </ul>
+    </li>
+    <li>There is not media type HTML.</li>
+    <li>Example: <a href="$contextPath/isFreeSearchSupported">isFreeSearchSupported</a></li>
+</ul>
+
+<h3><a name="getSupportedSrcDataSources">getSupportedSrcDataSources</a></h3>
+<ul>
+    <li>Implements:  Set&lt;DataSource&gt;  getSupportedSrcDataSources()</li>
+    <li>Returns Supported Source (BridgeDB)DataSource(s).</li>
+    <li>This method is available for media types XML, JSON and HTML.
+        <ul>
+            <li>Status 204 (no Content) is return if no data available.</li>
+        </ul>
+    </li>
+    <li>Request for media type HTML result in a framed page.
+        <ul>
+            <li>An warning page is returned if no data available.</li>
+        </ul>
+    </li>
+    <li>Example: <a href="$contextPath/getSupportedSrcDataSources">getSupportedSrcDataSources</a></li>
+</ul>
+
+<h3><a name="getSupportedTgtDataSources">getSupportedTgtDataSources</a></h3>
+<ul>
+    <li>Implements:  Set&lt;DataSource&gt;  getSupportedTgtDataSources()</li>
+    <li>Returns Supported Target (BridgeDB)DataSource(s).</li>
+    <li>This method is available for media types XML, JSON and HTML.
+        <ul>
+            <li>Status 204 (no Content) is return if no data available.</li>
+        </ul>
+    </li>
+    <li>Request for media type HTML will a html formated page.
+        <ul>
+            <li>An warning page is returned if no data available.</li>
+        </ul>
+    </li>
+    <li>Example: <a href="$contextPath/getSupportedTgtDataSources">getSupportedTgtDataSources</a></li>
+</ul>
+
+<h3><a name="isMappingSupported">isMappingSupported</a></h3>
+<ul>
+    <li>States if two DataSources are mapped at least once.</li>
+    <li>Implements:  boolean isMappingSupported(DataSource src, DataSource tgt)</li>
+    <li>This method is available for media types XML and JSON.
+        <ul>
+            <li>Status 204 (no Content) is never returned.</li>
+        </ul>
+    </li>
+    <li>There is not media type HTML.</li>
+    <li>Required arguements: (One of each)
+        <ul>
+            <li><a href="#sourceCode">sourceCode</a></li>
+            <li><a href="#targetCode">targetCode</a></li>
+        </ul>
+    </li>
+    <li>Example: <a href="$contextPath/isMappingSupported?sourceCode=$sourceCode1&targetCode=$targetCode1">
+            isMappingSupported?sourceCode=$sourceCode1&amp;targetCode=$targetCode1</a></li>
+</ul>
+
+<h3><a name="property">property/key</a></h3>
+<ul>
+    <li>Implements:  String getProperty(String key)</li>
+    <li>Returns The property value for this key.</li>
+    <li>This method is available for media types XML, JSON and HTML.
+        <ul>
+            <li>Status 204 (no Content) is return if no data available.</li>
+        </ul>
+    </li>
+    <li>Request for media type HTML will a html formated page.
+        <ul>
+            <li>An warning page is returned if no data available</li>
+        </ul>
+    </li>
+    <li>Required arguements:
+        <ul>
+            <li>Place the actual key after the /</li>
+        </ul>
+    </li>
+    <li>Example: <a href="$contextPath/property/LastUpdates">property/LastUpdates</a></li>
+</ul>
+
+<h3><a name="getKeys">getKeys</a></h3>
+<ul>
+    <li>Implements:  Set&lt;string&gt; getKeys()</li>
+    <li>Returns The keys and their property value.</li>
+    <li>This method is available for media types XML, JSON and HTML.
+        <ul>
+            <li>Status 204 (no Content) is return if no data available.</li>
+        </ul>
+    </li>
+    <li>Request for media type HTML will a html formated page.
+        <ul>
+            <li>An warning page is returned if no data available.</li>
+        </ul>
+    </li>
+    <li>Example: <a href="$contextPath/getKeys">getKeys</a></li>
+</ul>
+
+<h2>URI based methods</h2>
+
+<h3><a name="map">map</a></h3>
+<ul>
+    <li>List the full mappings to this URI or Xref</li>
+    <li>WARNING: Providing both URI and Xref parameters always causes an Exception. Even if they match!</li>
+    <li>Note: it is not recommened to use both <a href="#targetCode">targetCode</a>
+        and <a href="#targetUriPattern">targetUriPattern</a>.
+        If both are supplied the result is the union of the calls with each individually.</li>
+    <li>Note: it is not allowed to use both <a href="#graph">graph</a>
+        and <a href="#targetUriPattern">targetUriPattern</a>.
+        If both are supplied an error is thrown.</li>
+    <li>This method is available for media types XML, JSON and HTML.
+        <ul>
+            <li>Status 204 (no Content) is return if no data available.</li>
+        </ul>
+    </li>
+    <li>Request for media type HTML will a html formated page.
+        <ul>
+            <li>An warning page is returned if no data available.</li>
+        </ul>
+    </li>
+    <li>Required arguements:
+        <ul>
+            <li>URI based
+                <ul>
+                    <li><a href="#Uri">Uri</a></li>
+                </ul>
+            </li>
+            <li>Xref based
+                <ul>
+                    <li><a href="#id_code">id</a></li>
+                    <li><a href="#id_code">code</a></li>  
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>Optional arguments
+        <ul>
+            <li><a href="#lensUri">lensUri</a></li>
+            <li><a href="#includeXrefResults">includeXrefResults</a></li>
+            <li><a href="#includeUriResults">includeUriResults</a></li>
+            <li><a href="#graph">graph</a></li>
+            <li><a href="#targetUriPattern">targetUriPattern</a></li>
+            <li><a href="#targetCode">targetCode</a></li>
+        </ul>
+    </li>
+    <li>Xref Example: <a href="$contextPath/map?id=$id2&code=$code2&id=$id1&code=$code1">
+        map?id=$id2&amp;code=$code2&amp;id=$id1&amp;code=$code1</a></li>
+    <li>Target Code: <a href="$contextPath/map?id=$id2&code=$code2&id=$id1&code=$code1&targetCode=$targetCode1">
+        map?id=$id2&amp;code=$code2&amp;id=$id1&amp;code=$code1&amp;targetCode=$targetCode1</a></li>
+    <li>With Uri data: <a href="$contextPath/map?id=$id2&code=$code2&id=$id1&code=$code1&targetCode=$targetCode1&includeUriResults=true">
+        map?id=$id2&amp;code=$code2&amp;id=$id1&amp;code=$code1&amp;targetCode=$targetCode1&amp;includeUriResults=true</a></li>
+    <li>1 URI: <a href="$contextPath/map?Uri=$uri2">map?Uri=$uri2</a></li>
+    <li>2 URIs: <a href="$contextPath/map?Uri=$uri2&Uri=$uri1">
+        map?Uri=$uri2&amp;Uri=$uri1</a></li>
+    <li>The by graph and by targetUriPattern methods provide the same result as $graph
+        which has been set to the just the single targetUriPattern targetUriSpace2</li>
+    <li>With Graph: <a href="$contextPath/map?Uri=$uri2&graph=$graph">
+        map?Uri=$uri2&amp;graph=$graph</a></li>
+    <li>1 Target Pattern: <a href="$contextPath/map?Uri=$uri2&targetUriPattern=$targetUriSpace2">
+        map?Uri=$uri2&amp;targetUriPattern=targetUriSpace2</a></li>
+    <li>2 Target Patterns: <a href="$contextPath/map?Uri=$uri2&targetUriPattern=$sourceUriSpace2&targetUriPattern=$targetUriSpace2">
+        map?Uri=$uri2&amp;targetUriPattern=$sourceUriSpace2&amp;targetUriPattern=$targetUriSpace2</a></li>
+        <li>Starts with Pattern: <a href="$contextPath/map?Uri=$uri2&targetUriPattern=http://identifiers.org">
+        map?Uri=$uri2&amp;targetUriPattern=http://identifiers.org</a></li>
+    <li>All Lens: <a href="$contextPath/map?Uri=$uri2&lensUri=All">
+         map?Uri=$uri2&amp;lensUri=All</a></li>
+    <li>With Xref: <a href="$contextPath/map?Uri=$uri2&includeXrefResults=true">
+         map?Uri=$uri2&amp;includeXrefResults=true</a></li></ul>
+
+<h3><a name="mapUri">mapUri</a></h3>
+<ul>
+    <li>List the URIs that map to this URI(s)</li>
+    <li>Note: it is not allowed to use both <a href="#graph">graph</a> and <a href="#targetUriPattern">targetUriPattern</a>.
+         If both are supplied an error is thrown.</li> 
+    <li>This method is available for media types XML and JSON.
+        <ul>
+            <li>Status 204 (no Content) is return if no data available.</li>
+        </ul>
+    </li>
+    <li>Request for media type HTML will return XML Format.
+        <ul>
+            <li>An warning page is returned if no data available.</li>
+        </ul>
+    </li>
+    <li>Required arguements:
+        <ul>
+            <li><a href="#Uri">Uri</a>
+                <ul>
+                    <li>In Contrast to other methods multiple values may be provided</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>Optional arguments
+        <ul>
+            <li><a href="#lensUri">lensUri</a></li>
+            <li><a href="#graph">graph</a></li> 
+            <li><a href="#targetUriPattern">targetUriPattern</a></li> 
+            <li><a href="#overridePredicateURI">overridePredicateURI</a></li>
+        </ul>
+    </li>
+    <li>Note: The HTML version of this call is actually based on <a href="#map">map</a>
+        <ul>
+            <li>The id of the mapping set(s) used is added</li>
+            <li>The via (intermediate) values of transitives are shown.</li>
+        </ul>
+    </li>
+    <li>1 URI: <a href="$contextPath/mapUri?Uri=$uri2">mapUri?Uri=$uri2</a></li>
+    <li>2 URIs: <a href="$contextPath/mapUri?Uri=$uri2&Uri=$uri1">
+        mapUri?Uri=$uri2&amp;Uri=$uri1</a></li>
+    <li>The by graph and by targetUriPattern methods provide the same result as $graph
+        which has been set to the just the single targetUriPattern targetUriSpace2</li>
+    <li>With Graph: <a href="$contextPath/mapUri?Uri=$uri2&graph=$graph">
+        mapUri?Uri=$uri2&amp;graph=$graph</a></li>
+    <li>1 Target Pattern: <a href="$contextPath/mapUri?Uri=$uri2&targetUriPattern=$targetUriSpace2">
+        mapUri?Uri=$uri2&amp;targetUriPattern=targetUriSpace2</a></li>
+    <li>2 Target Patterns: <a href="$contextPath/mapUri?Uri=$uri2&targetUriPattern=$sourceUriSpace2&targetUriPattern=$targetUriSpace2">
+        mapUri?Uri=$uri2&amp;targetUriPattern=$sourceUriSpace2&amp;targetUriPattern=$targetUriSpace2</a></li>
+    <li>Starts with Pattern: <a href="$contextPath/mapUri?Uri=$uri2&targetUriPattern=http://identifiers.org">
+        mapUri?Uri=$uri2&amp;targetUriPattern=http://identifiers.org</a></li>
+    <li>All Lens: <a href="$contextPath/mapUri?Uri=$uri2&lensUri=All">
+        mapUri?Uri=$uri2&amp;lensUri=All</a></li>
+ </ul>
+
+<h3><a name="mapUriRDF">mapUriRDF</a></h3>
+<ul>
+    <li>Same data as <a href="#mapUri">mapUri</a> but presented at RDF.</li>
+    <li>This method is available for media type text/plain.
+        <ul>
+            <li>Status 204 (no Content) is never returned.</li>
+        </ul>
+    </li>
+    <li>Request for media type HTML will return same text in a window.
+        <ul>
+            <li>Empty RDF is returned if no data available.</li>
+        </ul>
+    </li>
+    <li>Includes all the same arguements as :<a href="#mapUri">mapUri</a></li>
+    <li>Plus 
+        <ul>
+            <li><a href="#rdfFormat">rdfFormat</a></li>
+            <li><a href="#baseUri">baseUri</a></li>
+            <li><a href="#c">linksetInfo</a></li>
+        </ul>
+    </li>
+    <li>As Statements: 
+        <ul>
+            <li><a href="$contextPath/mapUriRDF?Uri=$uri2">mapUriRDF?Uri=$uri2</a></li>
+        </ul>
+    </li>
+    <li>As RDF
+        <ul>
+            <li>The default format $rdfDefaultFormat is used if MediaType.TEXT_PLAIN is requested</li>
+            #foreach ($rdfFormat in $rdfFormats)
+                <li>$rdfFormat.getName(): <a href="$contextPath/mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()">
+                    mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()</a></li>
+            #end
+        </ul>
+    </li>
+    <li>Note: linksetInfo is ignored if rdfFormat does not support context!</li>
+    <li>With info: 
+        <ul>
+            <li><a href="$contextPath/mapUriRDF?Uri=$uri2&linksetInfo=true">mapUriRDF?Uri=$uri2&linksetinfo=true</a></li>
+            #foreach ($rdfFormat in $rdfFormats)
+                #if($rdfFormat.supportsContexts())
+                    <li>$rdfFormat.getName(): <a href="$contextPath/mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()&linksetInfo=true">
+                        mapUriRDF?Uri=$uri2&rdfFormat=$rdfFormat.getName()&linksetInfo=true</a></li>
+                #end
+            #end
+        </ul>
+    </li>
+    <li>With baseuri: 
+        <ul>
+            <li><a href="$contextPath/mapUriRDF?Uri=$uri2&linksetInfo=true&baseUri=http://www.example.com/myBridgeDB/">
+                mapUriRDF?Uri=$uri2&linksetinfo=true&baseUri=http://www.example.com/myBridgeDB/</a></li>
+        </ul>
+    </li>        
+    <li>Note: All the examples shown in <li><a href="#mapUri">mapUri</a> work with mapUriRDF too!</li>
+</ul
+
+<h3><a name="mapBySet">mapBySet</a></h3>
+<ul>
+    <li>DEPRECATED: Use <a href="#map">map</a> which gives the required information and more</li>
+</ul>
+
+<h3><a name="mapBySetRDF">mapBySetRDF</a></h3>
+<ul>
+    <li>DEPRECATED: Use <a href="#mapUriRDF">mapUriRDF</a> which gives the required information.</li>
+</ul>
+
+<h3><a name="UriExists">UriExists</a></h3>
+<ul>
+    <li>State if the URI is know to the Mapping Service or not</li>
+    <li>This method is available for media types XML and JSON.
+        <ul>
+            <li>Status 204 (no Content) is never returned.</li>
+        </ul>
+    </li>
+    <li>There is not media type HTML.</li>
+    <li>Required arguements:
+        <ul>
+            <li><a href="#Uri">Uri</a>
+                <ul>
+                    <li>Currently limited to single URI</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>Example: <a href="$contextPath/UriExists?Uri=$uri2">
+            UriExists?Uri=$uri2</a></li>
+</ul>
+
+<h3><a name="UriSearch">UriSearch</a></h3>
+<ul>
+    <li>Searches for URIs that have this ending.</li>
+    <li>This method is available for media types XML, JSON and HTML.
+        <ul>
+            <li>Status 204 (no Content) is return if no data available.</li>
+        </ul>
+    </li>
+    <li>Request for media type HTML will a html formated page.
+        <ul>
+            <li>An warning page is returned if no data available.</li>
+        </ul>
+    </li>
+    <li>Required arguements:
+        <ul>
+            <li><a href="#text">text</a></li>
+            <li><a href="#limit">limit</a> (default available)</li>
+        </ul>
+    </li>
+    <li>Example: <a href="$contextPath/UriSearch?text=$id2&limit=5">UriSearch?text=$id2&amp;limit=5</a></li>
+</ul>
+
+<h3><a name="dataSource">dataSource/id</a></h3>
+<ul>
+    <li>Obtain a dataSource</li>
+    <li>This method is available for media types XML and JSON.
+        <ul>
+            <li>Status 204 (no Content) is return if no data available.</li>
+        </ul>
+    </li>
+    <li>Request for media type HTML will return XML Format.
+        <ul>
+            <li>An warning page is returned if no data available.</li>
+        </ul>
+    </li>
+    <li>Required arguements: 
+        <ul>
+            <li>Returns the DataSource and associated UriSpace(s) with a specific id.
+        </ul>
+    </li>
+    <li>Example: <a href="$contextPath/dataSource/$code1">dataSource/$code1</a></li>
+</ul>
+
+<h3><a name="toUris">toUris</a></h3>
+<ul>
+    <li>Returns the URIs associated with a Xref</li>
+    <li>This method is available for media types XML and JSON.
+        <ul>
+            <li>Status 204 (no Content) is return if no data available.</li>
+        </ul>
+    </li>
+    <li>Request for media type HTML will return XML Format.
+        <ul>
+            <li>An warning page is returned if no data available.</li>
+        </ul>
+    </li>
+    <li>Required arguements: 
+        <ul>
+            <li><a href="#id_code">id</a></li>
+            <li><a href="#id_code">code</a></li>
+        </ul>
+    </li>
+    <li>Example: <a href="$contextPath/toUris?id=$id2&code=$code2">toUris?id=$id2&amp;code=$code2</a></li>
+</ul>
+
+<h3><a name="toXref">toXref</a></h3>
+<ul>
+    <li>Retrns the Xref for this URI</li>
+    <li>This method is available for media types XML, JSON and HTML.
+        <ul>
+            <li>Status 204 (no Content) is return if no data available.</li>
+        </ul>
+    </li>
+    <li>Request for media type HTML will a html formated page.
+        <ul>
+            <li>An warning page is returned if no data available.</li>
+        </ul>
+    </li>
+    <li>Required arguements:
+        <ul>
+            <li><a href="#Uri">Uri</a></li>
+        </ul>
+    </li>
+    <li>Example: <a href="$contextPath/toXref?Uri=$uri2">toXref?Uri=$uri2</a></li>
+</ul>
+
+<h2>Support methods</h2><h3><a name="SourceInfos">SourceInfos</a></h3>
+<ul>
+    <li>Brings up a table of all the Sources in the system.</li>
+    <li>Optional arguments:
+        <ul>
+            <li><a href="#lensUri">lensUri</a></li>
+        </ul>
+    </li>
+    <li>Example (Default Lens): <a href="$contextPath/SourceInfos">SourceInfos</a></li>
+    <li>Example (All Lens): <a href="$contextPath/SourceInfos?lensUri=All">SourceInfos?lensUri=All</a></li>
+</ul>
+
+<h3><a name="SourceTargetInfos">SourceTargetInfos</a></h3>
+<ul>
+    <li>Brings up a table of all the Targets for a particular Source.</li>
+    <li>Required arguement:
+        <ul>
+            <li><a href="#sourceCode">sourceCode</a></li>
+        </ul>
+    </li>
+    <li>Optional arguments
+        <ul>
+            <li><a href="#lensUri">lensUri</a></li>
+        </ul>
+    </li>
+    <li>Example (Default Lens): <a href="$contextPath/SourceTargetInfos?sourceCode=$sourceCode1">SourceTargetInfos?sourceCode=$sourceCode1</a></li>
+    <li>Example (All Lens): <a href="$contextPath/SourceTargetInfos?sourceCode=$sourceCode1&lensUri=All">SourceTargetInfos?sourceCode=$sourceCode1&amp;lensUri=All</a></li>
+</ul>
+
+<h3><a name="mappingSet">mappingSet</a></h3>
+<ul>
+    <li>Brings up a table of all the mappings in the system for a particular Source and Target.</li>
+    <li>Or Brings up the information for one mapping.</li>
+    <li>This method is available for media types XML, JSON and HTML.
+        <ul>
+            <li>Status 204 (no Content) is return if no data available.</li>
+        </ul>
+    </li>
+    <li>Request for media type HTML will a html formated page.
+        <ul>
+            <li>An warning page is returned if no data available.</li>
+        </ul>
+    </li>
+    <li>For a Single Mapping set append /Id.
+        <ul>
+            <li>id can be a single integer</li>
+            <li>Example (one Set): <a href="$contextPath/mappingSet/1">mappingSet/1</a></li>
+            <li>Or a Transitive mapping as list of integers separated by _ (underrscore)
+                <ul>
+                    <li>Note: No check is done to see if the list of integers makes a legal transitive.</li>
+                </ul>
+            </li>    
+            <li>Transitive: <a href="$contextPath/mappingSet/1">mappingSet/1_3</a></li>
+        </ul>
+    </li>
+    <li>For a Summary table for a Source Target pair.
+        <ul>
+            <li>Required arguements:
+                <ul>
+                    <li><a href="#sourceCode">sourceCode</a></li>
+                    <li><a href="#targetCode">targetCode</a></li> 
+                    <li>Note: These are required arguements Since April 2014 as this method did not scale well</li>
+                </ul>
+            </li>
+        <li>Optional arguments
+            <ul>
+                <li><a href="#lensUri">lensUri</a></li>
+            </ul>
+        </li>
+        <li>Example (Default Lens): <a href="$contextPath/mappingSet?sourceCode=$sourceCode1&targetCode=$targetCode1">
+                mappingSet?sourceCode=$sourceCode1&amp;targetCode=$targetCode1</a></li>
+        <li>Example (All Lens): <a href="$contextPath/mappingSet?sourceCode=$sourceCode1&targetCode=$targetCode1&lensUri=All">
+                mappingSet?sourceCode=$sourceCode1&amp;targetCode=$targetCode1&amp;lensUri=All</a></li>
+        <li>Example (XML version): <a href="$contextPath/mappingSetXML?sourceCode=$sourceCode1&targetCode=$targetCode1">
+                mappingSetXML?sourceCode=$sourceCode1&amp;targetCode=$targetCode1</a></li>
+        <li>Example (All Lens XML version): <a href="$contextPath/mappingSetXML?sourceCode=$sourceCode1&targetCode=$targetCode1">
+                mappingSetXML?sourceCode=$sourceCode1&amp;targetCode=$targetCode1</a></li>
+    </ul></li>
+</ul>
+
+<h3><a name="mappingSetRDF">mappingSetRDF</a></h3>
+<ul>
+    <li>Brings up the information for one mapping.</li>
+    <li>This method is available for media types TEXT and HTML.
+        <ul>
+            <li>Status 204 (no Content) is return if no data available.</li>
+        </ul>
+    </li>
+    <li>Request for media type HTML will a html formated page.
+        <ul>
+            <li>An warning page is returned if no data available.</li>
+        </ul>
+    </li>
+    <li>To use as an Identifier append /Id.
+        <ul>
+            <li>With media type TEXT the default RDF format is used</li> 
+            <li>Single mappingSet: <a href="$contextPath/mappingSetRDF/1">mappingSetRDF/1</a></li>
+            <li>Transitive: <a href="$contextPath/mappingSetRDF/1">mappingSetRDF/1_3</a></li>
+            <li>Note: /id form does not support any optiona arguements</li>
+        </ul>
+    </li>
+    <li>With extra Parameters
+        <ul>
+            <li>Required arguements:
+                <ul>
+                    <li>id (/id paramter)</li>
+                </ul>
+            </li>
+        <li>Optional arguments
+            <ul>
+                <li><a href="#rdfFormat">rdfFormat</a></li>
+                <li><a href="#baseUri">baseUri</a></li>
+            </ul>
+        </li>
+        <li>Note: sourceCode, targetCode and lensUri are NOT supported by this method</li>
+        <li>As Statements: 
+            <ul>
+                <li><a href="$contextPath/mappingSetRDF?id=1">mappingSetRDF?id=1</a></li>
+                <li><a href="$contextPath/mappingSetRDF?id=1_3">mappingSetRDF?id=1_3</a></li>
+            </ul>
+        </li>
+        <li>As RDF:
+            <ul>
+                #foreach ($rdfFormat in $rdfFormats)
+                    <li>$rdfFormat.getName(): <a href="$contextPath/mappingSetRDF?id=1&rdfFormat=$rdfFormat.getName()">
+                        mappingSetRDF?id=1&rdfFormat=$rdfFormat.getName()</a></li>
+                #end
+            </ul>
+        </li>    
+        <li>With baseuri: 
+            <ul>
+                <li><a href="$contextPath/mappingSetRDF?id=1&baseUri=http://www.example.com/myBridgeDB/">mappingSetRDF?id=1&baseUri=http://www.example.com/myBridgeDB/</a></li>
+                #foreach ($rdfFormat in $rdfFormats)
+                    <li>$rdfFormat.getName(): <a href="$contextPath/mappingSetRDF?id=1&rdfFormat=$rdfFormat.getName()&baseUri=http://www.example.com/myBridgeDB/">
+                        mappingSetRDF?id=1&rdfFormat=$rdfFormat.getName()&baseUri=http://www.example.com/myBridgeDB/</a></li>
+                #end
+            </ul>
+        </li>    
+    </ul>
+</ul>
+
+<h3><a name="graphviz">graphviz</a></h3>
+This method will now always throw an Exception! It did not scale.
+
+<h3><a name="Lens">Lens</a></h3>
+<ul>
+    <li>Brings up a list of the Supported Lens</li>
+    <li>Optional arguments:
+        <ul>
+            <li><a href="#lensUri">lensUri</a>
+                <ul>
+                    <li> If provided <a href="#lensGroup">lensGroup</a>  is ignored.</li>
+                </ul>
+            </li>
+            <li><a href="#lensGroup">lensGroup</a>
+                <ul>
+                    <li> If neither this nor <a href="#lensUri">lensUri</a> is provided the group public is used. </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>Examples:
+        <ul>
+            <li>No Parameter call <a href="$contextPath/Lens">Lens</a></li><li>Get all the Lenses <a href="$contextPath/Lens?lensGroup=all">Lens?lensGroup=all</a></li>
+            <li>Get all the default Lens. <a href="$contextPath/Lens?lensUri=Default">Lens?lensUri=Default</a></li>
+        </ul>
+    </li>
+</ul>
+
+<h3><a name="LensRDF">LensRDF</a></h3>
+<ul>
+    <li>Same data as <a href="#Lens">Lens</a> but presented at RDF.</li>
+    <li>Required Argument:
+        <ul>
+            <li><a href="#rdfFormat">rdfFormat</a></li>
+        </ul>
+    </li>
+    <li>Optional arguments:
+        <ul>
+            <li><a href="#lensUri">lensUri</a></li>
+            <li><a href="#lensGroup">lensGroup</a> </li> 
+            <li>See:<a href="#Lens">Lens</a> for argument behaviour and defaults</li>
+        </ul>
+    </li>
+    <li>TriX Examples: 
+        <ul>
+            <li>No Parameter call <a href="$contextPath/LensRDF?rdfFormat=TriX">LensRDF?rdfFormat=TriX</a></li>
+            <li>Get all the Lenses <a href="$contextPath/LensRDF?lensGroup=all&rdfFormat=TriX">LensRDF?lensGroup=all&amp;rdfFormat=TriX</a></li>
+            <li>Get all the default Lens. <a href="$contextPath/LensRDF?lensUri=Default&rdfFormat=TriX">LensRDF?lensUri=Default&amp;rdfFormat=TriX</a></li>
+        </ul>
+    </li>
+    <li>TriG Examples: 
+        <ul>
+            <li>No Parameter call <a href="$contextPath/LensRDF?rdfFormat=TriG">LensRDF?rdfFormat=TriG</a></li>
+            <li>Get all the Lenses <a href="$contextPath/LensRDF?lensGroup=all&rdfFormat=TriG">LensRDF?lensGroup=all&amp;rdfFormat=TriG</a></li>
+            <li>Get all the default Lens. <a href="$contextPath/LensRDF?lensUri=Default&rdfFormat=TriG">LensRDF?lensUri=Default&amp;rdfFormat=TriG</a></li>
+        </ul>
+    </li>
+    <li>N-Quads Examples: 
+        <ul>
+            <li>No Parameter call <a href="$contextPath/LensRDF?rdfFormat=N-Quads">LensRDF?rdfFormat=N-Quads</a></li>
+            <li>Get all the Lenses <a href="$contextPath/LensRDF?lensGroup=all&rdfFormat=N-Quads">LensRDF?lensGroup=all&amp;rdfFormat=N-Quads</a></li>
+            <li>Get all the default Lens. <a href="$contextPath/LensRDF?lensUri=Default&rdfFormat=N-Quads">LensRDF?lensUri=Default&amp;rdfFormat=N-Quads</a></li>
+        </ul>
+    </li>
+    <li>N-Triples Examples: 
+        <ul>
+            <li>No Parameter call <a href="$contextPath/LensRDF?rdfFormat=N-Triples">LensRDF?rdfFormat=N-Triples</a></li>
+            <li>Get all the Lenses <a href="$contextPath/LensRDF?lensGroup=all&rdfFormat=N-Triples">LensRDF?lensGroup=all&amp;rdfFormat=N-Triples</a></li>
+            <li>Get all the default Lens. <a href="$contextPath/LensRDF?lensUri=Default&rdfFormat=N-Triples">LensRDF?lensUri=Default&amp;rdfFormat=N-Triples</a></li>
+        </ul>
+    </li>
+    <li>RDF/JSON Examples: 
+        <ul>
+            <li>No Parameter call <a href="$contextPath/LensRDF?rdfFormat=RDF/JSON">LensRDF?rdfFormat=RDF/JSON</a></li>
+            <li>Get all the Lenses <a href="$contextPath/LensRDF?lensGroup=all&rdfFormat=RDF/JSON">LensRDF?lensGroup=all&amp;rdfFormat=RDF/JSON</a></li>
+            <li>Get all the default Lens. <a href="$contextPath/LensRDF?lensUri=Default&rdfFormat=RDF/JSON">LensRDF?lensUri=Default&amp;rdfFormat=RDF/JSON</a></li>
+        </ul>
+    </li>
+    <li>RDF/XML Examples: 
+        <ul>
+            <li>No Parameter call <a href="$contextPath/LensRDF?rdfFormat=RDF/XML">LensRDF?rdfFormat=RDF/XML</a></li>
+            <li>Get all the Lenses <a href="$contextPath/LensRDF?lensGroup=all&rdfFormat=RDF/XML">LensRDF?lensGroup=all&amp;rdfFormat=RDF/XML</a></li>
+            <li>Get all the default Lens. <a href="$contextPath/LensRDF?lensUri=Default&rdfFormat=RDF/XML">LensRDF?lensUri=Default&amp;rdfFormat=RDF/XML</a></li>
+        </ul>
+    </li>
+    <li>N3 Examples:
+        <ul>
+            <li>No Parameter call <a href="$contextPath/LensRDF?rdfFormat=N3">LensRDF?rdfFormat=N3</a></li>
+            <li>Get all the Lenses <a href="$contextPath/LensRDF?lensGroup=all&rdfFormat=N3">LensRDF?lensGroup=all&amp;rdfFormat=N3</a></li>
+            <li>Get all the default Lens. <a href="$contextPath/LensRDF?lensUri=Default&rdfFormat=N3">LensRDF?lensUri=Default&amp;rdfFormat=N3</a></li>
+            </ul>
+    </li>
+    <li>Turtle Examples: 
+        <ul>
+            <li>No Parameter call <a href="$contextPath/LensRDF?rdfFormat=Turtle">LensRDF?rdfFormat=Turtle</a></li>
+            <li>Get all the Lenses <a href="$contextPath/LensRDF?lensGroup=all&rdfFormat=Turtle">LensRDF?lensGroup=all&amp;rdfFormat=Turtle</a></li><li>Get all the default Lens. <a href="$contextPath/LensRDF?lensUri=Default&rdfFormat=Turtle">LensRDF?lensUri=Default&amp;rdfFormat=Turtle</a></li>
+        </ul>
+    </li>
+</ul>

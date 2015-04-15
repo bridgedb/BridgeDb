@@ -31,11 +31,10 @@ import org.bridgedb.uri.api.UriMapping;
  */
 @XmlRootElement(name="SetMapping")
 public class SetMappingBean {
-    private Integer id;
+    private String id;
     private String predicate;
     private String justification;
     private String mappingSource;
-    private String mappingResource;
     private Set<UriMappingBean> mapping;
 
     /**
@@ -47,7 +46,7 @@ public class SetMappingBean {
     
     public final SetMappings asSetMapping(){
        SetMappings setMappings = 
-               new SetMappings(getId(), getPredicate(), getJustification(), getMappingSource(), getMappingResource());
+               new SetMappings(getId(), getPredicate(), getJustification(), getMappingSource());
        for (UriMappingBean uriMappingBean:getMapping()){
            setMappings.addMapping(uriMappingBean.asUriMapping());
        }
@@ -59,7 +58,7 @@ public class SetMappingBean {
         setPredicate(setMapping.getPredicate());
         setJustification(setMapping.getJustification());
         setMappingSource(setMapping.getMappingSource());
-        setMappingResource(setMapping.getMappingResource());
+
         mapping = new HashSet<UriMappingBean>();
         for (UriMapping uriMapping:setMapping.getMappings()){
             mapping.add(new UriMappingBean(uriMapping));
@@ -69,14 +68,14 @@ public class SetMappingBean {
     /**
      * @return the id
      */
-    public final Integer getId() {
+    public final String getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public final void setId(Integer id) {
+    public final void setId(String id) {
         this.id = id;
     }
 
@@ -136,19 +135,4 @@ public class SetMappingBean {
         this.mapping = mapping;
     }
 
-    /**
-     * @return the mappingResource
-     */
-    public String getMappingResource() {
-        return mappingResource;
-    }
-
-    /**
-     * @param mappingResource the mappingResource to set
-     */
-    public void setMappingResource(String mappingResource) {
-        this.mappingResource = mappingResource;
-    }
-    
-  
 }

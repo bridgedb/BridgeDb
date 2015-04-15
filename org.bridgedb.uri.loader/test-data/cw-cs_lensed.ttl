@@ -1,0 +1,38 @@
+@prefix : <#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix pav: <http://purl.org/pav/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+<> a void:DatasetDescription ;
+    dcterms:title "ConceptWiki to ChemSpider Linkset"^^xsd:string ;
+    dcterms:description """A linkset connecting INCORRECT ConceptWiki concepts 
+    	with incorrect ChemSpider Molecules. This is purely for testing lens. 
+        The Information here is wrong!"""^^xsd:string;
+    pav:createdBy <http://www.foo.com/> ;
+    pav:createdOn "2012-08-06"^^xsd:date;
+    foaf:primaryTopic :conceptwiki_chemspider .
+
+:conceptwiki_chemspider a void:Linkset ;
+    void:subjectsTarget :conceptwiki ;
+    void:objectsTarget :chemspider ;
+    void:linkPredicate skos:exactMatch ;
+    dul:expresses <http://www.bridgedb.org/test#testJustification> ;
+    dcterms:created "2014-11-21"^^xsd:date .
+:conceptwiki a void:Dataset ;
+    dcterms:title "ConceptWiki"^^xsd:string ;
+    void:subset :conceptwiki_chemspider ;
+    void:uriSpace <http://www.conceptwiki.org/concept/> .
+:chemspider a void:Dataset ;
+    dcterms:title "ChemSpider"^^xsd:string ;
+    dcterms:license <http://www.chemspider.com/Disclaimer.aspx> ;
+    void:uriSpace <http://rdf.chemspider.com/> .
+   
+<http://www.conceptwiki.org/concept/f25a234e-df03-419f-8504-cde8689a4d1f000001> skos:exactMatch <http://rdf.chemspider.com/28509384000001> .
+<http://www.conceptwiki.org/concept/23a8be84-7177-42ba-800c-dd9192d69ac6000001> skos:exactMatch <http://rdf.chemspider.com/28524249000001> .
+<http://www.conceptwiki.org/concept/f65bcedd-f18f-41ae-b1dd-9af4ed6a1f26000001> skos:exactMatch <http://rdf.chemspider.com/23202612000001> .
+

@@ -27,20 +27,16 @@
             <tr>
                  <th>Id</th>
                  <th>Number of Links</th>
-                 <th>Mapping Resource</th>
                  <th>Mapping Source</th>
                  <th>Source Count</th>
                  <th>Target Count</th>
                  <th>Predicate</th>
                  <th>Justification</th>
-                 <th>Transitive Sources</th>
-                 <th>Transitive Ids</th>
             </tr>
             #foreach ( $mappingSetInfo in $MappingSetInfos)
                 <tr>
                     <td><a href="$contextPath/mappingSet/$mappingSetInfo.getIntId()">$mappingSetInfo.getIntId()</a></td>
                     <td>$mappingSetInfo.getNumberOfLinks()</td>
-                    <td><a href="$mappingSetInfo.getMappingResource()">$mappingSetInfo.resourceLocalName()</a></td>
                     <td><a href="$mappingSetInfo.getMappingSource()">$mappingSetInfo.sourceLocalName()</a></td>
                     <td>$mappingSetInfo.getNumberOfSources()</td>
                     <td>$mappingSetInfo.getNumberOfTargets()</td>

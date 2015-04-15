@@ -19,17 +19,17 @@
 //
 package org.bridgedb.uri.loader;
 
-import java.util.Set;
 import org.apache.log4j.Logger;
+import org.bridgedb.sql.justification.OpsJustificationMaker;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;
+import org.bridgedb.utils.Reporter;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.helpers.RDFHandlerBase;
 
 /**
  * Reads and RDF linkset file and passes the information on to a RdfLoader.
@@ -40,64 +40,42 @@ import org.openrdf.rio.helpers.RDFHandlerBase;
  *
  * @author Christian
  */
-public class LinksetHandler extends RDFHandlerBase{
+public class LinksetHandler extends LinkHandler{
     
-    boolean processingFirstStatement = true;
-    private final URI linkPredicate;
-    private final String justification;
-    private final String backwardJustification;
-    private final Resource mappingResource;
-    private final Resource mappingSource;
-    private boolean symetric;
-    private final UriListener uriListener;
-    private final Set<String> viaLabels;
-    private final Set<Integer> chainedLinkSets;
+    private boolean processingFirstStatement = true;
+    protected final String justification;
+    protected final String backwardJustification;
 
-    private int mappingSet;
+    protected final URI mappingSource;
+
     private int noneLinkStatements;
-    
-    public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, Resource mappingResource, 
-            Resource mappingSource, boolean symetric, Set<String> viaLabels, Set<Integer> chainedLinkSets){
-        this.uriListener = uriListener;
-        this.linkPredicate = linkPredicate;
-        this.justification = justification;
-        this.backwardJustification = null;
-        this.mappingResource = mappingResource;
-        this.mappingSource = mappingSource;
-        this.symetric = symetric;
-        this.viaLabels = viaLabels;
-        this.chainedLinkSets = chainedLinkSets;
-    }
-    
-    public LinksetHandler(UriListener uriListener, URI linkPredicate, String forwardJustification, String backwardJustification, 
-            Resource mappingResource, Resource mappingSource){
-        this.uriListener = uriListener;
-        this.linkPredicate = linkPredicate;
-        this.justification = forwardJustification;
-        this.backwardJustification = backwardJustification;
-        this.mappingResource = mappingResource;
-        this.mappingSource = mappingSource;
-        this.symetric = true;
-        this.viaLabels = null;
-        this.chainedLinkSets = null;
-    }
-
-    public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, Resource mappingResource, 
-            Resource mappingSource, boolean symetric){
-        this(uriListener, linkPredicate, justification, mappingResource, mappingSource, symetric, null, null);
-    }
-
     static final Logger logger = Logger.getLogger(LinksetHandler.class);
+    
+    public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, URI mappingSource){
+        super(uriListener, linkPredicate);
+        this.justification = justification;
+        this.mappingSource = mappingSource;
+        backwardJustification = OpsJustificationMaker.getInstance().getInverse(justification);
+    }
+    
+    /**
+     * @deprecated 
+     * @param uriListener
+     * @param linkPredicate
+     * @param justification
+     * @param mappingSource
+     * @param ignore 
+     */
+    public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, URI mappingSource, boolean ignore){
+        this(uriListener, linkPredicate, justification, mappingSource);
+    }
         
     @Override
     public void handleStatement(Statement st) throws RDFHandlerException {
         if (processingFirstStatement) {
             processFirstStatement(st);
         } else {
-            if (st.getPredicate().equals(linkPredicate)) {
-                /* Only store those statements that correspond to the link predicate */
-                insertUriMapping(st);
-            }
+            super.handleStatement(st);
         }
     }
        
@@ -120,78 +98,51 @@ public class LinksetHandler extends RDFHandlerBase{
             try {
                 processingFirstStatement = false;
                 if (!(subject instanceof URI)){
-                    throw new RDFHandlerException ("None URI subject in " + st);
+                    Reporter.error("None URI subject in " + st);
+                    return;
                 }
                 if (!(object instanceof URI)){
-                    throw new RDFHandlerException ("None URI object in " + st);
+                    Reporter.error("None URI object in " + st);
+                    return;
                 }
                 RegexUriPattern sourcePattern = uriListener.toUriPattern(subject.stringValue());
                 if (sourcePattern == null){
-                     throw new RDFHandlerException("Unable to get a pattern for " + subject.stringValue());
+                     Reporter.error("Unable to get a pattern for subject in " + st);
+                     return;
                 }
                 RegexUriPattern targetPattern = uriListener.toUriPattern(object.stringValue());
                 if (targetPattern == null){
-                    throw new RDFHandlerException("Unable to get a pattern for " + object.stringValue());
+                    Reporter.error("Unable to get a pattern for " + object.stringValue());
+                    return;
                 }
-                if (backwardJustification == null){
-                    mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), justification, targetPattern, 
-                        mappingResource, mappingSource, symetric, this.viaLabels, this.chainedLinkSets);
-                } else {
-                    mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), justification, backwardJustification, 
-                        targetPattern, mappingResource, mappingSource);
-                }
-//                if (symetric == null){
-//                    //If symetric is undefined assume map to self is not symetric
-//                    symetric = (!(sourcePattern.getSysCode().equals(targetPattern.getSysCode())));
-//                }
-                
+                registerMappingSet(sourcePattern, targetPattern);
             } catch (BridgeDBException ex) {
-                throw new RDFHandlerException("Error registering mappingset from " + st, ex);
+                Reporter.error("Error handling: " + st, ex);
             }
-            insertUriMapping(st);
+            super.handleStatement(st);
         } else {
             this.noneLinkStatements++;
         }
     }
 
-    @Override
-    public void startRDF() throws RDFHandlerException{
-        super.startRDF();
-    } 
-    
+    protected void registerMappingSet(RegexUriPattern sourcePattern, RegexUriPattern targetPattern ) 
+            throws BridgeDBException{
+        if (backwardJustification == null){
+            mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), 
+                    justification, targetPattern, mappingSource, false);
+            this.setSymetric(false);
+        } else {
+            mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), 
+                    justification, backwardJustification, targetPattern, mappingSource);
+        }
+    }
+
     @Override
     public void endRDF() throws RDFHandlerException{
         super.endRDF();
-        try {
-            uriListener.closeInput();
-        } catch (BridgeDBException ex) {
-            throw new RDFHandlerException("Error endingRDF ", ex);
-        }
         if (this.processingFirstStatement){
-            throw new RDFHandlerException("No Statements found with predicate: " + linkPredicate);
+            throw new RDFHandlerException("No Valid Statements found with predicate: " + linkPredicate);
         }
-    }
-
-    private void insertUriMapping(Statement st) throws RDFHandlerException {
-        Resource subject = st.getSubject();
-        Value object = st.getObject();
-        if (!(subject instanceof URI)){
-            throw new RDFHandlerException ("None URI subject in " + st);
-        }
-        if (!(object instanceof URI)){
-            throw new RDFHandlerException ("None URI object in " + st);
-        }
-        String sourceUri = subject.stringValue();
-        String targetUri = object.stringValue();
-        try {
-            uriListener.insertUriMapping(sourceUri, targetUri, mappingSet, symetric);
-        } catch (BridgeDBException ex) {
-            throw new RDFHandlerException("Error inserting statement " + st, ex);
-        }
-    }
-
-    public int getMappingsetId() {
-        return mappingSet;
     }
 
  }

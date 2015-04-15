@@ -38,10 +38,12 @@ public class BridgeDbRdfTools {
     
     static final Logger logger = Logger.getLogger(BridgeDbRdfTools.class);
 
+    public static final String DEFAULT_FORMAT = "TriX";
+    
     public static String writeRDF(Set<Statement> statements, String formatName) throws BridgeDBException{
         StringWriter writer = new StringWriter();
         if (formatName == null){
-            formatName = "TriX";
+            formatName = DEFAULT_FORMAT;
         }
         RDFFormat rdfFormat = RDFFormat.valueOf(formatName);
         writeRDF(statements,  rdfFormat, writer);
@@ -49,7 +51,10 @@ public class BridgeDbRdfTools {
     }
     
     public static void writeRDF(Set<Statement> statements,  RDFFormat format, Writer writer) throws BridgeDBException{        
-        RDFWriter rdfWriter = getWriterIfPossible(format, writer); 
+    	RDFWriter rdfWriter = null;
+        if (format != null) {
+			rdfWriter = getWriterIfPossible(format, writer);
+        }
         try {
             if (rdfWriter != null){
                 rdfWriter.startRDF();
@@ -62,9 +67,7 @@ public class BridgeDbRdfTools {
                 rdfWriter.endRDF();
             } else {
                 writer.flush();
-                writer.write("No Writer available for ");
-                writer.write(format.toString());
-                writer.write("\n");
+                writer.write("No Writer available for format: " + format + "\n");
             }
        } catch (RDFHandlerException ex) {
             throw new BridgeDBException("Error writing RDF. ", ex);
@@ -87,6 +90,18 @@ public class BridgeDbRdfTools {
             RDFWriter rdfWriter = getWriterIfPossible(rdfFormat, writer); 
             if (rdfWriter != null){
                 results.add(rdfFormat.getName());
+            }
+        }
+        return results;
+    }
+
+    public static Set<RDFFormat> getAvaiableFormats(){
+        HashSet<RDFFormat> results = new HashSet<RDFFormat>();
+        StringWriter writer = new StringWriter();
+        for (RDFFormat rdfFormat:RDFFormat.values()){
+            RDFWriter rdfWriter = getWriterIfPossible(rdfFormat, writer); 
+            if (rdfWriter != null){
+                results.add(rdfFormat);
             }
         }
         return results;

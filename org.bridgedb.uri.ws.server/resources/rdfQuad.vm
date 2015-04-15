@@ -1,0 +1,40 @@
+<table id="sortableTable" class="display" border=1>
+    <thead>
+        <tr>
+            <th>Subject</th>
+            <th>Predicate</th>
+            <th>Object</th>
+            <th>Context</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>Subject</th>
+            <th>Predicate</th>
+            <th>Object</th>
+            <th>Context</th>
+        </tr>
+    </tfoot>
+    <tbody>
+        #foreach ($statement in $statements)
+            <tr>
+                <td>$statement.getSubject().stringValue()</td>
+                <td>$statement.getPredicate().stringValue()</td>
+                <td>$statement.getObject().stringValue()</td>
+                #if ($statement.getContext())
+                    <td>$statement.getContext().stringValue()</td>
+                #else
+                    <td>No Conext</td>
+                #end    
+            </tr>        
+        #end
+    </tbody>
+</table>
+<p>Warning MediaType.TEXT_PLAIN version bahaves differently:
+<ul>
+    <li>Return RDF using the default format even if no format specified.</li>
+    <li>Removes HTML stuff such as top and menubars.</li>
+    <li>Returns status 204 if no mappings found.</li>
+</ul>
+
+

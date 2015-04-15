@@ -22,7 +22,9 @@ package org.bridgedb.uri.ws.bean;
 import java.util.HashSet;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.bridgedb.DataSource;
 import org.bridgedb.uri.lens.Lens;
+import org.bridgedb.ws.bean.DataSourceBean;
 
 /**
  *
@@ -37,6 +39,7 @@ public class LensBean {
     private String createdOn;
     private String description;
     private Set<String> justification;
+    private Set<DataSourceBean> allowedMiddleSource;
     
     //Webservice constructor
     public LensBean(){
@@ -49,11 +52,20 @@ public class LensBean {
         createdOn = lens.getCreatedOn().toString();
         description = lens.getDescription();
         justification = new HashSet<String>(lens.getJustifications());
+        allowedMiddleSource = new HashSet<DataSourceBean>();
+        for (DataSource dataSource:lens.getAllowedMiddleSources()){
+            allowedMiddleSource.add(new DataSourceBean(dataSource));
+        }
     }
     
     public Lens asLens(){
         String id = getUri().substring(getUri().indexOf("/"));
-        return new Lens(id, getName(), getCreatedOn(), getCreatedBy(), getDescription(), getJustification());
+        Set<DataSource> allowedMiddleDataSources = new HashSet<DataSource>();
+        for (DataSourceBean bean:this.allowedMiddleSource){
+            allowedMiddleDataSources.add(bean.asDataSource());
+        }
+         return new Lens(id, getName(), getCreatedOn(), getCreatedBy(), 
+                getDescription(), getJustification(), allowedMiddleDataSources);
     }
 
     public String toString(){
@@ -127,11 +139,25 @@ public class LensBean {
 		return justification;
 	}
 
-	/**
+        /**
 	 * @param justification the justification to set
 	 */
 	public void setJustification(Set<String> justification) {
 		this.justification = justification;
+	}
+
+	/**
+	 * @return the Allowed Middle Source
+	 */
+	public Set<DataSourceBean> getAllowedMiddleSource() {
+            return this.allowedMiddleSource;
+	}
+
+	/**
+	 * @return the Allowed Middle Source
+	 */
+	public void setAllowedMiddleSource(Set<DataSourceBean> allowedMiddleSource) {
+            this.allowedMiddleSource = allowedMiddleSource;
 	}
 
     /**

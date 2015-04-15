@@ -77,4 +77,8 @@ public class IdSysCodePair {
     public String toString(){
         return "id: " + id + " sysCode: " + sysCode;
     }
+    
+    public int hashCode(){
+        return (id + sysCode).hashCode();
+    }
 }

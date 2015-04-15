@@ -215,11 +215,11 @@ public class IdentifersOrgReader extends RdfBase {
         String sysCode = getSingletonString(repositoryConnection, catalogRecord, IdenitifiersOrgConstants.NAMESPACE_URI);
         String fullName = getSingletonString(repositoryConnection, catalogRecord, DCatConstants.TITLE_URI);
         if (!dataSource.getFullName().equals(fullName)){
-            System.err.println("FullName mistamtch for " + dataSource.getSystemCode() + " BridgeDb has " + dataSource.getFullName() 
+            System.err.println("FullName mismatch for " + dataSource.getSystemCode() + " BridgeDb has " + dataSource.getFullName() 
                     + " while miriam uses " + fullName);
         }
         if (dataSource.getAlternative() != null && !dataSource.getAlternative().equals(fullName)){
-            System.err.println("Alternative mistamtch for " + dataSource.getSystemCode() + " BridgeDb has " + dataSource.getAlternative()
+            System.err.println("Alternative mismatch for " + dataSource.getSystemCode() + " BridgeDb has " + dataSource.getAlternative()
                     + " while miriam uses " + fullName);
         }
     }

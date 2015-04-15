@@ -3608,7 +3608,7 @@ bridgeDB:DataSource_MEROPS a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://merops.sanger.ac.uk/cgi-bin/pepsum?mid=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/merops/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/merops/$id> ;
-	bridgeDB:hasRegexPattern "^[SCTAGMNU]\\d{2}\\.\\d{3}$" .
+	bridgeDB:hasRegexPattern "^[SCTAGMNUI]\\d{2}\\.[0-9AB]\\d{2}$" .
 
 bridgeDB:DataSource_MEROPS_Family a bridgeDB:DataSource ;
 	bridgeDB:fullName "MEROPS Family" ;

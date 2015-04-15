@@ -1,0 +1,88 @@
+<style>
+    #container { 
+        width: 100%; 
+        margin: 10px auto; 
+        border: 1px solid gray; 
+        font-family: perpetua, garamond, serif; 
+        min-width: 40em; 
+    }
+    #top {  
+        padding: .5em; 
+        background-color: #808080; 
+        border-bottom: 1px solid gray; 
+        -webkit-box-sizing:border-box;
+        -moz-box-sizing:border-box;
+        box-sizing:border-box
+    }
+    #top h1 { 
+        padding: .25em .5em .25em .5em; 
+        margin-left: 200px; 
+        margin-bottom: 0; 
+        margin-right: 0; 
+        margin-top: 0 
+    }
+    #top a { 
+        text-decoration: none; 
+        color: #ffffff; 
+    }
+    #navBar { 
+        float: left; 
+        width: 200px; margin: 0em; 
+        padding: 5px; 
+        min-width: 100px; 
+        min-height: 100%
+        -webkit-box-sizing:border-box;
+        -moz-box-sizing:border-box;
+        box-sizing:border-box
+    } 
+    #content { 
+        float:right;
+        padding:0 1em;
+        width: -moz-calc(200% - 100px);
+        width: -webkit-calc(200% - 100px);
+        width: calc(100% - 200px);
+        -webkit-box-sizing:border-box;
+        -moz-box-sizing:border-box;
+        box-sizing:border-box;
+        position:relative
+    }
+    #footer { 
+        clear:both; 
+    }
+    fieldset {
+        border: 1px solid #781351;
+        width: 20em
+    }
+    legend { 
+        color: #fff; 
+        background: #ffa20c; 
+        border: 1px solid #781351; 
+        padding: 2px 6px 
+    }
+    textarea {  
+        width: 100%; 
+        margin: 0; 
+        padding: 0; 
+        border: 1px; 
+    }
+    .texthotlink, 
+    .texthotlink_hilight { 
+        width: 150px; 
+        font-size: 85%; 
+        padding: .25em; 
+        cursor: pointer; 
+        color: black; 
+        font-family: Arial, sans-serif;	
+    }
+    .texthotlink_hilight {
+        background-color: #fff6ac;
+    }
+    .menugroup { 
+        font-size: 150%; 
+        font-weight: bold;
+        padding-top: .25em; 
+    }
+    input { 
+        background-color: #EEEEFF; 
+    } 
+</style>

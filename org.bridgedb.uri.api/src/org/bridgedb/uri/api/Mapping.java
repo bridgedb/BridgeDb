@@ -19,10 +19,15 @@
 //
 package org.bridgedb.uri.api;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.bridgedb.Xref;
+import org.bridgedb.pairs.CodeMapper;
+import org.bridgedb.pairs.IdSysCodePair;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  * Contains the information held for a particular mapping.
@@ -34,244 +39,247 @@ import org.bridgedb.Xref;
  * <li>UriSpace: 
  * @author Christian
  */
-public class Mapping {
- 
-    private Xref source;
-    private Xref target;
-    
-    private Set<String> sourceUri;
-    private Set<String> targetUri;
-    private Integer mappingSetId;
-    private String predicate;
-    
-    /**
-     * Default constructor for webService
-     */
-    public Mapping(){
-        this.sourceUri = new HashSet<String>();
-        this.targetUri = new HashSet<String>();
-    }
-    
-    public Mapping (Xref source, String predicate, Xref target, Integer mappingSetId){
-        this.sourceUri = new HashSet<String>();
-        this.source = source;
-        this.targetUri = new HashSet<String>();
-        this.target = target;
-        this.mappingSetId = mappingSetId;
-        this.predicate = predicate;
-    }
+public class Mapping implements Comparable<Mapping>{
 
+     //Both ASSERTED and TRANSITIVE mappings have these
+    private final String justification;
+    private final String lens;
+    private final String predicate;
+
+    //Only ASSERTED mappings have these
+    private final String mappingResource;
+    private final String mappingSource;
+    private final String id;
+    
+    //Only TRANSITIVE mappings have these
+    private final List<Mapping> viaMappings;
+    
+    //All three types can have these
+    //These are set later if required        
+    protected Xref source = null;
+    protected Xref target = null;
+    protected Set<String> sourceUri = new HashSet<String>();
+    protected Set<String> targetUri = new HashSet<String>();
+    
     /**
-     * This is the constructor for a mapping to self.
      * 
-     * @param id
-     * @param sysCode 
+     * @param predicate
+     * @param justification
+     * @param mappingSetId
+     * @param mappingResource
+     * @param mappingSource
+     * @param lens 
      */
-    public Mapping (Xref xref){
-        this.sourceUri = new HashSet<String>();
-        this.source = xref;
-        this.targetUri = new HashSet<String>();
-        this.target = xref;
-        this.mappingSetId = null;
+    public Mapping(String predicate, String justification, int mappingSetId, String mappingResource, String mappingSource, String lens){
+        this.predicate = predicate;
+        this.justification = justification;
+        this.id = "" + mappingSetId;
+        this.lens = lens;     
+        this.mappingResource = mappingResource;
+        this.mappingSource = mappingSource;
+        viaMappings = new ArrayList<Mapping>();
+    }
+    
+    public Mapping(Mapping previous, Mapping newMapping, String predicate, String justification){
+        this.predicate = predicate;
+        this.justification = justification;
+        this.lens = previous.lens;
+ 
+        this.id = previous.id + "_" + newMapping.id;
+        
+        this.mappingResource = null;
+        this.mappingSource = null;
+        
+        viaMappings = new ArrayList<Mapping>();
+        if (previous.isTransitive()){
+            this.viaMappings.addAll(previous.getViaMappings());
+        } else {
+            this.viaMappings.add(previous);
+        }
+
+        if (newMapping.isTransitive()){
+            this.viaMappings.addAll(newMapping.viaMappings);
+        } else {
+            this.viaMappings.add(newMapping);
+        }
+    }
+    
+    public Mapping(){
         this.predicate = null;
+        this.justification = null;
+        this.id = "self";
+        this.lens = null;     
+        this.mappingResource = null;
+        this.mappingSource = null;
+        viaMappings = new ArrayList<Mapping>();
     }
 
-    private boolean mapToSelf(){
-        return source == target;
+    //From Bean
+    public Mapping(Xref source, Xref target, Set<String> sourceUri, Set<String> targetUri, 
+            String justification, String predicate, String lens, String mappingResource, String mappingSource, 
+            String mappingSetId, List<Mapping> vias){
+        this.source = source;
+        this.target = target;
+        this.sourceUri = sourceUri;
+        this.targetUri = targetUri;
+        this.predicate = predicate;
+        this.justification = justification;
+        this.id = mappingSetId;
+        this.lens = lens;
+        this.mappingResource = mappingResource;
+        this.mappingSource = mappingSource;
+        this.viaMappings = vias;
     }
 
+     public Mapping (String uri, Set<String> targetUris){
+        this.sourceUri.add(uri);
+        this.targetUri.addAll(targetUris);
+        this.predicate = null;
+        this.justification = null;
+        this.id = "self";
+        this.lens = null;     
+        this.mappingResource = null;
+        this.mappingSource = null;
+        viaMappings = new ArrayList<Mapping>();
+    }
+    
+    public Mapping (String uri, IdSysCodePair pair){
+        this.sourceUri.add(uri);
+        this.targetUri.add(uri);
+        this.predicate = null;
+        this.justification = null;
+        this.id = null;
+        this.lens = null;     
+        this.mappingResource = null;
+        this.mappingSource = null;
+        viaMappings = new ArrayList<Mapping>();
+    }
+    
     /**
      * @return the sourceUris
      */
-    public Set<String> getSourceUri() {
+    public final Set<String> getSourceUri() {
         return sourceUri;
     }
  
-    public void addSourceUri(String sourceUri){
+    public final void addSourceUri(String sourceUri){
         getSourceUri().add(sourceUri);
-        if (mapToSelf()){
-            getTargetUri().add(sourceUri);
-        }
     }
     
-    public void addSourceUris(Collection<String> sourceUris){
+    public final void addSourceUris(Collection<String> sourceUris){
         getSourceUri().addAll(sourceUris);
-        if (mapToSelf()){
-            getTargetUri().addAll(sourceUris);
-        }
     }
     
     /**
      * @return the target Uris
      */
-    public Set<String> getTargetUri() {
+    public final Set<String> getTargetUri() {
         return targetUri;
     }
 
-    public void addTargetUri(String targetUri){
+    public final void addTargetUri(String targetUri){
         getTargetUri().add(targetUri);
     }
 
-    public void addTargetUris(Collection<String> extraTargetUris){
+    public final void addTargetUris(Collection<String> extraTargetUris){
         getTargetUri().addAll(extraTargetUris);
     }
 
-    public String toString(){
-        StringBuilder output = new StringBuilder("mapping ");
-        for (String sourceUri:getSourceUri()){
-            output.append("\n\tSourceUri: ");
-            output.append(sourceUri);
-        }
-        if (getSource() != null){
-            output.append("\n\tSource: ");
-            output.append(getSource());
-        }
-        output.append("\n\tPredicate(): ");
-        output.append(getPredicate());
-        for (String targetUri:getTargetUri()){
-            output.append("\n\tTargetUri: ");
-            output.append(targetUri);
-        }
-        if (getTarget() != null){
-            output.append("\n\tTarget: ");
-            output.append(getTarget()); 
-        }
-        output.append("\n\tMappingSet(id): ");
-        output.append(getMappingSetId());
-        return output.toString();
+    public final String getMappingSetId(){
+        return id;
     }
-   
-    @Override
-    public boolean equals(Object other){
-        if (other == null) return false;
-        if (other instanceof Mapping){
-            Mapping otherMapping = (Mapping)other;
-           if (!otherMapping.sourceUri.equals(sourceUri)) return false;
-            if (!otherMapping.targetUri.equals(targetUri)) return false;
-            if (!otherMapping.getMappingSetId().equals(getMappingSetId())) return false;
-            //No need to check predicate as by defintion one id has one predicate
-            return true;
-         } else {
-            return false;
-        }
-    }
-
-    /**
-     * @return the mappingSetId
-     */
-    public Integer getMappingSetId() {
-        return mappingSetId;
-    }
-
     /**
      * @return the predicate
      */
-    public String getPredicate() {
+    public final String getPredicate() {
         return predicate;
     }
 
     /**
      * @return the source
      */
-    public Xref getSource() {
+    public final Xref getSource() {
         return source;
     }
 
     /**
      * @return the target
      */
-    public Xref getTarget() {
+    public final Xref getTarget() {
         return target;
     }
-
-    /**
-     * @return the sourceId
-     * /
-    public String getSourceId() {
-        return sourceId;
-    }
-
-    /**
-     * @param sourceId the sourceId to set
-     * /
-    public void setSourceId(String sourceId) {
-        this.sourceId = sourceId;
-    }
-
-    /**
-     * @return the targetId
-     * /
-    public String getTargetId() {
-        return targetId;
-    }
-
-    /**
-     * @param targetId the targetId to set
-     * /
-    public void setTargetId(String targetId) {
-        this.targetId = targetId;
-    }
-
-    /**
-     * @return the targetSysCode
-     * / 
-    public String getTargetSysCode() {
-        return targetSysCode;
-    }
-
-    /**
-     * @param targetSysCode the targetSysCode to set
-     * /
-    public void setTargetSysCode(String targetSysCode) {
-        this.targetSysCode = targetSysCode;
-    }
-   */
     
-    /**
-     * @return the sourceSysCode
-     * /
-    public String getSourceSysCode() {
-        return sourceSysCode;
-    }
-
-    /**
-     * @param sourceSysCode the sourceSysCode to set
-     * /
-    public void setSourceSysCode(String sourceSysCode) {
-        this.sourceSysCode = sourceSysCode;
-    }
-
-    public Xref getSourceXref(){
-        DataSource ds = DataSource.getBySystemCode(sourceSysCode);
-        return new Xref(sourceId, ds);
-    }
-
     /**
      * @param sourceUris the sourceUris to set
      */
-    public void setSourceUri(Set<String> sourceUris) {
+    public final void setSourceUri(Set<String> sourceUris) {
         this.sourceUri = sourceUris;
     }
 
     /**
      * @param targetUris the targetUris to set
      */
-    public void setTargetUri(Set<String> targetUris) {
+    public final void setTargetUri(Set<String> targetUris) {
         this.targetUri = targetUris;
     }
 
-    /**
-     * @param mappingSetId the mappingSetId to set
-     */
-    public void setMappingSetId(Integer mappingSetId) {
-        this.mappingSetId = mappingSetId;
+    public final String getLens() {
+        return lens;
     }
 
     /**
-     * @param predicate the predicate to set
+     * @return the justification
      */
-    public void setPredicate(String predicate) {
-        this.predicate = predicate;
+    public final String getJustification() {
+        return justification;
     }
 
- }
+    /**
+     * @param source the source to set
+     */
+    public final void setSource(Xref source) {
+        this.source = source;
+    }
+
+    /**
+     * @param target the target to set
+     */
+    public final void setTarget(Xref target) {
+        this.target = target;
+    }
+
+    /**
+     * @return the mappingResource
+     */
+    public String getMappingResource() {
+        return mappingResource;
+    }
+
+    /**
+     * @return the mappingSource
+     */
+    public final String getMappingSource() {
+        return mappingSource;
+    }
+
+    /**
+     * @return the viaMappings
+     */
+    public List<Mapping> getViaMappings() {
+        return viaMappings;
+    }
+
+    public final boolean isMappingToSelf() {
+        return predicate == null;
+    }
+    
+    public final boolean isTransitive() {
+         return !viaMappings.isEmpty();
+    }
+
+    @Override
+    public int compareTo(Mapping o) {
+        return 0;
+    }
+    
+}

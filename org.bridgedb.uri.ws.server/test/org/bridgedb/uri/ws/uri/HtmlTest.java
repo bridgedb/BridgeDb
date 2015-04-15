@@ -37,4 +37,10 @@ public class HtmlTest {
         assertEquals(200, result.getStatus());
     }
 
+    @Test 
+    public void testApi() throws BridgeDBException, UnsupportedEncodingException{
+        Reporter.println("API");
+        Response result = server.imsApiPage(new DummyHttpServletRequest());
+        assertEquals(200, result.getStatus());
+    }
  }

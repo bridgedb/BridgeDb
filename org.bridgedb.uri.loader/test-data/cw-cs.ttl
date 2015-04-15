@@ -17,29 +17,22 @@
     foaf:primaryTopic :conceptwiki_chemspider .
 
 :conceptwiki_chemspider a void:Linkset ;
-    dcterms:license "unknown" ;
-    foaf:primaryTopic :conceptwiki_chemspider .
-
-:conceptwiki_chemspider a void:Linkset ;
     void:subjectsTarget :conceptwiki ;
     void:objectsTarget :chemspider ;
     void:linkPredicate skos:exactMatch ;
-    dul:expresses rdfs:isDefinedBy ;
-    dcterms:created "2012-02-28"^^xsd:date ;
-    dcterms:creator <http://www.conceptwiki.org> .
+    dul:expresses <http://semanticscience.org/resource/CHEMINF_000059> ;
+    dcterms:created "2014-11-21"^^xsd:date .
 :conceptwiki a void:Dataset ;
-	dcterms:title "ConceptWiki"^^xsd:string ;
-    dcterms:license "unknown" ;
+    dcterms:title "ConceptWiki"^^xsd:string ;
     pav:retrievedOn "2012-02-28"^^xsd:date ;
     void:subset :conceptwiki_chemspider ;
     void:uriSpace <http://www.conceptwiki.org/concept/> .
 :chemspider a void:Dataset ;
-	dcterms:title "ChemSpider"^^xsd:string ;
-    dcterms:license "http://www.chemspider.com/Disclaimer.aspx" ;
-    dcterms:subject "unknown" ;
-    pav:version "unknown" ;
+    dcterms:title "ChemSpider"^^xsd:string ;
+    dcterms:license <http://www.chemspider.com/Disclaimer.aspx> ;
     void:uriSpace <http://rdf.chemspider.com/> .
    
-<http://www.conceptwiki.org/concept/38932552-111f-4a4e-a46a-4ed1d7bdf9d5> skos:exactMatch <http://rdf.chemspider.com/187440> .
-<http://www.conceptwiki.org/concept/bd42675d-9966-48f5-b42e-f6a0c5ec6794> skos:exactMatch <http://rdf.chemspider.com/18> .
-<http://www.conceptwiki.org/concept/9d4a6a08-6757-4ff2-98c1-e3c8b3e095cc> skos:exactMatch <http://rdf.chemspider.com/50> .
+<http://www.conceptwiki.org/concept/f25a234e-df03-419f-8504-cde8689a4d1f> skos:exactMatch <http://rdf.chemspider.com/28509384> .
+<http://www.conceptwiki.org/concept/23a8be84-7177-42ba-800c-dd9192d69ac6> skos:exactMatch <http://rdf.chemspider.com/28524249> .
+<http://www.conceptwiki.org/concept/f65bcedd-f18f-41ae-b1dd-9af4ed6a1f26> skos:exactMatch <http://rdf.chemspider.com/23202612> .
+

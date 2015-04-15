@@ -77,23 +77,27 @@ public class DataSourceBean {
         if (bean == null){
             return null;
         }
-        DataSource.Builder builder = DataSource.register(bean.sysCode, bean.fullName);
-        if (bean.urlPattern != null){
-            builder = builder.urlPattern(bean.urlPattern);
+        return bean.asDataSource();
+    }
+
+    public DataSource asDataSource() {
+        DataSource.Builder builder = DataSource.register(sysCode, fullName);
+        if (urlPattern != null){
+            builder = builder.urlPattern(urlPattern);
         }
-        if (bean.idExample != null){
-            builder = builder.idExample(bean.idExample);
+        if (idExample != null){
+            builder = builder.idExample(idExample);
         }
-        builder = builder.primary(bean.isPrimary);
-        builder = builder.type(bean.type);
+        builder = builder.primary(isPrimary);
+        builder = builder.type(type);
 //        if (organism != null){
 //            builder = builder.organism(organism);
 //        }
-        if (bean.urnBase != null){
-            builder = builder.urnBase(bean.urnBase);
+        if (urnBase != null){
+            builder = builder.urnBase(urnBase);
         }
-        if (bean.mainUrl != null){
-            builder = builder.mainUrl(bean.mainUrl);
+        if (mainUrl != null){
+            builder = builder.mainUrl(mainUrl);
         }
         return builder.asDataSource();
     }

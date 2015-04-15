@@ -1,0 +1,43 @@
+@prefix : <#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix pav: <http://purl.org/pav/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+<> a void:DatasetDescription ;
+    dcterms:title "ChemSpider to OPS Linkset"^^xsd:string ;
+    dcterms:description """A linkset connecting ChemSpider  
+    	with Ops ids."""^^xsd:string;
+    pav:createdBy <http://www.foo.com/> ;
+    pav:createdOn "2012-08-06"^^xsd:date;
+    foaf:primaryTopic :conceptwiki_chemspider .
+
+:chemspider_ops a void:Linkset ;
+    dcterms:title "Test linkset from Chemspider to OPS";
+    dcterms:description "Test linkset from Chemspider to OPS. Warning links in the set may be false!";
+    void:subjectsTarget :chemspider ;
+    void:objectsTarget :ops ;
+    void:linkPredicate skos:exactMatch ;
+    dul:expresses <http://semanticscience.org/resource/CHEMINF_000059> ;
+    dcterms:issued "2014-11-03"^^xsd:date;
+    dcterms:created "2014-11-21"^^xsd:date ;
+    pav:authoredBy <https://github.com/Christian-B> ;
+    pav:authoredBy <http://www.cs.man.ac.uk/~brenninc/> ;
+    pav:createdOn "2014-11-03"^^xsd:date .
+:chemspider a void:Dataset ;
+    dcterms:title "ChemSpider"^^xsd:string ;
+    dcterms:license <http://www.chemspider.com/Disclaimer.aspx> ;
+    void:uriSpace <http://rdf.chemspider.com/> .
+:ops a void:Dataset ;
+	dcterms:title "ChemSpider"^^xsd:string ;
+    dcterms:license <http://www.chemspider.com/Disclaimer.aspx> ;
+    void:uriSpace <http://ops.rsc.org/OPS> .
+   
+<http://rdf.chemspider.com/28509384> skos:exactMatch <http://ops.rsc.org/OPS8> .
+<http://rdf.chemspider.com/28524249> skos:exactMatch <http://ops.rsc.org/OPS70263> .
+<http://rdf.chemspider.com/23202612> skos:exactMatch <http://ops.rsc.org/OPS1497600> .
+

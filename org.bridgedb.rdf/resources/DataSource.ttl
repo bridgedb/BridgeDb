@@ -1,8 +1,8 @@
 @prefix bridgeDB: <http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#> .
-@prefix ChemInf : <http://semanticscience.org/resource/> .
+@prefix ChemInf: <http://semanticscience.org/resource/> .
 @prefix : <http://no/BaseURI/Set/> .
 
-bridgeDB:bridgeDB:DataSource_AERS a bridgeDB:DataSource ;
+bridgeDB:DataSource_AERS a bridgeDB:DataSource ;
 	bridgeDB:fullName "AERS" ;
 	bridgeDB:systemCode "AERS" ;
 	bridgeDB:idExample "ADENINE" ;
@@ -173,7 +173,7 @@ bridgeDB:DataSource_Chembl_Protclass a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://rdf.ebi.ac.uk/resource/chembl/protclass/$id> ;
-        bridgeDB:hasRegexPattern "^CHEMBL_PC_\\d+$" .
+  bridgeDB:hasRegexPattern "^CHEMBL_PC_\\d+$" .
 
 bridgeDB:DataSource_Chembl_Target a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl Target" ;
@@ -266,6 +266,18 @@ bridgeDB:DataSource_drugbankTarget a bridgeDB:DataSource ;
         bridgeDB:hasUriPattern <http://drugbank.ca/molecules/$id?as=target> ;
         bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/drugbank.target/$id> ;
 	bridgeDB:hasUriPattern <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/$id> .
+
+bridgeDB:DataSource_drugbankv4Target a bridgeDB:DataSource ;
+	bridgeDB:fullName "Drugbank Target v4" ;
+	bridgeDB:systemCode "drugbankv4.target" ;
+	bridgeDB:idExample "BE0000938" ;
+  bridgeDB:hasRegexPattern "^BE\\d{7}$" ;
+	bridgeDB:mainUrl "http://www.drugbank.ca/" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasUrlPattern <http://www.drugbank.ca/biodb/bio_entities/$id> ;
+  bridgeDB:hasUriPattern <http://bio2rdf.org/drugbank:$id> ;
+  bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/drugbankv4.target/$id> .
 
 bridgeDB:DataSource_drugbankDrugs a bridgeDB:DataSource ;
 	bridgeDB:fullName "DrugBank" ;
@@ -390,6 +402,7 @@ bridgeDB:CodeMapper_GeneOntology a bridgeDB:CodeMapper ;
     bridgeDB:xrefPrefix "GO:";
 	bridgeDB:hasUriPattern <http://identifiers.org/obo.go/GO:$id> ; #Deprecated
         bridgeDB:hasUriPattern <http://purl.uniprot.org/go/$id>;
+        bridgeDB:hasUriPattern <http://purl.obolibrary.org/obo/GO_$id>;
 	bridgeDB:hasUriPattern <http://purl.org/obo/owl/GO#GO_$id> .
 
 bridgeDB:DataSource_GOA a bridgeDB:DataSource ;

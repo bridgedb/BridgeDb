@@ -1,0 +1,9 @@
+<div id="top">
+    <a href="http://www.cs.manchester.ac.uk/">
+        <img style="float: left; border: none; padding: 0px; margin: 0px;" src="http://assets.manchester.ac.uk/logos/university-1.png" alt="The University of Manchester" height="50"></img>
+    </a>
+    <a href="http://www.openphacts.org/">
+        <img style="float: right; border: none; padding: 0px; margin: 0px;" src="http://www.openphacts.org/images/stories/banner.jpg" alt="Open PHACTS" height="50"></img>
+    </a>
+    <h1>$title</h1>
+</div>

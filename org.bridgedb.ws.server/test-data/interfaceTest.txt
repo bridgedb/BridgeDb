@@ -1,4 +1,4 @@
-ConceptWiki	Chemspider	Chembl Molecule
-38932552-111f-4a4e-a46a-4ed1d7bdf9d5	187440	276734
-bd42675d-9966-48f5-b42e-f6a0c5ec6794	18	370186
-9d4a6a08-6757-4ff2-98c1-e3c8b3e095cc	50	520018
+ConceptWiki	Chemspider	OPS Chemical Registry Service
+f25a234e-df03-419f-8504-cde8689a4d1f	28509384	8
+23a8be84-7177-42ba-800c-dd9192d69ac6	28524249	70263
+f65bcedd-f18f-41ae-b1dd-9af4ed6a1f26	23202612	1497600

@@ -5752,7 +5752,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000059>
       a       dcat:CatalogRecord ;
-      idot:idRegexPattern "^[SCTAGMNU]\\d{2}\\.\\d{3}$"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:idRegexPattern "^[SCTAGMNUI]\\d{2}\\.[0-9AB]\\d{2}$"^^<http://www.w3.org/2001/XMLSchema#string> ;
       idot:namespace "merops"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:exampleResource
               "S01.001"^^<http://www.w3.org/2001/XMLSchema#string> ;

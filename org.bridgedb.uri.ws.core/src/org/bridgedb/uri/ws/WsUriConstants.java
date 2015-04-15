@@ -19,6 +19,7 @@
 //
 package org.bridgedb.uri.ws;
 
+import org.bridgedb.uri.api.UriConstants;
 import org.bridgedb.ws.WsConstants;
 
 /**
@@ -27,7 +28,7 @@ import org.bridgedb.ws.WsConstants;
  */
 public class WsUriConstants extends WsConstants{
     
-    
+    public static final String BASE_URI = "baseUri";
     public static final String BRIDGEDB_API = "BridgeDbApi";
     public static final String BRIDGEDB_HOME = "BridgeDb";
     public static final String DATA_SOURCE = "dataSource";
@@ -35,16 +36,23 @@ public class WsUriConstants extends WsConstants{
     public static final String GET_OVERALL_STATISTICS = "getOverallStatistics";
     public static final String GRAPH = "graph";
     public static final String GRAPHVIZ = "graphviz";
+    public static final String INCLUDE_XREF_RESULTS = "includeXrefResults"; 
+    public static final String INCLUDE_URI_RESULTS = "includeUriResults";
     public static final String MAP = "map";
     public static final String MAP_URI = "mapUri";
     public static final String MAP_BY_SET = "mapBySet";
+    public static final String MAPPING_SET = UriConstants.MAPPING_SET;
     public static final String LENS_URI = "lensUri";
-    public static final String RDF = "RDF";
+    public static final String LENS_GROUP = "lensGroup";
+    public static final String LINKSET_INFO = "linksetInfo";
+    public static final String OVERRIDE_PREDICATE_URI = "overridePredicateURI";
+    public static final String RDF = UriConstants.RDF;
     public static final String RDF_FORMAT = "rdfFormat";
     public static final String SQL_COMPAT_VERSION = "SqlCompatVersion";
     public static final String TARGET_URI_PATTERN = "targetUriPattern";
 
     public static final String TO_XREF = "toXref";
+    public static final String TO_URIS = "toUris";
     public static final String URI = "Uri";
     public static final String URI_EXISTS = "UriExists";
     public static final String URI_SEARCH = "UriSearch";
@@ -52,5 +60,6 @@ public class WsUriConstants extends WsConstants{
     
     public static final String SOURCE_INFOS = "SourceInfos";
     public static final String SOURCE_TARGET_INFOS = "SourceTargetInfos";
+    public static final String URI_SPACES_PER_GRAPH = "URISpacesPerGraph";
     
 }

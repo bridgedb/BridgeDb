@@ -58,17 +58,6 @@ public class MappingsBySetBean {
 
     }
     
-    public final MappingsBySet asMappingsBySet(){
-        MappingsBySet mappingsBySet = new MappingsBySet(getLens());
-        for (SetMappingBean setMappingBean:getMappingSet()){
-           mappingsBySet.addSetMapping(setMappingBean.asSetMapping());
-       }
-       for (UriMappingBean uriMappingBean:getMapping()){
-           mappingsBySet.addMapping(uriMappingBean.asUriMapping());
-       }
-       return mappingsBySet;
-    }
-
     /**
      * @return the lens
      */

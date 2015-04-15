@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.bridgedb.webservice</groupId>
 	<artifactId>org.bridgedb.webservice.cronos</artifactId>
@@ -8,13 +8,13 @@
 	<parent>
 		<artifactId>bridgedb-bundle</artifactId>
 		<groupId>org.bridgedb</groupId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>2.0.1.openphacts</version>
 	</parent>
 
 	<build>
 		<directory>target</directory>
 		<outputDirectory>target/classes</outputDirectory>
-		<finalName>${artifactId}-${version}</finalName>
+		<finalName>${project.artifactId}-${project.version}</finalName>
 		<testOutputDirectory>target/test-classes</testOutputDirectory>
 		<sourceDirectory>src</sourceDirectory>
 		<scriptSourceDirectory>scripts</scriptSourceDirectory>
@@ -60,6 +60,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.9.1</version>
 				<executions>
 					<execution>
 						<id>add-source</id>
@@ -82,7 +83,7 @@
 		<dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.bio</artifactId>
-			<version>${project.version}</version>
+			<version>2.0.1.openphacts</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

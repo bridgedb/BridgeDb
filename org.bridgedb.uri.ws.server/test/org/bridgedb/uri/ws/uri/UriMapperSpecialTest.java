@@ -22,6 +22,7 @@ package org.bridgedb.uri.ws.uri;
 import java.util.Date;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
+import static org.bridgedb.uri.UriListenerTest.loadData;
 import org.bridgedb.uri.ws.WSUriMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;

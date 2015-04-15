@@ -1,0 +1,34 @@
+@prefix : <#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix pav: <http://purl.org/pav/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+<> a void:DatasetDescription ;
+    dcterms:title "OPS to OPS Linkset"^^xsd:string ;
+    dcterms:description """A linkset connecting OPS ids 
+    	with incorrect OPS ids. This is purely for testing lens. 
+        The Information here is wrong!"""^^xsd:string;
+    pav:createdBy <http://www.foo.com/> ;
+    pav:createdOn "2012-08-06"^^xsd:date;
+    foaf:primaryTopic :conceptwiki_chemspider .
+
+:ops_ops a void:Linkset ;
+    void:subjectsTarget :ops ;
+    void:objectsTarget :ops ;
+    void:linkPredicate skos:exactMatch ;
+    dul:expresses <http://www.bridgedb.org/test#testJustification> ;
+    dcterms:created "2014-11-21"^^xsd:date .
+:ops a void:Dataset ;
+	dcterms:title "ChemSpider"^^xsd:string ;
+    dcterms:license <http://www.chemspider.com/Disclaimer.aspx> ;
+    void:uriSpace <http://ops.rsc.org/OPS> .
+   
+<http://ops.rsc.org/OPS8> skos:exactMatch <http://ops.rsc.org/OPS8000001> .
+<http://ops.rsc.org/OPS70263> skos:exactMatch <http://ops.rsc.org/OPS70263000001> .
+<http://ops.rsc.org/OPS1497600> skos:exactMatch <http://ops.rsc.org/OPS1497600000001> .
+
