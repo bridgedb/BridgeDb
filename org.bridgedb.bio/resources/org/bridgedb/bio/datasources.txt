@@ -126,6 +126,7 @@ Wheat gene names	Wn	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/report?cl
 Wheat gene refs	Wr	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$id	WGS-95-1333	probe	Triticum aestivum	0	Wr		Wheat gene refs
 WikiGenes	Wg	http://www.wikigenes.org/	http://www.wikigenes.org/e/gene/e/$id.html	7157	gene		0	urn:miriam:wikigenes		WikiGenes
 WikiPathways	Wp	http://www.wikipathways.org/	http://www.wikipathways.org/index.php/Pathway:$id	WP100	pathway		1	urn:miriam:wikipathways	WP\d{1,5}(_r\d+)?	WikiPathways
+Wikidata	Wd	http://www.wikidata.org	http://www.wikidata.org/wiki/$id	Q407962		0	urn:miriam:wikidata		Wikidata
 Wikipedia	Wi	http://www.wikipedia.org	http://en.wikipedia.org/wiki/$id	Acetate	metabolite		0	urn:miriam:wikipedia.en		Wikipedia
 WormBase	W	http://www.wormbase.org/	http://www.wormbase.org/db/gene/gene?name=$id;class=Gene	WBGene00000001	gene	Caenorhabditis elegans	1	urn:miriam:wormbase	^WBGene\d{8}$	WormBase
 XMetDB	Xm	http://www.xmetdb.org/	http://www.xmetdb.org/xmetdb/protocol/$id	XMETDB171	interaction		1		^XMETDB\d+$	Xenobiotics Metabolism Database
