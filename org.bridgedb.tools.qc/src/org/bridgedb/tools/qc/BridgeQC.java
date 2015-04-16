@@ -93,7 +93,7 @@ public class BridgeQC
 			else
 			{
 				int oldGenes = oldSet.get(ds);
-				double delta = (double)(newGenes - oldGenes) / (double)newGenes; 
+				double delta = (double)(newGenes - oldGenes) / (double)oldGenes;
 				System.out.printf(
 					"INFO: Number of ids in %s%s: %d (changed %+3.1f%%)\n",
 					ds.getSystemCode(),
