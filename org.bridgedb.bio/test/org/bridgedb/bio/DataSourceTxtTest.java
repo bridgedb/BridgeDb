@@ -75,4 +75,12 @@ public class DataSourceTxtTest {
         DataSourceTxt.loadInputStream(is);
     }
 
+    @Test
+    public void testWikidata() throws Exception {
+    	DataSourceTxt.init();
+    	DataSource wikidata = DataSource.getExistingByFullName("Wikidata");
+    	Assert.assertNotNull(wikidata);
+    	Assert.assertTrue(wikidata.urlPatternKnown());
+    	Assert.assertEquals("Wd", wikidata.getSystemCode());
+    }
 }
