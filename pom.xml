@@ -9,6 +9,7 @@
   <modules>
   	<module>org.bridgedb</module>
   	<module>org.bridgedb.bio</module>
+  	<module>org.bridgedb.gui</module>
   	<module>org.bridgedb.utils</module>
   	<module>org.bridgedb.sql</module>
   	<module>org.bridgedb.ws.core</module>
