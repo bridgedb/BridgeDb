@@ -4,7 +4,7 @@ Class-Path: org.bridgedb.jar org.bridgedb.bio.jar org.bridgedb.rdb.jar
   derby.jar org.bridgedb.rdb.construct.jar
 Bundle-SymbolicName: org.bridgedb.tools.dbbuilder
 Export-Package: org.bridgedb.util.hmdb
-Bundle-Version: 2.0.0.qualifier
+Bundle-Version: 2.1.0.qualifier
 Require-Bundle: org.bridgedb,
  org.bridgedb.bio,
  org.bridgedb.rdb,
