@@ -74,6 +74,7 @@ public enum Organism
 	OryziasLatipes ("Oryzias latipes", "Ol", "Medaka Fish", 8090),
 	OryctolagusCuniculus  ("Oryctolagus cuniculus", "Oc", "Rabbit", 9986),
 	PanTroglodytes("Pan troglodytes", "Pt", "Chimpanzee", 9598),
+	PlasmodiumFalciparum("Plasmodium falciparum", "Pf", "Malaria Parasite", 5833),
 	
 	//NB: two-letter code is Pi to disambiguate from Pan troglodytes	
 	PopulusTrichocarpa("Populus trichocarpa", "Pi", "Western Balsam Poplar", 3694),
