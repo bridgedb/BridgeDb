@@ -12,11 +12,13 @@
   	<module>org.bridgedb.gui</module>
     	<module>org.bridgedb.rdb</module>
   	<module>org.bridgedb.rdb.construct</module>
+  	<module>org.bridgedb.server</module>
   	<module>org.bridgedb.webservice.bridgerest</module>
   	<module>org.bridgedb.webservice.biomart</module>
   	<module>org.bridgedb.webservice.cronos</module>
   	<module>org.bridgedb.webservice.picr</module>
   	<module>org.bridgedb.webservice.synergizer</module>
+  	<module>org.bridgedb.webservice.uniprot</module>
         <module>org.bridgedb.tools.qc</module>
   	<module>examples</module>
   </modules>
