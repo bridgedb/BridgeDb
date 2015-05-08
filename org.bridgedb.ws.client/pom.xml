@@ -9,7 +9,7 @@
     <parent>
         <artifactId>bridgedb-bundle</artifactId>
         <groupId>org.bridgedb</groupId>
-        <version>2.0.2.openphacts</version>
+        <version>2.0.3-SNAPSHOT</version>
     </parent>
 
     <build>
@@ -21,7 +21,7 @@
  		<dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.ws.core</artifactId>
-			<version>2.0.2.openphacts</version>
+			<version>2.0.3-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
         <dependency>
@@ -38,21 +38,21 @@
 		<dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb</artifactId>
-			<version>2.0.2.openphacts</version>
+			<version>2.0.3-SNAPSHOT</version>
             <type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.utils</artifactId>
-			<version>2.0.2.openphacts</version>
+			<version>2.0.3-SNAPSHOT</version>
             <type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.ws.core</artifactId>
-			<version>2.0.2.openphacts</version>
+			<version>2.0.3-SNAPSHOT</version>
             <type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
