@@ -4656,7 +4656,7 @@ bridgeDB:DataSource_PDB a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/pdb/$id> ;
 	bridgeDB:hasRegexPattern "^[0-9][A-Za-z0-9]{3}$" ;
 	dcterms:alternative "Protein Data Bank" ;
-	bridgeDB:hasUriPattern <http://proteopedia.org/wiki/index.php/$id> , <http://purl.uniprot.org/pdb/$id> , <http://rdf.wwpdb.org/pdb/$id> , <http://service.pdbj.org/mine/summary/$id> , <http://www.ebi.ac.uk/pdbsum/$id> , <http://www.pdb.org/pdb/explore/explore.do?pdbId=$id> , <http://www.pdbe.org/$id> .
+	bridgeDB:hasUriPattern  <http://purl.uniprot.org/pdb/$id> , <http://rdf.wwpdb.org/pdb/$id> , <http://service.pdbj.org/mine/summary/$id> , <http://www.ebi.ac.uk/pdbsum/$id> , <http://www.pdb.org/pdb/explore/explore.do?pdbId=$id> , <http://www.pdbe.org/$id> .
 
 bridgeDB:DataSource_PeptideAtlas a bridgeDB:DataSource ;
 	bridgeDB:fullName "PeptideAtlas" ;
