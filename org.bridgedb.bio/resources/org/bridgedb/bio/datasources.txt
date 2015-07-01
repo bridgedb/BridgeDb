@@ -65,7 +65,7 @@ KEGG Drug	Kd	http://www.genome.jp/kegg/drug/	http://www.genome.jp/dbget-bin/www_
 KEGG Genes	Kg	http://www.genome.jp/kegg/genes.html	http://www.genome.jp/dbget-bin/www_bget?$id	syn:ssr3451	gene		1	urn:miriam:kegg.genes	^\w+:[\w\d\.-]*$	KEGG Genes
 KEGG Glycan	Kl	http://www.genome.jp/kegg/glycan/	http://www.genome.jp/dbget-bin/www_bget?gl:$id	G00123	metabolite		1	urn:miriam:kegg.glycan	^G\d+$	KEGG Glycan
 KEGG Pathway	Kp	http://www.genome.jp/kegg/pathway.html	http://www.genome.jp/dbget-bin/www_bget?pathway+$id	hsa00620	pathway		1	urn:miriam:kegg.pathway	^\w{2,4}\d{5}$	KEGG Pathway
-KEGG Reaction	Rk	http://www.genome.jp/kegg/reaction/	http://www.genome.jp/dbget-bin/www_bget?rn:$id	R00100	protein		1	urn:miriam:kegg.reaction	^R\d+$	KEGG Reaction
+KEGG Reaction	Rk	http://www.genome.jp/kegg/reaction/	http://www.genome.jp/dbget-bin/www_bget?rn:$id	R00100	pathway		1	urn:miriam:kegg.reaction	^R\d+$	KEGG Reaction
 LIPID MAPS	Lm	http://www.lipidmaps.org	http://www.lipidmaps.org/data/get_lm_lipids_dbgif.php?LM_ID=$id	LMPR0102010012	metabolite		1	urn:miriam:lipidmaps	^LM(FA|GL|GP|SP|ST|PR|SL|PK)[0-9]{4}([0-9a-zA-Z]{4,6})?$	LIPID MAPS
 LipidBank	Lb	http://lipidbank.jp/index.html	http://lipidbank.jp/cgi-bin/detail.cgi?id=$id	BBA0001	metabolite		1	urn:miriam:lipidbank	^\w+\d+$	LipidBank
 MACiE	Ma	http://www.ebi.ac.uk/thornton-srv/databases/MACiE/index.html	http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/MACiE/entry/getPage.pl?id=$id	M0001	protein		1	urn:miriam:macie	^M\d{4}$	MACiE
@@ -92,7 +92,7 @@ PharmGKB Pathways	Pgp	http://www.pharmgkb.org/	http://www.pharmgkb.org/pathway/$
 PhosphoSite Protein	Pp	http://www.phosphosite.org/homeAction.do	http://www.phosphosite.org/proteinAction.do?id=$id	12300	protein		1	urn:miriam:phosphosite.protein	^\d{5}$	PhosphoSite Protein
 PINA	Pi	http://cbg.garvan.unsw.edu.au/pina/	http://cbg.garvan.unsw.edu.au/pina/interactome.oneP.do?ac=$id&showExtend=null	Q13485	interaction		1	urn:miriam:pina	^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9])$	PINA
 PlantGDB	Pl	http://www.plantgdb.org/		PUT-157a-Vitis_vinifera-37378	gene		1	Pl	PUT-[\w\d-]+	PlantGDB
-PubChem-bioassay	Cpb	http://www.ncbi.nlm.nih.gov/sites/entrez?db=pcassay 	http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=$id	1018	metabolite		1	urn:miriam:pubchem.bioassay	^\d+$	PubChem-bioassay
+PubChem-bioassay	Cpb	http://www.ncbi.nlm.nih.gov/sites/entrez?db=pcassay 	http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=$id	1018	metabolite		0	urn:miriam:pubchem.bioassay	^\d+$	PubChem-bioassay
 PubChem-compound	Cpc	http://pubchem.ncbi.nlm.nih.gov/	http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=$id	100101	metabolite		1	urn:miriam:pubchem.compound	^\d+$	PubChem-compound
 PubChem-substance	Cps	http://pubchem.ncbi.nlm.nih.gov/	http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=$id	100101	metabolite		1	urn:miriam:pubchem.substance	^\d+$	PubChem-substance
 Reactome	Re	http://www.reactome.org/	http://www.reactome.org/cgi-bin/eventbrowser_st_id?FROM_REACTOME=1&ST_ID=$id	REACT_1590	pathway		1	urn:miriam:reactome	^REACT_\d+(\.\d+)?$	Reactome
