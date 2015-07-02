@@ -471,6 +471,10 @@ public final class DataSource
             if (current.organism.equals(organism)){
                 return this;
             }
+            if (current.organism instanceof String && organism instanceof String &&
+                ((String)current.organism).equals((String)organism)) {
+                return this;
+            }
             throw new IllegalArgumentException("Illegal attempt to change the organism of DataSource " + current + " from "
                     + current.organism + " to " + organism);  
 		}
