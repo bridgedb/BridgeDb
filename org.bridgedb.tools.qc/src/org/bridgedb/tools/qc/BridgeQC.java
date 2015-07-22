@@ -121,7 +121,7 @@ public class BridgeQC
 					genesRemoved.size(),
 					(delta * 100)
 				);
-				if (genesRemoved.size() > 0)
+				if (genesRemoved.size() > 0 && "true".equals(System.getProperty("showRemovedIDs", "false")))
 					System.out.printf(
 						"INFO: The ids removed from %s%s: %s\n",
 							ds.getSystemCode(),
