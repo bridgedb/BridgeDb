@@ -8,11 +8,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
 import org.bridgedb.bio.DataSourceTxt;
 import org.bridgedb.bio.Organism;
 import org.bridgedb.rdb.SimpleGdb;
@@ -92,14 +94,42 @@ public class BridgeQC
 			}
 			else
 			{
+				Set<String> oldIDs = new HashSet<String>();
+				for (Xref oldXref : oldGdb.getIterator(ds)) oldIDs.add(oldXref.getId());
+				Set<String> newIDs = new HashSet<String>();
+				for (Xref newXref : newGdb.getIterator(ds)) newIDs.add(newXref.getId());
+
+				// determine all new IDs
+				Set<String> newGenesAdded = new HashSet<String>();
+				newGenesAdded.addAll(newIDs);
+				newGenesAdded.removeAll(oldIDs);
+				
+				// determine all no longer existing (removed) IDs
+				Set<String> genesRemoved = new HashSet<String>();
+				genesRemoved.addAll(oldIDs);
+				genesRemoved.removeAll(newIDs);
+				
 				int oldGenes = oldSet.get(ds);
 				double delta = (double)(newGenes - oldGenes) / (double)oldGenes;
 				System.out.printf(
-					"INFO: Number of ids in %s%s: %d (changed %+3.1f%%)\n",
+					"INFO: Number of ids in %s%s: %d (%d added, %d removed -> overall changed %+3.1f%%)\n",
 					ds.getSystemCode(),
 					(ds.getFullName() != null && ds.getFullName().length() > 0) ?
 						" (" + ds.getFullName() + ")" : "",
-					newGenes, (delta * 100));
+					newGenes,
+					newGenesAdded.size(),
+					genesRemoved.size(),
+					(delta * 100)
+				);
+				if (genesRemoved.size() > 0)
+					System.out.printf(
+						"INFO: The ids removed from %s%s: %s\n",
+							ds.getSystemCode(),
+							(ds.getFullName() != null && ds.getFullName().length() > 0) ?
+								" (" + ds.getFullName() + ")" : "",
+							"" + genesRemoved
+						);
+
 				if (delta < -0.1) 
 					System.out.println ("WARNING: Number of ids in " + ds.getSystemCode() + " has shrunk by more than 10%");
 			}
