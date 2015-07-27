@@ -827,7 +827,7 @@ bridgeDB:DataSource_CAZy a bridgeDB:DataSource ;
 	bridgeDB:hasRegexPattern "^GT\\d+$" .
 
 bridgeDB:DataSource_CCDS a bridgeDB:DataSource ;
-	bridgeDB:fullName "CCDS" ;
+	bridgeDB:fullName "Consensus CDS" ;
 	bridgeDB:systemCode "Cc" ;
 	bridgeDB:mainUrl "http://identifiers.org/ccds/" ;
 	bridgeDB:idExample "CCDS43989" ;
