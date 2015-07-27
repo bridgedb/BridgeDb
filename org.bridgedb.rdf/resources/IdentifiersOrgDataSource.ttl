@@ -1727,7 +1727,7 @@ bridgeDB:DataSource_Ensembl a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/ensembl/$id> ;
 	bridgeDB:hasRegexPattern "^((ENS[A-Z]*[FPTG]\\d{11}(\\.\\d+)?)|(FB\\w{2}\\d{7})|(Y[A-Z]{2}\\d{3}[a-zA-Z](\\-[A-Z])?)|([A-Z_a-z0-9]+(\\.)?(t)?(\\d+)?([a-z])?))$" ;
 	dcterms:alternative "Ensembl" ;
-	bridgeDB:hasUriPattern <http://asia.ensembl.org/id/$id> , <http://bio2rdf.org/ensembl:$id> , <http://purl.uniprot.org/ensembl/$id> , <http://useast.ensembl.org/id/$id> , <http://uswest.ensembl.org/id/$id> , <http://www.ensembl.org/id/$id> .
+	bridgeDB:hasUriPattern <http://asia.ensembl.org/id/$id> , <http://bio2rdf.org/ensembl:$id> , <http://purl.uniprot.org/ensembl/$id> , <http://useast.ensembl.org/id/$id> , <http://uswest.ensembl.org/id/$id> , <http://www.ensembl.org/id/$id>, <http://rdf.ebi.ac.uk/resource/ensembl/$id> .
 
 bridgeDB:DataSource_Ensembl_B_subtilis a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl B. subtilis" ;
