@@ -257,6 +257,8 @@ public class BridgeDBRdfHandler extends RdfBase{
         if (result == null){
             result = UriPattern.readUriPattern(repositoryConnection, uriPatternResource, code, patternType);
             uriPatternRegister.put(uriPatternResource, result);
+        } else {
+        	result.getSysCodes().add(code);
         }
         return result;
     }
