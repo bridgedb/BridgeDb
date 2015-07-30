@@ -62,9 +62,23 @@
 
 
 
+###  http://vocabularies.bridgedb.org/ops#hasDataType
+
+<http://vocabularies.bridgedb.org/ops#hasDataType> rdf:type owl:ObjectProperty ;
+                                                   
+                                                   rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> ;
+                                                   
+                                                   rdfs:range <http://www.w3.org/2004/02/skos/core#Concept> .
+
+
+
 ###  http://vocabularies.bridgedb.org/ops#hasIdentifiersOrgInfoPattern
 
-<http://vocabularies.bridgedb.org/ops#hasIdentifiersOrgInfoPattern> rdf:type owl:ObjectProperty .
+<http://vocabularies.bridgedb.org/ops#hasIdentifiersOrgInfoPattern> rdf:type owl:ObjectProperty ;
+                                                                    
+                                                                    rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> ;
+                                                                    
+                                                                    rdfs:range <http://vocabularies.bridgedb.org/ops#IdentifiersOrgInfoPattern> .
 
 
 
@@ -120,7 +134,9 @@
                                                             
                                                             rdfs:comment "The reason why the Linkset claims these concepts are equivalent." ;
                                                             
-                                                            rdfs:domain void:Linkset .
+                                                            rdfs:domain void:Linkset ;
+                                                            
+                                                            rdfs:range <http://www.w3.org/2004/02/skos/core#Concept> .
 
 
 
@@ -130,7 +146,9 @@
                                                        
                                                        rdfs:comment "The type of concept the objects of the triples in the Linkset represent."@en ;
                                                        
-                                                       rdfs:domain void:Linkset .
+                                                       rdfs:domain void:Linkset ;
+                                                       
+                                                       rdfs:range <http://www.w3.org/2004/02/skos/core#Concept> .
 
 
 
@@ -150,7 +168,9 @@
                                                         
                                                         rdfs:comment "The type of concept the subjects of the triples in the Linkset represent."@en ;
                                                         
-                                                        rdfs:domain void:Linkset .
+                                                        rdfs:domain void:Linkset ;
+                                                        
+                                                        rdfs:range <http://www.w3.org/2004/02/skos/core#Concept> .
 
 
 
@@ -202,12 +222,6 @@
 <http://vocabularies.bridgedb.org/ops#fullName> rdf:type owl:DatatypeProperty ;
                                                 
                                                 rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> .
-
-
-
-###  http://vocabularies.bridgedb.org/ops#hasDataType
-
-<http://vocabularies.bridgedb.org/ops#hasDataType> rdf:type owl:DatatypeProperty .
 
 
 
@@ -321,7 +335,9 @@
 
 ###  http://vocabularies.bridgedb.org/ops#urnBase
 
-<http://vocabularies.bridgedb.org/ops#urnBase> rdf:type owl:DatatypeProperty .
+<http://vocabularies.bridgedb.org/ops#urnBase> rdf:type owl:DatatypeProperty ;
+                                               
+                                               rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> .
 
 
 
@@ -403,6 +419,14 @@ void:Linkset rdf:type owl:Class ;
 ###  http://vocabularies.bridgedb.org/ops#UriPattern
 
 <http://vocabularies.bridgedb.org/ops#UriPattern> rdf:type owl:Class .
+
+
+
+###  http://www.w3.org/2004/02/skos/core#Concept
+
+<http://www.w3.org/2004/02/skos/core#Concept> rdf:type owl:Class ;
+                                              
+                                              rdfs:isDefinedBy <http://www.w3.org/2004/02/skos/core> .
 
 
 
