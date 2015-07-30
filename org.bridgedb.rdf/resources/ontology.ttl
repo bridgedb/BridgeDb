@@ -9,9 +9,14 @@
 
 <http://vocabularies.bridgedb.org/ops#> rdf:type owl:Ontology ;
                                         
-                                        owl:versionIRI <http://vocabularies.bridgedb.org/ops#0.120150727> ;
+                                        rdfs:label "BridgeDb DataSource ontology"@en ;
                                         
-                                        rdfs:seeAlso <http://www.openphacts.org/specs/2013/WD-datadesc-20130912/#bridgedb> .
+                                        owl:versionInfo "2.0.3" ;
+                                        
+                                        rdfs:seeAlso <http://bridgedb.org/> ,
+                                                     <http://www.openphacts.org/specs/2013/WD-datadesc-20130912/#bridgedb> ;
+                                        
+                                        owl:versionIRI <https://cdn.rawgit.com/bridgedb/BridgeDb/openphacts_2.0.3/org.bridgedb.rdf/resources/ontology.ttl> .
 
 
 #################################################################
@@ -19,6 +24,16 @@
 #    Object Properties
 #
 #################################################################
+
+
+###  http://vocabularies.bridgedb.org/ops#aboutOrganism
+
+<http://vocabularies.bridgedb.org/ops#aboutOrganism> rdf:type owl:ObjectProperty ;
+                                                     
+                                                     rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> ;
+                                                     
+                                                     rdfs:range <http://vocabularies.bridgedb.org/ops#Organism> .
+
 
 
 ###  http://vocabularies.bridgedb.org/ops#assertionMethod
@@ -30,6 +45,72 @@
                                                        rdfs:domain void:Linkset ;
                                                        
                                                        rdfs:seeAlso <http://www.w3.org/TR/void/#linkset> .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#fulfillsLens
+
+<http://vocabularies.bridgedb.org/ops#fulfillsLens> rdf:type owl:ObjectProperty ;
+                                                    
+                                                    rdfs:range <http://vocabularies.bridgedb.org/ops#Lens> .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#hasDataSource
+
+<http://vocabularies.bridgedb.org/ops#hasDataSource> rdf:type owl:ObjectProperty .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#hasIdentifiersOrgInfoPattern
+
+<http://vocabularies.bridgedb.org/ops#hasIdentifiersOrgInfoPattern> rdf:type owl:ObjectProperty .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#hasIdentifiersOrgPattern
+
+<http://vocabularies.bridgedb.org/ops#hasIdentifiersOrgPattern> rdf:type owl:ObjectProperty ;
+                                                                
+                                                                rdfs:range <http://vocabularies.bridgedb.org/ops#IdentifiersOrgPattern> ;
+                                                                
+                                                                rdfs:subPropertyOf <http://vocabularies.bridgedb.org/ops#hasUriPattern> .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#hasUriPattern
+
+<http://vocabularies.bridgedb.org/ops#hasUriPattern> rdf:type owl:ObjectProperty ;
+                                                     
+                                                     rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> ;
+                                                     
+                                                     rdfs:range <http://vocabularies.bridgedb.org/ops#UriPattern> .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#hasUrlPattern
+
+<http://vocabularies.bridgedb.org/ops#hasUrlPattern> rdf:type owl:ObjectProperty ;
+                                                     
+                                                     rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#isTransitiveVia
+
+<http://vocabularies.bridgedb.org/ops#isTransitiveVia> rdf:type owl:ObjectProperty ;
+                                                       
+                                                       rdfs:range <http://vocabularies.bridgedb.org/ops#DataSource> ;
+                                                       
+                                                       rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#isUriPatternOf
+
+<http://vocabularies.bridgedb.org/ops#isUriPatternOf> rdf:type owl:ObjectProperty ;
+                                                      
+                                                      owl:inverseOf <http://vocabularies.bridgedb.org/ops#hasUriPattern> .
 
 
 
@@ -87,6 +168,181 @@
 
 #################################################################
 #
+#    Data properties
+#
+#################################################################
+
+
+###  http://purl.org/dc/terms/alternative
+
+<http://purl.org/dc/terms/alternative> rdf:type owl:DatatypeProperty ;
+                                       
+                                       rdfs:isDefinedBy <http://purl.org/dc/terms/> .
+
+
+
+###  http://purl.org/dc/terms/description
+
+<http://purl.org/dc/terms/description> rdf:type owl:DatatypeProperty ;
+                                       
+                                       rdfs:isDefinedBy <http://purl.org/dc/terms/> .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#code
+
+<http://vocabularies.bridgedb.org/ops#code> rdf:type owl:DatatypeProperty ;
+                                            
+                                            rdfs:domain <http://vocabularies.bridgedb.org/ops#Organism> .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#fullName
+
+<http://vocabularies.bridgedb.org/ops#fullName> rdf:type owl:DatatypeProperty ;
+                                                
+                                                rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#hasDataType
+
+<http://vocabularies.bridgedb.org/ops#hasDataType> rdf:type owl:DatatypeProperty .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#hasPostfix
+
+<http://vocabularies.bridgedb.org/ops#hasPostfix> rdf:type owl:DatatypeProperty ;
+                                                  
+                                                  rdfs:domain <http://vocabularies.bridgedb.org/ops#UriPattern> .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#hasPrefix
+
+<http://vocabularies.bridgedb.org/ops#hasPrefix> rdf:type owl:DatatypeProperty ;
+                                                 
+                                                 rdfs:domain <http://vocabularies.bridgedb.org/ops#UriPattern> .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#hasRegexPattern
+
+<http://vocabularies.bridgedb.org/ops#hasRegexPattern> rdf:type owl:DatatypeProperty .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#hasRegexUriPattern
+
+<http://vocabularies.bridgedb.org/ops#hasRegexUriPattern> rdf:type owl:DatatypeProperty .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#hasUrlPattern
+
+<http://vocabularies.bridgedb.org/ops#hasUrlPattern> rdf:type owl:DatatypeProperty .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#idExample
+
+<http://vocabularies.bridgedb.org/ops#idExample> rdf:type owl:DatatypeProperty ;
+                                                 
+                                                 rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#isDeprecatedBy
+
+<http://vocabularies.bridgedb.org/ops#isDeprecatedBy> rdf:type owl:DatatypeProperty .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#isSymmetric
+
+<http://vocabularies.bridgedb.org/ops#isSymmetric> rdf:type owl:DatatypeProperty ;
+                                                   
+                                                   rdfs:range xsd:boolean .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#latinName
+
+<http://vocabularies.bridgedb.org/ops#latinName> rdf:type owl:DatatypeProperty ;
+                                                 
+                                                 rdfs:domain <http://vocabularies.bridgedb.org/ops#Organism> .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#mainUrl
+
+<http://vocabularies.bridgedb.org/ops#mainUrl> rdf:type owl:DatatypeProperty ;
+                                               
+                                               rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#primary
+
+<http://vocabularies.bridgedb.org/ops#primary> rdf:type owl:DatatypeProperty ;
+                                               
+                                               rdfs:range xsd:boolean .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#shortName
+
+<http://vocabularies.bridgedb.org/ops#shortName> rdf:type owl:DatatypeProperty ;
+                                                 
+                                                 rdfs:domain <http://vocabularies.bridgedb.org/ops#Organism> .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#systemCode
+
+<http://vocabularies.bridgedb.org/ops#systemCode> rdf:type owl:DatatypeProperty ;
+                                                  
+                                                  rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#uriMapping
+
+<http://vocabularies.bridgedb.org/ops#uriMapping> rdf:type owl:DatatypeProperty .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#uriPattern
+
+<http://vocabularies.bridgedb.org/ops#uriPattern> rdf:type owl:DatatypeProperty .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#urnBase
+
+<http://vocabularies.bridgedb.org/ops#urnBase> rdf:type owl:DatatypeProperty .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#various
+
+<http://vocabularies.bridgedb.org/ops#various> rdf:type owl:DatatypeProperty .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#xrefPrefix
+
+<http://vocabularies.bridgedb.org/ops#xrefPrefix> rdf:type owl:DatatypeProperty ;
+                                                  
+                                                  rdfs:domain <http://vocabularies.bridgedb.org/ops#CodeMapper> .
+
+
+
+
+
+#################################################################
+#
 #    Classes
 #
 #################################################################
@@ -97,6 +353,56 @@
 void:Linkset rdf:type owl:Class ;
              
              rdfs:isDefinedBy void: .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#CodeMapper
+
+<http://vocabularies.bridgedb.org/ops#CodeMapper> rdf:type owl:Class .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#DataSource
+
+<http://vocabularies.bridgedb.org/ops#DataSource> rdf:type owl:Class .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#IdentifiersOrgInfoPattern
+
+<http://vocabularies.bridgedb.org/ops#IdentifiersOrgInfoPattern> rdf:type owl:Class .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#IdentifiersOrgPattern
+
+<http://vocabularies.bridgedb.org/ops#IdentifiersOrgPattern> rdf:type owl:Class ;
+                                                             
+                                                             rdfs:subClassOf <http://vocabularies.bridgedb.org/ops#UriPattern> .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#Lens
+
+<http://vocabularies.bridgedb.org/ops#Lens> rdf:type owl:Class .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#Organism
+
+<http://vocabularies.bridgedb.org/ops#Organism> rdf:type owl:Class .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#Transitive
+
+<http://vocabularies.bridgedb.org/ops#Transitive> rdf:type owl:Class .
+
+
+
+###  http://vocabularies.bridgedb.org/ops#UriPattern
+
+<http://vocabularies.bridgedb.org/ops#UriPattern> rdf:type owl:Class .
 
 
 
