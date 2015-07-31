@@ -140,7 +140,7 @@ public class BridgeDBRdfHandler extends RdfBase{
             builder.mainUrl(mainUrl);
         }
   
-        Value organismId = getPossibleSingleton(repositoryConnection, dataSourceId, BridgeDBConstants.ORGANISM_URI);
+        Value organismId = getPossibleSingleton(repositoryConnection, dataSourceId, BridgeDBConstants.ABOUT_ORGANISM_URI);
         if (organismId != null){
             Object organism = OrganismRdf.byRdfResource(organismId);
             builder.organism(organism);
@@ -386,7 +386,7 @@ public class BridgeDBRdfHandler extends RdfBase{
 
         if (dataSource.getOrganism() != null){
             Organism organism = (Organism)dataSource.getOrganism();
-            repositoryConnection.add(id, BridgeDBConstants.ORGANISM_URI, OrganismRdf.getResourceId(organism));
+            repositoryConnection.add(id, BridgeDBConstants.ABOUT_ORGANISM_URI, OrganismRdf.getResourceId(organism));
         }
         
         Pattern pattern = DataSourcePatterns.getPatterns().get(dataSource);
@@ -443,7 +443,7 @@ public class BridgeDBRdfHandler extends RdfBase{
     
     private static void writeRDF(RepositoryConnection repositoryConnection, RDFWriter rdfWriter) 
             throws IOException, RDFHandlerException, RepositoryException{ 
-        rdfWriter.handleNamespace(BridgeDBConstants.PREFIX_NAME1, BridgeDBConstants.PREFIX);
+        rdfWriter.handleNamespace(BridgeDBConstants.PREFIX_NAME, BridgeDBConstants.PREFIX);
         rdfWriter.handleNamespace(DCatConstants.PREFIX_NAME, DCatConstants.voidns);
         rdfWriter.handleNamespace(DCTermsConstants.PREFIX_NAME, DCTermsConstants.voidns);
         rdfWriter.handleNamespace("", DEFAULT_BASE_URI);

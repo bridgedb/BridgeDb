@@ -58,7 +58,7 @@ public class FormatConvertor {
     
     private static void writeRDF(RepositoryConnection repositoryConnection, RDFWriter rdfWriter) 
             throws IOException, RDFHandlerException, RepositoryException{ 
-        rdfWriter.handleNamespace(BridgeDBConstants.PREFIX_NAME1, BridgeDBConstants.PREFIX);
+        rdfWriter.handleNamespace(BridgeDBConstants.PREFIX_NAME, BridgeDBConstants.PREFIX);
         rdfWriter.handleNamespace("", DEFAULT_BASE_URI);
         rdfWriter.startRDF();
         RepositoryResult<Statement> statements = 
