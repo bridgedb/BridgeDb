@@ -11463,6 +11463,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://www.ensembl.org/id/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://www.ensembl.org/id/" .
 
+<http://rdf.ebi.ac.uk/resource/ensembl/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://rdf.ebi.ac.uk/resource/ensembl/$id" .
+
 <http://www.ensembl.org/Multi/GeneTree/Image?db=core%3Bgt%3D$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://www.ensembl.org/Multi/GeneTree/Image?db=core%3Bgt%3D" .
 
