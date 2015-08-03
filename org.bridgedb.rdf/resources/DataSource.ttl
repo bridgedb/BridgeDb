@@ -1018,8 +1018,7 @@ bridgeDB:DataSource_UniGene a bridgeDB:DataSource ;
 	bridgeDB:mainUrl "http://www.ncbi.nlm.nih.gov/unigene" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-    bridgeDB:hasUrlPattern <http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?UGID=1548618&SEARCH=$id> ;
-	bridgeDB:hasUriPattern <http://purl.uniprot.org/unigene/$id> .
+	bridgeDB:hasUrlPattern <http://purl.uniprot.org/unigene/$id> .
 
 bridgeDB:DataSource_UniGene_URI a bridgeDB:DataSource ;
 	bridgeDB:fullName "UniGene number" ;
@@ -1028,7 +1027,7 @@ bridgeDB:DataSource_UniGene_URI a bridgeDB:DataSource ;
 	bridgeDB:idExample "1548618" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasUrlPattern <http://www.ncbi.nlm.nih.gov/unigene?term=$id> ;
+	bridgeDB:hasUrlPattern <http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?UGID=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/unigene/$id> .
 
 bridgeDB:DataSource_Uniprot_Enzyme a bridgeDB:DataSource ;
