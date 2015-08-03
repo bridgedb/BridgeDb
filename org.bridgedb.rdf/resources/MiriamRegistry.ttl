@@ -11937,7 +11937,7 @@ Note: Currently, direct access to RNA products is restricted. This is expected t
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000375>
       a       dcat:CatalogRecord ;
-      idot:idRegexPattern "^CCDS\\d+\\.\\d+$"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:idRegexPattern "^CCDS\\d+(\\.\\d+)?$"^^<http://www.w3.org/2001/XMLSchema#string> ;
       idot:namespace "ccds"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:alternative "CCDS"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:exampleResource

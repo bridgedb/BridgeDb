@@ -835,7 +835,7 @@ bridgeDB:DataSource_CCDS a bridgeDB:DataSource ;
 	bridgeDB:hasPrimaryUriPattern <http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=ALLFIELDS&DATA=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/ccds/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/ccds/$id> ;
-	bridgeDB:hasRegexPattern "^CCDS\\d+\\.\\d+$" ;
+	bridgeDB:hasRegexPattern "^CCDS\\d+(\\.\\d+)?$" ;
 	dcterms:alternative "Consensus CDS" ;
 	bridgeDB:hasUriPattern <http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&amp%3BDATA=$id> .
 
