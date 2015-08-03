@@ -1,5 +1,4 @@
-@prefix bridgeDB: <http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#> .
-@prefix : <http://no/BaseURI/Set/> .
+@prefix bridgeDB: <http://vocabularies.bridgedb.org/ops#> .
 
 bridgeDB:DataSource_Chemspider a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chemspider" ;

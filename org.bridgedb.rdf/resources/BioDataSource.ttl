@@ -1,7 +1,6 @@
-@prefix bridgeDB: <http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#> .
+@prefix bridgeDB: <http://vocabularies.bridgedb.org/ops#> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix : <http://no/BaseURI/Set/> .
 
 
 bridgeDB:DataSource_Affy a bridgeDB:DataSource ;
