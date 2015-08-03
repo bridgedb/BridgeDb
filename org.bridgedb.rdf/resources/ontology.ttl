@@ -8,14 +8,14 @@
 @base <http://vocabularies.bridgedb.org/ops#> .
 
 <http://vocabularies.bridgedb.org/ops#> rdf:type owl:Ontology ;
-                                        
+
                                         rdfs:label "BridgeDb DataSource ontology"@en ;
-                                        
+
                                         owl:versionInfo "2.0.3" ;
-                                        
+
                                         rdfs:seeAlso <http://bridgedb.org/> ,
                                                      <http://www.openphacts.org/specs/2013/WD-datadesc-20130912/#bridgedb> ;
-                                        
+
                                         owl:versionIRI <https://cdn.rawgit.com/bridgedb/BridgeDb/openphacts_2.0.3/org.bridgedb.rdf/resources/ontology.ttl> .
 
 
@@ -29,9 +29,9 @@
 ###  http://vocabularies.bridgedb.org/ops#aboutOrganism
 
 <http://vocabularies.bridgedb.org/ops#aboutOrganism> rdf:type owl:ObjectProperty ;
-                                                     
+
                                                      rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> ;
-                                                     
+
                                                      rdfs:range <http://vocabularies.bridgedb.org/ops#Organism> .
 
 
@@ -39,11 +39,11 @@
 ###  http://vocabularies.bridgedb.org/ops#assertionMethod
 
 <http://vocabularies.bridgedb.org/ops#assertionMethod> rdf:type owl:ObjectProperty ;
-                                                       
+
                                                        rdfs:comment "The method by which the links in the Linkset have been asserted." ;
-                                                       
+
                                                        rdfs:domain void:Linkset ;
-                                                       
+
                                                        rdfs:seeAlso <http://www.w3.org/TR/void/#linkset> .
 
 
@@ -51,7 +51,7 @@
 ###  http://vocabularies.bridgedb.org/ops#fulfillsLens
 
 <http://vocabularies.bridgedb.org/ops#fulfillsLens> rdf:type owl:ObjectProperty ;
-                                                    
+
                                                     rdfs:range <http://vocabularies.bridgedb.org/ops#Lens> .
 
 
@@ -65,9 +65,9 @@
 ###  http://vocabularies.bridgedb.org/ops#hasDataType
 
 <http://vocabularies.bridgedb.org/ops#hasDataType> rdf:type owl:ObjectProperty ;
-                                                   
+
                                                    rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> ;
-                                                   
+
                                                    rdfs:range <http://www.w3.org/2004/02/skos/core#Concept> .
 
 
@@ -75,9 +75,9 @@
 ###  http://vocabularies.bridgedb.org/ops#hasIdentifiersOrgInfoPattern
 
 <http://vocabularies.bridgedb.org/ops#hasIdentifiersOrgInfoPattern> rdf:type owl:ObjectProperty ;
-                                                                    
+
                                                                     rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> ;
-                                                                    
+
                                                                     rdfs:range <http://vocabularies.bridgedb.org/ops#IdentifiersOrgInfoPattern> .
 
 
@@ -85,9 +85,9 @@
 ###  http://vocabularies.bridgedb.org/ops#hasIdentifiersOrgPattern
 
 <http://vocabularies.bridgedb.org/ops#hasIdentifiersOrgPattern> rdf:type owl:ObjectProperty ;
-                                                                
+
                                                                 rdfs:range <http://vocabularies.bridgedb.org/ops#IdentifiersOrgPattern> ;
-                                                                
+
                                                                 rdfs:subPropertyOf <http://vocabularies.bridgedb.org/ops#hasUriPattern> .
 
 
@@ -95,27 +95,27 @@
 ###  http://vocabularies.bridgedb.org/ops#hasUriPattern
 
 <http://vocabularies.bridgedb.org/ops#hasUriPattern> rdf:type owl:ObjectProperty ;
-                                                     
+
                                                      rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> ;
-                                                     
+
                                                      rdfs:range <http://vocabularies.bridgedb.org/ops#UriPattern> .
 
 
 
-###  http://vocabularies.bridgedb.org/ops#hasUrlPattern
+###  http://vocabularies.bridgedb.org/ops#hasPrimaryUriPattern
 
-<http://vocabularies.bridgedb.org/ops#hasUrlPattern> rdf:type owl:ObjectProperty ;
-                                                     
-                                                     rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> .
+<http://vocabularies.bridgedb.org/ops#hasPrimaryUriPattern> rdf:type owl:ObjectProperty ;
+
+                                                     rdfs:subPropertyOf <http://vocabularies.bridgedb.org/ops#hasUriPattern> .
 
 
 
 ###  http://vocabularies.bridgedb.org/ops#isTransitiveVia
 
 <http://vocabularies.bridgedb.org/ops#isTransitiveVia> rdf:type owl:ObjectProperty ;
-                                                       
+
                                                        rdfs:range <http://vocabularies.bridgedb.org/ops#DataSource> ;
-                                                       
+
                                                        rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> .
 
 
@@ -123,7 +123,7 @@
 ###  http://vocabularies.bridgedb.org/ops#isUriPatternOf
 
 <http://vocabularies.bridgedb.org/ops#isUriPatternOf> rdf:type owl:ObjectProperty ;
-                                                      
+
                                                       owl:inverseOf <http://vocabularies.bridgedb.org/ops#hasUriPattern> .
 
 
@@ -131,11 +131,11 @@
 ###  http://vocabularies.bridgedb.org/ops#linksetJustification
 
 <http://vocabularies.bridgedb.org/ops#linksetJustification> rdf:type owl:ObjectProperty ;
-                                                            
+
                                                             rdfs:comment "The reason why the Linkset claims these concepts are equivalent." ;
-                                                            
+
                                                             rdfs:domain void:Linkset ;
-                                                            
+
                                                             rdfs:range <http://www.w3.org/2004/02/skos/core#Concept> .
 
 
@@ -143,11 +143,11 @@
 ###  http://vocabularies.bridgedb.org/ops#objectsDatatype
 
 <http://vocabularies.bridgedb.org/ops#objectsDatatype> rdf:type owl:ObjectProperty ;
-                                                       
+
                                                        rdfs:comment "The type of concept the objects of the triples in the Linkset represent."@en ;
-                                                       
+
                                                        rdfs:domain void:Linkset ;
-                                                       
+
                                                        rdfs:range <http://www.w3.org/2004/02/skos/core#Concept> .
 
 
@@ -155,9 +155,9 @@
 ###  http://vocabularies.bridgedb.org/ops#objectsSpecies
 
 <http://vocabularies.bridgedb.org/ops#objectsSpecies> rdf:type owl:ObjectProperty ;
-                                                      
+
                                                       rdfs:comment "The species of the concept the objects of the triples in the Linkset represent."@en ;
-                                                      
+
                                                       rdfs:domain void:Linkset .
 
 
@@ -165,11 +165,11 @@
 ###  http://vocabularies.bridgedb.org/ops#subjectsDatatype
 
 <http://vocabularies.bridgedb.org/ops#subjectsDatatype> rdf:type owl:ObjectProperty ;
-                                                        
+
                                                         rdfs:comment "The type of concept the subjects of the triples in the Linkset represent."@en ;
-                                                        
+
                                                         rdfs:domain void:Linkset ;
-                                                        
+
                                                         rdfs:range <http://www.w3.org/2004/02/skos/core#Concept> .
 
 
@@ -177,9 +177,9 @@
 ###  http://vocabularies.bridgedb.org/ops#subjectsSpecies
 
 <http://vocabularies.bridgedb.org/ops#subjectsSpecies> rdf:type owl:ObjectProperty ;
-                                                       
+
                                                        rdfs:comment "The species of the concept the subjects of the triples in the Linkset represent."@en ;
-                                                       
+
                                                        rdfs:domain void:Linkset .
 
 
@@ -196,7 +196,7 @@
 ###  http://purl.org/dc/terms/alternative
 
 <http://purl.org/dc/terms/alternative> rdf:type owl:DatatypeProperty ;
-                                       
+
                                        rdfs:isDefinedBy <http://purl.org/dc/terms/> .
 
 
@@ -204,7 +204,7 @@
 ###  http://purl.org/dc/terms/description
 
 <http://purl.org/dc/terms/description> rdf:type owl:DatatypeProperty ;
-                                       
+
                                        rdfs:isDefinedBy <http://purl.org/dc/terms/> .
 
 
@@ -212,7 +212,7 @@
 ###  http://vocabularies.bridgedb.org/ops#code
 
 <http://vocabularies.bridgedb.org/ops#code> rdf:type owl:DatatypeProperty ;
-                                            
+
                                             rdfs:domain <http://vocabularies.bridgedb.org/ops#Organism> .
 
 
@@ -220,7 +220,7 @@
 ###  http://vocabularies.bridgedb.org/ops#fullName
 
 <http://vocabularies.bridgedb.org/ops#fullName> rdf:type owl:DatatypeProperty ;
-                                                
+
                                                 rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> .
 
 
@@ -228,7 +228,7 @@
 ###  http://vocabularies.bridgedb.org/ops#hasPostfix
 
 <http://vocabularies.bridgedb.org/ops#hasPostfix> rdf:type owl:DatatypeProperty ;
-                                                  
+
                                                   rdfs:domain <http://vocabularies.bridgedb.org/ops#UriPattern> .
 
 
@@ -236,7 +236,7 @@
 ###  http://vocabularies.bridgedb.org/ops#hasPrefix
 
 <http://vocabularies.bridgedb.org/ops#hasPrefix> rdf:type owl:DatatypeProperty ;
-                                                 
+
                                                  rdfs:domain <http://vocabularies.bridgedb.org/ops#UriPattern> .
 
 
@@ -253,16 +253,10 @@
 
 
 
-###  http://vocabularies.bridgedb.org/ops#hasUrlPattern
-
-<http://vocabularies.bridgedb.org/ops#hasUrlPattern> rdf:type owl:DatatypeProperty .
-
-
-
 ###  http://vocabularies.bridgedb.org/ops#idExample
 
 <http://vocabularies.bridgedb.org/ops#idExample> rdf:type owl:DatatypeProperty ;
-                                                 
+
                                                  rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> .
 
 
@@ -276,7 +270,7 @@
 ###  http://vocabularies.bridgedb.org/ops#isSymmetric
 
 <http://vocabularies.bridgedb.org/ops#isSymmetric> rdf:type owl:DatatypeProperty ;
-                                                   
+
                                                    rdfs:range xsd:boolean .
 
 
@@ -284,7 +278,7 @@
 ###  http://vocabularies.bridgedb.org/ops#latinName
 
 <http://vocabularies.bridgedb.org/ops#latinName> rdf:type owl:DatatypeProperty ;
-                                                 
+
                                                  rdfs:domain <http://vocabularies.bridgedb.org/ops#Organism> .
 
 
@@ -292,7 +286,7 @@
 ###  http://vocabularies.bridgedb.org/ops#mainUrl
 
 <http://vocabularies.bridgedb.org/ops#mainUrl> rdf:type owl:DatatypeProperty ;
-                                               
+
                                                rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> .
 
 
@@ -300,7 +294,7 @@
 ###  http://vocabularies.bridgedb.org/ops#primary
 
 <http://vocabularies.bridgedb.org/ops#primary> rdf:type owl:DatatypeProperty ;
-                                               
+
                                                rdfs:range xsd:boolean .
 
 
@@ -308,7 +302,7 @@
 ###  http://vocabularies.bridgedb.org/ops#shortName
 
 <http://vocabularies.bridgedb.org/ops#shortName> rdf:type owl:DatatypeProperty ;
-                                                 
+
                                                  rdfs:domain <http://vocabularies.bridgedb.org/ops#Organism> .
 
 
@@ -316,7 +310,7 @@
 ###  http://vocabularies.bridgedb.org/ops#systemCode
 
 <http://vocabularies.bridgedb.org/ops#systemCode> rdf:type owl:DatatypeProperty ;
-                                                  
+
                                                   rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> .
 
 
@@ -336,7 +330,7 @@
 ###  http://vocabularies.bridgedb.org/ops#urnBase
 
 <http://vocabularies.bridgedb.org/ops#urnBase> rdf:type owl:DatatypeProperty ;
-                                               
+
                                                rdfs:domain <http://vocabularies.bridgedb.org/ops#DataSource> .
 
 
@@ -350,7 +344,7 @@
 ###  http://vocabularies.bridgedb.org/ops#xrefPrefix
 
 <http://vocabularies.bridgedb.org/ops#xrefPrefix> rdf:type owl:DatatypeProperty ;
-                                                  
+
                                                   rdfs:domain <http://vocabularies.bridgedb.org/ops#CodeMapper> .
 
 
@@ -367,7 +361,7 @@
 ###  http://rdfs.org/ns/void#Linkset
 
 void:Linkset rdf:type owl:Class ;
-             
+
              rdfs:isDefinedBy void: .
 
 
@@ -393,7 +387,7 @@ void:Linkset rdf:type owl:Class ;
 ###  http://vocabularies.bridgedb.org/ops#IdentifiersOrgPattern
 
 <http://vocabularies.bridgedb.org/ops#IdentifiersOrgPattern> rdf:type owl:Class ;
-                                                             
+
                                                              rdfs:subClassOf <http://vocabularies.bridgedb.org/ops#UriPattern> .
 
 
@@ -425,11 +419,10 @@ void:Linkset rdf:type owl:Class ;
 ###  http://www.w3.org/2004/02/skos/core#Concept
 
 <http://www.w3.org/2004/02/skos/core#Concept> rdf:type owl:Class ;
-                                              
+
                                               rdfs:isDefinedBy <http://www.w3.org/2004/02/skos/core> .
 
 
 
 
 ###  Generated by the OWL API (version 3.5.1) http://owlapi.sourceforge.net
-
