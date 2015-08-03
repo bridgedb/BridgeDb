@@ -1017,7 +1017,7 @@ bridgeDB:DataSource_UniGene a bridgeDB:DataSource ;
 	bridgeDB:mainUrl "http://www.ncbi.nlm.nih.gov/unigene" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://purl.uniprot.org/unigene/$id> .
+	bridgeDB:hasPrimaryUriPattern <http://www.ncbi.nlm.nih.gov/unigene?term=$id> .
 
 bridgeDB:DataSource_UniGene_URI a bridgeDB:DataSource ;
 	bridgeDB:fullName "UniGene number" ;

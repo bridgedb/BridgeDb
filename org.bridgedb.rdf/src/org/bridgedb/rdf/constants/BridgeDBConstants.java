@@ -33,8 +33,6 @@ public class BridgeDBConstants {
     public static final String PREFIX = "http://vocabularies.bridgedb.org/ops#";
     public static final String PREFIX_NAME = "bdb";
     
-    public static final String PRIMARY = "Primary";
-
     //Types
     public static final String DATA_SOURCE_LABEL = "DataSource";
     public static final String DATA_SOURCE1 = PREFIX + DATA_SOURCE_LABEL;
@@ -59,8 +57,8 @@ public class BridgeDBConstants {
     public static final String ABOUT_ORGANISM1 = PREFIX + ORGANISM_LABEL;
     public static final URI ABOUT_ORGANISM_URI = new URIImpl(ORGANISM1);
     
-    private static final String PRIMAY = "primary";
-    public static final URI PRIMAY_URI = new URIImpl(PREFIX + PRIMAY);
+    private static final String PRIMARY = "primary";
+    public static final URI PRIMARY_URI = new URIImpl(PREFIX + PRIMARY);
     private static final String SYSTEM_CODE = "systemCode";
     public static final URI SYSTEM_CODE_URI = new URIImpl(PREFIX + SYSTEM_CODE);
     private static final String TYPE = "type";

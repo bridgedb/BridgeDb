@@ -146,7 +146,7 @@ public class BridgeDBRdfHandler extends RdfBase{
             builder.organism(organism);
         }
             
-        String primary = getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.PRIMAY_URI);
+        String primary = getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.PRIMARY_URI);
         if (primary != null){
             builder.primary(Boolean.parseBoolean(primary));
         }
@@ -357,9 +357,9 @@ public class BridgeDBRdfHandler extends RdfBase{
         }
  
         if (dataSource.isPrimary()){
-            repositoryConnection.add(id, BridgeDBConstants.PRIMAY_URI, BooleanLiteralImpl.TRUE);
+            repositoryConnection.add(id, BridgeDBConstants.PRIMARY_URI, BooleanLiteralImpl.TRUE);
         } else {
-            repositoryConnection.add(id, BridgeDBConstants.PRIMAY_URI, BooleanLiteralImpl.FALSE);
+            repositoryConnection.add(id, BridgeDBConstants.PRIMARY_URI, BooleanLiteralImpl.FALSE);
         }
  
         if (dataSource.getType() != null){

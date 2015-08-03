@@ -6090,10 +6090,10 @@ bridgeDB:DataSource_UniGene a bridgeDB:DataSource ;
 	bridgeDB:idExample "Hs.553708" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasUriPattern <http://www.ncbi.nlm.nih.gov/unigene?term=$id> ;
+	bridgeDB:hasPrimaryUriPattern <http://www.ncbi.nlm.nih.gov/unigene?term=$id> ;
 	bridgeDB:hasRegexPattern "[A-Z][a-z][a-z]?\\.\\d+" ;
 	dcterms:alternative "UniGene" ;
-	bridgeDB:hasPrimaryUriPattern <http://purl.uniprot.org/unigene/$id> .
+	bridgeDB:hasUriPattern <http://purl.uniprot.org/unigene/$id> .
 
 bridgeDB:DataSource_UniGene_number a bridgeDB:DataSource ;
 	bridgeDB:fullName "UniGene number" ;
@@ -6102,11 +6102,12 @@ bridgeDB:DataSource_UniGene_number a bridgeDB:DataSource ;
 	bridgeDB:idExample "1548618" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
+	bridgeDB:hasPrimaryUriPattern <http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?UGID=$id> ;
 	bridgeDB:hasUriPattern <http://www.ncbi.nlm.nih.gov/unigene?term=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/unigene/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/unigene/$id> ;
-	bridgeDB:hasRegexPattern "^\\d+$" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?UGID=$id> .
+	bridgeDB:hasRegexPattern "^\\d+$" .
+	
 
 bridgeDB:DataSource_Unimod a bridgeDB:DataSource ;
 	bridgeDB:fullName "Unimod" ;
@@ -11782,9 +11783,6 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?UGID=$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?UGID=" .
-
-<http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?UGID=1548618&SEARCH=$id> a bridgeDB:uriPattern ;
-	bridgeDB:hasPrefix "http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?UGID=1548618&SEARCH=" .
 
 <http://www.ncbi.nlm.nih.gov/unigene?term=$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://www.ncbi.nlm.nih.gov/unigene?term=" .
