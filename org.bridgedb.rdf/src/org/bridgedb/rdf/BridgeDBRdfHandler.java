@@ -165,7 +165,7 @@ public class BridgeDBRdfHandler extends RdfBase{
             regex = DataSourcePatterns.getPatterns().get(builder.asDataSource());
         }
         
-        Value urlValue = getPossibleSingleton(repositoryConnection, dataSourceId, BridgeDBConstants.HAS_URL_PATTERN_URI);
+        Value urlValue = getPossibleSingleton(repositoryConnection, dataSourceId, BridgeDBConstants.HAS_PRIMARY_URI_PATTERN_URI);
         if (urlValue != null){
             UriPattern urlPattern = getUriPattern(repositoryConnection, (Resource)urlValue, 
                     systemCode, UriPatternType.mainUrlPattern);
@@ -370,7 +370,7 @@ public class BridgeDBRdfHandler extends RdfBase{
         String url = dataSource.getKnownUrl("$id");
         UriPattern urlPattern = UriPattern.byPattern(url);
         if (urlPattern != null){
-            repositoryConnection.add(id, BridgeDBConstants.HAS_URL_PATTERN_URI, urlPattern.getResourceId());
+            repositoryConnection.add(id, BridgeDBConstants.HAS_PRIMARY_URI_PATTERN_URI, urlPattern.getResourceId());
         }
 
         String identifersOrgSimple = dataSource.getIdentifiersOrgUri("$id");

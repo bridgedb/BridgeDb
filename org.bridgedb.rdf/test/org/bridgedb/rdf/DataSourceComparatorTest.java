@@ -69,7 +69,7 @@ public class DataSourceComparatorTest {
     public void testGetResourceId() {
         Reporter.println("getResourceId");
         DataSource dataSource = DataSource.getByFullName("DataSourceUrisTest_testGetResourceId");
-        Resource expResult = new URIImpl("http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#DataSource_DataSourceUrisTest_testGetResourceId");
+        Resource expResult = new URIImpl("http://vocabularies.bridgedb.org/ops#DataSource_DataSourceUrisTest_testGetResourceId");
         Resource result = BridgeDBRdfHandler.asResource(dataSource);
         assertEquals(expResult, result);
     }
