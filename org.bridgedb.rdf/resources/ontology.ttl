@@ -11,12 +11,12 @@
                                         
                                         rdfs:label "BridgeDb DataSource ontology"@en ;
                                         
-                                        owl:versionInfo "2.0.3" ;
+                                        owl:versionInfo "2.1.0" ;
                                         
                                         rdfs:seeAlso <http://bridgedb.org/> ,
                                                      <http://www.openphacts.org/specs/2013/WD-datadesc-20130912/#bridgedb> ;
                                         
-                                        owl:versionIRI <https://cdn.rawgit.com/bridgedb/BridgeDb/openphacts_2.0.3/org.bridgedb.rdf/resources/ontology.ttl> .
+                                        owl:versionIRI <https://rawgit.com/bridgedb/BridgeDb/openphacts_2.1.0/org.bridgedb.rdf/resources/ontology.ttl> .
 
 
 #################################################################
