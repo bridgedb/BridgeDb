@@ -315,12 +315,6 @@
 
 
 
-###  http://vocabularies.bridgedb.org/ops#uriMapping
-
-:uriMapping rdf:type owl:DatatypeProperty .
-
-
-
 ###  http://vocabularies.bridgedb.org/ops#urnBase
 
 :urnBase rdf:type owl:DatatypeProperty ;
