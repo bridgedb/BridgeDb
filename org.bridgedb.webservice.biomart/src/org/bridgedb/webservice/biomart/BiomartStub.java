@@ -259,6 +259,8 @@ public final class BiomartStub
             	if (idOnly == (displayName.endsWith("ID")
             			|| displayName.endsWith("Accession")
             			|| name.endsWith("id")
+            			|| name.endsWith("name")
+            			|| name.endsWith("symbol")
             			|| name.endsWith("accession")
             			|| name.endsWith("ensembl_gene"))) {
             		result.add(name);
