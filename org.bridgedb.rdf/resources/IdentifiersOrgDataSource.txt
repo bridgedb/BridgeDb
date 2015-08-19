@@ -82,10 +82,10 @@ CharProt	charprot		http://www.jcvi.org/charprotdb/index.cgi/view/$id	CH_001923	u
 ChEBI	Ce	http://www.ebi.ac.uk/chebi/	http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id	CHEBI:36927	metabolite		1	urn:miriam:chebi	^CHEBI:\d+$	ChEBI
 ChemBank	chembank		http://chembank.broadinstitute.org/chemistry/viewMolecule.htm?cbid=$id	1000000	unknown		1	urn:miriam:chembank	^\d+$	
 ChEMBL compound	ChEMBLCompound	https://www.ebi.ac.uk/chembldb/	https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/$id	CHEMBL308052	metabolite		1	urn:miriam:chembl.compound	^CHEMBL\d+$	
-Chembl Id	ChemblId		http://data.kasabi.com/dataset/chembl-rdf/chemblid/$id	CHEMBL6329	unknown		1			
-Chembl Molecule	ChemblMolecule		http://data.kasabi.com/dataset/chembl-rdf/molecule/m$id	1	unknown		1			
-ChEMBL target	chembl.target		https://www.ebi.ac.uk/chembl//target/inspect/$id	CHEMBL3467	unknown		1	urn:miriam:chembl.target	^CHEMBL\d+$	
-Chembl Target	ChemblTarget		http://data.kasabi.com/dataset/chembl-rdf/target/t$id	1	unknown		1			
+Chembl Id	ChemblId		http://linkedchemistry.info/chembl/chemblid/$id	CHEMBL6329	unknown		1			
+Chembl Molecule	ChemblMolecule		http://linkedchemistry.info/chembl/molecule/m$id	1	unknown		1			
+ChEMBL target	chembl.target		https://www.ebi.ac.uk/chembl/target/inspect/$id	CHEMBL3467	unknown		1	urn:miriam:chembl.target	^CHEMBL\d+$	
+Chembl Target	ChemblTarget		http://linkedchemistry.info/chembl/target/t$id	1	unknown		1			
 ChEMBL target component	Chembl16TargetComponent	https://www.ebi.ac.uk/chembldb/	http://rdf.ebi.ac.uk/resource/chembl/targetcomponent/$id	CHEMBL_TC_3597	unknown		1			
 ChemDB	chemdb		http://cdb.ics.uci.edu/cgibin/ChemicalDetailWeb.py?chemical_id=$id	3966782	unknown		1	urn:miriam:chemdb	^\d+$	
 Chemical Component Dictionary	pdb-ccd		http://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/$id	AB0	unknown		1	urn:miriam:pdb-ccd	^\w{3}$	

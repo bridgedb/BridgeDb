@@ -152,8 +152,7 @@ bridgeDB:DataSource_Chembl_Id a bridgeDB:DataSource ;
 	bridgeDB:idExample "CHEMBL6329" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
-	bridgeDB:hasPrimaryUriPattern <http://data.kasabi.com/dataset/chembl-rdf/chemblid/$id> ;
-    bridgeDB:hasUriPattern <http://linkedchemistry.info/chembl/$id> .
+        bridgeDB:hasPrimaryUriPattern <http://linkedchemistry.info/chembl/chemblid/$id> .
 
 bridgeDB:DataSource_Chembl_Molecule a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl Molecule" ;
@@ -161,9 +160,8 @@ bridgeDB:DataSource_Chembl_Molecule a bridgeDB:DataSource ;
 	bridgeDB:idExample "1" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
-	bridgeDB:hasPrimaryUriPattern <http://data.kasabi.com/dataset/chembl-rdf/molecule/m$id> ;
 	bridgeDB:hasUriPattern <http://chem2bio2rdf.org/chembl/resource/chembl_compounds/$id> ;
-	bridgeDB:hasUriPattern <http://linkedchemistry.info/chembl/molecule/m$id> .
+	bridgeDB:hasPrimaryUriPattern <http://linkedchemistry.info/chembl/molecule/m$id> .
 
 bridgeDB:DataSource_Chembl_Protclass a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl Protclass" ;
@@ -180,9 +178,8 @@ bridgeDB:DataSource_Chembl_Target a bridgeDB:DataSource ;
 	bridgeDB:idExample "1" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
-	bridgeDB:hasPrimaryUriPattern <http://data.kasabi.com/dataset/chembl-rdf/target/t$id> ;
 	bridgeDB:hasUriPattern <http://chem2bio2rdf.org/chembl/resource/chembl_targets/$id> ;
-	bridgeDB:hasUriPattern <http://linkedchemistry.info/chembl/target/t$id> ;
+	bridgeDB:hasPrimaryUriPattern <http://linkedchemistry.info/chembl/target/t$id> ;
 	bridgeDB:hasUriPattern <http://rdf.ebi.ac.uk/resource/chembl/target/$id> .
 
 bridgeDB:DataSource_ChEMBL_target_component a bridgeDB:DataSource ;
