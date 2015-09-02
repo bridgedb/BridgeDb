@@ -92,4 +92,13 @@ public class DataSourceTxtTest {
     	Assert.assertTrue(wikidata.urlPatternKnown());
     	Assert.assertEquals("Cl", wikidata.getSystemCode());
     }
+
+    @Test
+    public void testKNApSAcK() throws Exception {
+    	DataSourceTxt.init();
+    	DataSource wikidata = DataSource.getExistingByFullName("KNApSAcK");
+    	Assert.assertNotNull(wikidata);
+    	Assert.assertTrue(wikidata.urlPatternKnown());
+    	Assert.assertEquals("Cks", wikidata.getSystemCode());
+    }
 }
