@@ -83,4 +83,13 @@ public class DataSourceTxtTest {
     	Assert.assertTrue(wikidata.urlPatternKnown());
     	Assert.assertEquals("Wd", wikidata.getSystemCode());
     }
+
+    @Test
+    public void testChEMBL() throws Exception {
+    	DataSourceTxt.init();
+    	DataSource wikidata = DataSource.getExistingByFullName("ChEMBL compound");
+    	Assert.assertNotNull(wikidata);
+    	Assert.assertTrue(wikidata.urlPatternKnown());
+    	Assert.assertEquals("Cl", wikidata.getSystemCode());
+    }
 }
