@@ -4356,7 +4356,8 @@ bridgeDB:DataSource_ORCID a bridgeDB:DataSource ;
 	bridgeDB:idExample "0000-0002-6309-7327" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
-	bridgeDB:hasPrimaryUriPattern <https://orcid.org/$id> ;
+	bridgeDB:hasPrimaryUriPattern <http://orcid.org/$id> ;
+	bridgeDB:hasUriPattern <https://orcid.org/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/orcid/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/orcid/$id> ;
 	bridgeDB:hasRegexPattern "^\\d{4}-\\d{4}-\\d{4}-\\d{3}(\\d|X)$" .
