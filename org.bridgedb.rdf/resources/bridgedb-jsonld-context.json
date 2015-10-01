@@ -1,6 +1,6 @@
 {
   "@context": {
-    "@vocab": "http://bridgedb.org/input-vocab/",
+    "@vocab": "http://vocabularies.bridgedb.org/ops#",
     "Dataset": {
       "@id": "void:Dataset",
       "@type": "@id"
