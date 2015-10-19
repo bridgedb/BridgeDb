@@ -85,6 +85,15 @@ public class DataSourceTxtTest {
     }
 
     @Test
+    public void testWikidataBySystemCode() throws Exception {
+    	DataSourceTxt.init();
+    	DataSource wikidata = DataSource.getExistingBySystemCode("Wd");
+    	Assert.assertNotNull(wikidata);
+    	Assert.assertTrue(wikidata.urlPatternKnown());
+    	Assert.assertEquals("Wikidata", wikidata.getFullName());
+    }
+
+    @Test
     public void testChEMBL() throws Exception {
     	DataSourceTxt.init();
     	DataSource wikidata = DataSource.getExistingByFullName("ChEMBL compound");
