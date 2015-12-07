@@ -4129,6 +4129,7 @@ bridgeDB:DataSource_nextProt a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasPrimaryUriPattern <http://www.nextprot.org/db/entry/$id> ;
+	bridgeDB:hasUriPattern <http://www.nextprot.org/db/search#$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/nextprot/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/nextprot/$id> ;
 	bridgeDB:hasRegexPattern "^NX_\\w+" .
@@ -11787,6 +11788,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://www.nextprot.org/db/entry/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.nextprot.org/db/entry/" .
+
+<http://www.nextprot.org/db/entry/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://www.nextprot.org/db/search#" .
 
 <http://www.nlm.nih.gov/cgi/mesh/2012/MB_cgi?mode=&index=$id&view=expanded> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.nlm.nih.gov/cgi/mesh/2012/MB_cgi?mode=&index=" ;
