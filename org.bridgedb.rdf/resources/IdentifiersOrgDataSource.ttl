@@ -950,7 +950,7 @@ bridgeDB:DataSource_ChemBank a bridgeDB:DataSource ;
 
 bridgeDB:DataSource_ChEMBL_compound a bridgeDB:DataSource ;
 	bridgeDB:fullName "ChEMBL compound" ;
-	bridgeDB:systemCode "chembl.compound" ;
+	bridgeDB:systemCode "linkedchemistry.chembl.compound" ;
 	bridgeDB:mainUrl "https://www.ebi.ac.uk/chembldb/" ;
 	bridgeDB:idExample "CHEMBL308052" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
