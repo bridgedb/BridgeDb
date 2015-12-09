@@ -81,7 +81,7 @@ CGSC Strain	cgsc		http://cgsc.biology.yale.edu/Strain.php?ID=$id	11042	unknown		
 CharProt	charprot		http://www.jcvi.org/charprotdb/index.cgi/view/$id	CH_001923	unknown		1	urn:miriam:charprot	^CH_\d+$	
 ChEBI	Ce	http://www.ebi.ac.uk/chebi/	http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id	CHEBI:36927	metabolite		1	urn:miriam:chebi	^CHEBI:\d+$	ChEBI
 ChemBank	chembank		http://chembank.broadinstitute.org/chemistry/viewMolecule.htm?cbid=$id	1000000	unknown		1	urn:miriam:chembank	^\d+$	
-ChEMBL compound	ChEMBLCompound	https://www.ebi.ac.uk/chembldb/	https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/$id	CHEMBL308052	metabolite		1	urn:miriam:chembl.compound	^CHEMBL\d+$	
+ChEMBL compound	Cl	https://www.ebi.ac.uk/chembldb/	https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/$id	CHEMBL308052	metabolite		1	urn:miriam:chembl.compound	^CHEMBL\d+$	
 Chembl Id	ChemblId		http://linkedchemistry.info/chembl/chemblid/$id	CHEMBL6329	unknown		1			
 Chembl Molecule	ChemblMolecule		http://linkedchemistry.info/chembl/molecule/m$id	1	unknown		1			
 ChEMBL target	chembl.target		https://www.ebi.ac.uk/chembl/target/inspect/$id	CHEMBL3467	unknown		1	urn:miriam:chembl.target	^CHEMBL\d+$	

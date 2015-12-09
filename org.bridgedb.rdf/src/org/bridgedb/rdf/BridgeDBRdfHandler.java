@@ -284,13 +284,13 @@ public class BridgeDBRdfHandler extends RdfBase{
             parseRdfInputStream(inputStream);
         } catch (IOException ex) {
             throw new BridgeDBException ("Error accessing file " + file.getAbsolutePath(), ex);
-        }
-        UriPattern.checkRegexPatterns();
+        }        
     }
     
-    static void parseRdfInputStream(InputStream stream) throws BridgeDBException {
+    public static void parseRdfInputStream(InputStream stream) throws BridgeDBException {
         BridgeDBRdfHandler handler = new BridgeDBRdfHandler();
         handler.doParseRdfInputStream(stream);
+        UriPattern.checkRegexPatterns();
     }
     
     public static void main(String[] args) throws RepositoryException, BridgeDBException, IOException, RDFParseException, RDFHandlerException {
