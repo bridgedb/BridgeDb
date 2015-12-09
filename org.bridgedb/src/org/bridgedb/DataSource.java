@@ -342,7 +342,7 @@ public final class DataSource
                 if (oldUrlPattern.equals(urlPattern)){
                     return this;
                 }
-                throw new IllegalArgumentException("DataSource " + current + " already has a URl Pattern of " 
+                throw new IllegalArgumentException("DataSource " + current + " already has a URL Pattern of " 
                         + oldUrlPattern + " so unable to set to " + urlPattern);
             }
             int pos = urlPattern.indexOf("$id");
