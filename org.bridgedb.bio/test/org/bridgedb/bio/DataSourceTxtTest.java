@@ -94,14 +94,24 @@ public class DataSourceTxtTest {
     }
 
     @Test
-    public void testChEMBL() throws Exception {
+    public void testChEMBLCompound() throws Exception {
     	DataSourceTxt.init();
     	DataSource wikidata = DataSource.getExistingByFullName("ChEMBL compound");
     	Assert.assertNotNull(wikidata);
     	Assert.assertTrue(wikidata.urlPatternKnown());
-    	Assert.assertEquals("Cl", wikidata.getSystemCode());
+    	Assert.assertEquals("chembl.compound", wikidata.getSystemCode());
     }
 
+    @Test
+    public void testChEMBLTarget() throws Exception {
+    	DataSourceTxt.init();
+    	DataSource wikidata = DataSource.getExistingByFullName("ChEMBL target");
+    	Assert.assertNotNull(wikidata);
+    	Assert.assertTrue(wikidata.urlPatternKnown());
+    	Assert.assertEquals("chembl.target", wikidata.getSystemCode());
+    }
+
+    
     @Test
     public void testKNApSAcK() throws Exception {
     	DataSourceTxt.init();
