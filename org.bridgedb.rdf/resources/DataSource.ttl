@@ -652,7 +652,7 @@ bridgeDB:DataSource_KEGG_Reaction a bridgeDB:DataSource ;
 	bridgeDB:mainUrl "http://www.genome.jp/kegg/reaction/" ;
 	bridgeDB:idExample "R00100" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "protein" ;
+	bridgeDB:type "pathway" ;
 	bridgeDB:hasPrimaryUriPattern <http://www.genome.jp/dbget-bin/www_bget?rn:$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/kegg.reaction/$id> ;
 	bridgeDB:hasUriPattern <http://bio2rdf.org/rn:$id> .

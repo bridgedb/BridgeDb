@@ -295,7 +295,7 @@ KEGG Metagenome	kegg.metagenome	http://www.genome.jp/kegg/catalog/org_list3.html
 KEGG Module	kegg.module		http://www.kegg.jp/entry/$id	M00002	unknown		1	urn:miriam:kegg.module	^([a-z]{3,5}_)?M\d{5}$	
 KEGG Orthology	kegg.orthology	http://www.genome.jp/kegg/ko.html	http://www.genome.jp/dbget-bin/www_bget?ko+$id	K00001	protein		1	urn:miriam:kegg.orthology	^K\d+$	
 KEGG Pathway	Kp	http://www.genome.jp/kegg/pathway.html	http://www.genome.jp/dbget-bin/www_bget?pathway+$id	hsa00620	pathway		1	urn:miriam:kegg.pathway	^\w{2,4}\d{5}$	KEGG Pathway
-KEGG Reaction	Rk	http://www.genome.jp/kegg/reaction/	http://www.genome.jp/dbget-bin/www_bget?rn:$id	R00100	protein		1	urn:miriam:kegg.reaction	^R\d+$	KEGG Reaction
+KEGG Reaction	Rk	http://www.genome.jp/kegg/reaction/	http://www.genome.jp/dbget-bin/www_bget?rn:$id	R00100	pathway		1	urn:miriam:kegg.reaction	^R\d+$	KEGG Reaction
 KiSAO	biomodels.kisao		http://purl.bioontology.org/ontology/KISAO/kisao:$id	KISAO_0000057	unknown		1	urn:miriam:biomodels.kisao	^KISAO_\d+$	
 KnapSack	knapsack		http://kanaya.naist.jp/knapsack_jsp/information.jsp?word=$id	C00000001	unknown		1	urn:miriam:knapsack	^C\d{8}	
 Ligand Expo	ligandexpo		http://ligand-depot.rutgers.edu/pyapps/ldHandler.py?formid=cc-index-search&target=$id&operation=ccid	ABC	unknown		1	urn:miriam:ligandexpo	^(\w){3}$	
