@@ -136,8 +136,6 @@ public class GraphResolver {
         GraphResolver gr = getInstance();
         gr.addPatterns("http://www.conceptwiki.org", "http://www.conceptwiki.org/concept/$id");
         gr.addPatterns("http://www.chemspider.com", "http://rdf.chemspider.com/$id");
-        gr.addPatterns("http://data.kasabi.com/dataset/chembl-rdf","http://data.kasabi.com/dataset/chembl-rdf/molecule/m$id");
-        gr.addPatterns("http://data.kasabi.com/dataset/chembl-rdf","http://data.kasabi.com/dataset/chembl-rdf/target/t$id");
     }
 
     private Set<RegexUriPattern> getAllowedPatterns(String graph) {
