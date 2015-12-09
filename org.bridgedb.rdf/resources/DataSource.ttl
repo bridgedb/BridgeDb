@@ -142,7 +142,7 @@ bridgeDB:DataSource_ChEMBL_compound a bridgeDB:DataSource ;
 	bridgeDB:idExample "CHEMBL308052" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
-	bridgeDB:hasPrimaryUriPattern <https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.ebi.ac.uk/chembl/compound/inspect/$id> ;
 	bridgeDB:hasUriPattern <http://rdf.ebi.ac.uk/resource/chembl/molecule/$id>;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chembl.compound/$id> .
 
