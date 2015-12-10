@@ -992,7 +992,7 @@ bridgeDB:DataSource_ChEMBL_target a bridgeDB:DataSource ;
 	bridgeDB:hasPrimaryUriPattern <http://rdf.ebi.ac.uk/resource/chembl/target/$id> ;
 	bridgeDB:hasUriPattern 
 		<https://www.ebi.ac.uk/chembl/target/inspect/$id>,
-		<https://www.ebi.ac.uk/chembldb/target/inspect/$id>
+		<https://www.ebi.ac.uk/chembldb/target/inspect/$id>,
 		<https://www.ebi.ac.uk/chembl/index.php/target/inspect/$id>,
 		<https://www.ebi.ac.uk/chembldb/index.php/target/inspect/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chembl.target/$id> ;
@@ -1721,7 +1721,7 @@ bridgeDB:DataSource_EMBL a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/ena.embl/$id> ;
 	bridgeDB:hasRegexPattern "^[A-Z]+[0-9]+$" ;
 	dcterms:alternative "European Nucleotide Archive" ;
-	bridgeDB:hasUriPattern <http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-page+EntryPage+-e+[EMBL:$id]+-view+EmblEntry> .
+	bridgeDB:hasUriPattern <http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-page+EntryPage+-e+%5BEMBL:$id%5D+-view+EmblEntry> .
 
 bridgeDB:DataSource_Ensembl a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl" ;
@@ -5253,7 +5253,7 @@ bridgeDB:DataSource_RESID a bridgeDB:DataSource ;
 	bridgeDB:idExample "AA0001" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "protein" ;
-	bridgeDB:hasPrimaryUriPattern <http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+6JSUg1NA6u4+-e+[RESID:'$id']> ;
+	bridgeDB:hasPrimaryUriPattern <http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+6JSUg1NA6u4+-e+%5BRESID:%27$id%27%5D> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/resid/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/resid/$id> ;
 	bridgeDB:hasRegexPattern "^AA\\d{4}$" ;
@@ -11001,13 +11001,13 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	bridgeDB:hasPrefix "http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+6JSUg1NA6u4+-e+%5BRESID%3A%27" ;
 	bridgeDB:hasPostfix "%27%5D" .
 
-<http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+6JSUg1NA6u4+-e+[RESID:'$id']> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+6JSUg1NA6u4+-e+[RESID:'" ;
-	bridgeDB:hasPostfix "']" .
+<http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+6JSUg1NA6u4+-e+%5BRESID:%27$id%27%5D> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+6JSUg1NA6u4+-e+%5BRESID:%27" ;
+	bridgeDB:hasPostfix "%27%5D" .
 
-<http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-page+EntryPage+-e+[EMBL:$id]+-view+EmblEntry> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-page+EntryPage+-e+[EMBL:" ;
-	bridgeDB:hasPostfix "]+-view+EmblEntry" .
+<http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-page+EntryPage+-e+%5BEMBL:$id%5D+-view+EmblEntry> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-page+EntryPage+-e+%5BEMBL:" ;
+	bridgeDB:hasPostfix "%5D+-view+EmblEntry" .
 
 <http://stitch.embl.de/interactions/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://stitch.embl.de/interactions/" .
@@ -11813,7 +11813,7 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://www.nextprot.org/db/entry/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.nextprot.org/db/entry/" .
 
-<http://www.nextprot.org/db/entry/$id> a bridgeDB:UriPattern ;
+<http://www.nextprot.org/db/search#$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.nextprot.org/db/search#" .
 
 <http://www.nlm.nih.gov/cgi/mesh/2012/MB_cgi?mode=&index=$id&view=expanded> a bridgeDB:UriPattern ;
