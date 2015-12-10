@@ -1346,3 +1346,25 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	bridgeDB:code "Zm" ;
 	bridgeDB:shortName "Maize" ;
 	bridgeDB:latinName "Zea mays" .
+
+bridgeDB:DataSource_nextProt a bridgeDB:DataSource ;
+        bridgeDB:fullName "nextProt" ;
+        bridgeDB:systemCode "nextprot" ;
+        bridgeDB:idExample "NX_O00165" ;
+        bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+        bridgeDB:type "unknown" ;
+        bridgeDB:hasPrimaryUriPattern <http://www.nextprot.org/db/entry/$id> ;
+        bridgeDB:hasUriPattern <http://www.nextprot.org/db/search#$id> ;
+        bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/nextprot/$id> ;
+        bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/nextprot/$id> ;
+        bridgeDB:hasRegexPattern "^NX_\\w+" .
+
+<http://identifiers.org/nextprot/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://identifiers.org/nextprot/" .
+<http://info.identifiers.org/nextprot/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://info.identifiers.org/nextprot/" .
+<http://www.nextprot.org/db/entry/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://www.nextprot.org/db/entry/" .
+<http://www.nextprot.org/db/search#$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://www.nextprot.org/db/search#" .
+
