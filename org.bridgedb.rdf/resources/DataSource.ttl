@@ -136,6 +136,11 @@ bridgeDB:DataSource_ChemIDplus a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chemidplus/$id> .
 
 bridgeDB:DataSource_ChEMBL_compound a bridgeDB:DataSource ;
+	bridgeDB:hasPrimaryUriPattern <https://www.ebi.ac.uk/chembl/compound/inspect/$id> ;
+	bridgeDB:hasUriPattern <http://rdf.ebi.ac.uk/resource/chembl/molecule/$id>;
+	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chembl.compound/$id> .
+
+bridgeDB:DataSource_ChEMBL_compound a bridgeDB:DataSource ;
 	bridgeDB:fullName "ChEMBL compound" ;
 	bridgeDB:systemCode "Cl" ;
 	bridgeDB:mainUrl "https://www.ebi.ac.uk/chembldb/" ;
@@ -143,8 +148,43 @@ bridgeDB:DataSource_ChEMBL_compound a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
 	bridgeDB:hasPrimaryUriPattern <https://www.ebi.ac.uk/chembl/compound/inspect/$id> ;
-	bridgeDB:hasUriPattern <http://rdf.ebi.ac.uk/resource/chembl/molecule/$id>;
-	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chembl.compound/$id> .
+	bridgeDB:hasUriPattern 
+		<http://rdf.ebi.ac.uk/resource/chembl/molecule/$id>,
+		<https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/$id>, 
+		<https://www.ebi.ac.uk/chembl/index.php/compound/inspect/$id>, 
+		<https://www.ebi.ac.uk/chembldb/compound/inspect/$id>,
+		<https://www.ebi.ac.uk/chembl/compound/inspect/$id> ;
+	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chembl.compound/$id> ;
+	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/chembl.compound/$id> ;
+	bridgeDB:hasRegexPattern "^CHEMBL\\d+$" .
+
+
+<http://identifiers.org/chembl.compound/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://identifiers.org/chembl.compound/" .
+
+<http://info.identifiers.org/chembl.compound/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://info.identifiers.org/chembl.compound/" .
+
+
+<https://www.ebi.ac.uk/chembl/compound/inspect/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://www.ebi.ac.uk/chembl/compound/inspect/" .
+
+<https://www.ebi.ac.uk/chembldb/compound/inspect/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://www.ebi.ac.uk/chembldb/compound/inspect/" .
+
+<https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/" .
+
+<https://www.ebi.ac.uk/chembldb/compound/inspect/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://www.ebi.ac.uk/chembldb/compound/inspect/" .
+
+
+<http://rdf.ebi.ac.uk/resource/chembl/molecule/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://rdf.ebi.ac.uk/resource/chembl/molecule/" .
+
+
+
+
 
 bridgeDB:DataSource_Chembl_Id a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl Id" ;
@@ -172,15 +212,9 @@ bridgeDB:DataSource_Chembl_Protclass a bridgeDB:DataSource ;
 	bridgeDB:hasPrimaryUriPattern <http://rdf.ebi.ac.uk/resource/chembl/protclass/$id> ;
   bridgeDB:hasRegexPattern "^CHEMBL_PC_\\d+$" .
 
-bridgeDB:DataSource_Chembl_Target a bridgeDB:DataSource ;
-	bridgeDB:fullName "Chembl Target" ;
-	bridgeDB:systemCode "ChemblTarget" ;
-	bridgeDB:idExample "1" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-	bridgeDB:hasUriPattern <http://chem2bio2rdf.org/chembl/resource/chembl_targets/$id> ;
-	bridgeDB:hasPrimaryUriPattern <http://linkedchemistry.info/chembl/target/t$id> ;
-	bridgeDB:hasUriPattern <http://rdf.ebi.ac.uk/resource/chembl/target/$id> .
+
+
+
 
 bridgeDB:DataSource_ChEMBL_target_component a bridgeDB:DataSource ;
 	bridgeDB:fullName "ChEMBL target component" ;
