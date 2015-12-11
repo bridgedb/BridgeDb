@@ -182,26 +182,52 @@ bridgeDB:DataSource_ChEMBL_compound a bridgeDB:DataSource ;
 <http://rdf.ebi.ac.uk/resource/chembl/molecule/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://rdf.ebi.ac.uk/resource/chembl/molecule/" .
 
+bridgeDB:DataSource_ChEMBL_target a bridgeDB:DataSource ;
+       bridgeDB:fullName "ChEMBL target" ;
+       bridgeDB:systemCode "chembl.target" ;
+       bridgeDB:idExample "CHEMBL3467" ;
+       bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+       bridgeDB:type "unknown" ;
+       bridgeDB:hasPrimaryUriPattern <https://www.ebi.ac.uk/chembl/target/inspect/$id> ;
+       bridgeDB:hasUriPattern 
+                # chembl//target (sic) was for a while in IMS and at
+                # http://identifiers.org/chembl.target/
+                <https://www.ebi.ac.uk/chembl//target/inspect/$id> ,
+		<http://rdf.ebi.ac.uk/resource/chembl/target/$id>,
+		<https://www.ebi.ac.uk/chembldb/index.php/target/inspect/$id>, 
+		<https://www.ebi.ac.uk/chembl/index.php/target/inspect/$id>, 
+		<https://www.ebi.ac.uk/chembldb/target/inspect/$id>,
+		<https://www.ebi.ac.uk/chembl/target/inspect/$id> ;
+       bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chembl.target/$id> ;
+       bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/chembl.target/$id> ;
+       bridgeDB:hasRegexPattern "^CHEMBL\\d+$" .
 
 
 
+<http://identifiers.org/chembl.target/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://identifiers.org/chembl.target/" .
 
-bridgeDB:DataSource_Chembl_Id a bridgeDB:DataSource ;
-	bridgeDB:fullName "Chembl Id" ;
-	bridgeDB:systemCode "ChemblId" ;
-	bridgeDB:idExample "CHEMBL6329" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-        bridgeDB:hasPrimaryUriPattern <http://linkedchemistry.info/chembl/chemblid/$id> .
+<http://info.identifiers.org/chembl.target/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://info.identifiers.org/chembl.target/" .
 
-bridgeDB:DataSource_Chembl_Molecule a bridgeDB:DataSource ;
-	bridgeDB:fullName "Chembl Molecule" ;
-	bridgeDB:systemCode "ChemblMolecule" ;
-	bridgeDB:idExample "1" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-	bridgeDB:hasUriPattern <http://chem2bio2rdf.org/chembl/resource/chembl_compounds/$id> ;
-	bridgeDB:hasPrimaryUriPattern <http://linkedchemistry.info/chembl/molecule/m$id> .
+
+<https://www.ebi.ac.uk/chembl/target/inspect/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://www.ebi.ac.uk/chembl/target/inspect/" .
+
+<https://www.ebi.ac.uk/chembldb/target/inspect/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://www.ebi.ac.uk/chembldb/target/inspect/" .
+
+<https://www.ebi.ac.uk/chembldb/index.php/target/inspect/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://www.ebi.ac.uk/chembldb/index.php/target/inspect/" .
+
+<https://www.ebi.ac.uk/chembldb/target/inspect/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://www.ebi.ac.uk/chembldb/target/inspect/" .
+
+
+<http://rdf.ebi.ac.uk/resource/chembl/target/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://rdf.ebi.ac.uk/resource/chembl/target/" .
+
+
 
 bridgeDB:DataSource_Chembl_Protclass a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl Protclass" ;
@@ -215,15 +241,18 @@ bridgeDB:DataSource_Chembl_Protclass a bridgeDB:DataSource ;
 
 
 
-
 bridgeDB:DataSource_ChEMBL_target_component a bridgeDB:DataSource ;
 	bridgeDB:fullName "ChEMBL target component" ;
-    bridgeDB:systemCode "Chembl16TargetComponent" ;
+        bridgeDB:systemCode "chembl.targetcomponent" ;
 	bridgeDB:mainUrl "https://www.ebi.ac.uk/chembldb/" ;
 	bridgeDB:idExample "CHEMBL_TC_3597" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasPrimaryUriPattern <http://rdf.ebi.ac.uk/resource/chembl/targetcomponent/$id> .
+
+<http://rdf.ebi.ac.uk/resource/chembl/targetcomponent/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://rdf.ebi.ac.uk/resource/chembl/targetcomponent/" .
+
 
 bridgeDB:DataSource_Chemspider a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chemspider" ;
