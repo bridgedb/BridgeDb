@@ -38,9 +38,9 @@ respective mappers to find clues which libraries are needed by which service.
 Contact
 -------
 
-Website, wiki and bug tracker: http://www.bridgedb.org
-Mailing list: http://groups.google.com/group/bridgedb-discuss/
-Source code can be obtained from http://svn.bigcat.unimaas.nl/bridgedb
+* Website, wiki and bug tracker: http://www.bridgedb.org
+* Mailing list: http://groups.google.com/group/bridgedb-discuss/
+* Source code can be obtained from http://github.com/bridgedb/BridgeDb
 
 Authors
 -------
