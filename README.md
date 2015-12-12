@@ -80,7 +80,7 @@ License
 
 BridgeDb is free and open source. It is available under
 the conditions of the Apache 2.0 License. 
-See License-2.0.txt for details.
+See LICENSE-2.0.txt for details.
 
 Configuration For the URI/OpenPHACTS packages ONLY!
 =============
