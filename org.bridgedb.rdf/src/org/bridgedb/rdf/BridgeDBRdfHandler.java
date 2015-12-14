@@ -140,13 +140,13 @@ public class BridgeDBRdfHandler extends RdfBase{
             builder.mainUrl(mainUrl);
         }
   
-        Value organismId = getPossibleSingleton(repositoryConnection, dataSourceId, BridgeDBConstants.ORGANISM_URI);
+        Value organismId = getPossibleSingleton(repositoryConnection, dataSourceId, BridgeDBConstants.ABOUT_ORGANISM_URI);
         if (organismId != null){
             Object organism = OrganismRdf.byRdfResource(organismId);
             builder.organism(organism);
         }
             
-        String primary = getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.PRIMAY_URI);
+        String primary = getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.PRIMARY_URI);
         if (primary != null){
             builder.primary(Boolean.parseBoolean(primary));
         }
@@ -165,7 +165,7 @@ public class BridgeDBRdfHandler extends RdfBase{
             regex = DataSourcePatterns.getPatterns().get(builder.asDataSource());
         }
         
-        Value urlValue = getPossibleSingleton(repositoryConnection, dataSourceId, BridgeDBConstants.HAS_URL_PATTERN_URI);
+        Value urlValue = getPossibleSingleton(repositoryConnection, dataSourceId, BridgeDBConstants.HAS_PRIMARY_URI_PATTERN_URI);
         if (urlValue != null){
             UriPattern urlPattern = getUriPattern(repositoryConnection, (Resource)urlValue, 
                     systemCode, UriPatternType.mainUrlPattern);
@@ -284,13 +284,13 @@ public class BridgeDBRdfHandler extends RdfBase{
             parseRdfInputStream(inputStream);
         } catch (IOException ex) {
             throw new BridgeDBException ("Error accessing file " + file.getAbsolutePath(), ex);
-        }
-        UriPattern.checkRegexPatterns();
+        }        
     }
     
-    static void parseRdfInputStream(InputStream stream) throws BridgeDBException {
+    public static void parseRdfInputStream(InputStream stream) throws BridgeDBException {
         BridgeDBRdfHandler handler = new BridgeDBRdfHandler();
         handler.doParseRdfInputStream(stream);
+        UriPattern.checkRegexPatterns();
     }
     
     public static void main(String[] args) throws RepositoryException, BridgeDBException, IOException, RDFParseException, RDFHandlerException {
@@ -357,9 +357,9 @@ public class BridgeDBRdfHandler extends RdfBase{
         }
  
         if (dataSource.isPrimary()){
-            repositoryConnection.add(id, BridgeDBConstants.PRIMAY_URI, BooleanLiteralImpl.TRUE);
+            repositoryConnection.add(id, BridgeDBConstants.PRIMARY_URI, BooleanLiteralImpl.TRUE);
         } else {
-            repositoryConnection.add(id, BridgeDBConstants.PRIMAY_URI, BooleanLiteralImpl.FALSE);
+            repositoryConnection.add(id, BridgeDBConstants.PRIMARY_URI, BooleanLiteralImpl.FALSE);
         }
  
         if (dataSource.getType() != null){
@@ -370,7 +370,7 @@ public class BridgeDBRdfHandler extends RdfBase{
         String url = dataSource.getKnownUrl("$id");
         UriPattern urlPattern = UriPattern.byPattern(url);
         if (urlPattern != null){
-            repositoryConnection.add(id, BridgeDBConstants.HAS_URL_PATTERN_URI, urlPattern.getResourceId());
+            repositoryConnection.add(id, BridgeDBConstants.HAS_PRIMARY_URI_PATTERN_URI, urlPattern.getResourceId());
         }
 
         String identifersOrgSimple = dataSource.getIdentifiersOrgUri("$id");
@@ -386,7 +386,7 @@ public class BridgeDBRdfHandler extends RdfBase{
 
         if (dataSource.getOrganism() != null){
             Organism organism = (Organism)dataSource.getOrganism();
-            repositoryConnection.add(id, BridgeDBConstants.ORGANISM_URI, OrganismRdf.getResourceId(organism));
+            repositoryConnection.add(id, BridgeDBConstants.ABOUT_ORGANISM_URI, OrganismRdf.getResourceId(organism));
         }
         
         Pattern pattern = DataSourcePatterns.getPatterns().get(dataSource);
@@ -443,7 +443,7 @@ public class BridgeDBRdfHandler extends RdfBase{
     
     private static void writeRDF(RepositoryConnection repositoryConnection, RDFWriter rdfWriter) 
             throws IOException, RDFHandlerException, RepositoryException{ 
-        rdfWriter.handleNamespace(BridgeDBConstants.PREFIX_NAME1, BridgeDBConstants.PREFIX);
+        rdfWriter.handleNamespace(BridgeDBConstants.PREFIX_NAME, BridgeDBConstants.PREFIX);
         rdfWriter.handleNamespace(DCatConstants.PREFIX_NAME, DCatConstants.voidns);
         rdfWriter.handleNamespace(DCTermsConstants.PREFIX_NAME, DCTermsConstants.voidns);
         rdfWriter.handleNamespace("", DEFAULT_BASE_URI);

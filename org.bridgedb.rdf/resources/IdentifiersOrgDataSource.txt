@@ -81,12 +81,12 @@ CGSC Strain	cgsc		http://cgsc.biology.yale.edu/Strain.php?ID=$id	11042	unknown		
 CharProt	charprot		http://www.jcvi.org/charprotdb/index.cgi/view/$id	CH_001923	unknown		1	urn:miriam:charprot	^CH_\d+$	
 ChEBI	Ce	http://www.ebi.ac.uk/chebi/	http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id	CHEBI:36927	metabolite		1	urn:miriam:chebi	^CHEBI:\d+$	ChEBI
 ChemBank	chembank		http://chembank.broadinstitute.org/chemistry/viewMolecule.htm?cbid=$id	1000000	unknown		1	urn:miriam:chembank	^\d+$	
-ChEMBL compound	ChEMBLCompound	https://www.ebi.ac.uk/chembldb/	https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/$id	CHEMBL308052	metabolite		1	urn:miriam:chembl.compound	^CHEMBL\d+$	
-Chembl Id	ChemblId		http://data.kasabi.com/dataset/chembl-rdf/chemblid/$id	CHEMBL6329	unknown		1			
-Chembl Molecule	ChemblMolecule		http://data.kasabi.com/dataset/chembl-rdf/molecule/m$id	1	unknown		1			
-ChEMBL target	chembl.target		https://www.ebi.ac.uk/chembl//target/inspect/$id	CHEMBL3467	unknown		1	urn:miriam:chembl.target	^CHEMBL\d+$	
-Chembl Target	ChemblTarget		http://data.kasabi.com/dataset/chembl-rdf/target/t$id	1	unknown		1			
-ChEMBL target component	Chembl16TargetComponent	https://www.ebi.ac.uk/chembldb/	http://rdf.ebi.ac.uk/resource/chembl/targetcomponent/$id	CHEMBL_TC_3597	unknown		1			
+ChEMBL compound	Cl	https://www.ebi.ac.uk/chembldb/	https://www.ebi.ac.uk/chembl/compound/inspect/$id	CHEMBL308052	metabolite		1	urn:miriam:chembl.compound	^CHEMBL\d+$	
+ChEMBL target	chembl.target		https://www.ebi.ac.uk/chembl/target/inspect/$id	CHEMBL3467	unknown		1	urn:miriam:chembl.target	^CHEMBL\d+$				
+ChEMBL target component	chembl.targetcomponent	https://www.ebi.ac.uk/chembldb/	http://rdf.ebi.ac.uk/resource/chembl/targetcomponent/$id	CHEMBL_TC_3597	unknown		1			
+LinkedChemistry ChEMBL molecule	linkedchemistry.chembl.molecule		http://linkedchemistry.info/chembl/molecule/m$id	1	unknown		1			
+LinkedChemistry ChEMBL id	linkedchemistry.chembl.id		http://linkedchemistry.info/chembl/chemblid/$id	CHEMBL6329	unknown		1			
+LinkedChemistry ChEMBL target  linkedchemistry.chembl.target            http://linkedchemistry.info/chembl/target/t$id  1       unknown         1  
 ChemDB	chemdb		http://cdb.ics.uci.edu/cgibin/ChemicalDetailWeb.py?chemical_id=$id	3966782	unknown		1	urn:miriam:chemdb	^\d+$	
 Chemical Component Dictionary	pdb-ccd		http://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/$id	AB0	unknown		1	urn:miriam:pdb-ccd	^\w{3}$	
 ChemIDplus	chemidplus	http://chem.sis.nlm.nih.gov/chemidplus/chemidheavy.jsp	http://chem.sis.nlm.nih.gov/chemidplus/direct.jsp?regno=$id	000057272	metabolite		1	urn:miriam:chemidplus	^\d+$	
@@ -295,7 +295,7 @@ KEGG Metagenome	kegg.metagenome	http://www.genome.jp/kegg/catalog/org_list3.html
 KEGG Module	kegg.module		http://www.kegg.jp/entry/$id	M00002	unknown		1	urn:miriam:kegg.module	^([a-z]{3,5}_)?M\d{5}$	
 KEGG Orthology	kegg.orthology	http://www.genome.jp/kegg/ko.html	http://www.genome.jp/dbget-bin/www_bget?ko+$id	K00001	protein		1	urn:miriam:kegg.orthology	^K\d+$	
 KEGG Pathway	Kp	http://www.genome.jp/kegg/pathway.html	http://www.genome.jp/dbget-bin/www_bget?pathway+$id	hsa00620	pathway		1	urn:miriam:kegg.pathway	^\w{2,4}\d{5}$	KEGG Pathway
-KEGG Reaction	Rk	http://www.genome.jp/kegg/reaction/	http://www.genome.jp/dbget-bin/www_bget?rn:$id	R00100	protein		1	urn:miriam:kegg.reaction	^R\d+$	KEGG Reaction
+KEGG Reaction	Rk	http://www.genome.jp/kegg/reaction/	http://www.genome.jp/dbget-bin/www_bget?rn:$id	R00100	pathway		1	urn:miriam:kegg.reaction	^R\d+$	KEGG Reaction
 KiSAO	biomodels.kisao		http://purl.bioontology.org/ontology/KISAO/kisao:$id	KISAO_0000057	unknown		1	urn:miriam:biomodels.kisao	^KISAO_\d+$	
 KnapSack	knapsack		http://kanaya.naist.jp/knapsack_jsp/information.jsp?word=$id	C00000001	unknown		1	urn:miriam:knapsack	^C\d{8}	
 Ligand Expo	ligandexpo		http://ligand-depot.rutgers.edu/pyapps/ldHandler.py?formid=cc-index-search&target=$id&operation=ccid	ABC	unknown		1	urn:miriam:ligandexpo	^(\w){3}$	
@@ -527,8 +527,8 @@ UM-BBD Compound	umbbd.compound		http://umbbd.ethz.ch/servlets/pageservlet?ptype=
 UM-BBD Enzyme	umbbd.enzyme		http://umbbd.ethz.ch/servlets/pageservlet?ptype=ep&enzymeID=$id	e0333	unknown		1	urn:miriam:umbbd.enzyme	^e\d+$	
 UM-BBD Pathway	umbbd.pathway		http://umbbd.ethz.ch/servlets/pageservlet?ptype=p&pathway_abbr=$id	ala	unknown		1	urn:miriam:umbbd.pathway	^\w+$	
 UM-BBD Reaction	umbbd.reaction		http://umbbd.ethz.ch/servlets/pageservlet?ptype=r&reacID=$id	r0001	unknown		1	urn:miriam:umbbd.reaction	^r\d+$	
-UniGene	U	http://www.ncbi.nlm.nih.gov/unigene	http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?UGID=1548618&SEARCH=$id	Hs.553708	gene		1		[A-Z][a-z][a-z]?\.\d+	UniGene
-UniGene number	unigene	http://www.ncbi.nlm.nih.gov/unigene	http://www.ncbi.nlm.nih.gov/unigene?term=$id	1548618	gene		1	urn:miriam:unigene	^\d+$	
+UniGene	U	http://www.ncbi.nlm.nih.gov/unigene	http://www.ncbi.nlm.nih.gov/unigene?term=$id	Hs.553708	gene		1		[A-Z][a-z][a-z]?\.\d+	UniGene
+UniGene number	unigene	http://www.ncbi.nlm.nih.gov/unigene	http://www.ncbi.nlm.nih.gov/unigene?UGID=$id	1548618	gene		1	urn:miriam:unigene	^\d+$	
 Unimod	unimod		http://www.unimod.org/modifications_view.php?editid1=$id	1200	unknown		1	urn:miriam:unimod	^\d+$	
 UniParc	uniparc		http://www.ebi.ac.uk/cgi-bin/dbfetch?db=uniparc&id=$id	UPI000000000A	unknown		1	urn:miriam:uniparc	^UPI[A-F0-9]{10}$	
 Unipathway	Up	http://www.grenoble.prabi.fr/obiwarehouse/unipathway	http://www.grenoble.prabi.fr/obiwarehouse/unipathway/upa?upid=$id	UPA00206	pathway		1	urn:miriam:unipathway	^UPA\d{5}$	Unipathway

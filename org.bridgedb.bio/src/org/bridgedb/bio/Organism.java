@@ -74,14 +74,16 @@ public enum Organism
 	OryziasLatipes ("Oryzias latipes", "Ol", "Medaka Fish", 8090),
 	OryctolagusCuniculus  ("Oryctolagus cuniculus", "Oc", "Rabbit", 9986),
 	PanTroglodytes("Pan troglodytes", "Pt", "Chimpanzee", 9598),
-	SolanumLycopersicum("Solanum lycopersicum", "Sl", "Tomato", 4081),
-	SusScrofa("Sus scrofa", "Ss", "Pig", 9823),
+	PlasmodiumFalciparum("Plasmodium falciparum", "Pf", "Malaria Parasite", 5833),
 	
 	//NB: two-letter code is Pi to disambiguate from Pan troglodytes	
 	PopulusTrichocarpa("Populus trichocarpa", "Pi", "Western Balsam Poplar", 3694),
+
 	RattusNorvegicus("Rattus norvegicus", "Rn", "Rat", 10116),
 	SaccharomycesCerevisiae("Saccharomyces cerevisiae", "Sc", "Yeast", 4932),
+	SolanumLycopersicum("Solanum lycopersicum", "Sl", "Tomato", 4081),
 	SorexAraneus ("Sorex araneus", "Sa", "Shrew", 42254),
+	SusScrofa("Sus scrofa", "Ss", "Pig", 9823),
 	SorghumBicolor ("Sorghum bicolor", "Sb", "Sorghum", 4558),
 	TetraodonNigroviridis ("Tetraodon nigroviridis", "Tn", "Pufferfish", 99883),
 	TriticumAestivum ("Triticum aestivum", "Ta", "Wheat", 4565),

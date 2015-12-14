@@ -11937,7 +11937,7 @@ Note: Currently, direct access to RNA products is restricted. This is expected t
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000375>
       a       dcat:CatalogRecord ;
-      idot:idRegexPattern "^CCDS\\d+\\.\\d+$"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:idRegexPattern "^CCDS\\d+(\\.\\d+)?$"^^<http://www.w3.org/2001/XMLSchema#string> ;
       idot:namespace "ccds"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:alternative "CCDS"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:exampleResource
@@ -14467,7 +14467,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
       void:inDataset <http://identifiers.org/registry/> ;
       void:uriSpace <http://identifiers.org/pdb/> ;
       dcat:description "The Protein Data Bank is the single worldwide archive of structural data of biological macromolecules."^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:distribution <http://identifiers.org/miriam.resource/MIR:00100165#application/xhtml+xml> , <http://identifiers.org/miriam.resource/MIR:00100037#application/xhtml+xml> , <http://identifiers.org/miriam.resource/MIR:00100166#application/xhtml+xml> , <http://identifiers.org/miriam.resource/MIR:00100096#application/xhtml+xml> , <http://identifiers.org/miriam.resource/MIR:00100029#application/xhtml+xml> ;
+      dcat:distribution <http://identifiers.org/miriam.resource/MIR:00100165#application/xhtml+xml> , <http://identifiers.org/miriam.resource/MIR:00100037#application/xhtml+xml> , <http://identifiers.org/miriam.resource/MIR:00100166#application/xhtml+xml> , <http://identifiers.org/miriam.resource/MIR:00100029#application/xhtml+xml> ;
       dcat:identifier "MIR:00000020"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:issued "2006-08-14T19:38:06+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
       dcat:keyword "structure"^^<http://www.w3.org/2001/XMLSchema#string> , "protein"^^<http://www.w3.org/2001/XMLSchema#string> ;

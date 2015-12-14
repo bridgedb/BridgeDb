@@ -20,6 +20,8 @@
 package org.bridgedb.rdf;
 
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.bio.DataSourceComparator;
@@ -41,9 +43,10 @@ import org.openrdf.model.impl.URIImpl;
  */
 public class DataSourceComparatorTest {
     
-    private static File file1 = new File("test-data/DataSourceMin.ttl");
-    
-    public DataSourceComparatorTest() {
+   
+    private static final String DATA_SOURCE_MIN_TTL = "/DataSourceMin.ttl";
+
+	public DataSourceComparatorTest() {
     }
     
     @BeforeClass
@@ -69,7 +72,7 @@ public class DataSourceComparatorTest {
     public void testGetResourceId() {
         Reporter.println("getResourceId");
         DataSource dataSource = DataSource.getByFullName("DataSourceUrisTest_testGetResourceId");
-        Resource expResult = new URIImpl("http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#DataSource_DataSourceUrisTest_testGetResourceId");
+        Resource expResult = new URIImpl("http://vocabularies.bridgedb.org/ops#DataSource_DataSourceUrisTest_testGetResourceId");
         Resource result = BridgeDBRdfHandler.asResource(dataSource);
         assertEquals(expResult, result);
     }
@@ -109,8 +112,12 @@ public class DataSourceComparatorTest {
     @Test
     public void testGetUriPatterns() throws BridgeDBException{
         Reporter.println("GetUriPatterns");
-        BridgeDBRdfHandler.parseRdfFile(file1);
+        InputStream dataSourceStream = getClass().getResourceAsStream(DATA_SOURCE_MIN_TTL);
+        assertNotNull("Could not find: test-data" + DATA_SOURCE_MIN_TTL);
+        
+        BridgeDBRdfHandler.parseRdfInputStream(dataSourceStream);
         Set<UriPattern> result = UriPattern.byCodeAndType("Cs", UriPatternType.mainUrlPattern);
+        assertFalse("Could not find main URL pattern for Cs", result.isEmpty());
         UriPattern pattern = UriPattern.existingByPattern("http://www.chemspider.com/Chemical-Structure.$id.html");
         assertThat (result, hasItem(pattern));
 //        pattern = UriPattern.existingOrCreateByPattern("http://identifiers.org/chemspider/$id");

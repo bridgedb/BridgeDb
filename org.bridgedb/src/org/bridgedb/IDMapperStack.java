@@ -367,9 +367,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 		}
 		return result;
 	}
-	
 
-	
 	/** {@inheritDoc} */
 	public Set<String> getAttributes(Xref ref, String attrname)
 			throws IDMapperException 
@@ -381,6 +379,19 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 			{
 				result.addAll (((AttributeMapper)child).getAttributes(ref, attrname));
 			}
+		}
+		return result;
+	}
+
+	/** {@inheritDoc} */
+	public Set<String> getAttributesForAllMappings(Xref ref, String attrname, DataSource... dataSources)
+			throws IDMapperException 
+	{
+		Set<String> result = new HashSet<String>();
+		Set<Xref> mappings = mapID(ref, dataSources);
+		mappings.add(ref); // TODO: check if this is really needed
+		for (Xref mappedRef : mappings) {
+			result.addAll(getAttributes(mappedRef, attrname));
 		}
 		return result;
 	}
@@ -586,6 +597,20 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 		}
 		return result;
 	}
+	
+	/** {@inheritDoc} */
+	public Map<String, Set<String>> getAttributesForAllMappings(Xref ref, DataSource... dataSources)
+			throws IDMapperException 
+	{
+		Map<String, Set<String>> result = new HashMap<String, Set<String>>();
+		Set<Xref> mappings = mapID(ref, dataSources);
+		mappings.add(ref); // TODO: check if this is really needed
+		for (Xref mappedRef : mappings) {
+			result.putAll(getAttributes(mappedRef));
+		}
+		return result;
+	}
+
 	
 	/** get all mappers */
 	public List<IDMapper> getMappers()

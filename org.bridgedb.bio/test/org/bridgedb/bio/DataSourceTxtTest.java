@@ -75,4 +75,39 @@ public class DataSourceTxtTest {
         DataSourceTxt.loadInputStream(is);
     }
 
+    @Test
+    public void testWikidata() throws Exception {
+    	DataSourceTxt.init();
+    	DataSource wikidata = DataSource.getExistingByFullName("Wikidata");
+    	Assert.assertNotNull(wikidata);
+    	Assert.assertTrue(wikidata.urlPatternKnown());
+    	Assert.assertEquals("Wd", wikidata.getSystemCode());
+    }
+
+    @Test
+    public void testWikidataBySystemCode() throws Exception {
+    	DataSourceTxt.init();
+    	DataSource wikidata = DataSource.getExistingBySystemCode("Wd");
+    	Assert.assertNotNull(wikidata);
+    	Assert.assertTrue(wikidata.urlPatternKnown());
+    	Assert.assertEquals("Wikidata", wikidata.getFullName());
+    }
+
+    @Test
+    public void testChEMBL() throws Exception {
+    	DataSourceTxt.init();
+    	DataSource wikidata = DataSource.getExistingByFullName("ChEMBL compound");
+    	Assert.assertNotNull(wikidata);
+    	Assert.assertTrue(wikidata.urlPatternKnown());
+    	Assert.assertEquals("Cl", wikidata.getSystemCode());
+    }
+
+    @Test
+    public void testKNApSAcK() throws Exception {
+    	DataSourceTxt.init();
+    	DataSource wikidata = DataSource.getExistingByFullName("KNApSAcK");
+    	Assert.assertNotNull(wikidata);
+    	Assert.assertTrue(wikidata.urlPatternKnown());
+    	Assert.assertEquals("Cks", wikidata.getSystemCode());
+    }
 }

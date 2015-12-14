@@ -51,9 +51,9 @@ org.bridgedb.uri.ws.*  Extends org.bridgedb.ws.* with URI supports from org.brid
 Contact
 -------
 
-Website, wiki and bug tracker: http://www.bridgedb.org
-Mailing list: http://groups.google.com/group/bridgedb-discuss/
-Source code can be obtained from http://svn.bigcat.unimaas.nl/bridgedb
+* Website, wiki and bug tracker: http://www.bridgedb.org
+* Mailing list: http://groups.google.com/group/bridgedb-discuss/
+* Source code can be obtained from http://github.com/bridgedb/BridgeDb
 
 Authors
 -------
@@ -66,7 +66,11 @@ BridgeDb and related tools are developed by (alphabetic order):
  * Isaac Ho
  * Martijn van Iersel
  * Alex Pico
+ * Stian Soiland-Reyes
  * Egon Willighagen
+ * Martin Kutmon
+ * Jonathan Melius
+ * Anders Riutta
 
 The lead teams at this moment are (alphabetic order):
 
@@ -79,7 +83,7 @@ License
 
 BridgeDb is free and open source. It is available under
 the conditions of the Apache 2.0 License. 
-See License-2.0.txt for details.
+See LICENSE-2.0.txt for details.
 
 Configuration For the URI/OpenPHACTS packages ONLY!
 =============

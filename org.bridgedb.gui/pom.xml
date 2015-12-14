@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bridgedb</groupId>
-  <artifactId>org.bridgedb.rdb.construct</artifactId>
-  <name>BridgeDb RDB Construct</name>
+  <artifactId>org.bridgedb.gui</artifactId>
+  <name>BridgeDb GUI</name>
   
   <parent>
   	<artifactId>bridgedb-bundle</artifactId>
@@ -14,7 +13,7 @@
 	<build>
 		<directory>target</directory>
 		<outputDirectory>target/classes</outputDirectory>
-		<finalName>${project.artifactId}-${project.version}</finalName>
+		<finalName>${artifactId}-${version}</finalName>
 		<testOutputDirectory>target/test-classes</testOutputDirectory>
 		<sourceDirectory>src</sourceDirectory>
 		<scriptSourceDirectory>scripts</scriptSourceDirectory>
@@ -34,33 +33,14 @@
 		<dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb</artifactId>
-			<version>${project.parent.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.bio</artifactId>
-			<version>${project.parent.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.12</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId>
-			<version>10.5.3.0_1</version>
-			<type>jar</type>
-			<scope>runtime</scope>
-		</dependency>
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derbyclient</artifactId>
-            <version>10.5.3.0_1</version>
-        </dependency>
+                <dependency>
+                        <groupId>com.jgoodies</groupId>
+                        <artifactId>forms</artifactId>
+                        <version>1.2.1</version>
+                        <scope>compile</scope>
+                </dependency>
 	</dependencies>
 </project>

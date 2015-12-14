@@ -2,9 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bridgedb</groupId>
-  <artifactId>org.bridgedb.tools.qc</artifactId>
-  <name>BridgeDb QC Tools</name>
-  
+  <artifactId>org.bridgedb.file.orthoxml</artifactId>
+  <name>BridgeDb OrthoXML</name>
   <parent>
   	<artifactId>bridgedb-bundle</artifactId>
   	<groupId>org.bridgedb</groupId>
@@ -26,41 +25,44 @@
 		</resources>
 		<testResources>
 			<testResource>
-				<directory>test-resources</directory>
+				<directory>test-data</directory>
 			</testResource>
 		</testResources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
 	</build>
-	
-	<dependencies>
+
+        <dependencies>
                 <dependency>
                         <groupId>org.bridgedb</groupId>
                         <artifactId>org.bridgedb</artifactId>
                         <version>${project.parent.version}</version>
                         <scope>compile</scope>
                 </dependency>
-		<dependency>
-			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.bio</artifactId>
-			<version>${project.parent.version}</version>
-			<scope>compile</scope>
+                <dependency>
+                        <groupId>org.bridgedb</groupId>
+                        <artifactId>org.bridgedb.bio</artifactId>
+                        <version>${project.parent.version}</version>
+                        <scope>compile</scope>
+                </dependency>
+                <dependency>
+			<groupId>org.group.project</groupId>
+			<artifactId>orthoxml</artifactId>
+			<version>0.1.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/orthoxml-0.1b.jar</systemPath>
 		</dependency>
-                <dependency>
-                        <groupId>org.bridgedb</groupId>
-                        <artifactId>org.bridgedb.rdb</artifactId>
-                        <version>${project.parent.version}</version>
-                        <scope>compile</scope>
-                </dependency>
-                <dependency>
-                        <groupId>org.bridgedb</groupId>
-                        <artifactId>org.bridgedb.rdb.construct</artifactId>
-                        <version>${project.parent.version}</version>
-                        <scope>compile</scope>
-                </dependency>
-                <dependency>
-                        <groupId>com.google.guava</groupId>
-                        <artifactId>guava</artifactId>
-                        <version>17.0</version>
-                </dependency>
-	</dependencies>
-  
+        </dependencies>
+
 </project>

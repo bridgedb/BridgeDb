@@ -28,17 +28,18 @@ import org.openrdf.model.impl.URIImpl;
  */
 public class BridgeDBConstants {
 
-    public static final String PREFIX = "http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#";
-    public static final String PREFIX_NAME1 = "bridgeDB";
-    public static final String PRIMARY = "Primary";
-
+    public static final String OLD_PREFIX = "http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#";
+    public static final String OLD_PREFIX_NAME = "bridgeDB";
+    public static final String PREFIX = "http://vocabularies.bridgedb.org/ops#";
+    public static final String PREFIX_NAME = "bdb";
+    
     //Types
     public static final String DATA_SOURCE_LABEL = "DataSource";
     public static final String DATA_SOURCE1 = PREFIX + DATA_SOURCE_LABEL;
     public static final URI DATA_SOURCE_URI = new URIImpl(PREFIX + DATA_SOURCE_LABEL);
-    public static final String URI_MAPPING = "uriMapping";
-    public static final URI URI_MAPPING_URI = new URIImpl(PREFIX + URI_MAPPING);
-    public static final String URI_PATTERN_LABEL = "uriPattern";
+    //public static final String URI_MAPPING = "UriMapping";
+    //public static final URI URI_MAPPING_URI = new URIImpl(PREFIX + URI_MAPPING);
+    public static final String URI_PATTERN_LABEL = "UriPattern";
     public static final String URI_PATTERN1 = PREFIX + URI_PATTERN_LABEL;
     public static final URI URI_PATTERN_URI = new URIImpl(URI_PATTERN1);
 
@@ -52,16 +53,21 @@ public class BridgeDBConstants {
     public static final String ORGANISM_LABEL = "Organism";
     public static final String ORGANISM1 = PREFIX + ORGANISM_LABEL;
     public static final URI ORGANISM_URI = new URIImpl(ORGANISM1);
-    private static final String PRIMAY = "primary";
-    public static final URI PRIMAY_URI = new URIImpl(PREFIX + PRIMAY);
+    public static final String ABOUT_ORGANISM_LABEL = "aboutOrganism";
+    public static final String ABOUT_ORGANISM1 = PREFIX + ORGANISM_LABEL;
+    public static final URI ABOUT_ORGANISM_URI = new URIImpl(ORGANISM1);
+    
+    private static final String PRIMARY = "primary";
+    public static final URI PRIMARY_URI = new URIImpl(PREFIX + PRIMARY);
     private static final String SYSTEM_CODE = "systemCode";
     public static final URI SYSTEM_CODE_URI = new URIImpl(PREFIX + SYSTEM_CODE);
     private static final String TYPE = "type";
     public static final URI TYPE_URI = new URIImpl(PREFIX + TYPE);
     public static final URI HAS_DATA_TYPE_URI = new URIImpl(PREFIX + "hasDataType");
-    public static final URI HAS_URL_PATTERN_URI = new URIImpl(PREFIX + "hasUrlPattern");
+    
     public static final URI HAS_REGEX_PATTERN_URI = new URIImpl(PREFIX + "hasRegexPattern");
     public static final URI HAS_REGEX_URL_PATTERN_URI = new URIImpl(PREFIX + "hasRegexUrlPattern");
+    public static final URI HAS_PRIMARY_URI_PATTERN_URI = new URIImpl(PREFIX + "hasPrimaryUriPattern");
     public static final URI HAS_URI_PATTERN_URI = new URIImpl(PREFIX + "hasUriPattern");
     public static final URI HAS_REGEX_URI_PATTERN_URI = new URIImpl(PREFIX + "hasRegexUriPattern");
     public static final URI IS_DEPRICATED_BY_URI = new URIImpl(PREFIX + "isDepricatedBy");
