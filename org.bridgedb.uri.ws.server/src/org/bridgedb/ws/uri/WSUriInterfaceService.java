@@ -1088,7 +1088,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     protected String sideBar(HttpServletRequest httpServletRequest) {
         StringBuilder sb = new StringBuilder("<div id=\"navBar\">");
         addSideBarMiddle(sb, httpServletRequest);
-        addSideBarStatisitics(sb, httpServletRequest);
+        addSideBarStatistics(sb, httpServletRequest);
         sb.append("</div>\n");        
         return sb.toString();
     }
@@ -1096,7 +1096,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     protected void sideBar(StringBuilder sb, HttpServletRequest httpServletRequest) {
         sb.append("<div id=\"navBar\">");
         addSideBarMiddle(sb, httpServletRequest);
-        addSideBarStatisitics(sb, httpServletRequest);
+        addSideBarStatistics(sb, httpServletRequest);
         sb.append("</div>\n");        
     }
     
@@ -1127,10 +1127,10 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     /**
      * Allows Super classes to add to the side bar
      */
-    protected void addSideBarStatisitics(StringBuilder sb, HttpServletRequest httpServletRequest) {
+    protected void addSideBarStatistics(StringBuilder sb, HttpServletRequest httpServletRequest) {
         try {
             OverallStatistics statistics = uriMapper.getOverallStatistics(Lens.DEFAULT_LENS_NAME);
-            //sb.append("\n<div class=\"menugroup\">Default Statisitics</div>");
+            //sb.append("\n<div class=\"menugroup\">Default Statistics</div>");
             //addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappings()) + " Mappings", httpServletRequest);
             //addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappingSets()) + " Mapping Sets", httpServletRequest);
             //addSideBarItem(sb, "getSupportedSrcDataSources", formatter.format(statistics.getNumberOfSourceDataSources()) 
@@ -1139,8 +1139,8 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             //addSideBarItem(sb, "getSupportedTgtDataSources", formatter.format(statistics.getNumberOfTargetDataSources()) 
              //       + " Target Data Sources ", httpServletRequest);
             statistics = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
-            //sb.append("\n<div class=\"menugroup\">All Statisitics</div>");
-            sb.append("\n<div class=\"menugroup\">Statisitics</div>");
+            //sb.append("\n<div class=\"menugroup\">All Statistics</div>");
+            sb.append("\n<div class=\"menugroup\">Statistics</div>");
             addSideBarItem(sb, WsUriConstants.MAPPING_SET, formatter.format(statistics.getNumberOfMappings()) + " Mappings", httpServletRequest);
             addSideBarItem(sb, WsUriConstants.MAPPING_SET, formatter.format(statistics.getNumberOfMappingSets()) + " Mapping Sets", httpServletRequest);
             addSideBarItem(sb, WsUriConstants.GET_SUPPORTED_SOURCE_DATA_SOURCES, formatter.format(statistics.getNumberOfSourceDataSources()) 
@@ -1151,7 +1151,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             addSideBarItem(sb, Lens.METHOD_NAME, formatter.format(statistics.getNumberOfLenses())
                     + " Lenses ", httpServletRequest);
         } catch (BridgeDBException ex) {
-            sb.append("\nStatisitics currenlty unavailable.");
+            sb.append("\nStatistics currenlty unavailable.");
             logger.error("Error getting statistics.", ex);
         }
     }
