@@ -4,10 +4,6 @@ Compilation
 If you've obtained the source code of BridgeDb, you should be
 able to compile with a simple:
 
-	ant
-	
-or (experimental; does not compile all jars) - 
-
 	mvn clean install
 
 (If you want to ignore failing tests, e.g. because you are not online,
