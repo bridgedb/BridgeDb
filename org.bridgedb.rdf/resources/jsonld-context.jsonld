@@ -109,7 +109,7 @@
     },
     "schema": {
       "@id": "http://schema.org/",
-      "@type": "@id"
+      "@type": "@vocab"
     },
     "subject": {
       "@id": "dcterms:subject",
