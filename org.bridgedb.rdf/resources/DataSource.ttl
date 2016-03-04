@@ -1431,3 +1431,22 @@ bridgeDB:DataSource_nextProt a bridgeDB:DataSource ;
 <http://www.nextprot.org/db/search#$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.nextprot.org/db/search#" .
 
+
+
+
+bridgeDB:DataSource_SureChEMBL_molecule a bridgeDB:DataSource ;
+       bridgeDB:fullName "SureChEMBL molecule" ;
+       bridgeDB:systemCode "schembl" ;
+       bridgeDB:idExample "SCHEMBL175877" ;
+       bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+       bridgeDB:type "unknown" ;       
+       bridgeDB:hasPrimaryUriPattern <http://rdf.ebi.ac.uk/resource/surechembl/molecule/$id> ;
+       bridgeDB:hasUriPattern <https://www.surechembl.org/chemical/$id> ;
+       bridgeDB:hasRegexPattern "^SCHEMBL\\d+$" .
+
+<https://www.surechembl.org/chemical/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://www.surechembl.org/chemical/" .
+
+<http://rdf.ebi.ac.uk/resource/surechembl/molecule/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://rdf.ebi.ac.uk/resource/surechembl/molecule/" .
+
