@@ -1436,7 +1436,7 @@ bridgeDB:DataSource_nextProt a bridgeDB:DataSource ;
 
 bridgeDB:DataSource_SureChEMBL_molecule a bridgeDB:DataSource ;
        bridgeDB:fullName "SureChEMBL molecule" ;
-       bridgeDB:systemCode "schembl" ;
+       bridgeDB:systemCode "surechembl.molecule" ;
        bridgeDB:idExample "SCHEMBL175877" ;
        bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
        bridgeDB:type "unknown" ;       
@@ -1449,4 +1449,42 @@ bridgeDB:DataSource_SureChEMBL_molecule a bridgeDB:DataSource ;
 
 <http://rdf.ebi.ac.uk/resource/surechembl/molecule/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://rdf.ebi.ac.uk/resource/surechembl/molecule/" .
+
+
+bridgeDB:DataSource_SureChEMBL_patent a bridgeDB:DataSource ;
+       bridgeDB:fullName "SureChEMBL patent" ;
+       bridgeDB:systemCode "surechembl.patent" ;
+       bridgeDB:idExample "US-20140024816-A1" ;
+       bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+       bridgeDB:type "unknown" ;       
+       bridgeDB:hasPrimaryUriPattern <http://rdf.ebi.ac.uk/resource/surechembl/patent/$id> ;
+       bridgeDB:hasUriPattern <https://www.surechembl.org/document/$id> .
+
+<https://www.surechembl.org/document/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://www.surechembl.org/document/" .
+
+<http://rdf.ebi.ac.uk/resource/surechembl/patent/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://rdf.ebi.ac.uk/resource/surechembl/patent/" .
+
+bridgeDB:DataSource_SureChEMBL_target a bridgeDB:DataSource ;
+       bridgeDB:fullName "SureChEMBL target" ;
+       bridgeDB:systemCode "surechembl.target" ;
+       bridgeDB:idExample "CER1" ;
+       bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+       bridgeDB:type "unknown" ;       
+       bridgeDB:hasPrimaryUriPattern <http://rdf.ebi.ac.uk/resource/surechembl/target/$id> .
+
+<http://rdf.ebi.ac.uk/resource/surechembl/target/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://rdf.ebi.ac.uk/resource/surechembl/target/" .
+
+bridgeDB:DataSource_SureChEMBL_indication a bridgeDB:DataSource ;
+       bridgeDB:fullName "SureChEMBL indication" ;
+       bridgeDB:systemCode "surechembl.indication" ;
+       bridgeDB:idExample "D012515" ;
+       bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+       bridgeDB:type "unknown" ;       
+       bridgeDB:hasPrimaryUriPattern <http://rdf.ebi.ac.uk/resource/surechembl/indication/$id> .
+
+<http://rdf.ebi.ac.uk/resource/surechembl/indication/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://rdf.ebi.ac.uk/resource/surechembl/indication/" .
 
