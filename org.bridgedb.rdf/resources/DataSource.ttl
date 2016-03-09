@@ -566,9 +566,7 @@ bridgeDB:DataSource_HGNC a bridgeDB:DataSource ;
 	bridgeDB:idExample "DAPK1" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-        bridgeDB:hasRegexPattern "^[A-Za-z-0-9_]+(\\@)?$" ;
-	bridgeDB:hasUriPattern <http://www.genenames.org/data/hgnc_data.php?match=$id> ;
-	bridgeDB:hasPrimaryUriPattern <http://www.genenames.org/cgi-bin/gene_symbol_report?match=$id> ;
+	bridgeDB:hasPrimaryUriPattern <http://www.genenames.org/data/hgnc_data.php?match=$id> ;
 	bridgeDB:Organism bridgeDB:Organism_Hs ;
  	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/hgnc.symbol/$id> .
 
