@@ -97,7 +97,7 @@ bridgeDB:DataSource_Bioontology_MESH a bridgeDB:DataSource ;
 <http://id.nlm.nih.gov/mesh/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://id.nlm.nih.gov/mesh/" .
 
-<http://identifiers.org/mesh/> a bridgeDB:UriPattern ;
+<http://identifiers.org/mesh/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://identifiers.org/mesh/" .
 
 <http://purl.bioontology.org/ontology/MSH/$id> a bridgeDB:UriPattern ;
