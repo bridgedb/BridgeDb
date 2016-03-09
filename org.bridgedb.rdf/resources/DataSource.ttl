@@ -73,11 +73,39 @@ bridgeDB:DataSource_Bioontology_MESH a bridgeDB:DataSource ;
 	bridgeDB:idExample "C536282" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
-	bridgeDB:hasPrimaryUriPattern <http://purl.bioontology.org/ontology/MSH/$id> ;
+        bridgeDB:hasRegexPattern "^(C|D)0\\d{5}$" ;
+	bridgeDB:hasUriPattern <http://purl.bioontology.org/ontology/MSH/$id> ;
 	bridgeDB:mainUrl "http://bioportal.bioontology.org/" ;
 	bridgeDB:hasUriPattern <http://bioportal.bioontology.org/ontologies/1351?p=terms&conceptid=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/mesh/$id> ;
-	bridgeDB:hasUriPattern <http://bio2rdf.org/mesh:$id> .
+	bridgeDB:hasPrimaryUriPattern <http://id.nlm.nih.gov/mesh/$id> ;
+	bridgeDB:hasUriPattern <https://id.nlm.nih.gov/mesh/$id> ;
+	bridgeDB:hasUriPattern <http://id.nlm.nih.gov/mesh/$id.html> ;
+	bridgeDB:hasUriPattern <https://id.nlm.nih.gov/mesh/$id.html> .
+
+<https://id.nlm.nih.gov/mesh/$id.html> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://id.nlm.nih.gov/mesh/" ;
+        bridgeDB:hasSuffix ".html" .
+
+<http://id.nlm.nih.gov/mesh/$id.html> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://id.nlm.nih.gov/mesh/" ;
+        bridgeDB:hasSuffix ".html" .
+
+<https://id.nlm.nih.gov/mesh/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://id.nlm.nih.gov/mesh/" .
+
+<http://id.nlm.nih.gov/mesh/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://id.nlm.nih.gov/mesh/" .
+
+<http://identifiers.org/mesh/> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://identifiers.org/mesh/" .
+
+<http://purl.bioontology.org/ontology/MSH/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://purl.bioontology.org/ontology/MSH/" .
+
+<http://bioportal.bioontology.org/ontologies/1351?p=terms&conceptid=$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://bioportal.bioontology.org/ontologies/1351?p=terms&conceptid=" .
+
 
 bridgeDB:DataSource_Bioontology_UMLS_NCIM a bridgeDB:DataSource ;
 	bridgeDB:fullName "Bioontology UMLS NCIM" ;
