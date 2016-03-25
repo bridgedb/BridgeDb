@@ -116,8 +116,14 @@
       "@type": "@vocab"
     },
     "type": "@type",
+    "uri": {
+      "@type": "@id"
+    },
     "void": {
       "@id": "http://rdfs.org/ns/void#",
+      "@type": "@id"
+    },
+    "website_url": {
       "@type": "@id"
     },
     "webPage": {
