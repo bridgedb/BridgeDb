@@ -1,3 +1,4 @@
+
 {
   "@context": {
     "@vocab": "http://vocabularies.bridgedb.org/ops#",
@@ -24,7 +25,7 @@
     },
     "bridgeDbDataSourceName": {
       "@id": "bridgeDbDataSourcesHeaders:datasource_name",
-      "@type": "@vocab"
+      "@type": "xsd:string"
     },
     "bridgeDbDataSources": {
       "@id": "https://github.com/bridgedb/BridgeDb/blob/master/org.bridgedb.bio/resources/org/bridgedb/bio/datasources.txt#",
@@ -36,7 +37,7 @@
     },
     "bridgeDbSystemCode": {
       "@id": "bridgeDbDataSourcesHeaders:system_code",
-      "@type": "@vocab"
+      "@type": "xsd:string"
     },
     "db": {
       "@id": "biopax:db",
@@ -85,7 +86,7 @@
     },
     "name": {
       "@id": "schema:name",
-      "@type": "@id"
+      "@type": "xsd:string"
     },
     "nameLanguageMap": {
       "@container": "@language",
