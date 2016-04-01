@@ -23,7 +23,7 @@
       "@id": "http://www.biopax.org/release/biopax-level3.owl#",
       "@type": "@id"
     },
-    "bridgeDbDataSourceName": {
+    "datasource_name": {
       "@id": "bridgeDbDataSourcesHeaders:datasource_name",
       "@type": "xsd:string"
     },
