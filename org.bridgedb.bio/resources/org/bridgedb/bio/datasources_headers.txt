@@ -11,7 +11,7 @@
 4	linkout_pattern	URL pattern for constructing links to ID-specific datasource pages, using $id as substitution variable	https://www.affymetrix.com/LinkServlet?probeset=$id  http://vocabularies.bridgedb.org/ops#hasRegexUriPattern
 5	example_identifier	A valid example of a datasource identifier; may not be representative of all types of identifiers from a given resource	1851_s_at http://vocabularies.bridgedb.org/ops#idExample
 6	entity_identified	Type of entity (e.g., biological molecule or concept) identified by datasource	probe http://vocabularies.bridgedb.org/ops#type
-7	single_species	Specific species represented by datasource (latin genus species); blank if datasource represents more than one species	Homo sapiens  http://vocabularies.bridgedb.org/ops#latinName
+7	single_species	Specific species represented by datasource (latin genus species); blank if datasource represents more than one species	Homo sapiens  http://vocabularies.bridgedb.org/ops#aboutOrganism
 8	identifier_type	Conventional usage type for datasource: 1 = primary identifiers (used to uniquely identify molecules or concepts; useful for identifying entities on a pathway; useful targets for mapping measurement data), 0 = secondary identifiers (used to annotate molecules or concepts; useful as secondary linkouts; useful sources for data/annotation mapping)	0 http://vocabularies.bridgedb.org/ops#primary
 9	uri	Official URI for datasource (e.g., from miriam); or repeat of system_code if unknown or unregistered	urn:miriam:affy.probeset  @id
 10	regex	Regular expression capturing all possible identifiers as narrowly as possible for datasource (see miriam)	\d{4,}((_[asx])?_at)? http://vocabularies.bridgedb.org/ops#hasRegexPattern
