@@ -23,19 +23,11 @@
       "@type": "@vocab"
     },
     "datasource_name": {
-      "@id": "bridgeDbDataSourcesHeaders:datasource_name",
+      "@id": "https://github.com/bridgedb/BridgeDb/blob/master/org.bridgedb.bio/resources/org/bridgedb/bio/datasources_headers.txt#datasource_name",
       "@type": "xsd:string"
     },
-    "bridgeDbDataSources": {
-      "@id": "https://github.com/bridgedb/BridgeDb/blob/master/org.bridgedb.bio/resources/org/bridgedb/bio/datasources.txt#",
-      "@type": "@id"
-    },
-    "bridgeDbDataSourcesHeaders": {
-      "@id": "https://github.com/bridgedb/BridgeDb/blob/master/org.bridgedb.bio/resources/org/bridgedb/bio/datasources_headers.txt#",
-      "@type": "@vocab"
-    },
     "bridgeDbSystemCode": {
-      "@id": "bridgeDbDataSourcesHeaders:system_code",
+      "@id": "https://github.com/bridgedb/BridgeDb/blob/master/org.bridgedb.bio/resources/org/bridgedb/bio/datasources_headers.txt#system_code",
       "@type": "xsd:string"
     },
     "db": {
