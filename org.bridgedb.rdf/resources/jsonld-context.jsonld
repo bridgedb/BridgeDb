@@ -12,7 +12,7 @@
     },
     "SIO": {
       "@id": "http://semanticscience.org/resource/",
-      "@type": "@id"
+      "@type": "@vocab"
     },
     "alternatePrefix": {
       "@id": "idot:alternatePrefix",
@@ -21,7 +21,7 @@
     "baseIri": "@base",
     "biopax": {
       "@id": "http://www.biopax.org/release/biopax-level3.owl#",
-      "@type": "@id"
+      "@type": "@vocab"
     },
     "datasource_name": {
       "@id": "bridgeDbDataSourcesHeaders:datasource_name",
@@ -33,7 +33,7 @@
     },
     "bridgeDbDataSourcesHeaders": {
       "@id": "https://github.com/bridgedb/BridgeDb/blob/master/org.bridgedb.bio/resources/org/bridgedb/bio/datasources_headers.txt#",
-      "@type": "@id"
+      "@type": "@vocab"
     },
     "bridgeDbSystemCode": {
       "@id": "bridgeDbDataSourcesHeaders:system_code",
@@ -45,7 +45,7 @@
     },
     "dcterms": {
       "@id": "http://purl.org/dc/terms/",
-      "@type": "@id"
+      "@type": "@vocab"
     },
     "displayName": {
       "@id": "biopax:displayName",
@@ -61,11 +61,11 @@
     },
     "foaf": {
       "@id": "http://xmlns.com/foaf/0.1/",
-      "@type": "@id"
+      "@type": "@vocab"
     },
     "gpml": {
       "@id": "http://vocabularies.wikipathways.org/gpml#",
-      "@type": "@id"
+      "@type": "@vocab"
     },
     "id": "@id",
     "identifier": {
@@ -78,7 +78,7 @@
     },
     "idot": {
       "@id": "http://identifiers.org/idot/",
-      "@type": "@id"
+      "@type": "@vocab"
     },
     "isDataItemIn": {
       "@id": "SIO:SIO_001278",
@@ -98,7 +98,7 @@
     },
     "owl": {
       "@id": "http://www.w3.org/2002/07/owl#",
-      "@type": "@id"
+      "@type": "@vocab"
     },
     "preferredPrefix": {
       "@id": "idot:preferredPrefix",
@@ -122,7 +122,7 @@
     },
     "void": {
       "@id": "http://rdfs.org/ns/void#",
-      "@type": "@id"
+      "@type": "@vocab"
     },
     "website_url": {
       "@type": "@id"
