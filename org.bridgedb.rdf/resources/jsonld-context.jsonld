@@ -44,7 +44,7 @@
     "https://github.com/bridgedb/BridgeDb/blob/master/org.bridgedb.bio/resources/org/bridgedb/bio/datasources_headers.txt#datasource_name": {
       "@type": "xsd:string"
     },
-    "https://github.com/bridgedb/BridgeDb/blob/master/org.bridgedb.bio/resources/org/bridgedb/bio/datasources_headers.txt#datasource_name": {
+    "bridgeDbDatasourceHeaders:datasource_name": {
       "@type": "xsd:string"
     },
     "datasource_name": {
