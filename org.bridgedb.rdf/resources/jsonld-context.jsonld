@@ -51,6 +51,12 @@
       "@id": "bridgeDbDatasourceHeaders:datasource_name",
       "@type": "xsd:string"
     },
+    "http://vocabularies.bridgedb.org/ops#systemCode": {
+      "@type": "xsd:string"
+    },
+    "systemCode": {
+      "@type": "xsd:string"
+    },
     "bridgeDbDatasourceHeaders:system_code": {
       "@type": "xsd:string"
     },
