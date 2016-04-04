@@ -18,6 +18,10 @@
       "@id": "biopax:EntityReference",
       "@type": "@id"
     },
+    "xref": {
+      "@id": "biopax:xref",
+      "@type": "@id"
+    },
     "SIO": {
       "@id": "http://semanticscience.org/resource/",
       "@type": "@vocab"
