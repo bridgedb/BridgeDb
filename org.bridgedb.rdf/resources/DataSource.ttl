@@ -73,7 +73,7 @@ bridgeDB:DataSource_Bioontology_MESH a bridgeDB:DataSource ;
 	bridgeDB:idExample "C536282" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
-        bridgeDB:hasRegexPattern "^(C|D)\d{6}$" ;
+        bridgeDB:hasRegexPattern "^(C|D)\\d{6}$" ;
 	bridgeDB:hasUriPattern <http://purl.bioontology.org/ontology/MSH/$id> ;
 	bridgeDB:mainUrl "http://bioportal.bioontology.org/" ;
 	bridgeDB:hasUriPattern <http://bioportal.bioontology.org/ontologies/1351?p=terms&conceptid=$id> ;
