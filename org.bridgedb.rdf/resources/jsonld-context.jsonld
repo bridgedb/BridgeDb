@@ -1,14 +1,8 @@
 {
   "@context": {
     "@vocab": "http://vocabularies.bridgedb.org/ops#",
-    "id": {
-      "@id": "@id",
-      "@type": "@id"
-    },
-    "type": {
-      "@id": "@type",
-      "@type": "@id"
-    },
+    "id": "@id",
+    "type": "@type",
     "Dataset": {
       "@id": "void:Dataset",
       "@type": "@id"
