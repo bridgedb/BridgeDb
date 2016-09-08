@@ -9,7 +9,7 @@ BRENDA	Br	http://www.brenda-enzymes.org/	http://www.brenda-enzymes.org/php/resul
 CAS	Ca	http://commonchemistry.org	http://commonchemistry.org/ChemicalDetail.aspx?ref=$id	50-00-0	metabolite		1	urn:miriam:cas	^\d{1,7}\-\d{2}\-\d$	CAS
 CCDS	Cc	http://identifiers.org/ccds/	http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=ALLFIELDS&DATA=$id	CCDS33337	gene		0	urn:miriam:ccds	^CCDS\d+\.\d+$	Consensus CDS
 ChEMBL compound	Cl	https://www.ebi.ac.uk/chembldb/	https://www.ebi.ac.uk/chembl/compound/inspect/$id	CHEMBL308052	metabolite		1	urn:miriam:chembl.compound	^CHEMBL\d+$	ChEMBL compound
-ChEBI	Ce	http://www.ebi.ac.uk/chebi/	http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id	CHEBI:36927	metabolite		1	urn:miriam:chebi	^CHEBI:\d+$	ChEBI
+ChEBI	Ce	http://www.ebi.ac.uk/chebi/	http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id	CHEBI:36927	metabolite		1	urn:miriam:chebi	^(CHEBI:)?\d+$	ChEBI
 Chemspider	Cs	http://www.chemspider.com/	http://www.chemspider.com/Chemical-Structure.$id.html	56586	metabolite		1	urn:miriam:chemspider	^\d+$	ChemSpider
 CodeLink	Ge	http://www.appliedmicroarrays.com/		GE86325	probe		0	Ge		CodeLink
 Database of Interacting Proteins	Dip	http://dip.doe-mbi.ucla.edu/	http://dip.doe-mbi.ucla.edu/dip/DIPview.cgi?ID=$id	DIP-743N	interaction		1	urn:miriam:dip	^DIP[\:\-]\d{3}[EN]$	Database of Interacting Proteins
