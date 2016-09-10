@@ -111,16 +111,25 @@ public class BridgeQC
 				
 				int oldGenes = oldSet.get(ds);
 				double delta = (double)(newGenes - oldGenes) / (double)oldGenes;
-				System.out.printf(
-					"INFO: Number of ids in %s%s: %d (%d added, %d removed -> overall changed %+3.1f%%)\n",
-					ds.getSystemCode(),
-					(ds.getFullName() != null && ds.getFullName().length() > 0) ?
-						" (" + ds.getFullName() + ")" : "",
-					newGenes,
-					newGenesAdded.size(),
-					genesRemoved.size(),
-					(delta * 100)
-				);
+				if (newGenesAdded.size() + genesRemoved.size() == 0)
+					System.out.printf(
+						"INFO: Number of ids in %s%s: %d (unchanged)\n",
+						ds.getSystemCode(),
+						(ds.getFullName() != null && ds.getFullName().length() > 0) ?
+							" (" + ds.getFullName() + ")" : "",
+						newGenes
+					);
+				else
+					System.out.printf(
+						"INFO: Number of ids in %s%s: %d (%d added, %d removed -> overall changed %+3.1f%%)\n",
+						ds.getSystemCode(),
+						(ds.getFullName() != null && ds.getFullName().length() > 0) ?
+							" (" + ds.getFullName() + ")" : "",
+						newGenes,
+						newGenesAdded.size(),
+						genesRemoved.size(),
+						(delta * 100)
+					);
 				if (genesRemoved.size() > 0 && "true".equals(System.getProperty("showRemovedIDs", "false")))
 					System.out.printf(
 						"INFO: The ids removed from %s%s: %s\n",
