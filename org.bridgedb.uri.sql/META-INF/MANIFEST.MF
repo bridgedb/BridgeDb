@@ -1,5 +1,5 @@
 Bundle-Name: org.bridgedb.uri.sql
-Bundle-Version: 1.1.0
+Bundle-Version: 2.2.0.qualifier
 Bundle-SymbolicName: org.bridgedb.uri.sql
 Export-Package: * 
 Require-Bundle: org.bridgedb;bundle-version="1.1.0"
