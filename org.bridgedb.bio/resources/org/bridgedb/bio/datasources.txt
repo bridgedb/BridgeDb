@@ -56,7 +56,7 @@ HMDB	Ch	http://www.hmdb.ca/	http://www.hmdb.ca/metabolites/$id	HMDB00001	metabol
 HomoloGene	Hg	http://www.ncbi.nlm.nih.gov/homologene/	http://www.ncbi.nlm.nih.gov/homologene/$id	1000	gene		1	urn:miriam:homologene	^\d+$	HomoloGene
 HPRD	Hp	http://www.hprd.org/			interaction	Homo sapiens	1	urn:miriam:hprd		HPRD
 Illumina	Il	http://www.illumina.com/		ILMN_5668	probe		0	Il	ILMN_\d+	Illumina
-InChIKey	Ik	http://inchi.org/		QTBSBXVTEAMEQO-UHFFFAOYSA-N	metabolite		1	urn:miriam:inchikey	^[A-Z]{14}\-[A-Z]{10}(\-[A-P])?	Standard InChIKey
+InChIKey	Ik	http://inchi.org/		QTBSBXVTEAMEQO-UHFFFAOYSA-N	metabolite		1	urn:miriam:inchikey	^[A-Z]{14}\-[A-Z]{10}(\-[A-Z])?	Standard InChIKey
 IntAct	Ia	http://www.ebi.ac.uk/intact/	http://www.ebi.ac.uk/intact/pages/details/details.xhtml?interactionAc=$id	EBI-2307691	interaction		1	urn:miriam:intact	^EBI\-[0-9]+$	IntAct
 InterPro	I	http://www.ebi.ac.uk/interpro/	http://www.ebi.ac.uk/interpro/DisplayIproEntry?ac=$id	IPR000100	protein		1	urn:miriam:interpro	^IPR\d{6}$	InterPro
 IPI	Ip	http://www.ebi.ac.uk/IPI	http://www.ebi.ac.uk/cgi-bin/dbfetch?db=IPI&id=$id&format=default	IPI00000001	protein		1	urn:miriam:ipi	^IPI\d{8}$	IPI
