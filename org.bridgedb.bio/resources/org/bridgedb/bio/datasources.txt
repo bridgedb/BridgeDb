@@ -9,7 +9,7 @@ BRENDA	Br	http://www.brenda-enzymes.org/	http://www.brenda-enzymes.org/php/resul
 CAS	Ca	http://commonchemistry.org	http://commonchemistry.org/ChemicalDetail.aspx?ref=$id	50-00-0	metabolite		1	urn:miriam:cas	^\d{1,7}\-\d{2}\-\d$	CAS
 CCDS	Cc	http://identifiers.org/ccds/	http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=ALLFIELDS&DATA=$id	CCDS33337	gene		0	urn:miriam:ccds	^CCDS\d+\.\d+$	Consensus CDS
 ChEMBL compound	Cl	https://www.ebi.ac.uk/chembldb/	https://www.ebi.ac.uk/chembl/compound/inspect/$id	CHEMBL308052	metabolite		1	urn:miriam:chembl.compound	^CHEMBL\d+$	ChEMBL compound
-ChEBI	Ce	http://www.ebi.ac.uk/chebi/	http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id	CHEBI:36927	metabolite		1	urn:miriam:chebi	^CHEBI:\d+$	ChEBI
+ChEBI	Ce	http://www.ebi.ac.uk/chebi/	http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id	CHEBI:36927	metabolite		1	urn:miriam:chebi	^(CHEBI:)?\d+$	ChEBI
 Chemspider	Cs	http://www.chemspider.com/	http://www.chemspider.com/Chemical-Structure.$id.html	56586	metabolite		1	urn:miriam:chemspider	^\d+$	ChemSpider
 CodeLink	Ge	http://www.appliedmicroarrays.com/		GE86325	probe		0	Ge		CodeLink
 Database of Interacting Proteins	Dip	http://dip.doe-mbi.ucla.edu/	http://dip.doe-mbi.ucla.edu/dip/DIPview.cgi?ID=$id	DIP-743N	interaction		1	urn:miriam:dip	^DIP[\:\-]\d{3}[EN]$	Database of Interacting Proteins
@@ -56,7 +56,7 @@ HMDB	Ch	http://www.hmdb.ca/	http://www.hmdb.ca/metabolites/$id	HMDB00001	metabol
 HomoloGene	Hg	http://www.ncbi.nlm.nih.gov/homologene/	http://www.ncbi.nlm.nih.gov/homologene/$id	1000	gene		1	urn:miriam:homologene	^\d+$	HomoloGene
 HPRD	Hp	http://www.hprd.org/			interaction	Homo sapiens	1	urn:miriam:hprd		HPRD
 Illumina	Il	http://www.illumina.com/		ILMN_5668	probe		0	Il	ILMN_\d+	Illumina
-InChIKey	Ik	http://inchi.org/		QTBSBXVTEAMEQO-UHFFFAOYSA-N	metabolite		1	urn:miriam:inchikey	^[A-Z]{14}\-[A-Z]{10}(\-[A-N])?	Standard InChIKey
+InChIKey	Ik	http://inchi.org/		QTBSBXVTEAMEQO-UHFFFAOYSA-N	metabolite		1	urn:miriam:inchikey	^[A-Z]{14}\-[A-Z]{10}(\-[A-Z])?	Standard InChIKey
 IntAct	Ia	http://www.ebi.ac.uk/intact/	http://www.ebi.ac.uk/intact/pages/details/details.xhtml?interactionAc=$id	EBI-2307691	interaction		1	urn:miriam:intact	^EBI\-[0-9]+$	IntAct
 InterPro	I	http://www.ebi.ac.uk/interpro/	http://www.ebi.ac.uk/interpro/DisplayIproEntry?ac=$id	IPR000100	protein		1	urn:miriam:interpro	^IPR\d{6}$	InterPro
 IPI	Ip	http://www.ebi.ac.uk/IPI	http://www.ebi.ac.uk/cgi-bin/dbfetch?db=IPI&id=$id&format=default	IPI00000001	protein		1	urn:miriam:ipi	^IPI\d{8}$	IPI
@@ -68,7 +68,7 @@ KEGG Glycan	Kl	http://www.genome.jp/kegg/glycan/	http://www.genome.jp/dbget-bin/
 KEGG Pathway	Kp	http://www.genome.jp/kegg/pathway.html	http://www.genome.jp/dbget-bin/www_bget?pathway+$id	hsa00620	pathway		1	urn:miriam:kegg.pathway	^\w{2,4}\d{5}$	KEGG Pathway
 KEGG Reaction	Rk	http://www.genome.jp/kegg/reaction/	http://www.genome.jp/dbget-bin/www_bget?rn:$id	R00100	pathway		1	urn:miriam:kegg.reaction	^R\d+$	KEGG Reaction
 KNApSAcK	Cks	http://kanaya.aist-nara.ac.jp/KNApSAcK/	http://kanaya.naist.jp/knapsack_jsp/information.jsp?word=$id	C00000001	metabolite		1	urn:miriam:knapsack	^C\d{8}	KNApSAcK
-LIPID MAPS	Lm	http://www.lipidmaps.org	http://www.lipidmaps.org/data/get_lm_lipids_dbgif.php?LM_ID=$id	LMPR0102010012	metabolite		1	urn:miriam:lipidmaps	^LM(FA|GL|GP|SP|ST|PR|SL|PK)[0-9]{4}([0-9a-zA-Z]{4,6})?$	LIPID MAPS
+LIPID MAPS	Lm	http://www.lipidmaps.org	http://www.lipidmaps.org/data/get_lm_lipids_dbgif.php?LM_ID=$id	LMPR0102010012	metabolite		1	urn:miriam:lipidmaps	^LM(FA|GL|GP|SP|ST|PR|SL|PK)[0-9]{2}([0-9a-zA-Z]{2,8})?$	LIPID MAPS
 LipidBank	Lb	http://lipidbank.jp/index.html	http://lipidbank.jp/cgi-bin/detail.cgi?id=$id	BBA0001	metabolite		1	urn:miriam:lipidbank	^\w+\d+$	LipidBank
 MACiE	Ma	http://www.ebi.ac.uk/thornton-srv/databases/MACiE/index.html	http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/MACiE/entry/getPage.pl?id=$id	M0001	protein		1	urn:miriam:macie	^M\d{4}$	MACiE
 MaizeGDB	Mg		http://www.maizegdb.org/cgi-bin/displaylocusresults.cgi?term=$id	acc1	gene	Zea mays	1	Mg		MaizeGDB
@@ -81,7 +81,6 @@ miRBase Sequence	Mb	http://microrna.sanger.ac.uk/	http://microrna.sanger.ac.uk/c
 NASC Gene	N	http://arabidopsis.info/		ATMG00960-TAIR-G	gene	Arabidopsis thaliana	1	N	AT[\dCM]G\d{5}\-TAIR\-G	NASC Gene
 NCBI Protein	Np	http://www.ncbi.nlm.nih.gov/protein	http://www.ncbi.nlm.nih.gov/protein/$id	CAA71118.1	protein		1	urn:miriam:ncbiprotein	^\w+\d+(\.\d+)?$	NCBI Protein
 NCI Pathway Interaction Database	Pid	http://pid.nci.nih.gov/	http://pid.nci.nih.gov/search/pathway_landing.shtml?what=graphic&jpg=on&pathway_id=$id	pi3kcipathway	pathway		1	urn:miriam:pid.pathway	^\w+$	NCI Pathway Interaction Database
-NuGO wiki	Nw	http://wiki.nugo.org	http://wiki.nugo.org/index.php/$id	HMDB00001	metabolite		0	Nw		NuGO wiki
 OMIM	Om	http://omim.org/	http://omim.org/entry/$id	603903	gene		0	urn:miriam:omim	^[*#+%^]?\d{6}$	OMIM
 Oryzabase	Ob	http://www.shigen.nig.ac.jp/rice/oryzabase	http://www.shigen.nig.ac.jp/rice/oryzabase/gateway/gatewayAction.do?target=symbol&id=$id	468	gene	Oryza sativa	1	Ob		Oryzabase
 Other	O				gene		1	O		Other
@@ -116,7 +115,7 @@ SUPFAM	Sf	http://supfam.org/SUPERFAMILY/	http://supfam.org/SUPERFAMILY/cgi-bin/s
 SWISS-MODEL	Sw	http://swissmodel.expasy.org/	http://swissmodel.expasy.org/repository/smr.php?sptr_ac=$id	P23298	protein		1	urn:miriam:swiss-model	^\w+$	SWISS-MODEL
 SwissLipids	Sl	http://www.swisslipids.org/	http://www.swisslipids.org/#/entity/$id/	SLM:000048885	metabolite		1		^SML:\d+$	SwissLipids
 Systems Biology Ontology	Sbo	http://www.ebi.ac.uk/sbo/	http://www.ebi.ac.uk/sbo/main/$id	SBO:0000262	ontology		1	urn:miriam:biomodels.sbo	^SBO:\d{7}$	Systems Biology Ontology
-TAIR	A	http://arabidopsis.org/index.jsp	http://arabidopsis.org/servlets/TairObject?type=locus&name=$id	AT1G01030	gene		1	urn:miriam:tair.locus	^AT[1-5]G\d{5}$	TAIR Locus
+TAIR	A	http://arabidopsis.org/index.jsp	http://arabidopsis.org/servlets/TairObject?type=locus&name=$id	AT1G01030	gene	Arabidopsis thaliana	1	urn:miriam:tair.locus	^AT[1-5]G\d{5}$	TAIR Locus
 TIGR	Ti	http://www.jcvi.org/		12012.t00308	gene		1	Ti		TIGR
 TTD Drug	Td	http://bidd.nus.edu.sg/group/cjttd/TTD_HOME.asp	http://bidd.nus.edu.sg/group/cjttd/ZFTTDDRUG.asp?ID=$id	DAP000773	metabolite		1	urn:miriam:ttd.drug	^DAP\d+$	TTD Drug
 TTD Target	Tt	http://bidd.nus.edu.sg/group/cjttd/TTD_HOME.asp	http://bidd.nus.edu.sg/group/cjttd/ZFTTDDetail.asp?ID=$id	TTDS00056	protein		1	urn:miriam:ttd.target	^TTDS\d+$	TTD Target
@@ -131,7 +130,7 @@ Wheat gene refs	Wr	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/cgi-bin/gr
 WikiGenes	Wg	http://www.wikigenes.org/	http://www.wikigenes.org/e/gene/e/$id.html	7157	gene		0	urn:miriam:wikigenes		WikiGenes
 WikiPathways	Wp	http://www.wikipathways.org/	http://www.wikipathways.org/index.php/Pathway:$id	WP100	pathway		1	urn:miriam:wikipathways	WP\d{1,5}(_r\d+)?	WikiPathways
 Wikidata	Wd	http://www.wikidata.org	http://www.wikidata.org/wiki/$id	Q407962	metabolite		0	urn:miriam:wikidata	^Q\d+$	Wikidata
-Wikipedia	Wi	http://www.wikipedia.org	http://en.wikipedia.org/wiki/$id	Acetate	metabolite		0	urn:miriam:wikipedia.en		Wikipedia
+Wikipedia	Wi	http://www.wikipedia.org	http://en.wikipedia.org/wiki/$id	Acetate	metabolite		0	urn:miriam:wikipedia.en	^.*$	Wikipedia
 WormBase	W	http://www.wormbase.org/	http://www.wormbase.org/db/gene/gene?name=$id;class=Gene	WBGene00000001	gene	Caenorhabditis elegans	1	urn:miriam:wormbase	^WBGene\d{8}$	WormBase
 XMetDB	Xm	http://www.xmetdb.org/	http://www.xmetdb.org/xmetdb/protocol/$id	XMETDB171	interaction		1		^XMETDB\d+$	Xenobiotics Metabolism Database
 ZFIN	Z	http://zfin.org	http://zfin.org/action/marker/view/$id	ZDB-GENE-041118-11	gene	Danio rerio	1	urn:miriam:zfin	ZDB\-GENE\-\d+\-\d+	ZFIN Gene
