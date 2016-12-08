@@ -6,15 +6,15 @@
 #
 # Tab-delimited table:				
 #
-# column	header	description	example_entry	http://www.w3.org/1999/02/22-rdf-syntax-ns#about
-1	datasource_name	Conventional name for datasource	Affy	http://vocabularies.bridgedb.org/ops#conventionalName
-2	system_code	Conventional 1-3 letter code for datasource	X	http://vocabularies.bridgedb.org/ops#systemCode
-3	website_url	URL to main webpage for datasource	http://www.affymetrix.com/	http://vocabularies.bridgedb.org/ops#mainUrl
-4	linkout_pattern	URL pattern for constructing links to ID-specific datasource pages, using $id as substitution variable	https://www.affymetrix.com/LinkServlet?probeset=$id	http://vocabularies.bridgedb.org/ops#hasPrimaryUriPattern
-5	example_identifier	A valid example of a datasource identifier; may not be representative of all types of identifiers from a given resource	1851_s_at	http://vocabularies.bridgedb.org/ops#idExample
-6	entity_identified	Type of entity (e.g., biological molecule or concept) identified by datasource	probe	http://vocabularies.bridgedb.org/ops#type
-7	single_species	Specific species represented by datasource (latin genus species); blank if datasource represents more than one species	Homo sapiens	http://vocabularies.bridgedb.org/ops#aboutOrganism
-8	identifier_type	Conventional usage type for datasource: 1 = primary identifiers (used to uniquely identify molecules or concepts; useful for identifying entities on a pathway; useful targets for mapping measurement data), 0 = secondary identifiers (used to annotate molecules or concepts; useful as secondary linkouts; useful sources for data/annotation mapping)	0	http://vocabularies.bridgedb.org/ops#primary
-9	uri	Official URI for datasource (e.g., from miriam); or repeat of system_code if unknown or unregistered	urn:miriam:affy.probeset	http://www.w3.org/1999/02/22-rdf-syntax-ns#about
-10	regex	Regular expression capturing all possible identifiers as narrowly as possible for datasource (see miriam)	\d{4,}((_[asx])?_at)?	http://vocabularies.bridgedb.org/ops#hasRegexPattern
-11	official_name	Official name of datasource resource; useful as an end-user display name; useful in name resolution	Affymetrix Probeset	http://vocabularies.bridgedb.org/ops#fullName
+# column	header	description	example_entry	http://www.w3.org/1999/02/22-rdf-syntax-ns#about	http://www.w3.org/1999/02/22-rdf-syntax-ns#datatype
+1	datasource_name	Conventional name for datasource	Affy	http://vocabularies.bridgedb.org/ops#conventionalName	http://www.w3.org/2001/XMLSchema#string
+2	system_code	Conventional 1-3 letter code for datasource	X	http://vocabularies.bridgedb.org/ops#systemCode	http://www.w3.org/2001/XMLSchema#string
+3	website_url	URL to main webpage for datasource	http://www.affymetrix.com/	http://vocabularies.bridgedb.org/ops#mainUrl	http://www.w3.org/2001/XMLSchema#anyURI
+4	linkout_pattern	URL pattern for constructing links to ID-specific datasource pages, using $id as substitution variable	https://www.affymetrix.com/LinkServlet?probeset=$id	http://vocabularies.bridgedb.org/ops#hasPrimaryUriPattern	http://www.w3.org/2001/XMLSchema#string
+5	example_identifier	A valid example of a datasource identifier; may not be representative of all types of identifiers from a given resource	1851_s_at	http://vocabularies.bridgedb.org/ops#idExample	http://www.w3.org/2001/XMLSchema#string
+6	entity_identified	Type of entity (e.g., biological molecule or concept) identified by datasource	probe	http://vocabularies.bridgedb.org/ops#type	http://www.w3.org/2001/XMLSchema#string
+7	single_species	Specific species represented by datasource (latin genus species); blank if datasource represents more than one species	Homo sapiens	http://vocabularies.bridgedb.org/ops#aboutOrganism	http://www.w3.org/2001/XMLSchema#string
+8	identifier_type	Conventional usage type for datasource: 1 = primary identifiers (used to uniquely identify molecules or concepts; useful for identifying entities on a pathway; useful targets for mapping measurement data), 0 = secondary identifiers (used to annotate molecules or concepts; useful as secondary linkouts; useful sources for data/annotation mapping)	0	http://vocabularies.bridgedb.org/ops#primary	http://www.w3.org/2001/XMLSchema#boolean
+9	uri	Official URI for datasource (e.g., from miriam); or repeat of system_code if unknown or unregistered	urn:miriam:affy.probeset	http://www.w3.org/1999/02/22-rdf-syntax-ns#about	http://www.w3.org/2001/XMLSchema#anyURI
+10	regex	Regular expression capturing all possible identifiers as narrowly as possible for datasource (see miriam)	\d{4,}((_[asx])?_at)?	http://vocabularies.bridgedb.org/ops#hasRegexPattern	http://www.w3.org/2001/XMLSchema#string
+11	official_name	Official name of datasource resource; useful as an end-user display name; useful in name resolution	Affymetrix Probeset	http://vocabularies.bridgedb.org/ops#fullName	http://www.w3.org/2001/XMLSchema#string
