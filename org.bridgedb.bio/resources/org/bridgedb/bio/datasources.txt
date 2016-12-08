@@ -1,4 +1,4 @@
-Affy	X	http://www.affymetrix.com/	https://www.affymetrix.com/LinkServlet?probeset=$id	1851_s_at	probe		0	urn:miriam:affy.probeset	\d{4,}((_[asx])?_at)?	Affymetrix Probeset	
+Affy	X	http://www.affymetrix.com/	https://www.affymetrix.com/LinkServlet?probeset=$id	1851_s_at	probe		0	urn:miriam:affy.probeset	\d{4,}((_[asx])?_at)?	Affymetrix Probeset
 Agilent	Ag	http://agilent.com		A_24_P98555	probe		0	Ag	A_\d+_.+	Agilent
 BIND	Bi	http://www.bind.ca/	http://www.bind.ca/Action?identifier=bindid&idsearch=$id		interaction		1	urn:miriam:bind	^\d+$	BIND
 BioCyc	Bc	http://biocyc.org	http://biocyc.org/getid?id=$id	ECOLI:CYT-D-UBIOX-CPLX	gene		1	urn:miriam:biocyc	^\w+\:[A-Za-z0-9-]+$	BioCyc
