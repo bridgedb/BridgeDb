@@ -204,7 +204,7 @@ public class GdbConstructImpl3 implements GdbConstruct
 	}
 
 	/**
-	 * Excecutes several SQL statements to create the tables and indexes in the database the given
+	 * Executes several SQL statements to create the tables and indexes in the database the given
 	 * connection is connected to
 	 * Note: Official GDB's are created by AP, not with this code.
 	 * This is just here for testing purposes.
