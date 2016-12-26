@@ -248,10 +248,15 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 	    	{
 	    	 	pst.init();
 	    	 	ResultSet rs = pst.executeQuery();
-	    	 	while (rs.next())
-	    	 	{
-	    	 		DataSource ds = DataSource.getExistingBySystemCode(rs.getString(1)); 
-	    	 		result.add (ds);
+	    	 	while (rs.next()) {
+	    	 		String syscode = rs.getString(1);
+	    	 		if (DataSource.systemCodeExists(syscode)) {
+	    	 			DataSource ds = DataSource.getExistingBySystemCode(syscode);
+		    	 		result.add (ds);
+	    	 		} else {
+	    	 			DataSource ds = DataSource.register(syscode, "Unknown data source").asDataSource();
+	    	 			result.add (ds);
+	    	 		}
 	    	 	}
 	    	}
 	    	catch (SQLException ignore)
