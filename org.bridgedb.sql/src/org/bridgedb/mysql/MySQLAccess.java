@@ -27,7 +27,7 @@ import org.bridgedb.utils.BridgeDBException;
 
 /**
  * MYSQL specific wrapper.
- * 
+ *
  * @author Christian
  */
 public class MySQLAccess implements SQLAccess{
@@ -37,10 +37,10 @@ public class MySQLAccess implements SQLAccess{
     private String username;// = "irs";
     /** password for the database */
     private String password;// = "irs";
-    
+
     /**
      * Instantiate a connection to the database
-     * 
+     *
      * @throws IMSException If there is a problem connecting to the database.
      */
     public MySQLAccess(String dbUrl, String username, String password) throws BridgeDBException {
@@ -65,14 +65,20 @@ public class MySQLAccess implements SQLAccess{
 
     /**
      * Retrieve an active connection to the database
-     * 
+     *
      * @return database connection
      * @throws IMSException if there is a problem establishing a connection
      */
     @Override
     public Connection getConnection() throws BridgeDBException {
         try {
-            Connection conn = DriverManager.getConnection(dbUrl, username, password);
+            java.util.Properties info = new java.util.Properties();
+
+            info.put("user", username);
+            info.put("password", password);
+            info.put("protocol", "tcp");
+
+            Connection conn = DriverManager.getConnection(dbUrl, info);
             return conn;
         } catch (SQLException ex) {
             System.err.println(ex);
@@ -81,5 +87,5 @@ public class MySQLAccess implements SQLAccess{
             throw new BridgeDBException(msg, ex);
         }
     }
-    
+
 }
