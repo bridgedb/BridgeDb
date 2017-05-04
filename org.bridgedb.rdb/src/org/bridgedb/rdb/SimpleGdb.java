@@ -242,6 +242,27 @@ public abstract class SimpleGdb extends IDMapperRdb
 	}
 
 	/**
+	   @return number of rows in link table.
+	   @throws IDMapperException on failure
+	 */
+	final public int getLinkCount() throws IDMapperException
+	{
+		int result = 0;
+		try
+		{
+			ResultSet r = getConnection().createStatement().executeQuery("SELECT COUNT(*) FROM " + "link");
+			r.next();
+			result = r.getInt (1);
+			r.close();
+		}
+		catch (SQLException e)
+		{
+			throw new IDMapperException (e);
+		}
+		return result;
+	}
+
+	/**
 	 * @param ds DataSource to count identifiers for.
 	   @return number of identifiers table for the given datasource
 	   @throws IDMapperException on failure

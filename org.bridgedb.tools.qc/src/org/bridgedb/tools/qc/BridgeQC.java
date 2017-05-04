@@ -314,9 +314,17 @@ public class BridgeQC
 		compareLinks();
 		
 		compareAttributes();
-		compareFileSizes();		
+		compareFileSizes();
+
+		summarizeOverallStats();
 	}
 	
+	private void summarizeOverallStats() throws IDMapperException
+	{
+		System.out.println("INFO: total number of identifiers is " + newGdb.getGeneCount());
+		System.out.println("INFO: total number of mappings is " + newGdb.getLinkCount());
+	}
+
 	public static void printUsage()
 	{
 		System.out.println ("Expected 2 arguments: <old database> <new database>");
