@@ -418,6 +418,8 @@ bridgeDB:DataSource_Ensembl a bridgeDB:DataSource ;
 	bridgeDB:hasUriPattern <http://www.ensembl.org/id/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/ensembl/$id> ;
     bridgeDB:hasUriPattern <http://purl.uniprot.org/ensembl/$id> ;
+    ## '.../ensembl.transcript/$id' pattern added to fix: https://github.com/bridgedb/BridgeDb/issues/43
+    ## '<http://www.ensembl.org/id/$id>' pattern likely obsolete, not in uniprot in May, 2017.
     bridgeDB:hasUriPattern <http://rdf.ebi.ac.uk/resource/ensembl.transcript/$id> ;
     bridgeDB:hasUriPattern <http://rdf.ebi.ac.uk/resource/ensembl/$id> ;
 	bridgeDB:hasUriPattern <http://bio2rdf.org/ensembl:$id> .
