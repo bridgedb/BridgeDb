@@ -418,6 +418,7 @@ bridgeDB:DataSource_Ensembl a bridgeDB:DataSource ;
 	bridgeDB:hasUriPattern <http://www.ensembl.org/id/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/ensembl/$id> ;
     bridgeDB:hasUriPattern <http://purl.uniprot.org/ensembl/$id> ;
+    bridgeDB:hasUriPattern <http://purl.uniprot.org/ensembl.transcript/$id> ;
     bridgeDB:hasUriPattern <http://rdf.ebi.ac.uk/resource/ensembl/$id> ;
 	bridgeDB:hasUriPattern <http://bio2rdf.org/ensembl:$id> .
 
