@@ -72,16 +72,19 @@ public class PatternChecker
 		while (rs.next())
 		{
 			String id = rs.getString(1);
-			DataSource ds = DataSource.getExistingBySystemCode(rs.getString(2));
-			if (patterns.get(ds) == null) continue; // skip if there is no pattern defined.
-			
-			Set<DataSource> matches = DataSourcePatterns.getDataSourceMatches(id);
-			if (!matches.contains(ds))
-			{
-				if (missExamples.get(ds).size() < 10) missExamples.put(ds, id);
-				misses.add (ds);
+			String syscode = rs.getString(2);
+			if (DataSource.systemCodeExists(syscode)) {
+				DataSource ds = DataSource.getExistingBySystemCode(syscode);
+				if (patterns.get(ds) == null) continue; // skip if there is no pattern defined.
+
+				Set<DataSource> matches = DataSourcePatterns.getDataSourceMatches(id);
+				if (!matches.contains(ds))
+				{
+					if (missExamples.get(ds).size() < 10) missExamples.put(ds, id);
+					misses.add (ds);
+				}
+				totals.add (ds);
 			}
-			totals.add (ds);
 		}
 			
 			
