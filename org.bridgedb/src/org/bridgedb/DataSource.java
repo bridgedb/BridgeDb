@@ -28,9 +28,9 @@ import java.util.Set;
 /**
 Contains information about a certain DataSource. This includes:
 <ul>
-<li>It's full name ("Ensembl")
-<li>It's system code ("En")
-<li>It's main url ("http://www.ensembl.org")
+<li>Its full name ("Ensembl")
+<li>Its system code ("En")
+<li>Its main url ("http://www.ensembl.org")
 <li>Id-specific url's ("http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=" + id)
 </ul>
 The DataSource class uses the extensible <code>enum</code> pattern.
