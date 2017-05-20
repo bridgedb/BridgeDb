@@ -14959,7 +14959,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000039>
       a       dcat:CatalogRecord ;
-      idot:idRegexPattern "^((AC|AP|NC|NG|NM|NP|NR|NT|NW|XM|XP|XR|YP|ZP)_\\d+|(NZ\\_[A-Z]{4}\\d+))(\\.\\d+)?$"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:idRegexPattern "^((AC|AP|NC|NG|NM|NP|NR|NT|NW|WP|XM|XP|XR|YP|ZP)_\\d+|(NZ\\_[A-Z]{4}\\d+))(\\.\\d+)?$"^^<http://www.w3.org/2001/XMLSchema#string> ;
       idot:namespace "refseq"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:exampleResource
               "NP_012345"^^<http://www.w3.org/2001/XMLSchema#string> ;
