@@ -723,7 +723,7 @@
               "98034"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:inDataset <http://identifiers.org/registry/> ;
       void:uriSpace <http://identifiers.org/tol/> ;
-      dcat:description """The Tree of Life Web Project (ToL) is a collaborative effort of biologists and nature enthusiasts from around the world. On more than 10,000 World Wide Web pages, the project provides information about biodiversity, the characteristics of different groups of organisms, and their evolutionary history (phylogeny).
+      dcat:description """The Tree of Life Web Project (ToL) is a collaborative effort of biologists and nature enthusiasts from around the world. On more than 10,000 World Wide Web pages, the project provides information about biodiversity, the characteristics of different groups of organisms, and their evolutionary history (phylogeny). 
 
 Each page contains information about a particular group, with pages linked one to another hierarchically, in the form of the evolutionary tree of life. Starting with the root of all Life on Earth and moving out along diverging branches to individual species, the structure of the ToL project thus illustrates the genetic connections between all living things."""^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:distribution <http://identifiers.org/miriam.resource/MIR:00100525#application/xhtml+xml> ;
@@ -3139,7 +3139,7 @@ The interactions include direct (physical) and indirect (functional) association
               "PA146123006"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:inDataset <http://identifiers.org/registry/> ;
       void:uriSpace <http://identifiers.org/pharmgkb.pathways/> ;
-      dcat:description """The PharmGKB database is a central repository for genetic, genomic, molecular and cellular phenotype data and clinical information about people who have participated in pharmacogenomics research studies. The data includes, but is not limited to, clinical and basic pharmacokinetic and pharmacogenomic research in the cardiovascular, pulmonary, cancer, pathways, metabolic and transporter domains.
+      dcat:description """The PharmGKB database is a central repository for genetic, genomic, molecular and cellular phenotype data and clinical information about people who have participated in pharmacogenomics research studies. The data includes, but is not limited to, clinical and basic pharmacokinetic and pharmacogenomic research in the cardiovascular, pulmonary, cancer, pathways, metabolic and transporter domains. 
 PharmGKB Pathways are drug centric, gene based, interactive pathways which focus on candidate genes and gene groups and associated genotype and phenotype data of relevance for pharmacogenetic and pharmacogenomic studies."""^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:distribution <http://identifiers.org/miriam.resource/MIR:00100120#application/xhtml+xml> ;
       dcat:identifier "MIR:00000089"^^<http://www.w3.org/2001/XMLSchema#string> ;
@@ -10580,7 +10580,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "BSU29180"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:inDataset <http://identifiers.org/registry/> ;
       void:uriSpace <http://identifiers.org/subtiwiki/> ;
-      dcat:description """SubtiWiki is a scientific wiki for the model bacterium Bacillus subtilis. It provides comprehensive information on all genes and their proteins and RNA products, as well as information related to the current investigation of the gene/protein.
+      dcat:description """SubtiWiki is a scientific wiki for the model bacterium Bacillus subtilis. It provides comprehensive information on all genes and their proteins and RNA products, as well as information related to the current investigation of the gene/protein. 
 Note: Currently, direct access to RNA products is restricted. This is expected to be rectified soon."""^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:distribution <http://identifiers.org/miriam.resource/MIR:00100172#application/xhtml+xml> ;
       dcat:identifier "MIR:00000132"^^<http://www.w3.org/2001/XMLSchema#string> ;
