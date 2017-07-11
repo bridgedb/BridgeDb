@@ -301,7 +301,7 @@ KnapSack	knapsack		http://kanaya.naist.jp/knapsack_jsp/information.jsp?word=$id	
 Ligand Expo	ligandexpo		http://ligand-depot.rutgers.edu/pyapps/ldHandler.py?formid=cc-index-search&target=$id&operation=ccid	ABC	unknown		1	urn:miriam:ligandexpo	^(\w){3}$	
 Ligand-Gated Ion Channel database	lgic		http://www.ebi.ac.uk/compneur-srv/LGICdb/HTML/$id.php	5HT3Arano	unknown		1	urn:miriam:lgic	^\w+$	
 LigandBox	ligandbox		http://ligandbox.protein.osaka-u.ac.jp/ligandbox/cgi-bin/liginf.cgi?id=$id	D00001	unknown		1	urn:miriam:ligandbox	^D\d{5}	
-LIPID MAPS	Lm	http://www.lipidmaps.org	http://www.lipidmaps.org/data/get_lm_lipids_dbgif.php?LM_ID=$id	LMPR0102010012	metabolite		1	urn:miriam:lipidmaps	^LM(FA|GL|GP|SP|ST|PR|SL|PK)[0-9]{4}([0-9a-zA-Z]{4,6})?$	LIPID MAPS
+LIPID MAPS	Lm	http://www.lipidmaps.org	http://www.lipidmaps.org/data/LMSDRecord.php?LMID=$id	LMPR0102010012	metabolite		1	urn:miriam:lipidmaps	^LM(FA|GL|GP|SP|ST|PR|SL|PK)[0-9]{4}([0-9a-zA-Z]{4,6})?$	LIPID MAPS
 LipidBank	Lb	http://lipidbank.jp/index.html	http://lipidbank.jp/cgi-bin/detail.cgi?id=$id	BBA0001	metabolite		1	urn:miriam:lipidbank	^\w+\d+$	LipidBank
 Locus Reference Genomic	lrg	http://www.lrg-sequence.org/	ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$id.xml	LRG_258	unknown		1	urn:miriam:lrg	^LRG_\d+$	
 MACiE	Ma	http://www.ebi.ac.uk/thornton-srv/databases/MACiE/index.html	http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/MACiE/entry/getPage.pl?id=$id	M0001	protein		1	urn:miriam:macie	^M\d{4}$	MACiE

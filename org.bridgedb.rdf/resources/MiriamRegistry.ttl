@@ -15043,7 +15043,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
 
 <http://identifiers.org/miriam.resource/MIR:00100080#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.lipidmaps.org/data/get_lm_lipids_dbgif.php?LM_ID=$id> ;
+      dcat:accessURL <http://www.lipidmaps.org/data/LMSDRecord.php?LMID=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100080> .
 

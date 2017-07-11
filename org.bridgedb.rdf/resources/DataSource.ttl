@@ -759,7 +759,7 @@ bridgeDB:DataSource_LIPID_MAPS a bridgeDB:DataSource ;
 	bridgeDB:idExample "LMPR0102010012" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.lipidmaps.org/data/get_lm_lipids_dbgif.php?LM_ID=$id> ;
+	bridgeDB:hasPrimaryUriPattern <http://www.lipidmaps.org/data/LMSDRecord.php?LMID=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/lipidmaps/$id> .
 
 bridgeDB:DataSource_LRG a bridgeDB:DataSource ;

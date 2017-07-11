@@ -3495,7 +3495,7 @@ bridgeDB:DataSource_LIPID_MAPS a bridgeDB:DataSource ;
 	bridgeDB:idExample "LMPR0102010012" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.lipidmaps.org/data/get_lm_lipids_dbgif.php?LM_ID=$id> ;
+	bridgeDB:hasPrimaryUriPattern <http://www.lipidmaps.org/data/LMSDRecord.php?LMID=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/lipidmaps/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/lipidmaps/$id> ;
 	bridgeDB:hasRegexPattern "^LM(FA|GL|GP|SP|ST|PR|SL|PK)[0-9]{4}([0-9a-zA-Z]{4,6})?$" ;
@@ -11675,7 +11675,7 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	bridgeDB:hasPrefix "http://www.lgcstandards-atcc.org/Products/All/" ;
 	bridgeDB:hasPostfix ".aspx" .
 
-<http://www.lipidmaps.org/data/get_lm_lipids_dbgif.php?LM_ID=$id> a bridgeDB:UriPattern ;
+<http://www.lipidmaps.org/data/LMSDRecord.php?LMID=$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.lipidmaps.org/data/get_lm_lipids_dbgif.php?LM_ID=" .
 
 <http://www.maizegdb.org/cgi-bin/displaylocusrecord.cgi?id=$id> a bridgeDB:UriPattern ;
