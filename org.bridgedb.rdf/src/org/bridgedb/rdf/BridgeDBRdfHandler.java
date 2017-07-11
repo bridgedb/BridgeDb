@@ -330,7 +330,7 @@ public class BridgeDBRdfHandler extends RdfBase{
             UriPattern.addAll(repositoryConnection);
             writeRDF(repositoryConnection, file);        
         } catch (Exception ex) {
-            throw new BridgeDBException ("Error writing Rdf to file ", ex);
+            throw new BridgeDBException ("Error writing RDF to file:" + ex.getMessage(), ex);
         } finally {
             shutDown(repository, repositoryConnection);
         }
