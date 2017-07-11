@@ -8165,7 +8165,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100495#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://en.wikipedia.org/wiki/$id> ;
+      dcat:accessURL <https://en.wikipedia.org/wiki/$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100495> .
 

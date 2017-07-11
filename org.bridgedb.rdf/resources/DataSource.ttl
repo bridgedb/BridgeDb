@@ -1204,7 +1204,7 @@ bridgeDB:DataSource_Wikipedia a bridgeDB:DataSource ;
 	bridgeDB:idExample "Acetate" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
-	bridgeDB:hasPrimaryUriPattern <http://en.wikipedia.org/wiki/$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://en.wikipedia.org/wiki/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/wikipedia.en/$id> ;
 	bridgeDB:hasUriPattern <http://dbpedia.org/resource/$id> .
 

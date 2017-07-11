@@ -6401,7 +6401,7 @@ bridgeDB:DataSource_Wikipedia a bridgeDB:DataSource ;
 	bridgeDB:idExample "Acetate" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
-	bridgeDB:hasPrimaryUriPattern <http://en.wikipedia.org/wiki/$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://en.wikipedia.org/wiki/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/wikipedia.en/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/wikipedia.en/$id> ;
 	bridgeDB:hasRegexPattern "^[A-Za-z-0-9_]+$" ;
@@ -7211,8 +7211,8 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	bridgeDB:hasPrefix "http://elm.eu.org/elms/elmPages/" ;
 	bridgeDB:hasPostfix ".html" .
 
-<http://en.wikipedia.org/wiki/$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://en.wikipedia.org/wiki/" .
+<https://en.wikipedia.org/wiki/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://en.wikipedia.org/wiki/" .
 
 <http://ensemblgenomes.org/id/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://ensemblgenomes.org/id/" .
