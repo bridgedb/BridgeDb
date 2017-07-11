@@ -6,6 +6,7 @@ BioGrid	Bg	http://thebiogrid.org/	http://thebiogrid.org/$id	31623	interaction		1
 BioModels Database	Bm	http://www.ebi.ac.uk/biomodels/	http://www.ebi.ac.uk/biomodels-main/$id	BIOMD0000000048	pathway		1	urn:miriam:biomodels.db	^((BIOMD|MODEL)\d{10})|(BMID\d{12})$	BioModels Database
 BioSystems	Bs	http://www.ncbi.nlm.nih.gov/biosystems/	http://www.ncbi.nlm.nih.gov/biosystems/$id	001	pathway		1	urn:miriam:biosystems	^\d+$	BioSystems
 BRENDA	Br	http://www.brenda-enzymes.org/	http://www.brenda-enzymes.org/php/result_flat.php4?ecno=$id	1.1.1.1	protein		1	urn:miriam:brenda	^((\d+\.-\.-\.-)|(\d+\.\d+\.-\.-)|(\d+\.\d+\.\d+\.-)|(\d+\.\d+\.\d+\.\d+))$	BRENDA
+BRENDA Ligands	Brl	http://www.brenda-enzymes.org/	http://www.brenda-enzymes.de/ligand.php?brenda_ligand_id=$id	278	metabolite		1	Brl	^\d+$	BRENDA Ligands
 CAS	Ca	http://commonchemistry.org	http://commonchemistry.org/ChemicalDetail.aspx?ref=$id	50-00-0	metabolite		1	urn:miriam:cas	^\d{1,7}\-\d{2}\-\d$	CAS
 CCDS	Cc	http://identifiers.org/ccds/	http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=ALLFIELDS&DATA=$id	CCDS33337	gene		0	urn:miriam:ccds	^CCDS\d+\.\d+$	Consensus CDS
 ChEMBL compound	Cl	https://www.ebi.ac.uk/chembldb/	https://www.ebi.ac.uk/chembl/compound/inspect/$id	CHEMBL308052	metabolite		1	urn:miriam:chembl.compound	^CHEMBL\d+$	ChEMBL compound
