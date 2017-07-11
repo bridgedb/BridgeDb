@@ -73,6 +73,7 @@ LipidBank	Lb	http://lipidbank.jp/index.html	http://lipidbank.jp/cgi-bin/detail.c
 MACiE	Ma	http://www.ebi.ac.uk/thornton-srv/databases/MACiE/index.html	http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/MACiE/entry/getPage.pl?id=$id	M0001	protein		1	urn:miriam:macie	^M\d{4}$	MACiE
 MaizeGDB	Mg		http://www.maizegdb.org/cgi-bin/displaylocusresults.cgi?term=$id	acc1	gene	Zea mays	1	Mg		MaizeGDB
 MatrixDB	Md	http://matrixdb.ibcp.fr/	http://matrixdb.ibcp.fr/cgi-bin/model/report/default?name=$id&class=Association	P00747_P07355	interaction		1	urn:miriam:matrixdb.association	^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])_.*|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9]_.*)|(GAG_.*)|(MULT_.*)|(PFRAG_.*)|(LIP_.*)|(CAT_.*)$	MatrixDB
+MetaboLights	Ml	http://www.ebi.ac.uk/metabolights/	http://www.ebi.ac.uk/metabolights/$id	MTBLC17170	metabolite		1	Ml	^MTBLC\-\d{1,6}$	MetaboLights Compounds
 MetaCyc	Mc	http://www.metacyc.org/	http://www.metacyc.org/META/NEW-IMAGE?type=NIL&object=$id	D-GLUTAMATE-OXIDASE-RXN	interaction		1	Mc		MetaCyc
 MGI	M	http://www.informatics.jax.org/	http://www.informatics.jax.org/marker/$id	MGI:2442292	gene	Mus musculus	1	urn:miriam:mgd	^MGI:\d+$	Mouse Genome Database
 MINT	Mi	http://mint.bio.uniroma2.it/mint/	http://mint.bio.uniroma2.it/mint/search/inFrameInteraction.do?interactionAc=$id	MINT-10000	interaction		1	urn:miriam:mint	^MINT\-\d{1,5}$	MINT
