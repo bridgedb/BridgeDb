@@ -94,7 +94,7 @@ public class IdentifersOrgReader extends RdfBase {
             Reporter.println("Registry read in. Now loading DataSources");
             loadData(repositoryConnection);
         } catch (Exception ex) {
-            throw new BridgeDBException ("Error parsing Rdf inputStream ", ex);
+            throw new BridgeDBException ("Error parsing RDF inputStream: " + ex.getMessage(), ex);
         } finally {
             try {
                 stream.close();
