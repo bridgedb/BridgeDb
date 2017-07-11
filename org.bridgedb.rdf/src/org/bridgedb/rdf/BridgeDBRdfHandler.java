@@ -92,7 +92,7 @@ public class BridgeDBRdfHandler extends RdfBase{
             readAllDataSources(repositoryConnection);
             readAllUriPatterns(repositoryConnection);      
         } catch (Exception ex) {
-            throw new BridgeDBException ("Error parsing Rdf inputStream ", ex);
+            throw new BridgeDBException ("Error parsing RDF inputStream: " + ex.getMessage(), ex);
         } finally {
             try {
                 stream.close();
