@@ -67,6 +67,7 @@ BridgeDb and related tools are developed by (alphabetic order):
  * Martin Kutmon
  * Jonathan Melius
  * Anders Riutta
+ * Randy Kerber
 
 The lead teams at this moment are (alphabetic order):
 
