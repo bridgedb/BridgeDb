@@ -1,5 +1,5 @@
 Bundle-Name: org.bridgedb.sql
-Bundle-Version: 2.2.0.qualifier
+Bundle-Version: 2.2.0
 Bundle-SymbolicName: org.bridgedb.sql
 Export-Package: * 
 Require-Bundle: org.bridgedb,
