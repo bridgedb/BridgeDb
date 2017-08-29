@@ -12,7 +12,7 @@
 		and are identifier mapping files for genes, proteins, and metabolites.
 	</description>
 	<url>http://www.bridgedb.org/</url>
-  <inceptionYear>2009</inceptionYear>
+  <inceptionYear>2006</inceptionYear>
   <modules>
   	<module>org.bridgedb</module>
   	<module>org.bridgedb.bio</module>
