@@ -19,8 +19,12 @@
 //
 package org.bridgedb.ws.server;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.file.IDMapperText;
@@ -37,8 +41,9 @@ public class IDMapperCapabilitiesTest extends org.bridgedb.utils.IDMapperCapabil
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException, MalformedURLException{
-        File INTERFACE_TEST_FILE = new File ("test-data/interfaceTest.txt");
-        IDMapper inner = new IDMapperText(INTERFACE_TEST_FILE.toURL());
+        URL INTERFACE_TEST_FILE = IDMapperCapabilitiesTest.class.getResource("/interfaceTest.txt");
+        assertNotNull("Can't find test-data/interfaceTest.txt", INTERFACE_TEST_FILE);
+        IDMapper inner = new IDMapperText(INTERFACE_TEST_FILE);
         WSCoreInterface  webService = new WSCoreService(inner);
         capabilities = new WSCoreMapper(webService);
     }
