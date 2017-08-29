@@ -4,8 +4,15 @@
   <groupId>org.bridgedb</groupId>
   <artifactId>bridgedb-bundle</artifactId>
   <packaging>pom</packaging>
+	<version>2.2.1-SNAPSHOT</version>	
   <name>BridgeDb bundle</name>
-  <version>2.2.1-SNAPSHOT</version>
+	<description>
+		BridgeDb is a framework for finding and mapping equivalent database
+		identifiers. It has many facets: it is both a framework, live services,
+		and are identifier mapping files for genes, proteins, and metabolites.
+	</description>
+	<url>http://www.bridgedb.org/</url>
+  <inceptionYear>2009</inceptionYear>
   <modules>
   	<module>org.bridgedb</module>
   	<module>org.bridgedb.bio</module>
@@ -102,6 +109,7 @@
             <version>2.4</version>
             <executions>
               <execution>
+							 <id>attach-sources</id>
                 <goals>
                   <goal>jar</goal>
                   <goal>test-jar</goal>
@@ -109,7 +117,17 @@
               </execution>
             </executions>
           </plugin>
-
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.5.3</version>
+					<configuration>
+						<autoVersionSubmodules>true</autoVersionSubmodules>
+						<useReleaseProfile>true</useReleaseProfile>
+						<releaseProfiles>release</releaseProfiles>
+						<goals>deploy</goals>
+					</configuration>
+				</plugin>
         </plugins>
 	</build>
 	
@@ -140,52 +158,66 @@
 			</distributionManagement>
 		</profile>
 		<profile>
-			<id>openphacts</id>
-			<!-- use as: mvn release:prepare -Popenphacts-->
-      <distributionManagement>
-          <repository>
-              <id>myGrid ops</id>
-              <name>myGrid Open PHACTS repository</name>
-              <url>http://repository.mygrid.org.uk/artifactory/ops</url>
-          </repository>
-          <snapshotRepository>
-              <id>myGrid ops</id>
-              <name>myGrid Open PHACTS repository</name>
-              <url>http://repository.mygrid.org.uk/artifactory/ops</url>
-          </snapshotRepository>
-      </distributionManagement>
+			<id>release</id>
+			<!-- use as: mvn release:prepare -Prelease-->
+			<distributionManagement>
+				<!-- Maven Central - see http://central.sonatype.org/pages/apache-maven.html -->
+				<repository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+				</repository>
+				<snapshotRepository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</snapshotRepository>
+			</distributionManagement>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.7</version>
+						<extensions>true</extensions>
+						<configuration>
+							<serverId>ossrh</serverId>
+							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+							<autoReleaseAfterClose>false</autoReleaseAfterClose>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.5</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>2.9.1</version>
+						<configuration>
+							<additionalparam>-Xdoclint:none</additionalparam>
+						</configuration>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
-  	<repositories>
-		<repository>
-			<id>sonatype-nexus-snapshots</id>
-			<name>Sonatype Nexus Snapshots</name>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-    <repository>
-        <id>myGrid ops</id>
-        <name>myGrid Open PHACTS repository</name>
-        <url>http://repository.mygrid.org.uk/artifactory/ops</url>
-        <releases>
-          <enabled>true</enabled>
-        </releases>
-        <snapshots>
-          <enabled>true</enabled>
-        </snapshots>
-    </repository>
-		<!--repository>
-			<id>maven2-repository.java.net</id>
-			<name>Java.net Repository for Maven</name>
-			<url>http://download.java.net/maven/2/</url>
-			<layout>default</layout>
-		</repository-->
-	</repositories>
   <scm>
     <connection>scm:git:https://github.com/bridgedb/BridgeDb.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/bridgedb/BridgeDb.git</developerConnection>
@@ -193,10 +225,103 @@
   </scm>
   <licenses>
     <license>
-      <name>The Apache Software License, Version 2.0</name>
+      <name>Apache License, Version 2.0</name>
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
+	<organization>
+	  <name>BridgeDb project</name>
+		<url>http://www.bridgedb.org/</url>
+	</organization>
+	<mailingLists>
+    <mailingList>
+      <name>bridgedb-discuss</name>
+      <subscribe>bridgedb-discuss+subscribe@googlegroups.com</subscribe>
+      <unsubscribe>bridgedb-discuss+unsubscribe@googlegroups.com</unsubscribe>
+      <post>bridgedb-discuss@googlegroups.com </post>
+      <archive>http://groups.google.com/group/bridgedb-discuss/</archive>
+    </mailingList>
+	</mailingLists>
+	<developers>
+<!-- Listed alphabetical by surname
 
+  	<developer>
+  		<id>githubusername</id>
+  		<email>usually@omitted.com</email>
+  		<name>Full Name</name>
+  		<url>http://orcid.org/0000-... or https://github.com/username</url>
+  	</developer>
+-->
+  	<developer>
+  		<id>Christian-B</id>
+  		<name>Christian Y. Brenninkmeijer</name>
+  		<url>http://orcid.org/0000-0002-2937-7819</url>
+  	</developer>
+  	<developer>
+  		<id>jjgao</id>
+  		<name>Jianjiong Gao</name>
+  		<url>http://orcid.org/0000-0002-5739-1781</url>
+  	</developer>
+  	<developer>
+  		<id>AlasdairGray</id>
+  		<name>Alasdair Gray</name>
+  		<url>http://orcid.org/0000-0002-5711-4872</url>
+  	</developer>
+  	<developer>
+  		<id>isaacyho</id>
+  		<name>Isaac Ho</name>
+  		<url>https://www.linkedin.com/in/isaacyho/</url>
+  	</developer>
+  	<developer>
+  		<id>amarillion</id>
+  		<name>Martijn van Iersel</name>
+  		<url>http://orcid.org/0000-0002-5877-4338</url>
+  	</developer>
+		<developer>
+  		<id>randykerber</id>
+  		<name>Randy Kerber</name>
+  		<url>http://orcid.org/0000-0002-8694-5157</url>
+  	</developer>
+		<developer>
+  		<id>mkutmon</id>
+  		<name>Martina Kutmon</name>
+  		<url>http://orcid.org/0000-0002-7699-8191</url>
+  	</developer>
+		<developer>
+  		<id>JonathanMELIUS</id>
+  		<name>Jonathan Mélius</name>
+  		<url>https://orcid.org/0000-0001-8624-2972</url>
+  	</developer>
+  	<developer>
+  		<id>AlexanderPico</id>
+  		<name>Alexander Pico</name>
+  		<url>http://orcid.org/0000-0001-5706-2163</url>
+  	</developer>
+		<developer>
+  		<id>ariutta</id>
+  		<name>Anders Riutta</name>
+  		<url>http://orcid.org/0000-0002-4693-0591</url>
+  	</developer>
+		<developer>
+  		<id>stain</id>
+  		<email>stain@apache.org</email>
+  		<name>Stian Soiland-Reyes</name>
+  		<url>http://orcid.org/0000-0001-9842-9718</url>
+  	</developer>
+  	<developer>
+  		<id>egonw</id>
+  		<email>egon.willighagen@gmail.com</email>
+  		<name>Egon Willighagen</name>
+  		<url>http://orcid.org/0000-0001-7542-0286</url>
+  	</developer>
+	</developers>
+	<issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/bridgedb/BridgeDb/issues</url>
+  </issueManagement>
+	<ciManagement>
+	  <system>jenkins</system>
+		<url>http://build.mygrid.org.uk/ci/job/ops-BridgeDb/</url>
+	</ciManagement>
 </project>

@@ -1,3 +1,9 @@
+BridgeDb
+========
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.593034.svg)](https://doi.org/10.5281/zenodo.593034)
+
+
 Compilation
 -----------
 
@@ -61,11 +67,11 @@ BridgeDb and related tools are developed by (alphabetic order):
  * Alasdair Gray
  * Isaac Ho
  * Martijn van Iersel
- * Alex Pico
+ * Alexander Pico
  * Stian Soiland-Reyes
  * Egon Willighagen
- * Martin Kutmon
- * Jonathan Melius
+ * Martina Kutmon
+ * Jonathan Mélius
  * Anders Riutta
  * Randy Kerber
 
