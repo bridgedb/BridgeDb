@@ -1,11 +1,10 @@
 package org.bridgedb.webservice.uniprot;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,10 +33,11 @@ import com.google.common.collect.HashBiMap;
  * Code based on documentation of Uniprot webservice found here: 
  * http://www.uniprot.org/faq/28#id_mapping_examples
  */
+@SuppressWarnings("deprecation")
 public class IDMapperUniprot implements IDMapper
 {
-	private static final String DEFAULT_BASE_URL = "http://www.uniprot.org";
-	private final String baseURL;
+	private static final URI DEFAULT_BASE_URL = URI.create("http://www.uniprot.org/");
+	private final URI baseURL;
 	
 	static 
 	{
@@ -49,22 +49,29 @@ public class IDMapperUniprot implements IDMapper
 
 		public IDMapper connect(String location) throws IDMapperException 
 		{
-			String baseURL = DEFAULT_BASE_URL;
+			URI baseURL = DEFAULT_BASE_URL;
 
 			Map<String, String> info = 
 				InternalUtils.parseLocation(location);
 			
 			if (info.containsKey("BASE"))
 			{
-				baseURL = info.get("BASE");
+				String base = info.get("BASE");
+				if (! (base.endsWith("/"))) {
+					base += "/";
+				}					
+				baseURL = URI.create(base);
 			}
 			return new IDMapperUniprot(baseURL);
 		}
 	}
 	
 	
-	private IDMapperUniprot(String baseURL)
+	private IDMapperUniprot(URI baseURL)
 	{
+		if (! (baseURL.isAbsolute())) {
+			throw new IllegalArgumentException("Base URL must be absolute: " + baseURL);
+		}
 		this.baseURL = baseURL;
 	}
 
@@ -86,7 +93,7 @@ public class IDMapperUniprot implements IDMapper
 		return null;
 	}
 
-	private class UniprotCapabilities extends AbstractIDMapperCapabilities
+  	private class UniprotCapabilities extends AbstractIDMapperCapabilities
 	{
 			/** default constructor.
 			 * @throws IDMapperException when database is not available */
@@ -97,12 +104,12 @@ public class IDMapperUniprot implements IDMapper
 
 		/** {@inheritDoc} */
 		public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
-			return IDMapperUniprot.this.aliasses.values();
+			return IDMapperUniprot.aliasses.values();
 		}
 
 		/** {@inheritDoc} */
 		public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
-			return IDMapperUniprot.this.aliasses.values();
+			return IDMapperUniprot.aliasses.values();
 		}
 
 	}
@@ -123,10 +130,10 @@ public class IDMapperUniprot implements IDMapper
 	public String[] runMappingQuery (String from, String to, String query) throws IDMapperException
 	{
 		String response = runQuery("mapping", new NameValuePair[] {
-					   new NameValuePair("from", from),
-					   new NameValuePair("to", to),
-					   new NameValuePair("format", "tab"),
-					   new NameValuePair("query", query),
+		  		  new NameValuePair("from", from),
+		  		  new NameValuePair("to", to),
+		  		  new NameValuePair("format", "tab"),
+		  		  new NameValuePair("query", query),
 		  		});
 		return response.split("\n");
 	}
@@ -310,20 +317,24 @@ public class IDMapperUniprot implements IDMapper
 	public String runQuery(String tool, NameValuePair[] params) throws IDMapperException
 	{
 		HttpClient client = new HttpClient();
-		String location = baseURL + '/' + tool + '/';
-		HttpMethod method = new PostMethod(location);
-		((PostMethod) method).addParameters(params);		
+		URI location = baseURL.resolve(tool + '/');
+		HttpMethod method = new PostMethod(location.toASCIIString());
+		((PostMethod)method).addParameters(params);		
 		method.setFollowRedirects(false);
 
 		try
 		{
 			int status = client.executeMethod(method);
-	
-			if (status == HttpStatus.SC_MOVED_TEMPORARILY)
-			{
-				location = method.getResponseHeader("Location").getValue();
+			
+			// Handle redirects manually (TODO: why?)
+			if (status == HttpStatus.SC_MOVED_TEMPORARILY || status == HttpStatus.SC_MOVED_PERMANENTLY || 
+				status == HttpStatus.SC_SEE_OTHER || status == HttpStatus.SC_TEMPORARY_REDIRECT)
+			{			
+				String redirect = method.getResponseHeader("Location").getValue();
+				// Resolve potentially relative URI
+				location = location.resolve(redirect);				
 				method.releaseConnection();
-				method = new GetMethod(location);
+				method = new GetMethod(location.toASCIIString());
 				status = client.executeMethod(method);
 			}	
 
@@ -337,7 +348,7 @@ public class IDMapperUniprot implements IDMapper
 					break;
 				Thread.sleep(wait * 1000);
 				method.releaseConnection();
-				method = new GetMethod(location);
+				method = new GetMethod(location.toASCIIString());
 				status = client.executeMethod(method);
 			}
 	
