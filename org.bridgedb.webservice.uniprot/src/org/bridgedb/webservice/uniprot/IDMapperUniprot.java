@@ -37,40 +37,40 @@ import com.google.common.collect.HashBiMap;
 public class IDMapperUniprot implements IDMapper
 {
 	private static final String DEFAULT_BASE_URL = "http://www.uniprot.org";
-    private final String baseURL;
+	private final String baseURL;
 	
-    static 
-    {
-        BridgeDb.register ("idmapper-uniprot", new Driver());
-    }
+	static 
+	{
+		BridgeDb.register ("idmapper-uniprot", new Driver());
+	}
 
-    private static class Driver implements org.bridgedb.Driver {
-        private Driver() { } // prevent outside instantiation
+	private static class Driver implements org.bridgedb.Driver {
+		private Driver() { } // prevent outside instantiation
 
-        public IDMapper connect(String location) throws IDMapperException 
-        {
-            String baseURL = DEFAULT_BASE_URL;
+		public IDMapper connect(String location) throws IDMapperException 
+		{
+			String baseURL = DEFAULT_BASE_URL;
 
-            Map<String, String> info = 
-            	InternalUtils.parseLocation(location);
-            
-            if (info.containsKey("BASE"))
-            {
-            	baseURL = info.get("BASE");
-        	}
-            return new IDMapperUniprot(baseURL);
-        }
-    }
-    
-    
-    private IDMapperUniprot(String baseURL)
-    {
-    	this.baseURL = baseURL;
-    }
+			Map<String, String> info = 
+				InternalUtils.parseLocation(location);
+			
+			if (info.containsKey("BASE"))
+			{
+				baseURL = info.get("BASE");
+			}
+			return new IDMapperUniprot(baseURL);
+		}
+	}
+	
+	
+	private IDMapperUniprot(String baseURL)
+	{
+		this.baseURL = baseURL;
+	}
 
 
-    private boolean closed = false;
-    
+	private boolean closed = false;
+	
 	@Override
 	public void close() throws IDMapperException
 	{
@@ -86,26 +86,26 @@ public class IDMapperUniprot implements IDMapper
 		return null;
 	}
 
-  	private class UniprotCapabilities extends AbstractIDMapperCapabilities
-    {
-            /** default constructor.
-             * @throws IDMapperException when database is not available */
-            public UniprotCapabilities()
-            {
-                    super (null, false, null);
-            }
+	private class UniprotCapabilities extends AbstractIDMapperCapabilities
+	{
+			/** default constructor.
+			 * @throws IDMapperException when database is not available */
+			public UniprotCapabilities()
+			{
+					super (null, false, null);
+			}
 
-        /** {@inheritDoc} */
-        public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
-            return IDMapperUniprot.this.aliasses.values();
-        }
+		/** {@inheritDoc} */
+		public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
+			return IDMapperUniprot.this.aliasses.values();
+		}
 
-        /** {@inheritDoc} */
-        public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
-            return IDMapperUniprot.this.aliasses.values();
-        }
+		/** {@inheritDoc} */
+		public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
+			return IDMapperUniprot.this.aliasses.values();
+		}
 
-    }
+	}
 
 	@Override
 	public IDMapperCapabilities getCapabilities()
@@ -122,12 +122,12 @@ public class IDMapperUniprot implements IDMapper
 
 	public String[] runMappingQuery (String from, String to, String query) throws IDMapperException
 	{
-	    String response = runQuery("mapping", new NameValuePair[] {
-		  	      new NameValuePair("from", from),
-		  	      new NameValuePair("to", to),
-		  	      new NameValuePair("format", "tab"),
-		  	      new NameValuePair("query", query),
-		  	    });
+		String response = runQuery("mapping", new NameValuePair[] {
+					   new NameValuePair("from", from),
+					   new NameValuePair("to", to),
+					   new NameValuePair("format", "tab"),
+					   new NameValuePair("query", query),
+		  		});
 		return response.split("\n");
 	}
 	
@@ -155,14 +155,14 @@ public class IDMapperUniprot implements IDMapper
 				String query = InternalUtils.joinIds (groupedByDataSource.get(srcDs), " ");
 				
 				String[] lines = runMappingQuery(srcFullName, destFullName, query);
-			    // skip header row				
-			    for (int i = 1; i < lines.length; ++i)
-			    {
-			    	String[] fields = lines[i].split("\t");
-			    	Xref src = new Xref(fields[0], srcDs);
-			    	Xref dest = new Xref(fields[1], ds);
-			    	InternalUtils.multiMapPut(result, src, dest);
-			    }
+				// skip header row				
+				for (int i = 1; i < lines.length; ++i)
+				{
+					String[] fields = lines[i].split("\t");
+					Xref src = new Xref(fields[0], srcDs);
+					Xref dest = new Xref(fields[1], ds);
+					InternalUtils.multiMapPut(result, src, dest);
+				}
 			}
 		}
 		return result;
@@ -188,12 +188,12 @@ public class IDMapperUniprot implements IDMapper
 			
 			String[] lines = runMappingQuery(from, to, ref.getId());
 			
-		    // skip header row
-		    for (int i = 1; i < lines.length; ++i)
-		    {
-		    	String[] fields = lines[i].split("\t");
-		    	result.add (new Xref(fields[1], ds));
-		    }
+			// skip header row
+			for (int i = 1; i < lines.length; ++i)
+			{
+				String[] fields = lines[i].split("\t");
+				result.add (new Xref(fields[1], ds));
+			}
 		}
 		
 		return result;
