@@ -2,6 +2,7 @@ BridgeDb
 ========
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.593034.svg)](https://doi.org/10.5281/zenodo.593034)
+[![Build Status](https://travis-ci.org/bridgedb/BridgeDb.svg?branch=master)](https://travis-ci.org/bridgedb/BridgeDb)
 
 
 Compilation
