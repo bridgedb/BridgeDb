@@ -5,6 +5,46 @@ BridgeDb
 [![Build Status](https://travis-ci.org/bridgedb/BridgeDb.svg?branch=master)](https://travis-ci.org/bridgedb/BridgeDb)
 
 
+Using BridgeDb dependencies
+---------------------------
+
+The [BridgeDb releases](https://github.com/bridgedb/BridgeDb/releases) are published to 
+[Maven Central](http://central.maven.org/maven2/org/bridgedb/), which means you can use the BridgeDb JARs without needing to compile BridgeDb.
+
+Usage depends on which module you require. The examples below assumes artifact `org.bridgedb.bio` and version `2.2.1`:
+
+
+For [Maven](https://maven.apache.org/):
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.bridgedb</groupId>
+        <artifactId>org.bridgedb.bio</artifactId>
+        <version>2.2.1</version>
+    </dependency>
+</dependencies>
+```
+
+For [Gradle](https://gradle.org/):
+
+```gradle
+compile group: 'org.bridgedb', name: 'org.bridgedb.bio', version: '2.2.1'
+```
+
+For [Ivy](http://ant.apache.org/ivy/):
+
+```xml
+<dependency org="org.bridgedb" name="org.bridgedb.bio" rev="2.2.1"/>
+```
+
+For [Buildr](https://buildr.apache.org/):
+
+```buildr
+'org.bridgedb:org.bridgedb.bio:jar:2.2.1'
+```
+
+
 Compilation
 -----------
 
@@ -80,13 +120,13 @@ The lead teams at this moment are (alphabetic order):
 
  * Gladstone Institutes
  * Maastricht University
- * Manchester University
+ * The University of Manchester
 
 License
 -------
 
 BridgeDb is free and open source. It is available under
-the conditions of the Apache 2.0 License. 
+the conditions of the [Apache License, version 2.0](https://www.apache.org/licenses/LICENSE-2.0). 
 See LICENSE-2.0.txt for details.
 
 Configuration For the URI/OpenPHACTS packages ONLY!
