@@ -1,7 +1,7 @@
 language: java
 
-services:
-  - mysql
-
-before_install:
- - mysql < mysqlConfig.sql  
+##services:
+##  - mysql
+##
+##before_install:
+## - mysql < mysqlConfig.sql  
