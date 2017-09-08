@@ -114,6 +114,12 @@ public class BioDataSourceTest
 	}
 
 	@Test
+	public void testNewHMDBIDs()
+	{
+		assertTrue (DataSourcePatterns.getDataSourceMatches("HMDB0000122").contains(BioDataSource.HMDB));
+	}
+
+	@Test
 	public void testBadCASNumbers()
 	{
 		assertFalse(DataSourcePatterns.getDataSourceMatches("50-99-77").contains(BioDataSource.CAS));
