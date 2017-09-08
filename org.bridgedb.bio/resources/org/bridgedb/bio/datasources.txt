@@ -54,7 +54,7 @@ Gramene Pathway	Gp	http://www.gramene.org/pathway		AAH72400	pathway		1	Gp		Grame
 Gramene Rice	EnOj	http://www.gramene.org/	http://www.gramene.org/Oryza_sativa/Gene/Summary?db=core;g=$id	osa-MIR171a	gene		1	EnOj		Gramene Rice
 HGNC	H	http://www.genenames.org	http://www.genenames.org/data/hgnc_data.php?match=$id	DAPK1	gene	Homo sapiens	1	urn:miriam:hgnc.symbol	^[A-Za-z0-9]+	HGNC Symbol
 HGNC Accession number	Hac	http://www.genenames.org	http://www.genenames.org/data/hgnc_data.php?hgnc_id=$id	HGNC:2674	gene	Homo sapiens	1	urn:miriam:hgnc	^(HGNC:)?\d{1,5}$	HGNC
-HMDB	Ch	http://www.hmdb.ca/	http://www.hmdb.ca/metabolites/$id	HMDB00001	metabolite		1	urn:miriam:hmdb	^HMDB\d{5}$	HMDB
+HMDB	Ch	http://www.hmdb.ca/	http://www.hmdb.ca/metabolites/$id	HMDB00001	metabolite		1	urn:miriam:hmdb	^HMDB(\d{2})?\d{5}$	HMDB
 HomoloGene	Hg	http://www.ncbi.nlm.nih.gov/homologene/	http://www.ncbi.nlm.nih.gov/homologene/$id	1000	gene		1	urn:miriam:homologene	^\d+$	HomoloGene
 HPRD	Hp	http://www.hprd.org/			interaction	Homo sapiens	1	urn:miriam:hprd		HPRD
 Illumina	Il	http://www.illumina.com/		ILMN_5668	probe		0	Il	ILMN_\d+	Illumina
