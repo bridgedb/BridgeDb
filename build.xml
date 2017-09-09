@@ -49,6 +49,8 @@
 			<include name="apidoc"/>
 			<include name="org.bridgedb.server/gdb.config.template"/>
 			<include name="org.bridgedb.server/contrib/bridgedb-example.*"/>
+			<exclude name="**/target/**"/>
+			<exclude name="**/bin/**"/>
 		</zipfileset>
 	</zip>
 	<tar destfile="${zipbase}.tar.gz" compression="gzip">
@@ -77,6 +79,8 @@
 			<include name="org.bridgedb.server/gdb.config.template"/>
 			<include name="org.bridgedb.server/contrib/bridgedb-example.pl"/>
 			<include name="org.bridgedb.server/contrib/bridgedb-example.py"/>
+			<exclude name="**/target/**"/>
+			<exclude name="**/bin/**"/>
 		</zipfileset>
 	</zip>
 	<tar destfile="${zipbase2}.tar.gz" compression="gzip">
