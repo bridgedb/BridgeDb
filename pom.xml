@@ -4,7 +4,7 @@
   <groupId>org.bridgedb</groupId>
   <artifactId>bridgedb-bundle</artifactId>
   <packaging>pom</packaging>
-	<version>2.2.2</version>	
+	<version>2.2.3-SNAPSHOT</version>	
   <name>BridgeDb bundle</name>
 	<description>
 		BridgeDb is a framework for finding and mapping equivalent database
@@ -223,7 +223,7 @@
     <connection>scm:git:https://github.com/bridgedb/BridgeDb.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/bridgedb/BridgeDb.git</developerConnection>
     <url>https://github.com/bridgedb/BridgeDb/</url>
-    <tag>release_2.2.2</tag>
+    <tag>HEAD</tag>
   </scm>
   <licenses>
     <license>
