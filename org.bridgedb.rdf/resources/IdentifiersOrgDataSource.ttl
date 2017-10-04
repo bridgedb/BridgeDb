@@ -1,4 +1,4 @@
-@prefix bridgeDB: <http://vocabularies.bridgedb.org/ops#> .
+.prefix bridgeDB: <http://vocabularies.bridgedb.org/ops#> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
@@ -4341,8 +4341,7 @@ bridgeDB:DataSource_OPS_Chemical_Registry_Service a bridgeDB:DataSource ;
 	bridgeDB:idExample "21009" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
-	bridgeDB:hasPrimaryUriPattern <http://ops.rsc.org/OPS$id> ;
-	bridgeDB:hasUriPattern <http://ops.rsc-us.org/OPS$id> , <http://ops.rsc.org/Compounds/Get/$id> , <http://ops.rsc.org/OPS$id/rdf> .
+	bridgeDB:hasPrimaryUriPattern <https://chemistry.openphacts.org/OPS$id> .
 
 bridgeDB:DataSource_OPS_Internal_URIS_for_GVK a bridgeDB:DataSource ;
 	bridgeDB:fullName "OPS Internal URIS for GVK" ;
@@ -10593,18 +10592,8 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://opm.phar.umich.edu/protein.php?pdbid=$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://opm.phar.umich.edu/protein.php?pdbid=" .
 
-<http://ops.rsc-us.org/OPS$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://ops.rsc-us.org/OPS" .
-
-<http://ops.rsc.org/Compounds/Get/$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://ops.rsc.org/Compounds/Get/" .
-
-<http://ops.rsc.org/OPS$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://ops.rsc.org/OPS" .
-
-<http://ops.rsc.org/OPS$id/rdf> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://ops.rsc.org/OPS" ;
-	bridgeDB:hasPostfix "/rdf" .
+<https://chemistry.openphacts.org/OPS$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://chemistry.openphacts.org/OPS" .
 
 <https://orcid.org/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "https://orcid.org/" .

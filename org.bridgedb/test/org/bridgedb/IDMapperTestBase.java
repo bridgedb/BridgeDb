@@ -75,7 +75,7 @@ public abstract class IDMapperTestBase {
    
     protected static final String uriSpace1 = "http://www.conceptwiki.org/concept/$id";
     protected static final String uriSpace2 = "http://www.chemspider.com/Chemical-Structure.$id.html";
-    protected static final String uriSpace3 = "http://ops.rsc.org/OPS$id";
+    protected static final String uriSpace3 = "https://chemistry.openphacts.org/OPS$id";
 
     @BeforeClass
     /**

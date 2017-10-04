@@ -854,17 +854,13 @@ bridgeDB:DataSource_OMIM a bridgeDB:DataSource ;
 	bridgeDB:hasUriPattern <http://purl.uniprot.org/mim/$id> ;
 	bridgeDB:hasUriPattern <http://bio2rdf.org/omim:$id> .
 
-bridgeDB:DataSource_OPS_Chemical_Registry_Service a bridgeDB:DataSource ;
+  bridgeDB:DataSource_OPS_Chemical_Registry_Service a bridgeDB:DataSource ;
     bridgeDB:systemCode "OPS-CRS" ;
-	bridgeDB:fullName "OPS Chemical Registry Service" ;
-	bridgeDB:mainUrl "http://www.rsc.org/" ;
-	bridgeDB:idExample "21009" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-        bridgeDB:hasPrimaryUriPattern <http://ops.rsc.org/OPS$id> ;
-        bridgeDB:hasUriPattern <http://ops.rsc.org/OPS$id/rdf> ;
-        bridgeDB:hasUriPattern <http://ops.rsc.org/Compounds/Get/$id> ;
-	bridgeDB:hasUriPattern <http://ops.rsc-us.org/OPS$id> .
+	  bridgeDB:fullName "OPS Chemical Registry Service" ;
+	  bridgeDB:idExample "21009" ;
+	  bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	  bridgeDB:type "unknown" ;
+      bridgeDB:hasPrimaryUriPattern <https://chemistry.openphacts.org/OPS$id> .
 
 bridgeDB:DataSource_OPS_GVK a bridgeDB:DataSource ;
     bridgeDB:systemCode "OPS-GVK" ;
