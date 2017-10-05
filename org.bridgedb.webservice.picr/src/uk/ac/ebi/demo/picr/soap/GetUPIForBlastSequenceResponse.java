@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="mappedDatabases" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded"/>
+ *         &lt;element name="getUPIForBlastSequenceReturn" type="{http://model.picr.ebi.ac.uk}UPEntry" maxOccurs="unbounded"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,41 +31,41 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "mappedDatabases"
+    "getUPIForBlastSequenceReturn"
 })
-@XmlRootElement(name = "getMappedDatabaseNamesResponse")
-public class GetMappedDatabaseNamesResponse {
+@XmlRootElement(name = "getUPIForBlastSequenceResponse")
+public class GetUPIForBlastSequenceResponse {
 
     @XmlElement(required = true)
-    protected List<String> mappedDatabases;
+    protected List<UPEntry> getUPIForBlastSequenceReturn;
 
     /**
-     * Gets the value of the mappedDatabases property.
+     * Gets the value of the getUPIForBlastSequenceReturn property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the mappedDatabases property.
+     * This is why there is not a <CODE>set</CODE> method for the getUPIForBlastSequenceReturn property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getMappedDatabases().add(newItem);
+     *    getGetUPIForBlastSequenceReturn().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link String }
+     * {@link UPEntry }
      * 
      * 
      */
-    public List<String> getMappedDatabases() {
-        if (mappedDatabases == null) {
-            mappedDatabases = new ArrayList<String>();
+    public List<UPEntry> getGetUPIForBlastSequenceReturn() {
+        if (getUPIForBlastSequenceReturn == null) {
+            getUPIForBlastSequenceReturn = new ArrayList<UPEntry>();
         }
-        return this.mappedDatabases;
+        return this.getUPIForBlastSequenceReturn;
     }
 
 }

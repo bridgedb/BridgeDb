@@ -16,7 +16,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "AccessionMapperService", targetNamespace = "http://www.ebi.ac.uk/picr/AccessionMappingService", wsdlLocation = "http://www.ebi.ac.uk/Tools/picr/service?wsdl")
+@WebServiceClient(name = "AccessionMapperService", targetNamespace = "http://www.ebi.ac.uk/picr/AccessionMappingService", wsdlLocation = "https://www.ebi.ac.uk/Tools/picr/service?wsdl")
 public class AccessionMapperService
     extends Service
 {
@@ -26,7 +26,7 @@ public class AccessionMapperService
     static {
         URL url = null;
         try {
-            url = new URL("http://www.ebi.ac.uk/Tools/picr/service?wsdl");
+            url = new URL("https://www.ebi.ac.uk/Tools/picr/service?wsdl");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

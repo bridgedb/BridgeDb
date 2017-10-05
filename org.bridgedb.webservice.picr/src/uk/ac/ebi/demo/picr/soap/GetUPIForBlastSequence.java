@@ -22,8 +22,13 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="sequence" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="searchDatabases" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded"/>
+ *         &lt;element name="identityValue" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="identityTaxon" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="filterType" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="blastDB" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="taxonId" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="onlyActive" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *         &lt;element name="blastParameters" type="{http://model.picr.ebi.ac.uk}BlastParameter"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,19 +41,34 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "sequence",
     "searchDatabases",
+    "identityValue",
+    "identityTaxon",
+    "filterType",
+    "blastDB",
     "taxonId",
-    "onlyActive"
+    "onlyActive",
+    "blastParameters"
 })
-@XmlRootElement(name = "getUPIForSequence")
-public class GetUPIForSequence {
+@XmlRootElement(name = "getUPIForBlastSequence")
+public class GetUPIForBlastSequence {
 
     @XmlElement(required = true)
     protected String sequence;
     @XmlElement(required = true)
     protected List<String> searchDatabases;
+    @XmlElement(required = true, nillable = true)
+    protected String identityValue;
+    @XmlElement(required = true, nillable = true)
+    protected String identityTaxon;
+    @XmlElement(required = true)
+    protected String filterType;
+    @XmlElement(required = true)
+    protected String blastDB;
     @XmlElement(required = true)
     protected String taxonId;
     protected boolean onlyActive;
+    @XmlElement(required = true, nillable = true)
+    protected BlastParameter blastParameters;
 
     /**
      * Gets the value of the sequence property.
@@ -104,6 +124,102 @@ public class GetUPIForSequence {
     }
 
     /**
+     * Gets the value of the identityValue property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getIdentityValue() {
+        return identityValue;
+    }
+
+    /**
+     * Sets the value of the identityValue property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setIdentityValue(String value) {
+        this.identityValue = value;
+    }
+
+    /**
+     * Gets the value of the identityTaxon property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getIdentityTaxon() {
+        return identityTaxon;
+    }
+
+    /**
+     * Sets the value of the identityTaxon property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setIdentityTaxon(String value) {
+        this.identityTaxon = value;
+    }
+
+    /**
+     * Gets the value of the filterType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getFilterType() {
+        return filterType;
+    }
+
+    /**
+     * Sets the value of the filterType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setFilterType(String value) {
+        this.filterType = value;
+    }
+
+    /**
+     * Gets the value of the blastDB property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getBlastDB() {
+        return blastDB;
+    }
+
+    /**
+     * Sets the value of the blastDB property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setBlastDB(String value) {
+        this.blastDB = value;
+    }
+
+    /**
      * Gets the value of the taxonId property.
      * 
      * @return
@@ -141,6 +257,30 @@ public class GetUPIForSequence {
      */
     public void setOnlyActive(boolean value) {
         this.onlyActive = value;
+    }
+
+    /**
+     * Gets the value of the blastParameters property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link BlastParameter }
+     *     
+     */
+    public BlastParameter getBlastParameters() {
+        return blastParameters;
+    }
+
+    /**
+     * Sets the value of the blastParameters property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BlastParameter }
+     *     
+     */
+    public void setBlastParameters(BlastParameter value) {
+        this.blastParameters = value;
     }
 
 }

@@ -2,6 +2,7 @@ package uk.ac.ebi.demo.picr.business;
 
 import uk.ac.ebi.demo.picr.soap.AccessionMapperService;
 import uk.ac.ebi.demo.picr.soap.AccessionMapperInterface;
+import uk.ac.ebi.demo.picr.soap.BlastParameter;
 import uk.ac.ebi.demo.picr.soap.UPEntry;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.Collections;
  *    limitations under the License.
  *
  * User: rcote
+ * User: Sam Wein
  * Date: 17-May-2007
  * Time: 10:58:03
  * $Id: $
@@ -118,6 +120,30 @@ public class PICRClient {
         port = service.getAccessionMapperPort();
 
         return port.getMappedDatabaseNames();
+
+    }
+
+    public List<UPEntry> performBlastMapping(String sequence, Object[] databases, String identityValue, String identityTaxon, String filterType, String blastDB, String taxonId, boolean onlyActive, BlastParameter blastParameter){
+         //get service
+        AccessionMapperService service = new AccessionMapperService();
+        AccessionMapperInterface port;
+        port = service.getAccessionMapperPort();
+
+        //a list of all databases to map to
+        List<String> searchDB = null;
+        if (databases != null) {
+            searchDB = new ArrayList<String>();
+            for (int i = 0; i < databases.length; i++) {
+                searchDB.add(databases[i].toString());
+            }
+        }
+
+        List<UPEntry> entry = port.getUPIForBlastSequence(sequence, searchDB, identityValue, identityTaxon,filterType, blastDB, taxonId, onlyActive,blastParameter);
+        if (entry != null) {
+            return entry;
+        } else {
+            return Collections.emptyList();
+        }
 
     }
 }

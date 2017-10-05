@@ -30,19 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetUPIForSequence }
+     * Create an instance of {@link UPEntry }
      * 
      */
-    public GetUPIForSequence createGetUPIForSequence() {
-        return new GetUPIForSequence();
-    }
-
-    /**
-     * Create an instance of {@link GetUPIForAccession }
-     * 
-     */
-    public GetUPIForAccession createGetUPIForAccession() {
-        return new GetUPIForAccession();
+    public UPEntry createUPEntry() {
+        return new UPEntry();
     }
 
     /**
@@ -54,19 +46,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetUPIForAccessionResponse }
+     * Create an instance of {@link GetUPIForBlastSequenceResponse }
      * 
      */
-    public GetUPIForAccessionResponse createGetUPIForAccessionResponse() {
-        return new GetUPIForAccessionResponse();
+    public GetUPIForBlastSequenceResponse createGetUPIForBlastSequenceResponse() {
+        return new GetUPIForBlastSequenceResponse();
     }
 
     /**
-     * Create an instance of {@link GetMappedDatabaseNames }
+     * Create an instance of {@link GetUPIForSequence }
      * 
      */
-    public GetMappedDatabaseNames createGetMappedDatabaseNames() {
-        return new GetMappedDatabaseNames();
+    public GetUPIForSequence createGetUPIForSequence() {
+        return new GetUPIForSequence();
     }
 
     /**
@@ -78,11 +70,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link UPEntry }
+     * Create an instance of {@link GetMappedDatabaseNames }
      * 
      */
-    public UPEntry createUPEntry() {
-        return new UPEntry();
+    public GetMappedDatabaseNames createGetMappedDatabaseNames() {
+        return new GetMappedDatabaseNames();
+    }
+
+    /**
+     * Create an instance of {@link GetUPIForAccessionResponse }
+     * 
+     */
+    public GetUPIForAccessionResponse createGetUPIForAccessionResponse() {
+        return new GetUPIForAccessionResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetUPIForBlastSequence }
+     * 
+     */
+    public GetUPIForBlastSequence createGetUPIForBlastSequence() {
+        return new GetUPIForBlastSequence();
+    }
+
+    /**
+     * Create an instance of {@link BlastParameter }
+     * 
+     */
+    public BlastParameter createBlastParameter() {
+        return new BlastParameter();
     }
 
     /**
@@ -91,6 +107,14 @@ public class ObjectFactory {
      */
     public GetMappedDatabaseNamesResponse createGetMappedDatabaseNamesResponse() {
         return new GetMappedDatabaseNamesResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetUPIForAccession }
+     * 
+     */
+    public GetUPIForAccession createGetUPIForAccession() {
+        return new GetUPIForAccession();
     }
 
 }

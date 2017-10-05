@@ -26,10 +26,10 @@ public interface AccessionMapperInterface {
 
     /**
      * 
-     * @param searchDatabases
      * @param taxonId
      * @param onlyActive
      * @param sequence
+     * @param searchDatabases
      * @return
      *     returns uk.ac.ebi.demo.picr.soap.UPEntry
      */
@@ -49,11 +49,49 @@ public interface AccessionMapperInterface {
 
     /**
      * 
+     * @param taxonId
+     * @param onlyActive
+     * @param blastParameters
+     * @param identityTaxon
+     * @param sequence
+     * @param searchDatabases
+     * @param identityValue
+     * @param filterType
+     * @param blastDB
+     * @return
+     *     returns java.util.List<uk.ac.ebi.demo.picr.soap.UPEntry>
+     */
+    @WebMethod(action = "getUPIForBlastSequence")
+    @WebResult(name = "getUPIForBlastSequenceReturn", targetNamespace = "http://www.ebi.ac.uk/picr/AccessionMappingService")
+    @RequestWrapper(localName = "getUPIForBlastSequence", targetNamespace = "http://www.ebi.ac.uk/picr/AccessionMappingService", className = "uk.ac.ebi.demo.picr.soap.GetUPIForBlastSequence")
+    @ResponseWrapper(localName = "getUPIForBlastSequenceResponse", targetNamespace = "http://www.ebi.ac.uk/picr/AccessionMappingService", className = "uk.ac.ebi.demo.picr.soap.GetUPIForBlastSequenceResponse")
+    public List<UPEntry> getUPIForBlastSequence(
+        @WebParam(name = "sequence", targetNamespace = "http://www.ebi.ac.uk/picr/AccessionMappingService")
+        String sequence,
+        @WebParam(name = "searchDatabases", targetNamespace = "http://www.ebi.ac.uk/picr/AccessionMappingService")
+        List<String> searchDatabases,
+        @WebParam(name = "identityValue", targetNamespace = "http://www.ebi.ac.uk/picr/AccessionMappingService")
+        String identityValue,
+        @WebParam(name = "identityTaxon", targetNamespace = "http://www.ebi.ac.uk/picr/AccessionMappingService")
+        String identityTaxon,
+        @WebParam(name = "filterType", targetNamespace = "http://www.ebi.ac.uk/picr/AccessionMappingService")
+        String filterType,
+        @WebParam(name = "blastDB", targetNamespace = "http://www.ebi.ac.uk/picr/AccessionMappingService")
+        String blastDB,
+        @WebParam(name = "taxonId", targetNamespace = "http://www.ebi.ac.uk/picr/AccessionMappingService")
+        String taxonId,
+        @WebParam(name = "onlyActive", targetNamespace = "http://www.ebi.ac.uk/picr/AccessionMappingService")
+        boolean onlyActive,
+        @WebParam(name = "blastParameters", targetNamespace = "http://www.ebi.ac.uk/picr/AccessionMappingService")
+        BlastParameter blastParameters);
+
+    /**
+     * 
+     * @param taxonId
+     * @param onlyActive
+     * @param acVersion
      * @param accession
      * @param searchDatabases
-     * @param taxonId
-     * @param acVersion
-     * @param onlyActive
      * @return
      *     returns java.util.List<uk.ac.ebi.demo.picr.soap.UPEntry>
      */
