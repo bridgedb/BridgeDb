@@ -56,7 +56,7 @@ public class IDMapperPicrRest extends IDMapperWebservice
 		BridgeDb.register ("idmapper-picr-rest", new Driver());
 	}
 
-    private String baseUrl = "http://www.ebi.ac.uk/Tools/picr/rest/";
+    private String baseUrl = "https://www.ebi.ac.uk/Tools/picr/rest/";
     private boolean onlyActive;
     
     private Set<DataSource> supportedDatabases = new HashSet<DataSource>();
