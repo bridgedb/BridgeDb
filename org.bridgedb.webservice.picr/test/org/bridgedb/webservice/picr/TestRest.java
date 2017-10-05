@@ -57,12 +57,13 @@ public class TestRest {
 
 		Xref src1 = new Xref ("YER095W", ENSEMBL_YEAST);
 		for (DataSource ds : dslist) System.out.println (ds.getFullName());
-
-        try {
-        	Assert.assertTrue(idmap.xrefExists(src1));        
-        } catch (Error er){
-            System.out.println("**** WARNING PICR Failure. Expected Xref not fount in PIRC server");
-        }
+		// PICR REST service returning 500 on 5/10/2017
+		// eg https://www.ebi.ac.uk/Tools/picr/rest/getUPIForAccession?accession=YER095W&database=ENSEMBL_S_CEREVISIAE
+        //try {
+        //	Assert.assertTrue(idmap.xrefExists(src1));        
+        //} catch (Error er){
+        //    System.out.println("**** WARNING PICR Failure. Expected Xref not fount in PIRC server");
+        //}
 
 		Set<Xref> srcRefs = new HashSet<Xref>();
 		srcRefs.add (src1);
