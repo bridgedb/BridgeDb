@@ -135,7 +135,7 @@ Configuration For the URI/OpenPHACTS packages ONLY!
 
 Where are configuration files loaded from?
 ------------------------------------------
-BridgeDB looks for the configuration files from the following locations with priority given to those at the top of the list (ie location 1 is a
+BridgeDb looks for the configuration files from the following locations with priority given to those at the top of the list (ie location 1 is a
 higher priority than 2 etc). Once it finds a configuration file the other locations are ignored.  
 
 1. Directly in the run directory  (Mainly for java *.jar runs)  
@@ -298,7 +298,7 @@ Make sure your local.properties file matches:
 or you have set up the default databases etc from BridgeDB.properties
 
 Deploy $BridgeDb/org.bridgedb.uri.ws.service/target/org.bridgedb.uri.ws.server-*.war to something like your local
-tomcata webapps directory
+Tomcat webapps directory
 To setup databases and add test data run org.bridgedb.uri.loader.SetupLoaderWithTestData. The easiest way is within eclipse since you
 can set the OPS_IMS_CONFIG environment variable within the run configuration, Netbeans unfortunately does not allow environment variables to be set
 within the IDE.
@@ -306,7 +306,7 @@ within the IDE.
    Both wars share the same SQL data.
 
 
-Note: If Installing the OpenPhacts IMS and or the OpenPhacts QueryExpander the org.bridgedb.uri.ws.server-*.war should not be deployed but
+Note: If Installing the OpenPHACTS IMS and or the OpenPHACTS QueryExpander the org.bridgedb.uri.ws.server-*.war should not be deployed but
 instead the war appropriate to the other project should be deployed. See the readme within the
 other projects for more details.
 
