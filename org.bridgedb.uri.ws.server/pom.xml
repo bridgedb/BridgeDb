@@ -109,7 +109,6 @@
             <groupId>org.bridgedb</groupId>
             <artifactId>org.bridgedb.ws.server</artifactId>
             <version>${project.parent.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.velocity</groupId>
@@ -165,6 +164,13 @@
         <dependency>
             <groupId>org.bridgedb</groupId>
             <artifactId>org.bridgedb.uri.sql</artifactId>
+            <version>${project.parent.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bridgedb</groupId>
+            <artifactId>org.bridgedb.ws.server</artifactId>
             <version>${project.parent.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
