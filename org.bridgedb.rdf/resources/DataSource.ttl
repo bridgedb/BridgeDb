@@ -310,6 +310,13 @@ bridgeDB:DataSource_CodeLink a bridgeDB:DataSource ;
 	bridgeDB:primary "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "probe" .
 
+bridgeDB:DataSource_COMPTOX a bridgeDB:DataSource ;
+	bridgeDB:fullName "COMPTOX" ;
+	bridgeDB:systemCode "Ctx" ;
+	bridgeDB:idExample "DTXCID10460459" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:hasPrimaryUriPattern <https://comptox.epa.gov/$id> .
+
 bridgeDB:DataSource_ConceptWiki a bridgeDB:DataSource ;
 	bridgeDB:fullName "ConceptWiki" ;
 	bridgeDB:systemCode "ConceptWiki" ;
