@@ -980,7 +980,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         boolean ok = true;
         RegexUriPattern sourceUriPattern = subjectUriPatterns.get(mappingSetId);
         if (sourceUriPattern == null) {
-            throw new BridgeDBException("No SourceURIPattern regstered for mappingSetId " + mappingSetId);
+            throw new BridgeDBException(
+                "No SourceURIPattern regstered for mappingSetId " + mappingSetId +
+                " with URI pattern: " + sourceUriPattern
+            );
         }
         int end = sourceUri.length() - sourceUriPattern.getPostfix().length();
         if (!sourceUri.startsWith(sourceUriPattern.getPrefix())) {
