@@ -375,7 +375,7 @@ OMIM	Om	http://omim.org/	http://omim.org/entry/$id	603903	gene		1	urn:miriam:omi
 Ontology for Biomedical Investigations	obi		http://purl.bioontology.org/ontology/OBI/obo:$id	OBI_0000225	unknown		1	urn:miriam:obi	^OBI_\d{7}$	
 Ontology of Physics for Biology	opb		http://purl.bioontology.org/ontology/OPB/$id	OPB_00573	unknown		1	urn:miriam:opb	^OPB_\d+$	
 OPM	opm		http://opm.phar.umich.edu/protein.php?pdbid=$id	1h68	unknown		1	urn:miriam:opm	^[0-9][A-Za-z0-9]{3}$	
-OPS Chemical Registry Service	OPS-CRS	http://www.rsc.org/	https://chemistry.openphacts.org/OPS$id	21009	unknown		1			
+OPS Chemical Registry Service	OPS-CRS	http://www.rsc.org/	http://chemistry.openphacts.org/OPS$id	21009	unknown		1			
 OPS Internal URIS for GVK	OPS-GVK		http://gvk.pharma.openphacts.com/targets/$id	t58221	unknown		1			
 OPS Internal URIS for TGR	OPS-TGR		http://tgr.pharma.openphacts.com/target/$id	t2000005	unknown		1			
 ORCID	orcid		https://orcid.org/$id	0000-0002-6309-7327	unknown		1	urn:miriam:orcid	^\d{4}-\d{4}-\d{4}-\d{3}(\d|X)$	
