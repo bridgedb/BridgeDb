@@ -1212,6 +1212,16 @@ bridgeDB:DataSource_Wikipedia a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/wikipedia.en/$id> ;
 	bridgeDB:hasUriPattern <http://dbpedia.org/resource/$id> .
 
+bridgeDB:DataSource_Wikidata a bridgeDB:DataSource ;
+   	bridgeDB:fullName "Wikidata" ;
+   	bridgeDB:systemCode "Wd" ;
+   	bridgeDB:mainUrl "http://www.wikidata.org" ;
+   	bridgeDB:idExample "Q27080955" ;
+   	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+   	bridgeDB:type "metabolite" ;
+   	bridgeDB:hasUriPattern <http://www.wikidata.org/entity/$id> ;
+    bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/wikidata/$id> .
+
 bridgeDB:DataSource_WormBase a bridgeDB:DataSource ;
 	bridgeDB:fullName "WormBase" ;
 	bridgeDB:systemCode "W" ;
