@@ -26,7 +26,7 @@ if (!$speciesFile) {
 my %speciesTable = ();                # Hash of Arrays for storing species table in Perl
 
 # download the file from BridgeDb
-`wget http://svn.bigcat.unimaas.nl/bridgedb/trunk/dbbuilder/src/org/bridgedb/extract/SpeciesList`;
+`wget https://raw.githubusercontent.com/bridgedb/BridgeDb/master/dbbuilder/src/org/bridgedb/extract/SpeciesList`;
 
 unless( open( SPECIES, $speciesFile)){
                 print "Could not open file $speciesFile: $!\n";
