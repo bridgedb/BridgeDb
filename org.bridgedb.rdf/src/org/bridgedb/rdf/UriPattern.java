@@ -29,7 +29,7 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
-import org.bridgedb.bio.DataSourceTxt;
+import org.bridgedb.bio.DataSourceTsv;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.IdenitifiersOrgConstants;
 import org.bridgedb.rdf.constants.RdfConstants;
@@ -96,7 +96,7 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         if (initialized){
             return;
         }
-        DataSourceTxt.init();
+        DataSourceTsv.init();
         DataSourceMetaDataProvidor.assumeUnknownsAreBio();
         BridgeDBRdfHandler.init();
         IdentifersOrgReader.init();

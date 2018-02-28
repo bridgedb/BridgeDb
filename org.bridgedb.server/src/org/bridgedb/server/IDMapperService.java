@@ -22,7 +22,7 @@ import org.bridgedb.AttributeMapper;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.bio.DataSourceTxt;
+import org.bridgedb.bio.DataSourceTsv;
 import org.bridgedb.rdb.GdbProvider;
 import org.restlet.Application;
 import org.restlet.Restlet;
@@ -222,7 +222,7 @@ public class IDMapperService extends Application {
 		PAR_ID + "}";
 
 	/**
-	 * URL pattern for getting the datasources.txt file
+	 * URL pattern for getting the datasources.tsv file
 	 */
 	public static final String URL_DATASOURCES = "/" + PAR_DATASOURCES;
 
@@ -230,7 +230,7 @@ public class IDMapperService extends Application {
 
 	public synchronized void start() throws Exception {
 		super.start();
-		DataSourceTxt.init();
+		DataSourceTsv.init();
 		connectGdbs();
 	}
 

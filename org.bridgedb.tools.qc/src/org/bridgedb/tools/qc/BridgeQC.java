@@ -15,7 +15,7 @@ import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.bio.DataSourceTxt;
+import org.bridgedb.bio.DataSourceTsv;
 import org.bridgedb.bio.Organism;
 import org.bridgedb.rdb.SimpleGdb;
 import org.bridgedb.rdb.SimpleGdbFactory;
@@ -339,7 +339,7 @@ public class BridgeQC
 	{
 		if (args.length != 2) { printUsage(); return; }
 		BridgeQC main = new BridgeQC (new File(args[0]), new File(args[1]));
-		DataSourceTxt.init();
+		DataSourceTsv.init();
 		main.run();
 		
 		PatternChecker checker = new PatternChecker();

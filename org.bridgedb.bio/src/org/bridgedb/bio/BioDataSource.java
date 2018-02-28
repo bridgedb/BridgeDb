@@ -35,7 +35,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * @deprecated use resources.org.bridgedb.bio.datasources.txt instead 
+ * @deprecated use resources.org.bridgedb.bio.datasources.tsv instead 
  *
  * Definition of many common biological DataSources.
  * Meta data about these Data Sources, such as URL templates,
@@ -257,7 +257,7 @@ public class BioDataSource
 	private static final Map<Organism, DataSource> ensemblBySpecies = new HashMap<Organism, DataSource>();
 
 	/**
-	 *  @deprecated use datasources.txt instead
+	 *  @deprecated use datasources.tsv instead
 	 */
 	static {
 		//sgd
@@ -599,10 +599,10 @@ public class BioDataSource
 	 */
 	public static void init() 
 	{
-		InputStream is = BioDataSource.class.getClassLoader().getResourceAsStream("org/bridgedb/bio/datasources.txt");
+		InputStream is = BioDataSource.class.getClassLoader().getResourceAsStream("org/bridgedb/bio/datasources.tsv");
 		try
 		{
-            DataSourceTxt.loadInputStream(is);
+            DataSourceTsv.loadInputStream(is);
 			InternalUtils.readXmlConfig(
 					new InputSource(
 							BioDataSource.class.getClassLoader().getResourceAsStream(

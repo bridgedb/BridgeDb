@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.bio.DataSourceTxt;
+import org.bridgedb.bio.DataSourceTsv;
 
 public class ExGuessing 
 {
@@ -17,7 +17,7 @@ public class ExGuessing
 		
 		// We have to initialize DataSource information,
 		// but we don't need a driver
-		DataSourceTxt.init();
+		DataSourceTsv.init();
 		
 		String query = "NP_036430";
 		System.out.println ("Which patterns match " + query + "?");

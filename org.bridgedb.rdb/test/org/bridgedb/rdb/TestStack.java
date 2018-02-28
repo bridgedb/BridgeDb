@@ -12,7 +12,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
 import org.bridgedb.bio.BioDataSource;
-import org.bridgedb.bio.DataSourceTxt;
+import org.bridgedb.bio.DataSourceTsv;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -34,7 +34,7 @@ import org.junit.Ignore;
 
 	@Before public void setUp() throws ClassNotFoundException
 	{
-		DataSourceTxt.init();
+		DataSourceTsv.init();
 		Class.forName ("org.bridgedb.file.IDMapperText");
 		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
 	}

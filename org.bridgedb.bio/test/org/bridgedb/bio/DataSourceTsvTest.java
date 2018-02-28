@@ -33,11 +33,11 @@ import org.junit.Test;
  *
  * @author Christian
  */
-public class DataSourceTxtTest {
+public class DataSourceTsvTest {
     
 	@Test
 	public void testUniqueSystemCodes() {
-		DataSourceTxt.init();
+		DataSourceTsv.init();
 		Set<String> codes = new HashSet<String>();
 		Set<DataSource> sources = DataSource.getDataSources();
 		Assert.assertNotSame(0, sources.size());
@@ -49,7 +49,7 @@ public class DataSourceTxtTest {
 
 	@Test
 	public void systemCodesDoNotHaveWhitespace() {
-		DataSourceTxt.init();
+		DataSourceTsv.init();
 		Set<DataSource> sources = DataSource.getDataSources();
 		Assert.assertNotSame(0, sources.size());
 		for (DataSource source : sources) {
@@ -62,22 +62,22 @@ public class DataSourceTxtTest {
 	}
     
     /**
-     * Test of init and writer test method, of class DataSourceTxt.
+     * Test of init and writer test method, of class DataSourceTsv.
      */
     @Test
     public void testWriteRead() throws IOException {
         System.out.println("WriteRead");
-        DataSourceTxt.init();
-        File generated = new File("test-data/generatedDatasources.txt");
+        DataSourceTsv.init();
+        File generated = new File("test-data/generatedDatasources.tsv");
         BufferedWriter writer = new BufferedWriter(new FileWriter(generated));
- //       DataSourceTxt.writeToBuffer(writer);
+ //       DataSourceTsv.writeToBuffer(writer);
         InputStream is = new FileInputStream(generated);
-        DataSourceTxt.loadInputStream(is);
+        DataSourceTsv.loadInputStream(is);
     }
 
     @Test
     public void testWikidata() throws Exception {
-    	DataSourceTxt.init();
+    	DataSourceTsv.init();
     	DataSource wikidata = DataSource.getExistingByFullName("Wikidata");
     	Assert.assertNotNull(wikidata);
     	Assert.assertTrue(wikidata.urlPatternKnown());
@@ -86,7 +86,7 @@ public class DataSourceTxtTest {
 
     @Test
     public void testWikidataBySystemCode() throws Exception {
-    	DataSourceTxt.init();
+    	DataSourceTsv.init();
     	DataSource wikidata = DataSource.getExistingBySystemCode("Wd");
     	Assert.assertNotNull(wikidata);
     	Assert.assertTrue(wikidata.urlPatternKnown());
@@ -95,7 +95,7 @@ public class DataSourceTxtTest {
 
     @Test
     public void testChEMBL() throws Exception {
-    	DataSourceTxt.init();
+    	DataSourceTsv.init();
     	DataSource wikidata = DataSource.getExistingByFullName("ChEMBL compound");
     	Assert.assertNotNull(wikidata);
     	Assert.assertTrue(wikidata.urlPatternKnown());
@@ -104,7 +104,7 @@ public class DataSourceTxtTest {
 
     @Test
     public void testKNApSAcK() throws Exception {
-    	DataSourceTxt.init();
+    	DataSourceTsv.init();
     	DataSource wikidata = DataSource.getExistingByFullName("KNApSAcK");
     	Assert.assertNotNull(wikidata);
     	Assert.assertTrue(wikidata.urlPatternKnown());

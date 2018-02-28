@@ -27,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.util.SortedSet;
 
-import org.bridgedb.bio.DataSourceTxt;
+import org.bridgedb.bio.DataSourceTsv;
 import org.bridgedb.utils.Reporter;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -45,7 +45,7 @@ public class BridgeDBRdfHandlerTest {
     @Test
     public void testInit() throws Exception {
         Reporter.println("init");
-        DataSourceTxt.init();
+        DataSourceTsv.init();
         BridgeDBRdfHandler.init();
         UriPattern.registerUriPatterns();
          

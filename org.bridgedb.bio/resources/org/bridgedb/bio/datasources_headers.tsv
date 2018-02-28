@@ -1,4 +1,4 @@
-# Column headers and brief descriptions for datasources.txt
+# Column headers and brief descriptions for datasources.tsv
 #
 # The term "conventional", as found in the descriptions below, refers to established usage norms for the BridgeDb project.
 # <http://www.w3.org/1999/02/22-rdf-syntax-ns#about> below refers to the identifier we are using for the concept.

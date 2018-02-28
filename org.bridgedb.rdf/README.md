@@ -13,7 +13,7 @@ Purpose:
 Similar to `ops.bridgedb.bio` with the plan to convert all data from `ops.bridgedb.bio` into 
 `../org.bridgedb.utils/resources/BioDataSource.ttl` (?)
 
-Including future updates to datasources.txt (until BioDataSource.ttl becomes default for all projects (if ever)) (?)
+Including future updates to datasources.tsv (until BioDataSource.ttl becomes default for all projects (if ever)) (?)
 
 ## Updating from identifiers.org
 
@@ -21,7 +21,7 @@ Including future updates to datasources.txt (until BioDataSource.ttl becomes def
 These files reflect http://identifiers.org/ registry:
 
 * [resources/IdentifiersOrgDataSource.ttl](resources/IdentifiersOrgDataSource.ttl)
-* [resources/IdentifiersOrgDataSource.txt](resources/IdentifiersOrgDataSource.txt)
+* [resources/IdentifiersOrgDataSource.tsv](resources/IdentifiersOrgDataSource.tsv)
 * [resources/MiriamRegistry.ttl](resources/MiriamRegistry.ttl)
 
 Run the `IdentifersOrgReader` to update the files:
@@ -36,6 +36,6 @@ and used to populate `IdentifiersOrgDataSource.*`.
 
 It is currently unclear how the remaining files in [resources/](resources/)
 are used or maintained (See [GitHub issue #21](https://github.com/bridgedb/BridgeDb/issues/21))
-and the relevance to [datasources.txt](../org.bridgedb.bio/resources/org/bridgedb/bio/datasources.txt)
+and the relevance to [datasources.tsv](../org.bridgedb.bio/resources/org/bridgedb/bio/datasources.tsv)
 from `org.bridgedb.bio`.
 

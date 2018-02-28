@@ -28,18 +28,18 @@ import java.util.regex.Pattern;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
 
-public class DataSourceTxt 
+public class DataSourceTsv 
 {
 
-    /** Call this to initialize the DataSourcs from org/bridgedb/bio/datasources.txt
+    /** Call this to initialize the DataSourcs from org/bridgedb/bio/datasources.tsv
 	 * 	You should call this before using any of these constants, 
 	 * 	or they may be undefined.
 	 */
 	public static void init() 
 	{
         try{
-    		InputStream is = DataSourceTxt.class.getClassLoader().getResourceAsStream("org/bridgedb/bio/datasources.txt");	
-            new DataSourceTxt().loadAnInputStream(is);
+    		InputStream is = DataSourceTsv.class.getClassLoader().getResourceAsStream("org/bridgedb/bio/datasources.tsv");	
+            new DataSourceTsv().loadAnInputStream(is);
 		}
 		catch (IOException ex)
 		{
@@ -47,10 +47,10 @@ public class DataSourceTxt
 		}
 	}
 
-	public static String datasourcesTxt = "";
+	public static String datasourcesTsv = "";
       
 	public static void loadInputStream(InputStream is) throws IOException{
-		new DataSourceTxt().loadAnInputStream(is);
+		new DataSourceTsv().loadAnInputStream(is);
 	}
 
 	protected void loadAnInputStream(InputStream is) throws IOException {
@@ -58,7 +58,7 @@ public class DataSourceTxt
 				new InputStreamReader (is));
 		String line;
    		while ((line = reader.readLine()) != null) {
-			datasourcesTxt = datasourcesTxt + line + "\n";
+			datasourcesTsv = datasourcesTsv + line + "\n";
             		String[] fields = line.split ("\\t");
             		loadLine(fields);
         	}		
@@ -105,7 +105,7 @@ public class DataSourceTxt
     /** 
      * Writes all currently loaded DataSources to a writer
      * 
-     * @see DataSourceTxtTest.testWriteRead() for a working example
+     * @see DataSourceTsvTest.testWriteRead() for a working example
      * 
      * @param writer
      * @throws IOException 

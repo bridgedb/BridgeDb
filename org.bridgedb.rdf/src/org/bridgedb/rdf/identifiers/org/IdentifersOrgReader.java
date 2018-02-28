@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
-import org.bridgedb.bio.DataSourceTxt;
+import org.bridgedb.bio.DataSourceTsv;
 import org.bridgedb.rdf.BridgeDBRdfHandler;
 import org.bridgedb.rdf.DataSourceMetaDataProvidor;
 import org.bridgedb.rdf.RdfBase;
@@ -164,11 +164,11 @@ public class IdentifersOrgReader extends RdfBase {
         BridgeDBRdfHandler.writeRdfToFile(mergedFile);
         BridgeDBRdfHandler.parseRdfFile(mergedFile);  
         
-        File textFile = new File("resources/IdentifiersOrgDataSource.txt");
+        File textFile = new File("resources/IdentifiersOrgDataSource.tsv");
         BufferedWriter writer = new BufferedWriter(new FileWriter(textFile));
-        DataSourceTxt.writeToBuffer(writer);
+        DataSourceTsv.writeToBuffer(writer);
         InputStream is = new FileInputStream(textFile);
-        DataSourceTxt.loadInputStream(is);
+        DataSourceTsv.loadInputStream(is);
     }
 
     private void loadData(RepositoryConnection repositoryConnection) throws Exception{
