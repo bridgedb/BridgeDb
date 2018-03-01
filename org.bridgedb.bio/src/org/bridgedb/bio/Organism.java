@@ -39,6 +39,7 @@ public enum Organism
 	AnophelesGambiae("Anopheles gambiae", "Ag", "Mosquito", 7165),
 	ArabidopsisThaliana("Arabidopsis thaliana", "At", 3702),
 	Aspergillusniger("Aspergillus niger", "An", "Black mold", 5061),
+	BrachypodiumDistachyon("Brachypodium distachyon", "Bd", 15368),
 	BacillusSubtilis("Bacillus subtilis", "Bs", 1423),
 	BetaVulgaris("Beta vulgaris", "Bv", "Sugar Beet", 3555),
 	BosTaurus("Bos taurus", "Bt", "Cow", 9913),
