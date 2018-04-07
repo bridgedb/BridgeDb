@@ -88,7 +88,7 @@ org.bridgedb.ws.*  Another version of the Webservice. Runs with and IDMapper
 org.bridgedb.rdf   Loads DataSources from rdf and miriam (with URI suppport)
 
 org.bridgedb.uri.sql   Adds support for URIs (requires org.bridgedb.sql)
-org.bridgedb.uri.loader  Loads RDF linksets into org.bridgedb.uri.sql. Also creates transtive linksets
+org.bridgedb.uri.loader  Loads RDF linksets into org.bridgedb.uri.sql. Also creates transitive linksets
 
 org.bridgedb.uri.ws.*  Extends org.bridgedb.ws.* with URI supports from org.bridgedb.uri.sql 
 
@@ -135,7 +135,7 @@ Configuration For the URI/OpenPHACTS packages ONLY!
 
 Where are configuration files loaded from?
 ------------------------------------------
-BridgeDb looks for the configuration files from the following locations with priority given to those at the top of the list (ie location 1 is a
+BridgeDb looks for the configuration files from the following locations with priority given to those at the top of the list (i.e. location 1 is a
 higher priority than 2 etc). Once it finds a configuration file the other locations are ignored.  
 
 1. Directly in the run directory  (Mainly for java *.jar runs)  
@@ -176,7 +176,7 @@ This file contains the local setup information which **MUST** be configured corr
 database user, password and database name are correct.
 		
 You **MUST** either supply local values matching your local setup or setup your data stores to use the defaults. 
-The recommened way to overwrite properties is to add a property with the exact (case sensitive) key to local.properties
+The recommended way to overwrite properties is to add a property with the exact (case sensitive) key to local.properties
 
 Database Dependency   
 -------------------
@@ -188,23 +188,23 @@ UPDATE, DELETE, and SELECT permissions.
 Consult the BridgeDB.properties file for the defaults, or copy and amend the configuration file
 to reflect your own setup.
 
-If you are using the default mysql accounts and databases then execute the file 
-mysqlConfig.sql from the BridgeDB root directory which will configure your local mysql with the BridgeDB defaults
+If you are using the default MySQL accounts and databases then execute the file 
+mysqlConfig.sql from the BridgeDB root directory which will configure your local mysql with the BridgeDb defaults
 
 	mysql -u root -p < mysqlConfig.sql
 
-Note that the sql script will fail, without reverting changes made up to the 
+Note that the SQL script will fail, without reverting changes made up to the 
 point of failure, if any of the user accounts or databases already exist.
 
 RDF Repository and Transitive Directory Dependency
 -------------------------
-(For org.bridgedb.rdf package and its exstensions ONLY)
+(For org.bridgedb.rdf package and its extensions ONLY)
 
-BridgeDB uses OpenRDF Sesame RDF engine and this is included automatically via maven.  
+BridgeDb uses OpenRDF Sesame RDF engine and this is included automatically via maven.  
 **WARNING**: All directories **MUST** exists and the (linux) user running tomcat **MUST** have READ/WRITE permission set!
 Some of the OpenRDF error message are unclear if this is not the case.
 
-See BridgeDB.properties and change the appropriate property to point to the correct directory.
+See BridgeDb.properties and change the appropriate property to point to the correct directory.
 A Sesame SailNativeStore(s) will be created automatically as long as the loader can create/find the directory,
 
 We recommend changing the relative directories to absolute directories.
@@ -226,7 +226,7 @@ Please refer to the log4j documentation for more information.
 ### DataSource.ttl 
 (Included in the build and found at org.bridgedb.rdf/resources)
 
-RDF format of all the BridgeDB DataSource(s) and Registered UriPatterns,
+RDF format of all the BridgeDb DataSource(s) and Registered UriPatterns,
 Found in $BRIDGEDB_HOME/org.bridgedb.rdf/resources
 
 This file defines all the URI patterns that will match every BridgeDB DataSource.
@@ -264,18 +264,18 @@ If extending a key we suggest using `local**` as the fourth part of the justific
 This file maps RDF Graphs/Context with the UriPatterns found in that graph.
 This allows Map functions to supply a graph name rather than a list of targetUriPatterns
 
-Data in the included file is OpenPHACTS specific.
+Data in the included file is Open PHACTS specific.
 
 Data Loading
 ============
 All tests should load their required data at the start of the tests.
-To load the test data into the live sql use the method SetupWithTestData in the URI loader package.
+To load the test data into the live SQL use the method SetupWithTestData in the URI loader package.
 The [IMS project](https://github.com/openphacts/IdentityMappingService) also has a data loader which should be used
 if the IMS is the deployed project.
 
 Compilation
 ===========
-For URI/OpenPHACTS packages
+For URI/Open PHACTS packages
 
 If you've obtained the source code of BridgeDb, you should be
 able to compile with a simple: 
@@ -293,7 +293,7 @@ OPS Webservice Setup.
 
 Make sure your local.properties file matches:
 * The SQL databases included user names and password
-* The rdf parent directories are setup (and accessible) as above.
+* The RDF parent directories are setup (and accessible) as above.
 
 or you have set up the default databases etc from BridgeDB.properties
 
@@ -306,7 +306,7 @@ within the IDE.
    Both wars share the same SQL data.
 
 
-Note: If Installing the OpenPHACTS IMS and or the OpenPHACTS QueryExpander the org.bridgedb.uri.ws.server-*.war should not be deployed but
+Note: If Installing the Open PHACTS IMS and or the Open PHACTS QueryExpander the org.bridgedb.uri.ws.server-*.war should not be deployed but
 instead the war appropriate to the other project should be deployed. See the readme within the
 other projects for more details.
 
