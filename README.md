@@ -148,19 +148,20 @@ higher priority than 2 etc). Once it finds a configuration file the other locati
 
 Configuration files
 -------------------
-local.properties
-BridgeDB.properties  
-log4j.properties  
-DataSource.ttl  
-lens.properties  
-graph.properties
+
+* local.properties
+* BridgeDB.properties
+* log4j.properties  
+* DataSource.ttl  
+* lens.properties  
+* graph.properties
 
 ### local.properties
 (There is no local properties files included)
 
 This is the recommended place to overwrite individual property values of any other *.properties file.
 
-local.properties will overwrite values with the same key in any other properties file.
+`local.properties` will overwrite values with the same key in any other properties file.
 Properties not overwritten in local will keep their original values.
 
 To install local properties you need to.
@@ -181,8 +182,9 @@ The recommended way to overwrite properties is to add a property with the exact 
 Database Dependency   
 -------------------
 (for the org.bridgedb.sql package and its dependencies ONLY)
-MySQL version 5 or above **MUST** be installed and running  
-MySQL databases and users **MUST** be created with CREATE, DROP, INDEX, INSERT, ALTER,
+
+* MySQL version 5 or above **MUST** be installed and running  
+* MySQL databases and users **MUST** be created with CREATE, DROP, INDEX, INSERT, ALTER,
 UPDATE, DELETE, and SELECT permissions.
 
 Consult the BridgeDB.properties file for the defaults, or copy and amend the configuration file
@@ -191,7 +193,9 @@ to reflect your own setup.
 If you are using the default MySQL accounts and databases then execute the file 
 mysqlConfig.sql from the BridgeDB root directory which will configure your local mysql with the BridgeDb defaults
 
-	mysql -u root -p < mysqlConfig.sql
+```shell
+mysql -u root -p < mysqlConfig.sql
+```
 
 Note that the SQL script will fail, without reverting changes made up to the 
 point of failure, if any of the user accounts or databases already exist.
@@ -200,7 +204,7 @@ RDF Repository and Transitive Directory Dependency
 -------------------------
 (For org.bridgedb.rdf package and its extensions ONLY)
 
-BridgeDb uses OpenRDF Sesame RDF engine and this is included automatically via maven.  
+BridgeDb uses OpenRDF Sesame RDF engine and this is included automatically via Maven.  
 **WARNING**: All directories **MUST** exists and the (linux) user running tomcat **MUST** have READ/WRITE permission set!
 Some of the OpenRDF error message are unclear if this is not the case.
 
@@ -280,7 +284,9 @@ For URI/Open PHACTS packages
 If you've obtained the source code of BridgeDb, you should be
 able to compile with a simple: 
 
-	mvn clean install
+```shell
+mvn clean install
+```
 	
 Note that for the maven build to run all tests: 
 1. The MySQL database **MUST** be running and configured as above.
