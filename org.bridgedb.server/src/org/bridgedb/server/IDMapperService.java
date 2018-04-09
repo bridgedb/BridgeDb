@@ -30,6 +30,13 @@ import org.restlet.routing.Redirector;
 import org.restlet.routing.Route;
 import org.restlet.routing.Router;
 
+/**
+ * Server component for ID mapping.
+ * 
+ * <p>Use <code>-DserverURL=http://</code> to change the URL to the server. It defaults
+ * to <a href="http://bridgedb.org/wiki/BridgeWebservice">http://bridgedb.org/wiki/BridgeWebservice</a>
+ * and must be overwritten for custom installations.
+ */
 public class IDMapperService extends Application {
 	public static final String CONF_GDBS = "gdb.config";
 
@@ -243,7 +250,7 @@ public class IDMapperService extends Application {
 		router.attach(URL_DATASOURCES, DataSources.class);
 
 		//Register the route for the home page url pattern
-		String target = "http://bridgedb.org/wiki/BridgeWebservice";
+		String target = System.getProperty("serverURL", "http://bridgedb.org/wiki/BridgeWebservice");
 		Redirector redirector = new Redirector(getContext(), target, Redirector.MODE_CLIENT_TEMPORARY);	
 		router.attach(URL_HOME, redirector);
 
