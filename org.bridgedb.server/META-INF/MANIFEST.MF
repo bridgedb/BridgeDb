@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Server
 Bundle-SymbolicName: org.bridgedb.server
-Bundle-Version: 2.2.0
+Bundle-Version: 2.3.0
 Export-Package: com.mysql.jdbc,
  com.mysql.jdbc.configs,
  com.mysql.jdbc.exceptions,
