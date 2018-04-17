@@ -51,11 +51,27 @@ Compilation
 If you've obtained the source code of BridgeDb, you should be
 able to compile with a simple:
 
-	mvn clean install
+```shell
+mvn clean install
+```
 
 If you want to ignore failing tests, e.g. because you are not online,
 add this option: -Dmaven.test.failure.ignore=true. Furthermore,
 note that 'mvn clean compile' fails.
+
+Making releases
+---------------
+
+If it is time for a release, run the following commands. Mind you, this requires you
+to have an approved Sonatype (http://oss.sonatype.org/) account with push rights:
+
+```shell
+mvn release:prepare
+mvn release:perform
+```
+
+The second command will make the actual push. These commands will update the version
+and everything.
 
 Library dependencies
 --------------------
