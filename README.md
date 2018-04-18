@@ -1,7 +1,7 @@
 BridgeDb
 ========
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.593034.svg)](https://doi.org/10.5281/zenodo.593034)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1219840.svg)](https://doi.org/10.5281/zenodo.1219840)
 [![Build Status](https://travis-ci.org/bridgedb/BridgeDb.svg?branch=master)](https://travis-ci.org/bridgedb/BridgeDb)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bridgedb/bridgedb-bundle/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bridgedb/bridgedb-bundle)
 
