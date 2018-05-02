@@ -29,19 +29,19 @@ For [Maven](https://maven.apache.org/):
 For [Gradle](https://gradle.org/):
 
 ```gradle
-compile group: 'org.bridgedb', name: 'org.bridgedb.bio', version: '2.2.1'
+compile group: 'org.bridgedb', name: 'org.bridgedb.bio', version: '2.3.0'
 ```
 
 For [Ivy](http://ant.apache.org/ivy/):
 
 ```xml
-<dependency org="org.bridgedb" name="org.bridgedb.bio" rev="2.2.1"/>
+<dependency org="org.bridgedb" name="org.bridgedb.bio" rev="2.3.0"/>
 ```
 
 For [Buildr](https://buildr.apache.org/):
 
 ```buildr
-'org.bridgedb:org.bridgedb.bio:jar:2.2.1'
+'org.bridgedb:org.bridgedb.bio:jar:2.3.0'
 ```
 
 
