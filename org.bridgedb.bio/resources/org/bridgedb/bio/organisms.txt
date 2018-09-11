@@ -4,6 +4,7 @@ Aspergillus niger	Black mold	An
 Bacillus	subtilis	Bsubtilis	Bs
 Beta  vulgaris  Sugar Beet  Bv
 Bos	taurus	Cow	Bt
+Brassica  napus  Rapeseed Bn
 Caenorhabditis	elegans	Celegans	Ce
 Canis	familiaris	Dog	Cf
 Ciona	intestinalis	Sea Squirt	Ci
@@ -28,8 +29,8 @@ Ornithorhynchus	anatinus	Platypus	Oa
 Oryctolagus	cuniculus	Rabbit	Oc
 Oryza	sativa	Japanese Rice	Os
 Oryzias	latipes	Medaka Fish	Ol
-Pan	troglodytes	Chimp	Pt
-Populus	trichocarpa	Western Balsam Poplar	Pi
+Pan troglodytes	Chimp	Pt
+Populus trichocarpa	Western Balsam Poplar	Pi
 Rattus	norvegicus	Rat	Rn
 Saccharomyces	cerevisiae	Yeast	Sc
 Solanum	lycopersicum	Tomato	Sl
