@@ -36,7 +36,7 @@
 		<javac srcdir="src"
 			   includes="**"
 			   debug="true"
-			   source="1.6"
+			   source="${ant.build.javac.source}"
 			   destdir="build">
 			   <classpath refid="absolute.and.libs"/>
 		</javac>
@@ -117,7 +117,7 @@
 		<javac srcdir="test" debug="true" 
 					includes="**"
 					destdir="build"
-					source="1.5">
+					source="${ant.build.javac.source}">
 			<classpath refid="test.classpath"/>
 		</javac>		
 		<junit printsummary="on" haltonfailure="false" fork="true">
