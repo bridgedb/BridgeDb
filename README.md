@@ -5,6 +5,9 @@ BridgeDb
 [![Build Status](https://travis-ci.org/bridgedb/BridgeDb.svg?branch=master)](https://travis-ci.org/bridgedb/BridgeDb)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bridgedb/bridgedb-bundle/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bridgedb/bridgedb-bundle)
 
+BridgeDb currently is tested with Java 8. Later versions may work, but Java 11 is yet unsupported, because of
+the removal of the JAXB functionality.
+
 Using BridgeDb dependencies
 ---------------------------
 
