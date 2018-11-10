@@ -166,9 +166,11 @@ public class IDMapperUniprot implements IDMapper
 				for (int i = 1; i < lines.length; ++i)
 				{
 					String[] fields = lines[i].split("\t");
-					Xref src = new Xref(fields[0], srcDs);
-					Xref dest = new Xref(fields[1], ds);
-					InternalUtils.multiMapPut(result, src, dest);
+					if (fields.length > 1) {
+						Xref src = new Xref(fields[0], srcDs);
+						Xref dest = new Xref(fields[1], ds);
+						InternalUtils.multiMapPut(result, src, dest);
+					}
 				}
 			}
 		}
@@ -199,7 +201,8 @@ public class IDMapperUniprot implements IDMapper
 			for (int i = 1; i < lines.length; ++i)
 			{
 				String[] fields = lines[i].split("\t");
-				result.add (new Xref(fields[1], ds));
+				if (fields.length > 1)
+				    result.add (new Xref(fields[1], ds));
 			}
 		}
 		
