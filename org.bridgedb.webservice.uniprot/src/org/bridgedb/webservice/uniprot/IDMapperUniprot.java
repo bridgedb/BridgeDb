@@ -165,6 +165,8 @@ public class IDMapperUniprot implements IDMapper
 				// skip header row				
 				for (int i = 1; i < lines.length; ++i)
 				{
+					if (!lines[i].contains("\t"))
+						throw new IDMapperException("Unexpected content line: " + lines[i]);
 					String[] fields = lines[i].split("\t");
 					if (fields.length > 1) {
 						Xref src = new Xref(fields[0], srcDs);
@@ -200,6 +202,8 @@ public class IDMapperUniprot implements IDMapper
 			// skip header row
 			for (int i = 1; i < lines.length; ++i)
 			{
+				if (!lines[i].contains("\t"))
+					throw new IDMapperException("Unexpected content line: " + lines[i]);
 				String[] fields = lines[i].split("\t");
 				if (fields.length > 1)
 				    result.add (new Xref(fields[1], ds));
