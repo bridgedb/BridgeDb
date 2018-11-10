@@ -10,13 +10,16 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.bio.BioDataSource;
+import org.junit.Assert;
+import org.junit.BeforeClass;
 
 import junit.framework.TestCase;
 
 public class Test extends TestCase
 {
 	private IDMapper mapper;
-	
+
+	@BeforeClass
 	public void setUp() throws ClassNotFoundException, IDMapperException
 	{
 		BioDataSource.init();
@@ -24,7 +27,7 @@ public class Test extends TestCase
 		mapper = BridgeDb.connect("idmapper-uniprot:");
 	}
 	
-	
+	@org.junit.Test
 	public void testBasic() throws IDMapperException
 	{
 //		DataSource acc = DataSource.getByFullName("ACC");
@@ -37,16 +40,28 @@ public class Test extends TestCase
 		DataSource uniprot_id = DataSource.getByFullName ("ID");
 		
 		Xref ref1 = new Xref("P13368", acc);
-		for (Xref i : mapper.mapID (ref1, refseq))
+		Set<Xref> mappings = mapper.mapID (ref1, refseq);
+		Assert.assertNotNull(mappings);
+		Assert.assertNotSame(0, mappings.size());
+		System.out.println("" + mappings);
+		for (Xref i : mappings)
 		{
 			System.out.println (i);
 		}
 
+		mappings = mapper.mapID (ref1, uniprot_id);
+		Assert.assertNotNull(mappings);
+		Assert.assertNotSame(0, mappings.size());
+		System.out.println("" + mappings);
 		for (Xref i : mapper.mapID (ref1, uniprot_id))
 		{
 			System.out.println (i);
 		}
 
+		mappings = mapper.mapID (ref1, entrez);
+		Assert.assertNotNull(mappings);
+		Assert.assertNotSame(0, mappings.size());
+		System.out.println("" + mappings);
 		for (Xref i : mapper.mapID (ref1, entrez))
 		{
 			System.out.println (i);
@@ -58,6 +73,9 @@ public class Test extends TestCase
 		query.add (ref1);
 		
 		Map<Xref, Set<Xref>> result = mapper.mapID (query, refseq);
+		Assert.assertNotNull(result);
+		Assert.assertNotSame(0, result.size());
+		System.out.println("" + result);
 		for (Xref src : result.keySet())
 		{
 			System.out.println(src);
