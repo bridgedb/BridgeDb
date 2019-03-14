@@ -1,5 +1,7 @@
 package org.bridgedb.tools.qc;
 import java.io.File;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,7 +28,7 @@ import org.bridgedb.rdb.SimpleGdbFactory;
  * Some basic comparisons will be done, which serves as a sanity check
  * that not suddenly a whole identifier system has gone missing.
  * <p>
- * The script produces a report on stdout, lines starting with "INFO"
+ * The script produces a report on STDOUT (configurable), lines starting with "INFO"
  * are strictly informative, whereas lines starting with "WARNING" are
  * problems worth investigating further. Ideally there are no "WARNING" lines
  * in the report. 
@@ -37,11 +39,32 @@ public class BridgeQC
 	private final File newDb;
 	private SimpleGdb oldGdb;
 	private SimpleGdb newGdb;
+	private PrintStream out;
 
+	/**
+	 * Compares two Derby databases and reports the output
+	 * to STDOUT.
+	 *
+	 * @param f1 the original Derby database
+	 * @param f2 the new Derby database
+	 */
 	public BridgeQC(File f1, File f2) throws IDMapperException
+	{
+		this(f1, f2, System.out);
+	}
+
+	/**
+	 * Compares two Derby databases and reports the output
+	 * to the given {@link java.io.OutputStream}.
+	 *
+	 * @param f1 the original Derby database
+	 * @param f2 the new Derby database
+	 */
+	public BridgeQC(File f1, File f2, OutputStream out) throws IDMapperException
 	{
 		oldDb = f1;
 		newDb = f2;
+		this.out = new PrintStream(out);
 	}
 
 	Map<DataSource, Integer> oldSet = new HashMap<DataSource, Integer>();
@@ -74,7 +97,7 @@ public class BridgeQC
 		{
 			if (!newSet.containsKey(ds))
 			{
-				System.out.println ("WARNING: " + ds.getSystemCode() + " is only in old database");
+				this.out.println ("WARNING: " + ds.getSystemCode() + " is only in old database");
 			}
 		}
 
@@ -84,13 +107,13 @@ public class BridgeQC
 			int newGenes = newSet.get(ds);
 			if (newGenes == 0)
 			{
-				System.out.println ("WARNING: " + ds.getSystemCode() + " has 0 ids");
+				this.out.println ("WARNING: " + ds.getSystemCode() + " has 0 ids");
 			}
 			
 			if (!oldSet.containsKey(ds))
 			{
-				System.out.println ("INFO: " + ds.getSystemCode() + " is only in new database"); 
-				System.out.printf ("INFO: Number of ids in %s: %d\n", ds.getSystemCode(), newGenes); 
+				this.out.println ("INFO: " + ds.getSystemCode() + " is only in new database");
+				this.out.printf ("INFO: Number of ids in %s: %d\n", ds.getSystemCode(), newGenes);
 			}
 			else
 			{
@@ -112,7 +135,7 @@ public class BridgeQC
 				int oldGenes = oldSet.get(ds);
 				double delta = (double)(newGenes - oldGenes) / (double)oldGenes;
 				if (newGenesAdded.size() + genesRemoved.size() == 0)
-					System.out.printf(
+					this.out.printf(
 						"INFO: Number of ids in %s%s: %d (unchanged)\n",
 						ds.getSystemCode(),
 						(ds.getFullName() != null && ds.getFullName().length() > 0) ?
@@ -120,7 +143,7 @@ public class BridgeQC
 						newGenes
 					);
 				else
-					System.out.printf(
+					this.out.printf(
 						"INFO: Number of ids in %s%s: %d (%d added, %d removed -> overall changed %+3.1f%%)\n",
 						ds.getSystemCode(),
 						(ds.getFullName() != null && ds.getFullName().length() > 0) ?
@@ -131,7 +154,7 @@ public class BridgeQC
 						(delta * 100)
 					);
 				if (genesRemoved.size() > 0 && "true".equals(System.getProperty("showRemovedIDs", "false")))
-					System.out.printf(
+					this.out.printf(
 						"INFO: The ids removed from %s%s: %s\n",
 							ds.getSystemCode(),
 							(ds.getFullName() != null && ds.getFullName().length() > 0) ?
@@ -140,7 +163,7 @@ public class BridgeQC
 						);
 
 				if (delta < -0.1) 
-					System.out.println ("WARNING: Number of ids in " + ds.getSystemCode() + " has shrunk by more than 10%");
+					this.out.println ("WARNING: Number of ids in " + ds.getSystemCode() + " has shrunk by more than 10%");
 			}
 		}
 	}
@@ -161,18 +184,18 @@ public class BridgeQC
 		
 		if (rs.next())
 		{
-			System.out.println ("ERROR: 'link' table contains ids that do not occur in 'datanode' table.");
-			System.out.print ("ERROR: A few examples: ");
+			this.out.println ("ERROR: 'link' table contains ids that do not occur in 'datanode' table.");
+			this.out.print ("ERROR: A few examples: ");
 			String sep = "";
 			int i = 0;
 			do 
 			{
-				System.out.print (sep + rs.getString(1) + ":" + rs.getString(2));
+				this.out.print (sep + rs.getString(1) + ":" + rs.getString(2));
 				sep = ", ";
 			}
 			while (rs.next() && ++i < 8);
-			System.out.println();
-			System.out.println ("ERROR: These ids will not map properly.");
+			this.out.println();
+			this.out.println ("ERROR: These ids will not map properly.");
 		}
 		
 	}
@@ -181,7 +204,7 @@ public class BridgeQC
 	{
 		long oldSize = oldDb.length();
 		long newSize = newDb.length();
-		System.out.printf ("INFO: new size is %d Mb (changed %+3.1f%%)\n", newSize / 1000000, 
+		this.out.printf ("INFO: new size is %d Mb (changed %+3.1f%%)\n", newSize / 1000000,
 				(double)(newSize - oldSize) / (double)oldSize * 100);
 	}
 
@@ -194,16 +217,16 @@ public class BridgeQC
 		{
 			if (!newAttrSet.contains(oldAttr))
 			{
-				System.out.println ("WARNING: Attribute " + oldAttr + " only in old database");
+				this.out.println ("WARNING: Attribute " + oldAttr + " only in old database");
 			}
 		}
 
 		for (String newAttr : newAttrSet)
 		{
-			System.out.println ("INFO: Attribute provided: " + newAttr);
+			this.out.println ("INFO: Attribute provided: " + newAttr);
 			if (!oldAttrSet.contains(newAttr))
 			{
-				System.out.println ("INFO: Attribute " + newAttr + " only in new database");
+				this.out.println ("INFO: Attribute " + newAttr + " only in new database");
 			}
 		}
 	}
@@ -215,35 +238,35 @@ public class BridgeQC
 
 	public interface PropertyChecker
 	{
-		abstract void check(String oldVal, String newVal);
+		abstract void check(String oldVal, String newVal, PrintStream out);
 	}
 	
 	enum Props implements PropertyChecker
 	{
 		ORGANISM (true, false) {
-			public void check(String oldVal, String newVal) 
+			public void check(String oldVal, String newVal, PrintStream out)
 			{
 				if (newVal != null)
 				{
 					Organism o = Organism.fromLatinName(newVal);
-					if (o == null) System.out.println ("WARNING: species '" + newVal + "' is not a recognized latin name");
+					if (o == null) this.out.println ("WARNING: species '" + newVal + "' is not a recognized latin name");
 				}
 			}
 		},
 		DATASOURCENAME (true, true) {
-			public void check(String oldVal, String newVal) {}
+			public void check(String oldVal, String newVal, PrintStream out) {}
 		},
 		SERIES (true, true) {
-			public void check(String oldVal, String newVal) {}
+			public void check(String oldVal, String newVal, PrintStream out) {}
 		},
 		DATATYPE (true, true) {
-			public void check(String oldVal, String newVal) {}
+			public void check(String oldVal, String newVal, PrintStream out) {}
 		},
 		DATASOURCEVERSION (false, true) {
-			public void check(String oldVal, String newVal) {}
+			public void check(String oldVal, String newVal, PrintStream out) {}
 		},
 		BUILDDATE (false, true) {
-			public void check(String oldVal, String newVal) {
+			public void check(String oldVal, String newVal, PrintStream out) {
 				SimpleDateFormat sft = new SimpleDateFormat("yyyyMMdd");
 				Date oldDate = null;
 				Date newDate = null;
@@ -254,7 +277,7 @@ public class BridgeQC
 				}
 				catch (ParseException e)
 				{
-					System.out.println ("ERROR: " + oldVal + " does not match pattern yyyymmdd"); 
+					this.out.println ("ERROR: " + oldVal + " does not match pattern yyyymmdd");
 				}
 				try
 				{
@@ -263,21 +286,22 @@ public class BridgeQC
 				}
 				catch (ParseException e)
 				{
-					System.out.println ("ERROR: " + oldVal + " does not match pattern yyyymmdd"); 
+					this.out.println ("ERROR: " + oldVal + " does not match pattern yyyymmdd");
 				}
 				if (oldDate != null && newDate != null && oldDate.after(newDate))
 				{
-					System.out.println ("ERROR: new date " + newVal + " is older than old date " + oldVal); 
+					this.out.println ("ERROR: new date " + newVal + " is older than old date " + oldVal);
 				}
 			}
 		},
 		SCHEMAVERSION (false, true) {
-			public void check(String oldVal, String newVal) {}
+			public void check(String oldVal, String newVal, PrintStream out) {}
 		},
 		;
 		
 		private boolean mustBeSame;
 		private boolean mustBeDefined;
+		PrintStream out;
 		
 		Props(boolean mustBeSame, boolean mustBeDefined)
 		{
@@ -288,10 +312,10 @@ public class BridgeQC
 		public void checkWrap(String oldVal, String newVal)
 		{
 			if (mustBeSame && !safeEquals (oldVal, newVal))
-				System.out.println ("WARNING: old " + name() + " '" + oldVal + "' doesn\'t match new " + name() + " '" + newVal + "'");
+				this.out.println ("WARNING: old " + name() + " '" + oldVal + "' doesn\'t match new " + name() + " '" + newVal + "'");
 			if (mustBeDefined && (newVal == null || newVal.equals("")))
-				System.out.println ("WARNING: property " + name() + " is undefined");
-			check(oldVal, newVal);
+				this.out.println ("WARNING: property " + name() + " is undefined");
+			check(oldVal, newVal, this.out);
 		}
 	}
 	
@@ -321,8 +345,8 @@ public class BridgeQC
 	
 	private void summarizeOverallStats() throws IDMapperException
 	{
-		System.out.println("INFO: total number of identifiers is " + newGdb.getGeneCount());
-		System.out.println("INFO: total number of mappings is " + newGdb.getLinkCount());
+		this.out.println("INFO: total number of identifiers is " + newGdb.getGeneCount());
+		this.out.println("INFO: total number of mappings is " + newGdb.getLinkCount());
 	}
 
 	public static void printUsage()
