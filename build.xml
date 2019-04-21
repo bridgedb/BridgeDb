@@ -16,6 +16,7 @@
 					<file name="org.bridgedb.rdb/build.xml"/>
 					<file name="org.bridgedb.rdb.construct/build.xml"/>
 					<file name="org.bridgedb.tools.batchmapper/build.xml"/>
+                                        <file name="org.bridgedb.tools.qc/build.xml"/>
 					<file name="org.bridgedb.server/build.xml"/>
 					<file name="org.bridgedb.webservice.picr/build.xml"/>
 					<file name="org.bridgedb.webservice.synergizer/build.xml"/>
