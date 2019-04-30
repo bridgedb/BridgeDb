@@ -202,7 +202,7 @@ Database Dependency
 -------------------
 (for the org.bridgedb.sql package and its dependencies ONLY)
 
-* MySQL version 5 or above **MUST** be installed and running, otherwise it fails to start
+* MySQL **MUST** be installed and running, otherwise it fails to start. Tested with MySQL up to version 5.5
 * MySQL databases and users **MUST** be created with CREATE, DROP, INDEX, INSERT, ALTER,
 UPDATE, DELETE, and SELECT permissions.
 
