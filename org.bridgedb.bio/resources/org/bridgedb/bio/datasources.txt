@@ -15,7 +15,7 @@ Chemspider	Cs	http://www.chemspider.com/	http://www.chemspider.com/Chemical-Stru
 CodeLink	Ge	http://www.appliedmicroarrays.com/		GE86325	probe		0	Ge		CodeLink
 Database of Interacting Proteins	Dip	http://dip.doe-mbi.ucla.edu/	http://dip.doe-mbi.ucla.edu/dip/DIPview.cgi?ID=$id	DIP-743N	interaction		1	urn:miriam:dip	^DIP[\:\-]\d{3}[EN]$	Database of Interacting Proteins
 dbSNP	Sn	http://www.ncbi.nlm.nih.gov/sites/entrez?db=snp	http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$id	121909098	gene		1	urn:miriam:dbsnp	^\d+$	dbSNP
-DrugBank	Dr	http://www.drugbank.ca/	http://www.drugbank.ca/drugs/$id	DB00001	metabolite		1	urn:miriam:drugbank	^DB\d{5}$	DrugBank
+DrugBank	Dr	http://www.drugbank.ca/	http://www.drugbank.ca/drugs/$id	DB00001	metabolite		1	urn:miriam:drugbank	^D(B|BSALT)(\d{1})?\d{5}$	DrugBank
 EcoCyc	Eco	http://ecocyc.org/	http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=$id	325-BISPHOSPHATE-NUCLEOTIDASE-RXN	interaction	Escherichia coli	1	Eco		EcoCyc
 EcoGene	Ec	http://ecogene.org/	http://ecogene.org/geneInfo.php?eg_id=$id	EG10173	gene	Escherichia coli	1	urn:miriam:ecogene	^EG\d+$	EcoGene
 EMBL	Em	http://www.ebi.ac.uk/embl/	http://www.ebi.ac.uk/ena/data/view/$id	X58356	gene		1	urn:miriam:ena.embl	^[A-Z]+[0-9]+$	European Nucleotide Archive
