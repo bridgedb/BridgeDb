@@ -139,7 +139,7 @@ DragonDB DNA	dragondb.dna		http://antirrhinum.net/cgi-bin/ace/generic/tree/Drago
 DragonDB Locus	dragondb.locus		http://antirrhinum.net/cgi-bin/ace/generic/tree/DragonDB?name=$id&amp%3Bclass=Locus	DEF	unknown		1	urn:miriam:dragondb.locus	^\w+$	
 DragonDB Protein	dragondb.protein		http://antirrhinum.net/cgi-bin/ace/generic/tree/DragonDB?name=$id%3Bclass%3DPeptide	AMDEFA	unknown		1	urn:miriam:dragondb.protein	^\w+$	
 DRSC	drsc		http://www.flyrnai.org/cgi-bin/RNAi_gene_lookup_public.pl?gname=$id	DRSC05221	unknown		1	urn:miriam:drsc	^DRSC\d+$	
-DrugBank	Dr	http://www.drugbank.ca/	http://www.drugbank.ca/drugs/$id	DB00001	metabolite		1	urn:miriam:drugbank	^DB\d{5}$	DrugBank
+DrugBank	Dr	http://www.drugbank.ca/	http://www.drugbank.ca/drugs/$id	DB00001	metabolite		1	urn:miriam:drugbank	^D(B|BSALT)(\d{1})?\d{5}$	DrugBank
 Drugbank Enzymes	drugbankEnzymes	http://www.drugbank.ca/	http://www4.wiwiss.fu-berlin.de/drugbank/resource/enzymes/$id	1	unknown		1			
 Drugbank Target	drugbankTarget	http://www.drugbank.ca/	http://www.drugbank.ca/molecules/$id	6511	unknown		1	urn:miriam:drugbank.target	^\d+$	
 EchoBASE	echobase		http://www.york.ac.uk/res/thomas/Gene.cfm?recordID=$id	EB0170	unknown		1	urn:miriam:echobase	^EB\d+$	

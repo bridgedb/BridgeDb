@@ -158,7 +158,7 @@ bridgeDB:DataSource_DrugBank a bridgeDB:DataSource ;
 	bridgeDB:idExample "DB00001" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
-	bridgeDB:hasRegexPattern "^DB\\d{5}$" ;
+	bridgeDB:hasRegexPattern "^D(B|BSALT)(\d{1})?\d{5}$" ;
 	dcterms:alternative "DrugBank" .
 
 bridgeDB:DataSource_EcoCyc a bridgeDB:DataSource ;
