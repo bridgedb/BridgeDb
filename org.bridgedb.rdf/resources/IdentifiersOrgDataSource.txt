@@ -19,6 +19,10 @@ Animal Genome Pig QTL	pigqtldb		http://www.animalgenome.org/cgi-bin/QTLdb/SS/qde
 Animal Genome Sheep QTL	sheepqtldb		http://www.animalgenome.org/cgi-bin/QTLdb/OA/qdetails?QTL_ID=$id	19803	unknown		1	urn:miriam:sheepqtldb	^\d+$	
 Animal TFDB Family	atfdb.family		http://www.bioguo.org/AnimalTFDB/family.php?fam=$id	CUT	unknown		1	urn:miriam:atfdb.family	^\w+$	
 AntWeb	antweb		http://www.antweb.org/specimen.do?name=$id	casent0106247	unknown		1	urn:miriam:antweb	^casent\d+(\-D\d+)?$	
+AOP-Wiki KE	AopKe	https://aopwiki.org/	https://aopwiki.org/events/$id	3	unknown		1	urn:miriam:aop.events	^\d+$	AOP-Wiki Key Events
+AOP-Wiki AOP	Aop	https://aopwiki.org/	https://aopwiki.org/aops/$id	3	pathway		1	urn:miriam:aop	^\d+$	AOP-Wiki Adverse Outcome Pathway
+AOP-Wiki KER	AopKer	https://aopwiki.org/	https://aopwiki.org/relationships/$id	5	interaction		1	urn:miriam:aop.relationships	^\d+$	AOP-Wiki Key Event Relationships
+AOP-Wiki Stressor	AopS	https://aopwiki.org/	https://aopwiki.org/stressors/	222	metabolite		1	urn:miriam:aop.stressor	^\d+$	AOP-Wiki Stressor
 APD	apd		http://aps.unmc.edu/AP/database/query_output.php?ID=$id	01001	unknown		1	urn:miriam:apd	^\d{5}$	
 AphidBase Transcript	aphidbase.transcript		http://isyip.genouest.org/apps/grs-2.2/grs?reportID=aphidbase_transcript_report&objectID=$id	ACYPI000159	unknown		1	urn:miriam:aphidbase.transcript	^ACYPI\d{6}(-RA)?$	
 ArachnoServer	arachnoserver		http://www.arachnoserver.org/toxincard.html?id=$id	AS000060	unknown		1	urn:miriam:arachnoserver	^AS\d{6}$	

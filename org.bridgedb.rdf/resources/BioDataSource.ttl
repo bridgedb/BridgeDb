@@ -1332,6 +1332,46 @@ bridgeDB:DataSource_ZFIN a bridgeDB:DataSource ;
 	bridgeDB:hasRegexPattern "ZDB\\-GENE\\-\\d+\\-\\d+" ;
 	dcterms:alternative "ZFIN Gene" .
 
+bridgeDB:DataSource_AOP-Wiki_Key_Events a bridgeDB:DataSource ;
+	bridgeDB:fullName "AOP-Wiki Key Event“ ;
+	bridgeDB:systemCode "AopKe" ;
+	bridgeDB:mainUrl "https://aopwiki.org/events" ;
+	bridgeDB:idExample "3" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "pathway" ;
+	bridgeDB:hasRegexPattern "^\d+$" ;
+	dcterms:alternative "Key Event" .
+
+bridgeDB:DataSource_AOP-Wiki_Adverse_Outcome_Pathways a bridgeDB:DataSource ;
+	bridgeDB:fullName "AOP-Wiki Adverse Outcome Pathway" ;
+	bridgeDB:systemCode "Aop" ;
+	bridgeDB:mainUrl "https://aopwiki.org/aops" ;
+	bridgeDB:idExample "3" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "pathway" ;
+	bridgeDB:hasRegexPattern "^\d+$" ;
+	dcterms:alternative "Adverse Outcome Pathway" .
+
+bridgeDB:DataSource_AOP-Wiki_Key_Event_Relationships a bridgeDB:DataSource ;
+	bridgeDB:fullName "AOP-Wiki Key Event Relationship" ;
+	bridgeDB:systemCode "AopKer" ;
+	bridgeDB:mainUrl "https://aopwiki.org/relationships" ;
+	bridgeDB:idExample "5" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "interaction" ;
+	bridgeDB:hasRegexPattern "^\d+$" ;
+	dcterms:alternative "Key Event Relationship" .
+
+bridgeDB:DataSource_AOP-Wiki_Stressor a bridgeDB:DataSource ;
+	bridgeDB:fullName "AOP-Wiki Stressor" ;
+	bridgeDB:systemCode "AopS" ;
+	bridgeDB:mainUrl "https://aopwiki.org/stressors" ;
+	bridgeDB:idExample "222" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "metabolite" ;
+	bridgeDB:hasRegexPattern "^\d+$" ;
+	dcterms:alternative "Stressor" .
+
 bridgeDB:Organism_Ag a bridgeDB:Organism ;
 	bridgeDB:code "Ag" ;
 	bridgeDB:shortName "Mosquito" ;
