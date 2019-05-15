@@ -65,7 +65,12 @@ note that 'mvn clean compile' fails.
 Making releases
 ---------------
 
-If it is time for a release, run the following commands. Mind you, this requires you
+If it is time for a release, ensure the code is ready for releases with both
+Ant (to create proper OSGi bundles, which Maven does not currently do) and
+Maven. For the former, the OSGI info must be updated, and particular the
+`MANIFEST.MF` files.
+
+Then, run the following commands. Mind you, this requires you
 to have an approved Sonatype (http://oss.sonatype.org/) account with push rights:
 
 ```shell
