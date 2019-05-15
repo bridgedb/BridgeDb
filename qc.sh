@@ -3,7 +3,7 @@
 # Run after first compiling with "mvn compile install" and updating the version
 # number below.
 
-VERSION=2.2.3-SNAPSHOT
+VERSION=`tail -1 org.bridgedb/version.props | cut -d'=' -f2`
 CLASSPATH=org.bridgedb.tools.qc/target/org.bridgedb.tools.qc-${VERSION}.jar:\
 org.bridgedb/target/org.bridgedb-${VERSION}.jar:\
 org.bridgedb.bio/target/org.bridgedb.bio-${VERSION}.jar:\
