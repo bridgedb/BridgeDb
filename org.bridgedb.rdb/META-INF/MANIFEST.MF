@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.bridgedb.rdb
 Bundle-SymbolicName: org.bridgedb.rdb
-Bundle-Version: 2.3.0
+Bundle-Version: 2.3.2
 Export-Package: org.bridgedb.rdb,
  org.bridgedb.rdb.impl
 Require-Bundle: org.bridgedb,

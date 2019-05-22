@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Gui
 Bundle-SymbolicName: org.bridgedb.gui
-Bundle-Version: 2.3.0
+Bundle-Version: 2.3.2
 Export-Package: org.bridgedb.gui
 Require-Bundle: org.bridgedb,
  org.pathvisio.jgoodies.forms;bundle-version="1.2.0",
