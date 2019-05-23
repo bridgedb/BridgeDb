@@ -1,6 +1,7 @@
 BridgeDb
 ========
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dc3b302d73bf4ab091a03e5aef1eb6c9)](https://app.codacy.com/app/nunogit/BridgeDb?utm_source=github.com&utm_medium=referral&utm_content=bridgedb/BridgeDb&utm_campaign=Badge_Grade_Dashboard)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2567175.svg)](https://doi.org/10.5281/zenodo.2567175)
 [![Build Status](https://travis-ci.org/bridgedb/BridgeDb.svg?branch=master)](https://travis-ci.org/bridgedb/BridgeDb)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bridgedb/bridgedb-bundle/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bridgedb/bridgedb-bundle)
