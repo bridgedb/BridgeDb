@@ -1,8 +1,6 @@
 package org.bridgedb.server;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.Iterator;
 import java.util.Set;
 
@@ -11,14 +9,14 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.Xref;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
+//import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 
 public class Batch extends IDMapperResource {
 
-	DataSource sourceDs;
-	DataSource targetDs;
+	private DataSource sourceDs;
+	private DataSource targetDs;
 
 	protected void doInit() throws ResourceException {
 		super.doInit();
