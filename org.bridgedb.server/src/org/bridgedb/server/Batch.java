@@ -16,9 +16,6 @@
 
 package org.bridgedb.server;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -27,15 +24,21 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.Xref;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 
+/**
+ * @author nuno
+ *
+ */
 public class Batch extends IDMapperResource {
 
 	private DataSource sourceDs;
 	private DataSource targetDs;
 
+	/* (non-Javadoc)
+	 * @see src.org.bridgedb.server.IDMapperResource#doInit()
+	 */
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		try {
@@ -54,6 +57,10 @@ public class Batch extends IDMapperResource {
 		}
 	}
 	
+	/**
+	 * @param entity
+	 * @return 
+	 */
 	@Post
     public String accept(Representation entity) { 
 		String result=null;
@@ -66,6 +73,10 @@ public class Batch extends IDMapperResource {
 		return result;
     }
     
+	/**
+	 * @param entity
+	 * @return
+	 */
 	public String multiDataSource(Representation entity){
 		System.out.println( "Batch Multi Xrefs.getXrefs() start" );
 		try {
@@ -115,6 +126,10 @@ public class Batch extends IDMapperResource {
 		}
 	}
 	
+	/**
+	 * @param entity
+	 * @return
+	 */
 	public String oneDataSource(Representation entity){
 		System.out.println( "Batch Xrefs.getXrefs() start" );
 		try {
@@ -158,6 +173,9 @@ public class Batch extends IDMapperResource {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see src.org.bridgedb.server.IDMapperResource#parseDataSource(String)
+	 */
 	protected DataSource parseDataSource(String dsName) {
 		if(dsName == null) return null;
 		DataSource ds = null;
