@@ -120,7 +120,7 @@ org.bridgedb.uri.ws.*  Extends org.bridgedb.ws.* with URI supports from org.brid
 Database structure
 ------------------
 
-For further information about the database structure check [the documentation here](BridgeDb/tree/master/docs/database).
+For further information about the database structure check [the documentation here](docs/database).
 
 Contact
 -------
