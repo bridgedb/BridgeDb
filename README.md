@@ -117,6 +117,11 @@ org.bridgedb.uri.loader  Loads RDF linksets into org.bridgedb.uri.sql. Also crea
 
 org.bridgedb.uri.ws.*  Extends org.bridgedb.ws.* with URI supports from org.bridgedb.uri.sql 
 
+Database structure
+------------------
+
+For further information about the database structure check [the documentation here](docs/database).
+
 Contact
 -------
 
