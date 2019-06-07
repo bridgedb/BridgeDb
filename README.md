@@ -63,6 +63,24 @@ If you want to ignore failing tests, e.g. because you are not online,
 add this option: -Dmaven.test.failure.ignore=true. Furthermore,
 note that 'mvn clean compile' fails.
 
+Checking for regressions
+------------------------
+
+You may want to run the following commands to detect regressions,
+which is particularly important before starting to make a release:
+
+```shell
+ant clean test
+mvn clean test
+```
+
+Note that teh first call may fail a number of unit tests, like for those
+of `IDMapperCapabilitiesTest`. For that one, this is because it is an
+abstract class that should not actually be run by JUnit as test suite.
+
+Note also that the second one may fail because BridgeDb module dependencies
+may not be resolved yet.
+
 Making releases
 ---------------
 
