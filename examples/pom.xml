@@ -6,7 +6,7 @@
     <version>2.4.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.bridgedb</groupId>
+  <groupId>org.bridgedb.examples</groupId>
   <artifactId>examples</artifactId>
   <name>BridgeDb Examples</name>
   
