@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Picr
-Bundle-SymbolicName: org.bridgedb.webservice.picr
-Bundle-Version: 2.3.2
-Export-Package: org.bridgedb.webservice.picr
-Require-Bundle: org.bridgedb,
- org.apache.commons.collections;bundle-version="3.2.1",
- javax.activation;bundle-version="1.1.0"
