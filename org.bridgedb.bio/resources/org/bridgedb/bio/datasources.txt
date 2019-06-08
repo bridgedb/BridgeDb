@@ -1,9 +1,9 @@
 Affy	X	http://www.affymetrix.com/	https://www.affymetrix.com/LinkServlet?probeset=$id	1851_s_at	probe		0	urn:miriam:affy.probeset	\d{4,}((_[asx])?_at)?	Affymetrix Probeset
 Agilent	Ag	http://agilent.com		A_24_P98555	probe		0	Ag	A_\d+_.+	Agilent
-AOP-Wiki KE     AopKe      https://aopwiki.org/    https://aopwiki.org/events/$id  3       unknown         1       urn:miriam:aop.events   ^\d+$   AOP-Wiki Key Events
-AOP-Wiki AOP    Aop     https://aopwiki.org/    https://aopwiki.org/aops/$id    3       pathway         1       urn:miriam:aop  ^\d+$   AOP-Wiki Adverse Outcome Pathway
-AOP-Wiki KER    AopKer      https://aopwiki.org/    https://aopwiki.org/relationships/$id   5       interaction             1       urn:miriam:aop.relationships    ^\d+$  $
-AOP-Wiki Stressor       AopS      https://aopwiki.org/    https://aopwiki.org/stressors/  222     metabolite              1       urn:miriam:aop.stressor ^\d+$   AOP-Wik$
+AOP-Wiki KE	AopKe	https://aopwiki.org/	https://aopwiki.org/events/$id	3	unknown		1	urn:miriam:aop.events	^\d+$	AOP-Wiki Key Events
+AOP-Wiki AOP	Aop	https://aopwiki.org/	https://aopwiki.org/aops/$id	3	pathway		1	urn:miriam:aop	^\d+$	AOP-Wiki Adverse Outcome Pathway
+AOP-Wiki KER	AopKer	https://aopwiki.org/	https://aopwiki.org/relationships/$id	5	interaction		1	urn:miriam:aop.relationships	^\d+$	AOP-Wiki Key Event Relationships
+AOP-Wiki Stressor	AopS	https://aopwiki.org/	https://aopwiki.org/stressors/	222	metabolite		1	urn:miriam:aop.stressor	^\d+$	AOP-Wiki Stressor
 BIND	Bi	http://www.bind.ca/	http://www.bind.ca/Action?identifier=bindid&idsearch=$id		interaction		1	urn:miriam:bind	^\d+$	BIND
 BioCyc	Bc	http://biocyc.org	http://biocyc.org/getid?id=$id	ECOLI:CYT-D-UBIOX-CPLX	gene		1	urn:miriam:biocyc	^\w+\:[A-Za-z0-9-]+$	BioCyc
 BioGrid	Bg	http://thebiogrid.org/	http://thebiogrid.org/$id	31623	interaction		1	urn:miriam:biogrid	^\d+$	BioGRID
