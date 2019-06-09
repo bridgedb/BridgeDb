@@ -1,7 +1,7 @@
 /*
 *BridgeDb,
 *An abstraction layer for identifier mapping services, both local and online.
-*Copyright (c) 2006-2009 BridgeDb developers
+*Copyright (c) 2019 Manas Awasthi, <marvex17@gmail.com>
 *
 *Licensed under the Apache License, Version 2.0 (the "License");
 *you may not use this file except in compliance with the License.
@@ -14,43 +14,42 @@
 
 package org.bridgedb.statistics;
 
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DataSetInfoTest {
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void getSysCode() {
         DataSetInfo dataSetInfo = new DataSetInfo("En", "Ensembl");
-        Assert.assertEquals("En", dataSetInfo.getSysCode());
+        assertEquals("En", dataSetInfo.getSysCode());
     }
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void getFullName() {
         DataSetInfo dataSetInfo = new DataSetInfo("En", "Ensembl");
-        Assert.assertEquals("Ensembl", dataSetInfo.getFullName());
+        assertEquals("Ensembl", dataSetInfo.getFullName());
     }
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void equals() {
         DataSetInfo dataSetInfo = new DataSetInfo("En", "Ensembl");
         Object object = new DataSetInfo("En", "Ensembl");
-        Assert.assertTrue(object.equals(dataSetInfo));
+        assertTrue(object.equals(dataSetInfo));
     }
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void compareTo() {
         DataSetInfo dataSetInfo = new DataSetInfo("En", "Ensembl");
         DataSetInfo other = new DataSetInfo("X", "Affy");
         DataSetInfo dataSetInfo1 = new DataSetInfo("En", "Ensembl");
-        Assert.assertNotEquals(0, dataSetInfo.compareTo(other));
-        Assert.assertEquals(0, dataSetInfo.compareTo(dataSetInfo1));
+        assertNotEquals(0, dataSetInfo.compareTo(other));
+        assertEquals(0, dataSetInfo.compareTo(dataSetInfo1));
     }
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void testToString() {
         DataSetInfo dataSetInfo = new DataSetInfo(null, "Affy");
-        Assert.assertEquals("Affy", dataSetInfo.toString());
+        assertEquals("Affy", dataSetInfo.toString());
         DataSetInfo dataSetInfo1 = new DataSetInfo("En", "Ensembl");
-        Assert.assertEquals("En",dataSetInfo1.toString());
+        assertEquals("En",dataSetInfo1.toString());
     }
-}
