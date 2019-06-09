@@ -2,4 +2,4 @@ org.bridgedb.ws.server
 ----------------------
 
 Actual webservice server code, that uses the ws.core
-functionality to expose BridgeDB data.
+functionality to expose BridgeDb data.
