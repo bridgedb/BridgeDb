@@ -1,7 +1,7 @@
 /*
  *BridgeDb,
  *An abstraction layer for identifier mapping services, both local and online.
- *Copyright (c) 2019 Manas Awasthi
+ *Copyright (c) 2019, Manas Awasthi
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class MappingSetInfoTest {
 
     @org.junit.jupiter.api.Test
-    void getStringId() {
+     public void getStringId() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("En", "Ensembl");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.ebi.ac.uk/embl/", targetDataSetInfo, "centre","none", "Ensembl", 0, 2, 1, 1);
@@ -28,7 +28,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void getIntId() {
+    public void getIntId() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("En", "Ensembl");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.ebi.ac.uk/embl/", targetDataSetInfo, "centre","none", "Ensembl", 0, 2, 1, 1);
@@ -37,7 +37,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void combineIds() {
+    public void combineIds() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("En", "Ensembl");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.ebi.ac.uk/embl/", targetDataSetInfo, "centre","none", "Ensembl", 0, 2, 1, 1);
@@ -47,7 +47,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void getPredicate() {
+    public void getPredicate() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("En", "Ensembl");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.ebi.ac.uk/embl/", targetDataSetInfo, "centre","none", "Ensembl", 0, 2, 1, 1);
@@ -55,7 +55,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void predicateLocalName() {
+    public void predicateLocalName() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "centre","none", "SwissLipids", 0, 2, 1, 1);
@@ -64,7 +64,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void isSymmetric() {
+    public void isSymmetric() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "centre", "none", "SwissLipids", 2, 2, 1, 1);
@@ -74,7 +74,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void hasOrIsSymmetric() {
+    public void hasOrIsSymmetric() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "centre", "none", "SwissLipids", 2, 2, 1, 1);
@@ -84,7 +84,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void getNumberOfLinks() {
+    public void getNumberOfLinks() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "centre", "none", "SwissLipids", 2, 2, 1, 1);
@@ -92,7 +92,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void setNumberOfLinks() {
+    public void setNumberOfLinks() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "centre", "none", "SwissLipids", 2, 2, 1, 1);
@@ -101,7 +101,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void toString1() {
+    public void toString1() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "centre", "none", "SwissLipids", 2, 2, 1, 1);
@@ -118,7 +118,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void getJustification() {
+    public void getJustification() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "centre", "none", "SwissLipids", 2, 2, 1, 1);
@@ -126,7 +126,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void justificationLocalName() {
+    public void justificationLocalName() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", "none", "SwissLipids", 2, 2, 1, 1);
@@ -134,7 +134,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void getSymmetric() {
+    public void getSymmetric() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", "none", "SwissLipids", 2, 2, 1, 1);
@@ -142,7 +142,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void getSource() {
+    public void getSource() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", "none", "SwissLipids", 2, 2, 1, 1);
@@ -151,7 +151,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void getTarget() {
+    public void getTarget() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", "none", "SwissLipids", 2, 2, 1, 1);
@@ -160,7 +160,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void isTransitive() {
+    public void isTransitive() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", "none", "SwissLipids", 2, 2, 1, 1);
@@ -168,7 +168,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void getMappingResource() {
+    public void getMappingResource() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", "Affy", "SwissLipids", 2, 2, 1, 1);
@@ -177,7 +177,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void resourceLocalName() {
+    public void resourceLocalName() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", "https://www.affymetrix.com/LinkServlet?probeset=$id", "SwissLipids.", 2, 2, 1, 1);
@@ -185,7 +185,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void getMappingSource() {
+    public void getMappingSource() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", "https://www.affymetrix.com/LinkServlet?probeset=$id", "SwissLipids", 2, 2, 1, 1);
@@ -193,7 +193,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void sourceLocalName() {
+    public void sourceLocalName() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", "https://www.affymetrix.com/LinkServlet?probeset=$id", "http://www.swisslipids.org/#/entity/$id/", 2, 2, 1, 1);
@@ -201,7 +201,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void getNumberOfSources() {
+    public void getNumberOfSources() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", "Affy", "SwissLipids", 2, 2, 1, 1);
@@ -210,7 +210,7 @@ class MappingSetInfoTest {
     }
 
     @org.junit.jupiter.api.Test
-    void getNumberOfTargets() {
+    public void getNumberOfTargets() {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", "Affy", "SwissLipids", 2, 2, 1, 1);
