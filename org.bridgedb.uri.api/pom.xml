@@ -48,7 +48,13 @@
                 <version>${hamcrest.version}</version>
                 <scope>test</scope>
             </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.5.0-RC1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
     <pluginRepositories>
         <pluginRepository> 
             <id>onejar-maven-plugin.googlecode.com</id>
