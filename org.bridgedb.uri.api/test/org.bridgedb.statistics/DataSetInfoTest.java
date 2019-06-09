@@ -53,3 +53,4 @@ public class DataSetInfoTest {
         DataSetInfo dataSetInfo1 = new DataSetInfo("En", "Ensembl");
         assertEquals("En",dataSetInfo1.toString());
     }
+}
