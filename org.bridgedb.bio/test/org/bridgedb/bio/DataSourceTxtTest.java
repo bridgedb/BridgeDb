@@ -1,20 +1,17 @@
-// BridgeDb,
-// An abstraction layer for identifier mapping services, both local and online.
-// Copyright 2006-2009 BridgeDb developers
-// Copyright 2012-2013 Christian Brenninkmeijer
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
+/*
+*BridgeDb,
+*An abstraction layer for identifier mapping services, both local and online.
+*Copyright (c) 2006-2009 BridgeDb Developers
+*Copyright (c) 2012-2013 Christian Brenninkmeijer
+*
+*Licensed under the Apache License, Version 2.0 (the "License");
+*you may not use this file except in compliance with the License.
+*You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+*
+*Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
+*WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*See the License for the specific language governing permissions and limitations under the License.
+*/
 package org.bridgedb.bio;
 
 import java.io.BufferedWriter;
@@ -26,37 +23,37 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.DataSource;
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 /**
  *
  * @author Christian
  */
 public class DataSourceTxtTest {
-    
-	@Test
+
+	@org.junit.jupiter.api.Test
 	public void testUniqueSystemCodes() {
 		DataSourceTxt.init();
 		Set<String> codes = new HashSet<String>();
 		Set<DataSource> sources = DataSource.getDataSources();
-		Assert.assertNotSame(0, sources.size());
+		assertNotSame(0, sources.size());
 		for (DataSource source : sources) {
 			codes.add(source.getSystemCode());
 		}
-		Assert.assertEquals(sources.size(), codes.size());
+		assertEquals(sources.size(), codes.size());
 	}
 
-	@Test
+	@org.junit.jupiter.api.Test
 	public void systemCodesDoNotHaveWhitespace() {
 		DataSourceTxt.init();
 		Set<DataSource> sources = DataSource.getDataSources();
-		Assert.assertNotSame(0, sources.size());
+		assertNotSame(0, sources.size());
 		for (DataSource source : sources) {
 			String sysCode = source.getSystemCode();
 			if (sysCode != null) {
-				Assert.assertEquals(sysCode.length(), sysCode.trim().length());
-				Assert.assertFalse(sysCode.contains(" "));
+				assertEquals(sysCode.length(), sysCode.trim().length());
+				assertFalse(sysCode.contains(" "));
 			}
 		}
 	}
@@ -64,8 +61,8 @@ public class DataSourceTxtTest {
     /**
      * Test of init and writer test method, of class DataSourceTxt.
      */
-    @Test
-    public void testWriteRead() throws IOException {
+	@org.junit.jupiter.api.Test
+    	public void testWriteRead() throws IOException {
         System.out.println("WriteRead");
         DataSourceTxt.init();
         File generated = new File("test-data/generatedDatasources.txt");
@@ -75,39 +72,39 @@ public class DataSourceTxtTest {
         DataSourceTxt.loadInputStream(is);
     }
 
-    @Test
-    public void testWikidata() throws Exception {
+	@org.junit.jupiter.api.Test
+    	public void testWikidata() throws Exception {
     	DataSourceTxt.init();
     	DataSource wikidata = DataSource.getExistingByFullName("Wikidata");
-    	Assert.assertNotNull(wikidata);
-    	Assert.assertTrue(wikidata.urlPatternKnown());
-    	Assert.assertEquals("Wd", wikidata.getSystemCode());
+    	assertNotNull(wikidata);
+    	assertTrue(wikidata.urlPatternKnown());
+    	assertEquals("Wd", wikidata.getSystemCode());
     }
 
-    @Test
-    public void testWikidataBySystemCode() throws Exception {
+	@org.junit.jupiter.api.Test
+    	public void testWikidataBySystemCode() throws Exception {
     	DataSourceTxt.init();
     	DataSource wikidata = DataSource.getExistingBySystemCode("Wd");
-    	Assert.assertNotNull(wikidata);
-    	Assert.assertTrue(wikidata.urlPatternKnown());
-    	Assert.assertEquals("Wikidata", wikidata.getFullName());
+    	assertNotNull(wikidata);
+    	assertTrue(wikidata.urlPatternKnown());
+    	assertEquals("Wikidata", wikidata.getFullName());
     }
 
-    @Test
-    public void testChEMBL() throws Exception {
+	@org.junit.jupiter.api.Test
+    	public void testChEMBL() throws Exception {
     	DataSourceTxt.init();
     	DataSource wikidata = DataSource.getExistingByFullName("ChEMBL compound");
-    	Assert.assertNotNull(wikidata);
-    	Assert.assertTrue(wikidata.urlPatternKnown());
-    	Assert.assertEquals("Cl", wikidata.getSystemCode());
+    	assertNotNull(wikidata);
+    	assertTrue(wikidata.urlPatternKnown());
+    	assertEquals("Cl", wikidata.getSystemCode());
     }
 
-    @Test
-    public void testKNApSAcK() throws Exception {
+	@org.junit.jupiter.api.Test
+    	public void testKNApSAcK() throws Exception {
     	DataSourceTxt.init();
     	DataSource wikidata = DataSource.getExistingByFullName("KNApSAcK");
-    	Assert.assertNotNull(wikidata);
-    	Assert.assertTrue(wikidata.urlPatternKnown());
-    	Assert.assertEquals("Cks", wikidata.getSystemCode());
+    	assertNotNull(wikidata);
+    	assertTrue(wikidata.urlPatternKnown());
+    	assertEquals("Cks", wikidata.getSystemCode());
     }
 }
