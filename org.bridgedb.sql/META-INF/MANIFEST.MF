@@ -1,5 +1,5 @@
 Bundle-Name: org.bridgedb.sql
-Bundle-Version: 2.3.2
+Bundle-Version: 2.3.3
 Bundle-SymbolicName: org.bridgedb.sql
 Export-Package: * 
 Require-Bundle: org.bridgedb,

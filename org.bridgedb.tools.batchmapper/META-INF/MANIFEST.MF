@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Batchmapper
 Bundle-SymbolicName: org.bridgedb.tools.batchmapper
-Bundle-Version: 2.3.2
+Bundle-Version: 2.3.3
 Export-Package: org.bridgedb.tools.batchmapper
 Require-Bundle: org.bridgedb,
  org.bridgedb.bio,

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Biomart
 Bundle-SymbolicName: org.bridgedb.webservice.biomart
-Bundle-Version: 2.3.2
+Bundle-Version: 2.3.3
 Export-Package: org.bridgedb.webservice.biomart,
  org.bridgedb.webservice.biomart.util
 Require-Bundle: org.bridgedb
