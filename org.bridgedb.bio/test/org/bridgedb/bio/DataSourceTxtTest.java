@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.DataSource;
-import org.junit.Assert;
 import static org.junit.jupiter.api.Assertions.*;
 
 
