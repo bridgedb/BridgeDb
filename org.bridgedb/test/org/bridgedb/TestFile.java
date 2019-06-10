@@ -1,19 +1,16 @@
-// BridgeDb,
-// An abstraction layer for identifier mapping services, both local and online.
-// Copyright 2006-2009 BridgeDb developers
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
+/*
+ *BridgeDb,
+ *An abstraction layer for identifier mapping services, both local and online.
+ *Copyright (c) 2006-2009 BridgeDb Developers
+ *
+ *Licensed under the Apache License, Version 2.0 (the "License");
+ *you may not use this file except in compliance with the License.
+ *You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
+ *WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *See the License for the specific language governing permissions and limitations under the License.
+ */
 package org.bridgedb;
 
 //import buildsystem.Measure;
@@ -29,10 +26,12 @@ import java.util.Set;
 
 import org.bridgedb.file.IDMapperFile;
 import org.bridgedb.file.IDMapperText;
-import org.junit.Before;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test identifier mapping using a tab-delimited text file.
@@ -46,17 +45,20 @@ public class TestFile {
     private static final DataSource EMBL = DataSource.getByFullName("EMBL");
     private static final Xref XREF1 = new Xref("YHR055C", ENS_YEAST);
 	
-	@Before public void setUp()
+	@BeforeEach
+	public void setUp()
 	{
 		//measure = new Measure("bridgedb_timing.txt");
 	}
 	
-	@Test public void testFiles()
+	@Test
+	public void testFiles()
 	{
-		Assert.assertTrue (YEAST_IDS.exists());
+		assertTrue (YEAST_IDS.exists());
 	}
 	
-	@Test public void testRead() throws IDMapperException, IOException
+	@Test
+	public void testRead() throws IDMapperException, IOException
 	{
 		IDMapperFile idMapper = new IDMapperText (YEAST_IDS.toURL());
 
@@ -84,7 +86,7 @@ public class TestFile {
         		new Xref("856450", ENTREZ)
         		));
         Set<Xref> xrefs = mapXrefs.get(XREF1);
-        Assert.assertEquals (expected, xrefs);
+        assertEquals (expected, xrefs);
 
         for (Xref xr : xrefs) {
             System.out.println(xr.getDataSource().getFullName() + ": " + xr.getId());
@@ -92,7 +94,7 @@ public class TestFile {
         
         Xref nonsense = new Xref ("Humbug", DataSource.getByFullName("Ebenizer Scrooge"));
         // non-existent id should just return empty list.
-        Assert.assertEquals (0, idMapper.mapID(nonsense).size());
+        assertEquals (0, idMapper.mapID(nonsense).size());
 
 	}
 
