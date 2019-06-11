@@ -1,19 +1,17 @@
-//BridgeDb,
-//An abstraction layer for identifier mapping services, both local and online.
-//Copyright 2006-2009 BridgeDb developers
-//
-//Licensed under the Apache License, Version 2.0 (the "License");
-//you may not use this file except in compliance with the License.
-//You may obtain a copy of the License at
-//
-//http://www.apache.org/licenses/LICENSE-2.0
-//
-//Unless required by applicable law or agreed to in writing, software
-//distributed under the License is distributed on an "AS IS" BASIS,
-//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//See the License for the specific language governing permissions and
-//limitations under the License.
-//
+/*
+ * BridgeDb,
+ * An abstraction layer for identifier mapping services, both local and online.
+ * Copyright (c) 2006 - 2009  BridgeDb Developers
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 package org.bridgedb.server;
 
 import java.io.File;
@@ -28,16 +26,18 @@ import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.bio.BioDataSource;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class Test {
 	private IDMapper mapper;
 	private Server server;
 	private boolean configExists;
 	
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	    
 	   
@@ -69,7 +69,7 @@ public class Test {
 	
 	
 
-	@After
+	@AfterEach
     public void tearDown() throws Exception
     {
 	    if (server != null)
@@ -84,7 +84,7 @@ public class Test {
 		return mapper;
 	}
 	
-	@org.junit.Test
+	@org.junit.jupiter.api.Test
 	public void testLocalMapID() throws IDMapperException, ClassNotFoundException {
 		
 	    if (configExists)
@@ -94,13 +94,12 @@ public class Test {
     		Xref insr = new Xref ("3643", BioDataSource.ENTREZ_GENE);
     		Xref affy = new Xref ("33162_at", BioDataSource.AFFY);
     		Set<Xref> result = mapper.mapID(insr);
-    		Assert.assertTrue (result.contains(affy));
-    		
-    		Assert.assertTrue(mapper.xrefExists(insr));
+    		assertTrue (result.contains(affy));
+    		assertTrue(mapper.xrefExists(insr));
 	    }
 	}
 	
-	@org.junit.Test
+	@org.junit.jupiter.api.Test
 	public void testLocalCapabilities() throws IDMapperException, ClassNotFoundException {
 		
 	    if (configExists)
@@ -110,24 +109,21 @@ public class Test {
     		IDMapperCapabilities cap = mapper.getCapabilities();
     		
     		Set<DataSource> supported = cap.getSupportedSrcDataSources();
-    		Assert.assertTrue (supported.contains(DataSource.getBySystemCode("L")));
+    		assertTrue (supported.contains(DataSource.getBySystemCode("L")));
     
     		String val = cap.getProperty("SCHEMAVERSION");
-    		Assert.assertNotNull(val);
+    		assertNotNull(val);
     		
     		Set<DataSource> srcDs = cap.getSupportedSrcDataSources();
-    		Assert.assertTrue(srcDs.size() > 0);
-    		
-    		Assert.assertTrue(cap.isFreeSearchSupported());
-    		
-    		Assert.assertTrue(cap.isMappingSupported(BioDataSource.UNIPROT, BioDataSource.ENTREZ_GENE));
-    		
-    		Assert.assertFalse(cap.isMappingSupported(
+    		assertTrue(srcDs.size() > 0);
+    		assertTrue(cap.isFreeSearchSupported());
+    		assertTrue(cap.isMappingSupported(BioDataSource.UNIPROT, BioDataSource.ENTREZ_GENE));
+    		assertFalse(cap.isMappingSupported(
     				DataSource.getBySystemCode("??"), DataSource.getBySystemCode("!!")));
 	    }
 	}
 	
-	@org.junit.Test
+	@org.junit.jupiter.api.Test
 	public void testLocalSearch() throws IDMapperException, ClassNotFoundException {
 		
 	    if (configExists)
@@ -136,11 +132,11 @@ public class Test {
     		
     		Set<Xref> result = mapper.freeSearch("1234", 100);
     		System.out.println(result);
-    		Assert.assertTrue(result.size() > 0);
+    		assertTrue(result.size() > 0);
         }
 	}
 	
-	@org.junit.Test
+	@org.junit.jupiter.api.Test
 	public void testLocalAttributes() throws ClassNotFoundException, IDMapperException {
 		
 	    if (configExists)
@@ -149,24 +145,21 @@ public class Test {
     		
     		Xref insr = new Xref("3643", BioDataSource.ENTREZ_GENE);
     		Map<String, Set<String>> attrMap = mapper.getAttributes(insr);
-    		Assert.assertNotNull(attrMap.get("Symbol"));
-    		Assert.assertTrue(attrMap.get("Symbol").size() == 2);
+    		assertNotNull(attrMap.get("Symbol"));
+			assertEquals(2, attrMap.get("Symbol").size());
     		
     		Set<String> attrValues = mapper.getAttributes(insr, "Symbol");
-    		Assert.assertTrue(attrValues.size() == 2);
+			assertEquals(2, attrValues.size());
     		
     		Map<Xref, String> xrefMap = mapper.freeAttributeSearch("INSR", "Symbol", 1);
-    		Assert.assertTrue(xrefMap.size() == 1);
+			assertEquals(1, xrefMap.size());
     
     		xrefMap = mapper.freeAttributeSearch("INSR", "Symbol", 100);
-    		Assert.assertTrue(xrefMap.containsKey(insr));
-    		Assert.assertTrue(xrefMap.size() > 1);
+    		assertTrue(xrefMap.containsKey(insr));
+    		assertTrue(xrefMap.size() > 1);
     		
     		Set<String> attrs = mapper.getAttributeSet();
-    		Assert.assertTrue(attrs.size() > 0);
+    		assertTrue(attrs.size() > 0);
         }
 	}
-
-
-
 }
