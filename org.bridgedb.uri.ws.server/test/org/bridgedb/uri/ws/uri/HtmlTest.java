@@ -11,9 +11,8 @@ import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.ws.uri.WSUriServer;
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
+import org.junit.jupiter.api.*;
 
 /**
  *
@@ -23,7 +22,7 @@ public class HtmlTest {
     
     static WSUriServer server;
     
-    @BeforeClass
+    @BeforeAll
     public static void setupIDMapper() throws BridgeDBException{
         ConfigReader.useTest();
         TestSqlFactory.checkSQLAccess();
@@ -34,13 +33,13 @@ public class HtmlTest {
     public void testWelcomeMessage() throws BridgeDBException, UnsupportedEncodingException{
         Reporter.println("WelcomeMessage");
         Response result = server.welcomeMessage(new DummyHttpServletRequest());
-        assertEquals(200, result.getStatus());
+        Assertions.assertEquals(200, result.getStatus());
     }
 
     @Test 
     public void testApi() throws BridgeDBException, UnsupportedEncodingException{
         Reporter.println("API");
         Response result = server.imsApiPage(new DummyHttpServletRequest());
-        assertEquals(200, result.getStatus());
+        Assertions.assertEquals(200, result.getStatus());
     }
  }
