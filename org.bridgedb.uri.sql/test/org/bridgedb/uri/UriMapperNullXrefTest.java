@@ -11,8 +11,10 @@ import org.bridgedb.Xref;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.lens.Lens;
-import static org.junit.Assert.*;
-import org.junit.Test;
+
+import org.junit.jupiter.api.*;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
@@ -295,5 +297,4 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
         Set<Mapping> results = uriMapper.mapFull(sourceUri, lensId, DEFAULT_IGNORE, NULL_GRAPH, patterns);
         assertTrue(results.isEmpty());
     }
-
 }

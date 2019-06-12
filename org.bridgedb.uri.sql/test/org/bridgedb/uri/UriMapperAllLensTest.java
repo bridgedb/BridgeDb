@@ -11,9 +11,10 @@ import org.bridgedb.Xref;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.lens.Lens;
+
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -29,7 +30,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
    /**
      * Test of mapID method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapID_sourceXref_lensId_tgtDataSources() throws Exception {
         report("MapID_sourceXref_lensId_tgtDataSources");
         Xref sourceXref = map2xref2;
@@ -53,7 +54,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapID method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapID_sourceXref_lensId_tgtDataSource() throws Exception {
         report("MapID_sourceXref_lensId_tgtDataSource");
         Xref sourceXref = map2xref2;
@@ -76,7 +77,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapID method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapID_sourceXref_lensId() throws Exception {
         report("MapID_sourceXref_lensId");
         Xref sourceXref = map2xref2;
@@ -97,7 +98,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapUri method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapUri_sourceUri_lensId_tgtUriPatterns() throws Exception {
         report("MapUri_sourceUri_lensId_tgtUriPatterns");
         String sourceUri = map3Uri3;
@@ -121,7 +122,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapUri method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapUri_sourceXref_lensId_tgtUriPattern() throws Exception {
         report("MapUri_sourceXref_lensId_tgtUriPattern");
         Xref sourceXref = map3xref2;
@@ -143,7 +144,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapUri method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapUri_sourceXref_lensId() throws Exception {
         report("MapUri_sourceXref_lensId");
         Xref sourceXref = map3xref2;
@@ -165,7 +166,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapUri method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapUri_sourceXref_lensId_tgtUriPatterns() throws Exception {
         report("MapUri_sourceXref_lensId_tgtUriPatterns");
         Xref sourceXref = map3xref2;
@@ -189,7 +190,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapUri method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapUri_sourceUri_lensId_tgtUriPattern() throws Exception {
         report("MapUri_sourceUri_lensId_tgtUriPattern");
         String sourceUri = map3Uri2;
@@ -212,7 +213,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapUri method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapUri_sourceUri_lensId() throws Exception {
         report("MapUri_sourceUri_lensId");
         String sourceUri = map3Uri2;
@@ -244,7 +245,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapFull_sourceXref_lensId_tgtDataSources() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources");
         Xref sourceXref = map3xref2;
@@ -287,7 +288,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapFull_sourceXref_lensId_tgtDataSources_noURI() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources_noURI");
         Xref sourceXref = map3xref2;
@@ -307,7 +308,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapFull_sourceXref_lensId_tgtDataSources_default() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources_default");
         Xref sourceXref = map3xref2;
@@ -326,7 +327,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapFull_sourceXref_lensId_tgtDataSource() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources");
         Xref sourceXref = map3xref2;
@@ -373,7 +374,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapFull_sourceXref_lensId() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources");
         Xref sourceXref = map3xref2;
@@ -413,7 +414,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapFull_sourceXref_lensId_noUris() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources_noUris");
         Xref sourceXref = map3xref2;
@@ -429,7 +430,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapFull_sourceXref_lensId_default() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources_default");
         Xref sourceXref = map3xref2;
@@ -445,7 +446,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapFull_sourceXref_lensId_tgtUriPatterns() throws Exception {
         report("MapFull_sourceXref_lensId_tgtUriPatterns");
         Xref sourceXref = map3xref2;
@@ -489,7 +490,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapFull_sourceXref_lensId_tgtUriPattern() throws Exception {
         report("MapFull_sourceXref_lensId_tgtUriPattern");
         Xref sourceXref = map3xref2;
@@ -531,7 +532,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapFull_sourceUri_lensId_tgtDataSources() throws Exception {
         report("MapFull_sourceUri_lensId_tgtDataSources");
         String sourceUri = map3Uri2;
@@ -578,7 +579,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapFull_sourceUri_lensId_tgtDataSource() throws Exception {
         report("MapFull_sourceUri_lensId_tgtDataSource");
         String sourceUri = map3Uri2;
@@ -623,7 +624,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapFull_MapFull_sourceUri_lensId() throws Exception {
         report("MapFull_sourceUri_lensId");
         String sourceUri = map3Uri2;
@@ -666,7 +667,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapFull_MapFull_sourceUri_lensId_noXref() throws Exception {
         report("MapFull_sourceUri_lensId_noXref");
         String sourceUri = map3Uri2;
@@ -684,7 +685,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
      /**
      * Test of mapFull method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapFull_sourceUri_lensId_tgtUriPattern() throws Exception {
         report("MapFull_sourceUri_lensId_tgtUriPattern");
         String sourceUri = map3Uri2;
@@ -698,7 +699,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         for (Mapping mapping:results){
             assertEquals(sourceXref, mapping.getSource());
             assertTrue(mapping.getSourceUri().contains(sourceUri));
-            assertTrue(mapping.getSourceUri().size() == 1);
+            assertEquals(1, mapping.getSourceUri().size());
             if (!mapping.getTarget().equals(sourceXref)){
                 assertThat(mapping.getPredicate(), not(equalTo(null)));            
                 assertThat(mapping.getMappingSetId(), not(equalTo(null)));
@@ -729,7 +730,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapFull_sourceUri_lensId_tgtUriPattern_noUris() throws Exception {
         report("MapFull_sourceUri_lensId_tgtUriPattern_noUris");
         String sourceUri = map3Uri2;
@@ -738,8 +739,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         uriPatterns.add(stringPattern3);
         Set<Mapping> results = uriMapper.mapFull(sourceUri, lensId, false, NULL_GRAPH, uriPatterns);
         for (Mapping mapping:results){
-            assertTrue(mapping.getSource() == null);
-            assertTrue(mapping.getTarget() == null);
+            assertNull(mapping.getSource());
+            assertNull(mapping.getTarget());
             checkVia(mapping);
         }
     }
@@ -747,7 +748,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapFull_sourceUri_lensId_tgtUriPattern_default() throws Exception {
         report("MapFull_sourceUri_lensId_tgtUriPattern_default");
         String sourceUri = map3Uri2;
@@ -756,8 +757,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         uriPatterns.add(stringPattern3);
         Set<Mapping> results = uriMapper.mapFull(sourceUri, lensId, false, NULL_GRAPH, uriPatterns);
         for (Mapping mapping:results){
-            assertTrue(mapping.getSource() == null);
-            assertTrue(mapping.getTarget() == null);
+            assertNull(mapping.getSource());
+            assertNull(mapping.getTarget());
             checkVia(mapping);
         }
     }
@@ -765,7 +766,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testMapFull_sourceUri_lensId_tgtUriPatterns() throws Exception {
         report("MapFull_sourceUri_lensId_tgtUriPatterns");
         String sourceUri = map3Uri2;
@@ -780,7 +781,7 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         for (Mapping mapping:results){
             assertEquals(sourceXref, mapping.getSource());
             assertTrue(mapping.getSourceUri().contains(sourceUri));
-            assertTrue(mapping.getSourceUri().size() == 1);
+            assertEquals(1, mapping.getSourceUri().size());
             if (!mapping.getTarget().equals(sourceXref)){
                 assertThat(mapping.getPredicate(), not(equalTo(null)));            
                 assertThat(mapping.getMappingSetId(), not(equalTo(null)));
@@ -807,5 +808,4 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
         assertFalse(targetXrefs.contains(map1xref1));
         assertFalse(targetXrefs.contains(map2xref2));   
     }
-
 }

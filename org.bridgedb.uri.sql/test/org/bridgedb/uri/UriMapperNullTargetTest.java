@@ -12,9 +12,10 @@ import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.lens.Lens;
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.*;
 /**
  *
  * @author Christian

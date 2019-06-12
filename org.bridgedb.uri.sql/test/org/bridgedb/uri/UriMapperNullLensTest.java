@@ -12,9 +12,11 @@ import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.tools.GraphResolver;
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
 
 /**
  *
@@ -646,5 +648,4 @@ public abstract class UriMapperNullLensTest extends UriListenerTest{
         assertThat(targetXrefs, not(hasItem(map1xref1)));
         assertThat(targetXrefs, not(hasItem(map2xref2)));   
     }
-
 }

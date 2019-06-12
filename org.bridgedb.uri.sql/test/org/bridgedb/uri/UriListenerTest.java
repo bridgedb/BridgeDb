@@ -1,22 +1,24 @@
-// BridgeDb,
-// An abstraction layer for identifier mapping services, both local and online.
-//
-// Copyright 2006-2009  BridgeDb developers
-// Copyright 2012-2013  Christian Y. A. Brenninkmeijer
-// Copyright 2012-2013  OpenPhacts
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
+/*
+ * BridgeDb,
+ * An abstraction layer for identifier mapping services, both local and online.
+ *
+ * Copyright 2006-2009  BridgeDb developers
+ * Copyright 2012-2013  Christian Y. A. Brenninkmeijer
+ * Copyright 2012-2013  OpenPhacts
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.bridgedb.uri;
 
 import java.util.Set;
@@ -31,10 +33,12 @@ import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.IDMapperTestBase;
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Base class of all Test using Uris
@@ -130,7 +134,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
     protected static int mappingSet2to3Lensed;
     
     
-    @BeforeClass
+    @BeforeAll
     public static void setupUris() throws BridgeDBException{
         map1Axref1 = new Xref(ds1Id1+"000001", DataSource1);
         map1Axref2 = new Xref(ds2Id1+"000001", DataSource2);
@@ -179,7 +183,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         
     }
     
-    @BeforeClass
+    @BeforeAll
     public static void setupUriPatterns() throws BridgeDBException{
         setupUris();
         connectionOk = true;
