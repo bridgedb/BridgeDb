@@ -14,10 +14,11 @@ import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.lens.Lens;
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.junit.Assert.*;
-import org.junit.Ignore;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.*;
 
 /**
  *
@@ -625,7 +626,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         for (Mapping mapping:results){
             assertEquals(sourceXref, mapping.getSource());
             assertTrue(mapping.getSourceUri().contains(sourceUri));
-            assertTrue(mapping.getSourceUri().size() == 1);
+            assertEquals(1, mapping.getSourceUri().size());
             if (!mapping.getTarget().equals(sourceXref)){
                 assertThat(mapping.getPredicate(), not(equalTo(null)));            
                 assertThat(mapping.getMappingSetId(), not(equalTo(null)));
@@ -667,7 +668,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         for (Mapping mapping:results){
             assertEquals(sourceXref, mapping.getSource());
             assertTrue(mapping.getSourceUri().contains(sourceUri));
-            assertTrue(mapping.getSourceUri().size() == 1);
+            assertEquals(1, mapping.getSourceUri().size());
             if (!mapping.getTarget().equals(sourceXref)){
                 assertThat(mapping.getPredicate(), not(equalTo(null)));            
                 assertThat(mapping.getMappingSetId(), not(equalTo(null)));
@@ -706,7 +707,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         for (Mapping mapping:results){
             assertEquals(sourceXref, mapping.getSource());
             assertTrue(mapping.getSourceUri().contains(sourceUri));
-            assertTrue(mapping.getSourceUri().size() == 1);
+            assertEquals(1, mapping.getSourceUri().size());
             if (!mapping.getTarget().equals(sourceXref)){
                 assertThat(mapping.getPredicate(), not(equalTo(null)));            
                 assertThat(mapping.getMappingSetId(), not(equalTo(null)));
@@ -747,7 +748,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         for (Mapping mapping:results){
             assertEquals(sourceXref, mapping.getSource());
             assertTrue(mapping.getSourceUri().contains(sourceUri));
-            assertTrue(mapping.getSourceUri().size() == 1);
+            assertEquals(1, mapping.getSourceUri().size());
             if (!mapping.getTarget().equals(sourceXref)){
                 assertThat(mapping.getPredicate(), not(equalTo(null)));            
                 assertThat(mapping.getMappingSetId(), not(equalTo(null)));
