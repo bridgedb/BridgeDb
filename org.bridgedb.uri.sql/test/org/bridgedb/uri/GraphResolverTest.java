@@ -11,11 +11,9 @@ import org.bridgedb.uri.tools.GraphResolver;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
+import org.junit.jupiter.api.*;
+
 import static org.junit.Assert.*;
 
 /**
@@ -27,26 +25,26 @@ public class GraphResolverTest {
     public GraphResolverTest() {
     }
     
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
     }
     
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
     }
     
-    @Before
+    @BeforeEach
     public void setUp() {
     }
     
-    @After
+    @AfterEach
     public void tearDown() {
     }
 
     /**
      * Test of knownGraphs method, of class GraphResolver.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testKnownGraphs() throws Exception {
         Reporter.println("knownGraphs");
         Set result = GraphResolver.knownGraphs();
@@ -55,7 +53,7 @@ public class GraphResolverTest {
     /**
      * Test of getUriPatternsForGraph method, of class GraphResolver.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testGetUriPatternsForGraph() throws Exception {
         Reporter.println("getUriPatternsForGraph");
         GraphResolver.addTestMappings();
@@ -69,7 +67,7 @@ public class GraphResolverTest {
     /**
      * Test of getAllowedUriPatterns method, of class GraphResolver.
      */
-    @Test
+    @org.junit.jupiter.api.Test
     public void testGetAllowedUriPatterns() throws BridgeDBException {
         Reporter.println("getAllowedUriPatterns");
         GraphResolver instance = GraphResolver.getInstance();

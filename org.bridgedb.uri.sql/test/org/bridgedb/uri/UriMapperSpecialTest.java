@@ -1,22 +1,22 @@
-// BridgeDb,
-// An abstraction layer for identifier mapping services, both local and online.
-//
-// Copyright 2006-2009  BridgeDb developers
-// Copyright 2012-2013  Christian Y. A. Brenninkmeijer
-// Copyright 2012-2013  OpenPhacts
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
+/* BridgeDb,
+* An abstraction layer for identifier mapping services, both local and online.
+*
+* Copyright 2006-2009  BridgeDb developers
+* Copyright 2012-2013  Christian Y. A. Brenninkmeijer
+* Copyright 2012-2013  OpenPhacts
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 package org.bridgedb.uri;
 
 import java.util.HashSet;
@@ -35,10 +35,13 @@ import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.utils.BridgeDBException;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import org.junit.Ignore;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.*;
+
 
 /**
  * Tests the UriMapper interface (and by loading the UriListener interface)
@@ -120,7 +123,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         assertFalse(uriMapper.uriExists(mapBadUri2));
         assertFalse(uriMapper.uriExists(mapBadUri3));
     }
-        
+
     @Test
     public void testFreeSearchBad() throws BridgeDBException{
         org.junit.Assume.assumeTrue(uriMapper.getCapabilities().isFreeSearchSupported());       
@@ -440,7 +443,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     }
     
     @Test
-    @Ignore
+    @Disabled
     public void testChemblProtclassFull() throws Exception {
         //Date start = new Date();
         report("ChemblProtclassFull");
@@ -453,7 +456,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     }
     
     @Test
-    @Ignore
+    @Disabled
     public void testChemblProtclass2Full() throws Exception {
         //Date start = new Date();
         report("ChemblProtclass2Full");
@@ -467,7 +470,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     }
     
     @Test
-    @Ignore
+    @Disabled
     public void testChemblProtclass3Full() throws Exception {
         //Date start = new Date();
         report("ChemblProtclass3Full");
@@ -482,7 +485,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     }
     
     @Test
-    @Ignore
+    @Disabled
     public void testChemblProtclass4Full() throws Exception {
         //Date start = new Date();
         report("ChemblProtclass4Full");

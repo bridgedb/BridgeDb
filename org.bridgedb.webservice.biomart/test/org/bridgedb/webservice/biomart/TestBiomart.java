@@ -1,19 +1,20 @@
-// BridgeDb,
-// An abstraction layer for identifier mapping services, both local and online.
-// Copyright 2006-2009 BridgeDb developers
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
+/* BridgeDb,
+ * An abstraction layer for identifier mapping services, both local and online.
+ *
+ * Copyright 2006-2009  BridgeDb developers
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.bridgedb.webservice.biomart;
 
 import org.bridgedb.BridgeDb;
@@ -27,14 +28,16 @@ import java.io.IOException;
 
 import java.util.*;
 
-import org.junit.Ignore;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
+import org.junit.jupiter.api.*;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 /**
  * Test identifier mapping using Biomart web service.
  */
-@Ignore //uncomment if biomart service is down again...
+@Disabled //uncomment if biomart service is down again...
 public class TestBiomart // do not need to extend TestCase
 {
 	// disabled test, because it takes several minutes to run
@@ -170,7 +173,7 @@ public class TestBiomart // do not need to extend TestCase
     	   System.out.println (ref);
        }
        
-       assertTrue ("Expected entrezgene:3643. Got " + setRep (result), 
-    		   result.contains (new Xref ("3643", DataSource.getByFullName("entrezgene"))));
+       assertTrue (
+    		   result.contains (new Xref ("3643", DataSource.getByFullName("entrezgene"))), "Expected entrezgene:3643. Got " + setRep (result));
    }
 }

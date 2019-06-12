@@ -1,19 +1,16 @@
-// BridgeDb,
-// An abstraction layer for identifier mapping services, both local and online.
-// Copyright 2006-2009 BridgeDb developers
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
+/*
+ *BridgeDb,
+ *An abstraction layer for identifier mapping services, both local and online.
+ *Copyright (c) 2006 - 2009  BridgeDb Developers
+ *
+ *Licensed under the Apache License, Version 2.0 (the "License");
+ *you may not use this file except in compliance with the License.
+ *You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
+ *WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *See the License for the specific language governing permissions and limitations under the License.
+ */
 package org.bridgedb.rdb;
 
 import java.util.HashSet;
@@ -26,11 +23,13 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
+
 
 import buildsystem.Measure;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 /**
  * Test access to the derby client running on the webservice.
@@ -39,15 +38,15 @@ public class Test {
 	
 	private Measure measure;
 	
-	@Before public void setUp()
-	{
+	@BeforeEach
+	public void setUp() {
 		measure = new Measure("bridgedb_timing.txt");
 	}
 
-	@org.junit.Test
-        @Ignore
-	public void testDerbyClient() throws IDMapperException, ClassNotFoundException
-	{
+
+	@Disabled
+	@org.junit.jupiter.api.Test
+	public void testDerbyClient() throws IDMapperException, ClassNotFoundException {
 		long start, end, delta;
 		start = System.currentTimeMillis();
 		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
@@ -58,8 +57,7 @@ public class Test {
 		delta = end - start;
 		measure.add ("timing::idmapper-derbyclient connect to two databases", "" + delta, "msec");
 		
-		for (String key : mapper.getCapabilities().getKeys())
-		{
+		for (String key : mapper.getCapabilities().getKeys()) {
 			System.out.println (key + " -> " + mapper.getCapabilities().getProperty(key));
 		}
 
@@ -68,8 +66,7 @@ public class Test {
 		Set <String> symbols = new HashSet<String>();
 		AttributeMapper attr = (AttributeMapper)mapper;
 
-		for (String key : attr.getAttributeSet())
-		{
+		for (String key : attr.getAttributeSet()) {
 			System.out.println (key);
 		}
 
@@ -89,7 +86,8 @@ public class Test {
 		//TODO: Synonyms is also available, but not on ENSG.... ids
 		{
 			Set<String> result = attr.getAttributes(insr , x);
-			Assert.assertTrue ("No result for " + x, result.size() > 0);
+			assertTrue ( result.size() > 0, "No result for " + x);
+
 			System.out.println (result);
 		}
 		

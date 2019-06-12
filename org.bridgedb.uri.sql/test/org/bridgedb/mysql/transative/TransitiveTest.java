@@ -1,22 +1,23 @@
-// BridgeDb,
-// An abstraction layer for identifier mapping services, both local and online.
-//
-// Copyright 2006-2009  BridgeDb developers
-// Copyright 2012-2013  Christian Y. A. Brenninkmeijer
-// Copyright 2012-2013  OpenPhacts
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
+/* BridgeDb,
+* An abstraction layer for identifier mapping services, both local and online.
+*
+* Copyright 2006-2009  BridgeDb developers
+* Copyright 2012-2013  Christian Y. A. Brenninkmeijer
+* Copyright 2012-2013  OpenPhacts
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
 package org.bridgedb.mysql.transative;
 
 import java.util.Set;
@@ -28,6 +29,8 @@ import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.sql.transative.DirectMapping;
 import static org.bridgedb.uri.UriListenerTest.SYMETRIC;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.lens.LensTools;
@@ -35,9 +38,9 @@ import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeAll;
+
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
 
@@ -119,7 +122,7 @@ public class TransitiveTest {
     private static int mappingSetCY;
     
     
-    @BeforeClass
+    @BeforeAll
     public static void setupIDMapper() throws BridgeDBException{
         TestSqlFactory.checkSQLAccess();
         ConfigReader.useTest();
@@ -419,7 +422,7 @@ public class TransitiveTest {
         sqlUriMapper.closeInput();
 }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testDirectMappings1AtoB() throws Exception{
         Reporter.println("DirectMappings1AtoB");
         IdSysCodePair source = new IdSysCodePair("1", sysCodeA);
@@ -427,7 +430,7 @@ public class TransitiveTest {
         assertEquals(1, mappings.size());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testDirectMappings1BtoAC() throws Exception{
         Reporter.println("DirectMappings1BtoAC");
         IdSysCodePair source = new IdSysCodePair( "1", sysCodeB);
@@ -435,7 +438,7 @@ public class TransitiveTest {
         assertEquals(2, mappings.size());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings1A() throws Exception{
         Reporter.println("TransitiveMappings1A");
         IdSysCodePair source = new IdSysCodePair("1", sysCodeA);
@@ -443,7 +446,7 @@ public class TransitiveTest {
         assertEquals(3, mappings.size());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings1C() throws Exception{
         Reporter.println("TransitiveMappings1C");
         IdSysCodePair source = new IdSysCodePair("1", sysCodeC);
@@ -451,7 +454,7 @@ public class TransitiveTest {
         assertEquals(3, mappings.size());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings2A() throws Exception{
         Reporter.println("TransitiveMappings2A");
         IdSysCodePair source = new IdSysCodePair("2", sysCodeA);
@@ -459,7 +462,7 @@ public class TransitiveTest {
         assertEquals(3, mappings.size());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings2C() throws Exception{
         Reporter.println("TransitiveMappings2C");
         IdSysCodePair source = new IdSysCodePair("2", sysCodeC);
@@ -467,7 +470,7 @@ public class TransitiveTest {
         assertEquals(3, mappings.size());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings3A() throws Exception{
         Reporter.println("TransitiveMappings3A");
         IdSysCodePair source = new IdSysCodePair("3a", sysCodeA);
@@ -475,7 +478,7 @@ public class TransitiveTest {
         assertEquals(3, mappings.size()); //B3, C3, D3
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings3C() throws Exception{
         Reporter.println("TransitiveMappings3C");
         IdSysCodePair source = new IdSysCodePair("3", sysCodeC);
@@ -483,7 +486,7 @@ public class TransitiveTest {
         assertEquals(4, mappings.size()); //A3a, A3b, B3, C3, D3
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings4A() throws Exception{
         Reporter.println("TransitiveMappings4A");
         IdSysCodePair source = new IdSysCodePair("4", sysCodeA);
@@ -491,7 +494,7 @@ public class TransitiveTest {
         assertEquals(3, mappings.size()); //B4, C4, D4
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings4C() throws Exception{
         Reporter.println("TransitiveMappings4C");
         IdSysCodePair source = new IdSysCodePair("4", sysCodeC);
@@ -499,8 +502,7 @@ public class TransitiveTest {
         assertEquals(3, mappings.size()); //A4, B4, D4
     }
 
-
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings6A() throws Exception{
         Reporter.println("TransitiveMappings6A");
         IdSysCodePair source = new IdSysCodePair("6a", sysCodeA);
@@ -508,7 +510,7 @@ public class TransitiveTest {
         assertEquals(2, mappings.size()); //B6a, C6
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings6B() throws Exception{
         Reporter.println("TransitiveMappings6B");
         IdSysCodePair source = new IdSysCodePair("6a", sysCodeB);
@@ -516,7 +518,7 @@ public class TransitiveTest {
         assertEquals(2, mappings.size()); //A6a, C6
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings6C() throws Exception{
         Reporter.println("TransitiveMappings6C");
         IdSysCodePair source = new IdSysCodePair("6", sysCodeC);
@@ -524,7 +526,7 @@ public class TransitiveTest {
         assertEquals(4, mappings.size()); //A6a, A6b, B6a, B6b
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings7A() throws Exception{
         Reporter.println("TransitiveMappings7A");
         IdSysCodePair source = new IdSysCodePair("7a", sysCodeA);
@@ -532,7 +534,7 @@ public class TransitiveTest {
         assertEquals(1, mappings.size()); //B7
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings7B() throws Exception{
         Reporter.println("TransitiveMappings6B");
         IdSysCodePair source = new IdSysCodePair("7", sysCodeB);
@@ -540,7 +542,7 @@ public class TransitiveTest {
         assertEquals(2, mappings.size()); //A7a, A7b
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings8A() throws Exception{
         Reporter.println("TransitiveMappings8A");
         IdSysCodePair source = new IdSysCodePair("8", sysCodeA);
@@ -548,7 +550,7 @@ public class TransitiveTest {
         assertEquals(2, mappings.size()); //8E1, 8E2
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings8Ea() throws Exception{
         Reporter.println("TransitiveMappings8E1");
         IdSysCodePair source = new IdSysCodePair("8a", sysCodeE);
@@ -556,7 +558,7 @@ public class TransitiveTest {
         assertEquals(2, mappings.size()); //A8, E8b
     }
     
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings8Eb() throws Exception{
         Reporter.println("TransitiveMappings8E1");
         IdSysCodePair source = new IdSysCodePair("8b", sysCodeE);
@@ -564,7 +566,7 @@ public class TransitiveTest {
         assertEquals(2, mappings.size()); //A8, E8a
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings9A() throws Exception{
         Reporter.println("TransitiveMappings9A");
         IdSysCodePair source = new IdSysCodePair("9a", sysCodeA);
@@ -572,7 +574,7 @@ public class TransitiveTest {
         assertEquals(3, mappings.size()); //9Ab, 9E1, 9E2
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings9E() throws Exception{
         Reporter.println("TransitiveMappings9E");
         IdSysCodePair source = new IdSysCodePair("9a", sysCodeE);
@@ -580,7 +582,7 @@ public class TransitiveTest {
         assertEquals(3, mappings.size()); //A9a, A9b,, E8b
     }
     
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings10A() throws Exception{
         Reporter.println("TransitiveMappings10A");
         IdSysCodePair source = new IdSysCodePair("10", sysCodeA);
@@ -588,7 +590,7 @@ public class TransitiveTest {
         assertEquals(2, mappings.size()); //10E1, 10E2
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings10E() throws Exception{
         Reporter.println("TransitiveMappings10E");
         IdSysCodePair source = new IdSysCodePair("10a", sysCodeE);
@@ -597,7 +599,7 @@ public class TransitiveTest {
     }
 
     //A11 -> E11a -> E11b - B11
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings11A() throws Exception{
         Reporter.println("TransitiveMappings11A");
         IdSysCodePair source = new IdSysCodePair("11", sysCodeA);
@@ -605,7 +607,7 @@ public class TransitiveTest {
         assertEquals(3, mappings.size()); //B11 E11a, E11b
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings11E() throws Exception{
         Reporter.println("TransitiveMappings11E");
         IdSysCodePair source = new IdSysCodePair("11a", sysCodeE);
@@ -614,7 +616,7 @@ public class TransitiveTest {
     }
 
      // E12a -> E12b - A12a   E12b - A12b
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings12A() throws Exception{
         Reporter.println("TransitiveMappings12A");
         IdSysCodePair source = new IdSysCodePair("12a", sysCodeA);
@@ -622,7 +624,7 @@ public class TransitiveTest {
         assertEquals(2, mappings.size()); //E12a, E12b
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings12E() throws Exception{
         Reporter.println("TransitiveMappings12E");
         IdSysCodePair source = new IdSysCodePair("12a", sysCodeE);
@@ -631,7 +633,7 @@ public class TransitiveTest {
     }
     
     // A13a -> E13a   A13b - E13a - E13b - B13a  E13b - B13b
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings13A() throws Exception{
         Reporter.println("TransitiveMappings13A");
         IdSysCodePair source = new IdSysCodePair("13a", sysCodeA);
@@ -639,7 +641,7 @@ public class TransitiveTest {
         assertEquals(4, mappings.size()); //E13a, E13b B13a B13b
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings13E() throws Exception{
         Reporter.println("TransitiveMappings13E");
         IdSysCodePair source = new IdSysCodePair("13a", sysCodeE);
@@ -648,7 +650,7 @@ public class TransitiveTest {
     }
     
     // A14a -> E14a   A14b - E14a - E14b - B14a  E14a - E14c - B14b
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings14A() throws Exception{
         Reporter.println("TransitiveMappings14A");
         IdSysCodePair source = new IdSysCodePair("14a", sysCodeA);
@@ -656,7 +658,7 @@ public class TransitiveTest {
         assertEquals(5, mappings.size()); //E14a, E14b E14c B13a B13b
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings14Ea() throws Exception{
         Reporter.println("TransitiveMappings14Ea");
         IdSysCodePair source = new IdSysCodePair("14a", sysCodeE);
@@ -664,7 +666,7 @@ public class TransitiveTest {
         assertEquals(6, mappings.size()); //A13b A13b, E13b E13b B13a B13bb
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings14Eb() throws Exception{
         Reporter.println("TransitiveMappings14Eb");
         IdSysCodePair source = new IdSysCodePair("14b", sysCodeE);
@@ -672,7 +674,7 @@ public class TransitiveTest {
         assertEquals(4, mappings.size()); //A13b A13b, E13a B13a 
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings14B() throws Exception{
         Reporter.println("TransitiveMappings14B");
         IdSysCodePair source = new IdSysCodePair("14a", sysCodeB);
@@ -681,7 +683,7 @@ public class TransitiveTest {
     }
     
      //A14a - E15a - E15b - B15a  A15b - E15c - E15d - B15b  E15a - E15d E15c - E15b
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings15A() throws Exception{
         Reporter.println("TransitiveMappings15A");
         IdSysCodePair source = new IdSysCodePair("15a", sysCodeA);
@@ -689,7 +691,7 @@ public class TransitiveTest {
         assertEquals(5, mappings.size()); //E14a, E14b E14d B13a B13b
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings15Ea() throws Exception{
         Reporter.println("TransitiveMappings15Ea");
         IdSysCodePair source = new IdSysCodePair("15a", sysCodeE);
@@ -698,7 +700,7 @@ public class TransitiveTest {
     }
     
     //C16a - A16a  C16b - A16a - E16a - E16b - B16a    A16b - E16c - E16d - B16b - D16   E16a - E16d   E16c - E16b
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings16A() throws Exception{
         Reporter.println("TransitiveMappings16A");
         IdSysCodePair source = new IdSysCodePair("16a", sysCodeA);
@@ -706,7 +708,7 @@ public class TransitiveTest {
         assertEquals(7, mappings.size()); //C16a E16a, E16b E16d B16a B16b D16
     }
 
-   @Test
+   @org.junit.jupiter.api.Test
     public void testTransitiveMappings16E() throws Exception{
         Reporter.println("TransitiveMappings16E");
         IdSysCodePair source = new IdSysCodePair("16a", sysCodeE);
@@ -714,7 +716,7 @@ public class TransitiveTest {
         assertEquals(7, mappings.size()); //C16a A16b E16b E16b B16a B16b D16
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings16C() throws Exception{
         Reporter.println("TransitiveMappings16C");
         IdSysCodePair source = new IdSysCodePair("16a", sysCodeC);
@@ -722,7 +724,7 @@ public class TransitiveTest {
         assertEquals(7, mappings.size()); //A16a, E16a E16b E16d B16a B16b D16
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings16D() throws Exception{
         Reporter.println("TransitiveMappings16D");
         IdSysCodePair source = new IdSysCodePair("16", sysCodeD);
@@ -731,7 +733,7 @@ public class TransitiveTest {
     }
  
     //C17 - A17 - E17a - E17b - B17 -D17
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings17A() throws Exception{
         Reporter.println("TransitiveMappings17A");
         IdSysCodePair source = new IdSysCodePair("17", sysCodeA);
@@ -739,7 +741,7 @@ public class TransitiveTest {
         assertEquals(5, mappings.size()); //C17 E17a E17b B17 D17
     }
   
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings17C() throws Exception{
         Reporter.println("TransitiveMappings17C");
         IdSysCodePair source = new IdSysCodePair("17", sysCodeC);
@@ -748,7 +750,7 @@ public class TransitiveTest {
     }
     
     //A18 - X18  // X18 - C18
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings18A() throws Exception{
         Reporter.println("TransitiveMappings18A");
         IdSysCodePair source = new IdSysCodePair("18", sysCodeA);
@@ -757,7 +759,7 @@ public class TransitiveTest {
     }
 
     //A19 - X19  A19 - Y19 // X19 - C19  Y19 - C19
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings19A() throws Exception{
         Reporter.println("TransitiveMappings19A");
         IdSysCodePair source = new IdSysCodePair("19", sysCodeA);
@@ -766,7 +768,7 @@ public class TransitiveTest {
     }
 
     //A20 - B20 - C20 A20 - X20  // X20 - C20
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings20A() throws Exception{
         Reporter.println("TransitiveMappings20A");
         IdSysCodePair source = new IdSysCodePair("20", sysCodeA);
@@ -775,7 +777,7 @@ public class TransitiveTest {
     }
 
     //A21 -> B21 -> C21 => D21
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings21A() throws Exception{
         Reporter.println("TransitiveMappings21A");
         IdSysCodePair source = new IdSysCodePair("21", sysCodeA);
@@ -783,7 +785,7 @@ public class TransitiveTest {
         assertEquals(2, mappings.size()); //B21 C21
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings21B() throws Exception{
         Reporter.println("TransitiveMappings21B");
         IdSysCodePair source = new IdSysCodePair("21", sysCodeB);
@@ -791,7 +793,7 @@ public class TransitiveTest {
         assertEquals(2, mappings.size()); //A21 C21
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings21C() throws Exception{
         Reporter.println("TransitiveMappings21C");
         IdSysCodePair source = new IdSysCodePair("21", sysCodeC);
@@ -799,7 +801,7 @@ public class TransitiveTest {
         assertEquals(3, mappings.size()); //A21 B21 C21
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings21D() throws Exception{
         Reporter.println("TransitiveMappings21D");
         IdSysCodePair source = new IdSysCodePair("21", sysCodeD);
@@ -808,7 +810,7 @@ public class TransitiveTest {
     }
 
     //A22 -> B22 => C21 => D21
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings22A() throws Exception{
         Reporter.println("TransitiveMappings22A");
         IdSysCodePair source = new IdSysCodePair("22", sysCodeA);
@@ -816,7 +818,7 @@ public class TransitiveTest {
         assertEquals(1, mappings.size()); //B22
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings22B() throws Exception{
         Reporter.println("TransitiveMappings22B");
         IdSysCodePair source = new IdSysCodePair("22", sysCodeB);
@@ -824,7 +826,7 @@ public class TransitiveTest {
         assertEquals(3, mappings.size()); //A22 C22 D22
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings22C() throws Exception{
         Reporter.println("TransitiveMappings22C");
         IdSysCodePair source = new IdSysCodePair("22", sysCodeC);
@@ -832,7 +834,7 @@ public class TransitiveTest {
         assertEquals(2, mappings.size()); //B21 D21
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings22D() throws Exception{
         Reporter.println("TransitiveMappings22D");
         IdSysCodePair source = new IdSysCodePair("22", sysCodeD);
@@ -841,7 +843,7 @@ public class TransitiveTest {
     }
 
     //A23 -> B23 -> C23 => D23
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings23A() throws Exception{
         Reporter.println("TransitiveMappings23A");
         IdSysCodePair source = new IdSysCodePair("23", sysCodeA);
@@ -849,7 +851,7 @@ public class TransitiveTest {
         assertEquals(2, mappings.size()); //B23 C23
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings23B() throws Exception{
         Reporter.println("TransitiveMappings23B");
         IdSysCodePair source = new IdSysCodePair("23", sysCodeB);
@@ -857,7 +859,7 @@ public class TransitiveTest {
         assertEquals(2, mappings.size()); //A23 C23
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings23C() throws Exception{
         Reporter.println("TransitiveMappings23C");
         IdSysCodePair source = new IdSysCodePair("23", sysCodeC);
@@ -865,7 +867,7 @@ public class TransitiveTest {
         assertEquals(2, mappings.size()); //A23 B23 
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings23D() throws Exception{
         Reporter.println("TransitiveMappings23D");
         IdSysCodePair source = new IdSysCodePair("23", sysCodeD);
@@ -874,7 +876,7 @@ public class TransitiveTest {
     }
 
     //A24 -> B24 => C24 => D24
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings24A() throws Exception{
         Reporter.println("TransitiveMappings24A");
         IdSysCodePair source = new IdSysCodePair("24", sysCodeA);
@@ -882,7 +884,7 @@ public class TransitiveTest {
         assertEquals(1, mappings.size()); //B24
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings24B() throws Exception{
         Reporter.println("TransitiveMappings24B");
         IdSysCodePair source = new IdSysCodePair("24", sysCodeB);
@@ -890,7 +892,7 @@ public class TransitiveTest {
         assertEquals(1, mappings.size()); //A24 
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings24C() throws Exception{
         Reporter.println("TransitiveMappings24C");
         IdSysCodePair source = new IdSysCodePair("24", sysCodeC);
@@ -898,7 +900,7 @@ public class TransitiveTest {
         assertEquals(0, mappings.size()); //None due to Lens
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings24D() throws Exception{
         Reporter.println("TransitiveMappings24D");
         IdSysCodePair source = new IdSysCodePair("24", sysCodeD);
@@ -907,7 +909,7 @@ public class TransitiveTest {
     }
 
     //A25 ..> B24 -> C24 => D24
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings25A() throws Exception{
         Reporter.println("TransitiveMappings25A");
         IdSysCodePair source = new IdSysCodePair("25", sysCodeA);
@@ -915,7 +917,7 @@ public class TransitiveTest {
         assertEquals(1, mappings.size()); //B25
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings25B() throws Exception{
         Reporter.println("TransitiveMappings25B");
         IdSysCodePair source = new IdSysCodePair("25", sysCodeB);
@@ -923,7 +925,7 @@ public class TransitiveTest {
         assertEquals(2, mappings.size()); //A24 C24 
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings25CAll() throws Exception{
         Reporter.println("TransitiveMappings25CAll");
         IdSysCodePair source = new IdSysCodePair("25", sysCodeC);
@@ -931,7 +933,7 @@ public class TransitiveTest {
         assertEquals(2, mappings.size()); //B24 D24
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings25C() throws Exception{
         Reporter.println("TransitiveMappings25C");
         IdSysCodePair source = new IdSysCodePair("25", sysCodeC);
@@ -939,7 +941,7 @@ public class TransitiveTest {
         assertEquals(1, mappings.size()); //B24 
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings25DAll() throws Exception{
         Reporter.println("TransitiveMappings25DAll");
         IdSysCodePair source = new IdSysCodePair("25", sysCodeD);
@@ -947,7 +949,7 @@ public class TransitiveTest {
         assertEquals(1, mappings.size()); //C25
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testTransitiveMappings25D() throws Exception{
         Reporter.println("TransitiveMappings25D");
         IdSysCodePair source = new IdSysCodePair("25", sysCodeD);
