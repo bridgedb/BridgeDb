@@ -9,8 +9,10 @@ import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.lens.LensTools;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.*;
 
 /**
  *
