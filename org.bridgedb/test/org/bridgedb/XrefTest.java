@@ -59,14 +59,22 @@ public class XrefTest {
 		Xref xref2 = new Xref("ENSG000001", EN);
 		assertEquals(xref, xref2);
 		assertEquals(xref2, xref); // and symmetric
+		Xref xref3 = new Xref("ENSG000001", EN, true);
+		Xref xref4 = new Xref("ENSG000001", EN, false);
+		assertNotEquals(xref3, xref4);
 	}
 
 	@Test
 	public void testCompareTo() {
-		Xref xref = new Xref("ENSG000001", EN);
+		Xref xref1 = new Xref("ENSG000001", EN);
 		Xref xref2 = new Xref("ENSG000001", EN);
-		assertEquals(0, xref.compareTo(xref2));
-		assertEquals(0, xref2.compareTo(xref)); // and symmetric
+		assertEquals(0, xref1.compareTo(xref2));
+		assertEquals(0, xref2.compareTo(xref1)); // and symmetric
+		Xref xref3 = new Xref("ENSG000001", EN, true);
+		Xref xref4 = new Xref("ENSG000001", EN, false);
+		assertNotEquals(xref3.isPrimary(), xref4.isPrimary());
+		assertEquals(xref3, xref4);
+		assertEquals(xref4, xref3); // and symmetric
 	}
 
 	@Test
