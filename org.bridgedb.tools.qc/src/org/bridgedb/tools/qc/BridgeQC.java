@@ -338,12 +338,12 @@ public class BridgeQC
 		return countOfPrimary;
 	}
 	
-	public int totalIds(DataSource ds)throws IDMapperException{
-		int countOfID = 0;
-		for(Xref xref : oldGdb.getIterator(ds)){
-			countOfID++;
+	public int countIds(DataSource ds)throws IDMapperException{
+		int countId = 0;
+		for (Xref xref : oldGdb.getIterator(ds)){
+				countId++;
 		}
-		return countOfID;
+		return countId;
 	}
 	
 	public void run() throws IDMapperException, SQLException
@@ -366,10 +366,9 @@ public class BridgeQC
 		this.out.println("INFO: total number of identifiers is " + newGdb.getGeneCount());
 		this.out.println("INFO: total number of mappings is " + newGdb.getLinkCount());
 		for (DataSource ds : newGdb.getCapabilities().getSupportedSrcDataSources())
-			this.out.println("INFO: total number of primary ids in datasource" + ds + " are "+countPrimary(ds));
+			this.out.println("INFO: total number of primary ids are "+countPrimary(ds));
 		for (DataSource ds : newGdb.getCapabilities().getSupportedSrcDataSources())
-			this.out.println("INFO: total number of secondary ids in datasource" + ds + " are "+(countOfID(ds)-countPrimary(ds)));
-		
+			this.out.println("INFO: total number of secondary ids are "+(countIds(ds)-countPrimary(ds)));
 	}
 
 	public static void printUsage()
