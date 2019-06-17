@@ -342,6 +342,7 @@ public class BridgeQC
 		int countOfID = 0;
 		for(Xref xref : oldGdb.getIterator(ds)){
 			countOfID++;
+		}
 		return countOfID;
 	}
 	
