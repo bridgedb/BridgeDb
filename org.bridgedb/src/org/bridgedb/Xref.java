@@ -29,6 +29,7 @@ public class Xref implements Comparable<Xref>
 {	
 	final private String id;
 	final private DataSource ds;
+	final private boolean isPrimary;
 	
 	// String representation of this xref
 	final private String rep;
@@ -40,9 +41,21 @@ public class Xref implements Comparable<Xref>
 	public Xref(String id, DataSource ds) {
 		this.id = id;
 		this.ds = ds;
-		rep = (ds == null ? "" : (ds.getSystemCode() == null ? ds.getFullName() : ds.getSystemCode())) + ":" + id; 
+		rep = (ds == null ? "" : (ds.getSystemCode() == null ? ds.getFullName() : ds.getSystemCode())) + ":" + id;
+		this.isPrimary = true;
 	}
-	
+	/**
+	 * @param id the Id part of this Xref
+	 * @param ds the DataSource part of this Xref.
+	 * @param isPrimary represents whether the id is primary or not
+	 */
+	public Xref(String id, DataSource ds, boolean isPrimary){
+		this.id = id;
+		this.ds = ds;
+		rep = (ds == null ? "" : (ds.getSystemCode() == null ? ds.getFullName() : ds.getSystemCode())) + ":" + id;
+		this.isPrimary = isPrimary;
+	}
+
 	/**
 	 * @return the DataSource part of this Xref
 	 */
@@ -52,7 +65,11 @@ public class Xref implements Comparable<Xref>
 	 * @return the id part of this Xref
 	 */
 	public String getId() { return id; }
-	
+
+	/**
+	 * @return whether is id is primary or not
+	 */
+	public boolean isPrimary(){ return isPrimary; }
 	/**
 	 * @return short string representation for this Xref, for example En:ENSG000001 or X:1004_at
 	 *   This string representation is not meant to be stored or parsed, it is there mostly for
@@ -80,7 +97,8 @@ public class Xref implements Comparable<Xref>
 		Xref ref = (Xref)o;
 		return 
 			(id == null ? ref.id == null : id.equals(ref.id)) && 
-			(ds == null ? ref.ds == null : ds.equals(ref.ds));
+			(ds == null ? ref.ds == null : ds.equals(ref.ds)) &&
+					(ref.isPrimary()==isPrimary);
 	}
 	
 	/**
