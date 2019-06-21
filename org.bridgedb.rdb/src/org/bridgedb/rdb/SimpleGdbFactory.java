@@ -86,6 +86,8 @@ public final class SimpleGdbFactory
 			return new SimpleGdbImpl2(dbName, connectionString);
 		case 3:
 			return new SimpleGdbImpl3(dbName, connectionString);
+		case 4:
+			return new SimpleGdbImpl4(dbName, connectionString);
 		//NB add future schema versions here
 		default:
 			throw new IDMapperException ("Unrecognized schema version '" + version + "', please make sure you have the latest " +
