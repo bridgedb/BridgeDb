@@ -63,8 +63,9 @@ class SimpleGdbImpl4 extends SimpleGdbImplCommon {
                 pst.init();
                 pst.setString (1, ref.getId());
                 pst.setString (2, ref.getDataSource().getSystemCode());
+                //pst.setBoolean(3, ref.isPrimary());
                 pst.setString (3, attrname);
-                pst.setString (4, Boolean.toString(ref.isPrimary()));
+
                 ResultSet r = pst.executeQuery();
                 if (r.next())
                 {
@@ -89,7 +90,7 @@ class SimpleGdbImpl4 extends SimpleGdbImplCommon {
                 pst.init();
                 pst.setString (1, ref.getId());
                 pst.setString (2, ref.getDataSource().getSystemCode());
-                pst.setString (3, Boolean.toString(ref.isPrimary()));
+                //pst.setBoolean(3, ref.isPrimary());
                 ResultSet r = pst.executeQuery();
                 while (r.next())
                 {
