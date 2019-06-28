@@ -61,7 +61,7 @@ public class GdbConstructImpl4 implements GdbConstruct
         {
             pstGene.setString(1, ref.getId());
             pstGene.setString(2, ref.getDataSource().getSystemCode());
-            pstGene.setString(3, Boolean.toString(ref.isPrimary()));
+            pstGene.setBoolean(3, ref.isPrimary());
             pstGene.executeUpdate();
         }
         catch (SQLException e)
@@ -77,12 +77,13 @@ public class GdbConstructImpl4 implements GdbConstruct
     {
         recentException = null;
         try {
-            pstAttr.setString(1, attr);
-            pstAttr.setString(2, val);
-            pstAttr.setString(3, ref.getId());
-            pstAttr.setString(4, ref.getDataSource().getSystemCode());
-            pstAttr.setString(5, Boolean.toString(ref.isPrimary()));
+            pstAttr.setString(1, ref.getId());
+            pstAttr.setString(2, ref.getDataSource().getSystemCode());
+            pstAttr.setBoolean(3, ref.isPrimary());
+            pstAttr.setString(4, attr);
+            pstAttr.setString(5, val);
             pstAttr.executeUpdate();
+
         } catch (SQLException e) {
             recentException = e;
             return 1;
@@ -133,7 +134,7 @@ public class GdbConstructImpl4 implements GdbConstruct
             );
             pstAttr = con.prepareStatement(
                     "INSERT INTO attribute " +
-                            "	(attrname, attrvalue, id, code, isPrimary)" +
+                            "	( id, code, isPrimary, attrname, attrvalue)" +
                             "VALUES (?, ?, ?, ?, ?)"
             );
         }
@@ -236,7 +237,7 @@ public class GdbConstructImpl4 implements GdbConstruct
 //			Logger.log.info("Version stored in info");
             sh.execute(
                     "CREATE TABLE					" +
-                            "		link							" +
+                            "		link					    	" +
                             " (   idLeft VARCHAR(50) NOT NULL,		" +
                             "     codeLeft VARCHAR(50) NOT NULL,	" +
                             "     idRight VARCHAR(50) NOT NULL,		" +
@@ -247,20 +248,20 @@ public class GdbConstructImpl4 implements GdbConstruct
                             " )										");
 //			Logger.log.info("Link table created");
             sh.execute(
-                    "CREATE TABLE					" +
+                            "CREATE TABLE					        " +
                             "		datanode						" +
                             " (   id VARCHAR(50),					" +
                             "     code VARCHAR(50),					" +
-                            "     isPrimary VARCHAR(5),                " +
+                            "     isPrimary SMALLINT,                   " +
                             "     PRIMARY KEY (id, code)    		" +
                             " )										");
 //			Logger.log.info("DataNode table created");
             sh.execute(
-                    "CREATE TABLE							" +
+                            "CREATE TABLE							" +
                             "		attribute 						" +
                             " (   id VARCHAR(50),					" +
                             "     code VARCHAR(50),					" +
-                            "     isPrimary VARCHAR(5),                " +
+                            "     isPrimary SMALLINT,               " +
                             "     attrname VARCHAR(50),				" +
                             "	  attrvalue VARCHAR(255)			" +
                             " )										");
