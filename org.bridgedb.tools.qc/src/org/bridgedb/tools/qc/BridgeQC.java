@@ -350,6 +350,8 @@ public class BridgeQC
 		int countOfPrimary = 0;
 		int countofSecondary = 0;
 		for (DataSource ds : newGdb.getCapabilities().getSupportedSrcDataSources()){
+			countOfPrimary=0;
+			countofSecondary=0;
 			Connection con = newGdb.getConnection();
 			Statement st = con.createStatement();
 			for (Xref xref : newGdb.getIterator(ds)){
