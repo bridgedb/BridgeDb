@@ -327,24 +327,6 @@ public class BridgeQC
 					newGdb.getCapabilities().getProperty(p.name()));
 		}
 	}
-
-	public int countPrimary(DataSource ds)throws IDMapperException{
-		int countOfPrimary = 0;
-		for (Xref xref : oldGdb.getIterator(ds)){
-			if (xref.isPrimary()){
-				countOfPrimary++;
-			}
-		}
-		return countOfPrimary;
-	}
-
-	public int countIds(DataSource ds)throws IDMapperException{
-		int countId = 0;
-		for (Xref xref : oldGdb.getIterator(ds)){
-				countId++;
-		}
-		return countId;
-	}
 	
 	public void run() throws IDMapperException, SQLException
 	{
@@ -361,13 +343,47 @@ public class BridgeQC
 		summarizeOverallStats();
 	}
 	
-	private void summarizeOverallStats() throws IDMapperException
+	private void summarizeOverallStats() throws IDMapperException, SQLException
 	{
 		this.out.println("INFO: total number of identifiers is " + newGdb.getGeneCount());
 		this.out.println("INFO: total number of mappings is " + newGdb.getLinkCount());
+		int countOfPrimary = 0;
+		int countofSecondary = 0;
 		for (DataSource ds : newGdb.getCapabilities().getSupportedSrcDataSources()){
-			this.out.println("INFO: total number of primary ids in "+ds.getFullName()+" are "+countPrimary(ds));
-			this.out.println("INFO: total number of secondary ids in "+ds.getFullName()+" are "+(countIds(ds)-countPrimary(ds)));
+			Connection con = newGdb.getConnection();
+			Statement st = con.createStatement();
+			for (Xref xref : newGdb.getIterator(ds)){
+				String sql = "SELECT isPrimary FROM datanode WHERE datanode.id = '"+xref.getId()+"'AND datanode.code = '"+ds.getSystemCode()+"'";
+				ResultSet rs = st.executeQuery(sql);
+				while(rs.next()){
+					if (rs.getBoolean("isPrimary")){
+						countOfPrimary++;
+					}
+					else
+						countofSecondary++;
+				}
+
+			}
+			this.out.println("NEW DB INFO: total number of primary ids in "+ds.getFullName()+" are "+countOfPrimary);
+			this.out.println("NEW DB INFO: total number of secondary ids in "+ds.getFullName()+" are "+countofSecondary);
+		}
+		for (DataSource ds : oldGdb.getCapabilities().getSupportedSrcDataSources()){
+			Connection con = oldGdb.getConnection();
+			Statement st = con.createStatement();
+			countOfPrimary = 0;
+			countofSecondary=0;
+			for (Xref xref : oldGdb.getIterator(ds)){
+				String sql = "SELECT isPrimary FROM datanode WHERE datanode.id ='"+xref.getId()+"'"+" AND datanode.code = '"+ds.getSystemCode()+"'";
+				ResultSet rs = st.executeQuery(sql);
+				while(rs.next()) {
+					if (rs.getBoolean("isPrimary")) {
+						countOfPrimary++;
+					} else
+						countofSecondary++;
+				}
+			}
+			this.out.println("OLD DB INFO: total number of primary ids in "+ds.getFullName()+" are "+countOfPrimary);
+			this.out.println("OLD DB INFO: total number of secondary ids in "+ds.getFullName()+" are "+countofSecondary);
 		}
 	}
 
@@ -375,11 +391,11 @@ public class BridgeQC
 	{
 		System.out.println ("Expected 2 arguments: <old database> <new database>");
 	}
-	
+
 	/**
 	 * @param args
-	 * @throws IDMapperException 
-	 * @throws SQLException 
+	 * @throws IDMapperException
+	 * @throws SQLException
 	 */
 	public static void main(String[] args) throws IDMapperException, SQLException
 	{
@@ -387,7 +403,7 @@ public class BridgeQC
 		BridgeQC main = new BridgeQC (new File(args[0]), new File(args[1]));
 		DataSourceTxt.init();
 		main.run();
-		
+
 		PatternChecker checker = new PatternChecker();
 		checker.run(new File(args[0]));
 	}
