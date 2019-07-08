@@ -527,6 +527,16 @@ bridgeDB:DataSource_Gramene_Rice a bridgeDB:DataSource ;
 	bridgeDB:type "gene" ;
 	dcterms:alternative "Gramene Rice" .
 
+bridgeDB:DataSource_Guide_to_Pharmacology a bridgeDB:DataSource ;
+	bridgeDB:fullName "Guide to Pharmacology" ;
+	bridgeDB:systemCode "Gpl" ;
+	bridgeDB:mainUrl "http://www.guidetopharmacology.org/" ;
+	bridgeDB:idExample "1627" ;
+	bridgeDB:primary "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "metabolite" ;
+	bridgeDB:hasRegexPattern "^^\d+$" ;
+	dcterms:alternative "Iuphar Ligand" .	
+	
 bridgeDB:DataSource_HGNC a bridgeDB:DataSource ;
 	bridgeDB:fullName "HGNC" ;
 	bridgeDB:systemCode "H" ;
@@ -1262,6 +1272,16 @@ bridgeDB:DataSource_Uniprot_TrEMBL a bridgeDB:DataSource ;
 	bridgeDB:hasRegexPattern "^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9])(\\.\\d+)?$" ;
 	dcterms:alternative "UniProtKB/TrEMBL" .
 
+bridgeDB:DataSource_VMH_Life_Metabolite a bridgeDB:DataSource ;
+	bridgeDB:fullName "VMH Life_Metabolite" ;
+	bridgeDB:systemCode "VmhM" ;
+	bridgeDB:mainUrl "https://registry.identifiers.org:/registry/vmhmetabolite" ;
+	bridgeDB:idExample "h2o" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "metabolite" ;
+	bridgeDB:hasRegexPattern "[a-zA-Z0-9_\(\_\)\[\]]+" ;
+	dcterms:alternative "Recon metabolites" .	
+	
 bridgeDB:DataSource_Wheat_gene_names a bridgeDB:DataSource ;
 	bridgeDB:fullName "Wheat gene names" ;
 	bridgeDB:systemCode "Wn" ;
