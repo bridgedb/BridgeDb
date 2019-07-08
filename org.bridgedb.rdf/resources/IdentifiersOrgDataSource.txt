@@ -232,6 +232,7 @@ GRIN Plant Taxonomy	grin.taxonomy		http://www.ars-grin.gov/cgi-bin/npgs/html/tax
 GRSDB	grsdb		http://bioinformatics.ramapo.edu/GRSDB2/geneview.php?geneID=$id	10142	unknown		1	urn:miriam:grsdb	^\d+$	
 GXA Expt	gxa.expt		http://www.ebi.ac.uk/gxa/experiment/$id	E-MTAB-62	unknown		1	urn:miriam:gxa.expt	^[AEP]-\w{4}-\d+$	
 GXA Gene	gxa.gene		http://www.ebi.ac.uk/gxa/gene/$id	AT4G01080	unknown		1	urn:miriam:gxa.gene	^\w+$	
+Guide to Pharmacology	Gpl	http://www.guidetopharmacology.org/	http://www.guidetopharmacology.org/GRAC/LigandDisplayForward?ligandId=$id	1627	metabolite		1	urn:miriam:iuphar.ligand	^\d+$	Guide to Pharmacology
 H-InvDb Locus	hinv.locus		http://h-invitational.jp/hinv/spsoup/locus_view?hix_id=$id	HIX0004394	unknown		1	urn:miriam:hinv.locus	^HIX\d{7}(\.\d+)?$	
 H-InvDb Protein	hinv.protein		http://h-invitational.jp/hinv/protein/protein_view.cgi?hip_id=$id	HIP000030660	unknown		1	urn:miriam:hinv.protein	^HIP\d{9}(\.\d+)?$	
 H-InvDb Transcript	hinv.transcript		http://h-invitational.jp/hinv/spsoup/transcript_view?hit_id=$id	HIT000195363	unknown		1	urn:miriam:hinv.transcript	^HIT\d{9}(\.\d+)?$	
@@ -548,6 +549,7 @@ VFDB Genus	vfdb.genus		http://www.mgc.ac.cn/cgi-bin/VFs/genus.cgi?Genus=$id	Chla
 ViPR Strain	vipr		http://www.viprbrc.org/brc/viprStrainDetails.do?strainName=$id&decorator=arena	BeAn 70563	unknown		1	urn:miriam:vipr	^[A-Za-z 0-9]+$	
 ViralZone	viralzone		http://viralzone.expasy.org/all_by_protein/$id.html	992	unknown		1	urn:miriam:viralzone	^\d+$	
 VIRsiRNA	virsirna		http://crdd.osdd.net/servers/virsirnadb/record.php?details=$id	virsi1909	unknown		1	urn:miriam:virsirna	^virsi\d+$	
+VMH metabolite	VmhM		https://registry.identifiers.org:/registry/vmhmetabolite	http://identifiers.org/vmhmetabolite/$id	h2o	metabolite		1		urn:miriam:vmhmetabolite	^[a-zA-Z0-9_\(\_\)\[\]]+$	VMH Life_Metabolite
 Wheat gene catalog	Wc	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/sql?sql=select+distinct+genewgcreference.number+as+WGC,+reference.name+as+Reference,+reference.title+as+Title,+journal.name+as+Journal,+reference.volume+as+Volume,+reference.pages+as+Page+from+reference+inner+join+genewgcreference+on+genewgcreference.referenceid=reference.id+inner+join+journal+on+reference.journalid=journal.id+where+genewgcreference.number=$id	341	gene	Triticum aestivum	1			
 Wheat gene names	Wn	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/report?class=gene;name=$id	5S-Rrna-D1_(Triticum)	gene	Triticum aestivum	1			Wheat gene names
 Wheat gene refs	Wr	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$id	WGS-95-1333	probe	Triticum aestivum	0			Wheat gene refs
