@@ -4,7 +4,7 @@ org.bridgedb.rdf
 Purpose:
 
 1. Provide a tool for saving DataSource information in a RDF format.
-2. Tool for creating `DataSource`s by reading the RDF format
+2. Tool for creating `DataSource(s)` by reading the RDF format.
 3. Extra Support for `DataSource` to `UriPattern` mapping
     To replace hack in `ops.bridgebd.ops.sql` (to be renamed `ops.bridgedb.uri.sql`)
 4. To be determined if Uri -> Xref -> Uri should be SQL query based or HashMap based
@@ -18,7 +18,7 @@ Including future updates to datasources.txt (until BioDataSource.ttl becomes def
 ## Updating from identifiers.org
 
 
-These files reflect http://identifiers.org/ registry:
+These files reflect http://identifiers.org/ registry (Date: 20xx-XX-xx):
 
 * [resources/IdentifiersOrgDataSource.ttl](resources/IdentifiersOrgDataSource.ttl)
 * [resources/IdentifiersOrgDataSource.txt](resources/IdentifiersOrgDataSource.txt)
@@ -38,4 +38,3 @@ It is currently unclear how the remaining files in [resources/](resources/)
 are used or maintained (See [GitHub issue #21](https://github.com/bridgedb/BridgeDb/issues/21))
 and the relevance to [datasources.txt](../org.bridgedb.bio/resources/org/bridgedb/bio/datasources.txt)
 from `org.bridgedb.bio`.
-

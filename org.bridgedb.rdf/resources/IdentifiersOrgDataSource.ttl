@@ -2655,6 +2655,20 @@ bridgeDB:DataSource_GRSDB a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/grsdb/$id> ;
 	bridgeDB:hasRegexPattern "^\\d+$" .
 
+bridgeDB:DataSource_Guide_to_Pharmacology a bridgeDB:DataSource ;
+	bridgeDB:fullName "Guide to Pharmacology" ;
+	bridgeDB:systemCode "Gpl" ;
+	bridgeDB:mainUrl "http://www.guidetopharmacology.org/" ;
+	bridgeDB:idExample "1627" ;
+	bridgeDB:primary "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "metabolite" ;
+	bridgeDB:hasPrimaryUriPattern <http://www.guidetopharmacology.org/GRAC/LigandDisplayForward?ligandId=$id> ;
+	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/iuphar.ligand/$id> ;
+	bridgeDB:hasIdentifiersOrgInfoPattern <http://identifiers.org/iuphar.ligand/$id> ;
+	bridgeDB:hasRegexPattern "^^\d+$" ;
+	dcterms:alternative "Iuphar Ligand" ;
+	bridgeDB:hasUriPattern <http://www.guidetopharmacology.org/GRAC/LigandDisplayForward?ligandId=$id> , <http://identifiers.org/iuphar.ligand/$id> .	
+	
 bridgeDB:DataSource_GXA_Expt a bridgeDB:DataSource ;
 	bridgeDB:fullName "GXA Expt" ;
 	bridgeDB:systemCode "gxa.expt" ;
@@ -6335,6 +6349,21 @@ bridgeDB:DataSource_VIRsiRNA a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/virsirna/$id> ;
 	bridgeDB:hasRegexPattern "^virsi\\d+$" .
 
+bridgeDB:DataSource_VMH_Life_Metabolite a bridgeDB:DataSource ;
+	bridgeDB:fullName "VMH Life_Metabolite" ;
+	bridgeDB:systemCode "VmhM" ;
+	bridgeDB:mainUrl "https://registry.identifiers.org:/registry/vmhmetabolite" ;
+	bridgeDB:idExample "h2o" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "metabolite" ;
+	bridgeDB:hasPrimaryUriPattern <https://www.vmh.life/#metabolite/$id> ;
+	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/vmhmetabolite/$id> ;
+	bridgeDB:hasIdentifiersOrgInfoPattern <http://identifiers.org/vmhmetabolite/$id> ;
+	bridgeDB:hasRegexPattern "[a-zA-Z0-9_\(\_\)\[\]]+" ;
+	dcterms:alternative "Recon metabolites" ;
+	bridgeDB:hasUriPattern <https://www.vmh.life/#metabolite/$id> , <http://identifiers.org/vmhmetabolite/$id> .	
+	bridgeDB:hasUriPattern <https://www.vmh.life/#metabolite/$id> , <http://identifiers.org/vmhmetabolite/$id> .	
+		
 bridgeDB:DataSource_Wheat_gene_catalog a bridgeDB:DataSource ;
 	bridgeDB:fullName "Wheat gene catalog" ;
 	bridgeDB:systemCode "Wc" ;
@@ -7739,7 +7768,7 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://identifiers.org/drugbank/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://identifiers.org/drugbank/" .
-
+	
 <http://identifiers.org/ec-code/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://identifiers.org/ec-code/" .
 
@@ -8837,6 +8866,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://identifiers.org/virsirna/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://identifiers.org/virsirna/" .
+	
+<http://identifiers.org/vmhmetabolite/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://identifiers.org/vmhmetabolite/" . 
 
 <http://identifiers.org/wikigenes/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://identifiers.org/wikigenes/" .
@@ -10380,6 +10412,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://info.identifiers.org/virsirna/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://info.identifiers.org/virsirna/" .
+	
+<http://info.identifiers.org/vmhmetabolite/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://info.identifiers.org/vmhmetabolite/" .	
 
 <http://info.identifiers.org/wikigenes/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://info.identifiers.org/wikigenes/" .
