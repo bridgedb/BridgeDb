@@ -133,6 +133,9 @@
           <configuration>
             <testFailureIgnore>true</testFailureIgnore>
             <forkCount>0</forkCount>
+            <properties>
+              <excludeTags>mysql,webservice</excludeTags>
+            </properties>
           </configuration>
         </plugin>
         </plugins>

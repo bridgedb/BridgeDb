@@ -37,11 +37,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Test identifier mapping using Biomart web service.
  */
-@Disabled //uncomment if biomart service is down again...
 public class TestBiomart // do not need to extend TestCase
 {
-	// disabled test, because it takes several minutes to run
-	//@Test
+
+	@Tag("webservice")
+	@Test
     public void _testBiomartStub() throws IOException, IDMapperException {
         BiomartStub biomartStub = BiomartStub.getInstance();
 
@@ -83,6 +83,7 @@ public class TestBiomart // do not need to extend TestCase
         }
     }
 
+	@Tag("webservice")
     @Test
     public void testBioMartConnector() throws IOException, IDMapperException, ClassNotFoundException
     {
@@ -119,7 +120,8 @@ public class TestBiomart // do not need to extend TestCase
 		assertTrue (dest.contains (DataSource.getByFullName("entrezgene")));
     }
 
-    @Test
+	@Tag("webservice")
+	@Test
     public void testBioMartConnector2() throws IOException, IDMapperException, ClassNotFoundException
     {
 		Class.forName("org.bridgedb.webservice.biomart.IDMapperBiomart");
@@ -157,7 +159,7 @@ public class TestBiomart // do not need to extend TestCase
     	return result.toString();
     }
     
-    
+	@Tag("webservice")    
     @Test
     public void testBioMartMapping() throws IOException, IDMapperException, ClassNotFoundException
     {
