@@ -55,6 +55,9 @@
         <servlet.version>2.5</servlet.version>
         <slf4j.version>1.6.4</slf4j.version>
         <derby.version>10.14.2.0</derby.version>
+        <junit5.jupiter.version>5.3.1</junit5.jupiter.version>
+        <junit5.excludeGroups></junit5.excludeGroups>
+        <junit5.groups></junit5.groups>
     </properties>
    
   	<build>
@@ -133,9 +136,8 @@
           <configuration>
             <testFailureIgnore>true</testFailureIgnore>
             <forkCount>0</forkCount>
-            <properties>
-              <excludeTags>mysql,webservice</excludeTags>
-            </properties>
+            <groups>${junit5.groups}</groups>
+            <excludedGroups>${junit5.excludeGroups}</excludedGroups>
           </configuration>
         </plugin>
         </plugins>
