@@ -37,6 +37,7 @@ import org.junit.jupiter.api.BeforeAll;
 public class UriMapperOtherTest extends org.bridgedb.uri.UriMapperOtherTest {
     
     @BeforeAll
+    @Tag("mysql")
     public static void setupIDMapper() throws BridgeDBException{
         connectionOk = false;
         TestSqlFactory.checkSQLAccess();
