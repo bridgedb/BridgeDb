@@ -23,12 +23,14 @@ import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.IDMapperTest;
+import org.junit.jupiter.api.Tag;
 
 /**
  * Extends the IDMapper Tests with a method to load the test data before running the tests.
  *
  * @author Christian
  */
+@Tag("mysql")
 public abstract class MappingListenerTest extends IDMapperTest{
     
     protected static final boolean SYMETRIC = true;
