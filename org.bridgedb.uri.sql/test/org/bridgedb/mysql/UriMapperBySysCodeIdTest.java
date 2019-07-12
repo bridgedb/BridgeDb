@@ -43,6 +43,7 @@ public class UriMapperBySysCodeIdTest extends org.bridgedb.uri.UriMapperBySysCod
     private static final long CREATION1 = new Date().getTime();
 
     @BeforeAll
+    @Tag("mysql")
     public static void setupIDMapper() throws BridgeDBException{
 
         connectionOk = false;
