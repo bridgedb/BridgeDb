@@ -30,6 +30,7 @@ import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -40,7 +41,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Christian
  */
-//@Ignore 
+//@Ignore
+@Tag("mysql")
 public class MappingListenerTest extends org.bridgedb.mapping.MappingListenerTest {
     
     static final Logger logger = Logger.getLogger(MappingListenerTest.class);
@@ -61,6 +63,7 @@ public class MappingListenerTest extends org.bridgedb.mapping.MappingListenerTes
     }
     
     @Test
+    @Tag("mysql")
     public void testMapIDOneToOne() throws IDMapperException{
         report("MapIDOneToOne");
         Set<Xref> results = sqlIdMapper.mapID(map1xref1, DataSource2);
