@@ -43,6 +43,7 @@ public class UriMapperNullLensTest extends org.bridgedb.uri.UriMapperNullLensTes
     private static final long CREATION1 = new Date().getTime();
 
     @BeforeAll
+    @Tag("mysql")
     public static void setupIDMapper() throws BridgeDBException{
 
         connectionOk = false;
