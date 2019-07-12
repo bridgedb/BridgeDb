@@ -42,6 +42,7 @@ public class UriMapperNullXrefTest extends org.bridgedb.uri.UriMapperNullXrefTes
     private static final long CREATION1 = new Date().getTime();
 
     @BeforeAll
+    @Tag("mysql")           
     public static void setupIDMapper() throws BridgeDBException{
 
         connectionOk = false;
