@@ -43,6 +43,7 @@ public class UriMapperRdfTest extends org.bridgedb.uri.UriMapperRdfTest{
     }
     
     @BeforeAll
+    @Tag("mysql")
     public static void setupIDMapper() throws BridgeDBException{
 
         connectionOk = false;
