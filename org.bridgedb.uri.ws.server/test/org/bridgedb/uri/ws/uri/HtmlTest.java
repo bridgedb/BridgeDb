@@ -23,20 +23,23 @@ public class HtmlTest {
     static WSUriServer server;
     
     @BeforeAll
+    @Tag("mysql")
     public static void setupIDMapper() throws BridgeDBException{
         ConfigReader.useTest();
         TestSqlFactory.checkSQLAccess();
         server = new WSUriServer();
     }
 
-    @Test 
+    @Test
+    @Tag("mysql")
     public void testWelcomeMessage() throws BridgeDBException, UnsupportedEncodingException{
         Reporter.println("WelcomeMessage");
         Response result = server.welcomeMessage(new DummyHttpServletRequest());
         Assertions.assertEquals(200, result.getStatus());
     }
 
-    @Test 
+    @Test
+    @Tag("mysql")   
     public void testApi() throws BridgeDBException, UnsupportedEncodingException{
         Reporter.println("API");
         Response result = server.imsApiPage(new DummyHttpServletRequest());

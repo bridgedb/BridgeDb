@@ -35,6 +35,8 @@ import org.openrdf.model.Resource;
 import org.openrdf.model.impl.URIImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Tag;
+
 
 /**
  * Runs the UriMapper interface tests over SQLUriMapper class
@@ -50,6 +52,7 @@ public class UriMapperRecoverTest extends UriListenerTest {
     private static final long CREATION1 = new Date().getTime();
 
     @Test
+    @Tag("mysql")
     public void testRecover()throws BridgeDBException{
         TestSqlFactory.checkSQLAccess();
         ConfigReader.useTest();

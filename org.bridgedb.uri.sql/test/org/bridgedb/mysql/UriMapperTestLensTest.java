@@ -28,6 +28,8 @@ import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
+
 
 /**
  * Runs the UriMapper interface tests over SQLUriMapper class
@@ -43,6 +45,7 @@ public class UriMapperTestLensTest extends org.bridgedb.uri.UriMapperTestLensTes
     private static final long CREATION1 = new Date().getTime();
 
     @BeforeAll
+    @Tag("mysql")
     public static void setupIDMapper() throws BridgeDBException{
 
         connectionOk = false;
