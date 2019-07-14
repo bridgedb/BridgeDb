@@ -1,0 +1,32 @@
+cff-version: 1.0.3
+message: If you use this software, please cite it as below.
+title: BridgeDb
+version: 2.3.2
+doi: 10.5281/zenodo.3171955
+date-released: 2019-05-22
+references:
+  - type: article
+    authors:
+      - family-names: Van Iersel
+        given-names: Martijn P.
+      - family-names: Pico
+        given-names: Alexander R.
+      - family-names: Kelder
+        given-names: Thomas
+      - family-names: Gao
+        given-names: Jianjiong
+      - family-names: Isaac
+        given-names: Ho
+      - family-names: Hanspers
+        given-names: Kristina
+      - family-names: Conklin
+        given-names: Bruce R.
+      - family-names: Evelo
+        given-names: Chris T.
+    title: "The BridgeDb framework: standardized access to gene, protein and metabolite identifier mapping services"
+    year: 2010
+    journal: BMC Bioinformatics
+    volume: 11
+    issue: 5
+    doi: 10.1186/1471-2105-11-5
+    url: https://doi.org/10.1186/1471-2105-11-5
