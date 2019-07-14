@@ -38,6 +38,7 @@ import org.junit.jupiter.api.Tag;
  *
  * @author Christian
  */
+@Tag("mysql")
 public class UriMapperSpecialTest extends org.bridgedb.uri.UriMapperSpecialTest {
     
     private static final String CREATOR1 = "testCreator";

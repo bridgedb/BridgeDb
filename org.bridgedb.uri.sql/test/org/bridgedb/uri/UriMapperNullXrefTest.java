@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Christian
  */
+@Tag("mysql")
 public abstract class UriMapperNullXrefTest extends UriListenerTest{
 
     private static  final String NULL_GRAPH = null;

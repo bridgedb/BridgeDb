@@ -36,6 +36,7 @@ import org.junit.jupiter.api.Tag;
  *
  * @author Christian
  */
+@Tag("mysql")
 public class UriMapperNullLensTest extends org.bridgedb.uri.UriMapperNullLensTest {
     
     private static final String CREATOR1 = "testCreator";

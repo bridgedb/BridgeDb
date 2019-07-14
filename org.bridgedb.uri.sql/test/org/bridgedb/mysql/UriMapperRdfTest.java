@@ -37,6 +37,7 @@ import org.junit.jupiter.api.Tag;
  *
  * @author Christian
  */
+@Tag("mysql")
 public class UriMapperRdfTest extends org.bridgedb.uri.UriMapperRdfTest{
     
     @BeforeAll

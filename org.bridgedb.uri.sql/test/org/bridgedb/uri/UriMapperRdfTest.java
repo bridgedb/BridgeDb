@@ -46,6 +46,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * 
  * @author Christian
  */
+@Tag("mysql")
 public abstract class UriMapperRdfTest extends UriListenerTest{
            
     public static final String NULL_GRAPH = null;

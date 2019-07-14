@@ -41,6 +41,7 @@ import org.openrdf.model.Statement;
  *
  * @author Christian
  */
+@Tag("mysql")
 public class LensTest extends org.bridgedb.uri.UriListenerTest {
     
     static SQLUriMapper sqlUriMapper;

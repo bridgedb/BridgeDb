@@ -45,6 +45,7 @@ import org.junit.jupiter.api.Tag;
  *
  * @author Christian
  */
+@Tag("mysql")
 public class UriMapperRecoverTest extends UriListenerTest {
     
     private static final String CREATOR1 = "testCreator";

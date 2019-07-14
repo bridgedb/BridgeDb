@@ -37,6 +37,7 @@ import org.junit.jupiter.api.Tag;
  *
  * @author Christian
  */
+@Tag("mysql")
 public class UriMapperNullTargetTest extends org.bridgedb.uri.UriMapperNullTargetTest {
     
     private static final String CREATOR1 = "testCreator";

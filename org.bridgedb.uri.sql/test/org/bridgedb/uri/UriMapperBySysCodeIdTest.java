@@ -18,6 +18,7 @@ import static org.hamcrest.Matchers.*;
  *
  * @author Christian
  */
+@Tag("mysql")
 public abstract class UriMapperBySysCodeIdTest extends UriListenerTest{
 
     private static  final String EMPTY_GRAPH = "";

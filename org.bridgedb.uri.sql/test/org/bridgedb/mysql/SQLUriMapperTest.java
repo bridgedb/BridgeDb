@@ -42,6 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * 
  * @author Christian
  */
+@Tag("mysql")
 public class SQLUriMapperTest extends UriListenerTest{
    
     private static SQLUriMapper sqlUriMapper;
