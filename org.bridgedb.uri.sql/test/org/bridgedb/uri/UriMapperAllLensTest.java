@@ -11,6 +11,8 @@ import org.bridgedb.Xref;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.lens.Lens;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,10 +29,11 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     private static final Set<DataSource> NO_TARGET_DATA_SOURCES = null;
     private static final Set<String> NO_PATTERNS = null;
     
-   /**
+    /**
      * Test of mapID method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapID_sourceXref_lensId_tgtDataSources() throws Exception {
         report("MapID_sourceXref_lensId_tgtDataSources");
         Xref sourceXref = map2xref2;
@@ -54,7 +57,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapID method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapID_sourceXref_lensId_tgtDataSource() throws Exception {
         report("MapID_sourceXref_lensId_tgtDataSource");
         Xref sourceXref = map2xref2;
@@ -77,7 +81,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapID method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapID_sourceXref_lensId() throws Exception {
         report("MapID_sourceXref_lensId");
         Xref sourceXref = map2xref2;
@@ -98,7 +103,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapUri method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapUri_sourceUri_lensId_tgtUriPatterns() throws Exception {
         report("MapUri_sourceUri_lensId_tgtUriPatterns");
         String sourceUri = map3Uri3;
@@ -122,7 +128,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapUri method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapUri_sourceXref_lensId_tgtUriPattern() throws Exception {
         report("MapUri_sourceXref_lensId_tgtUriPattern");
         Xref sourceXref = map3xref2;
@@ -144,7 +151,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapUri method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapUri_sourceXref_lensId() throws Exception {
         report("MapUri_sourceXref_lensId");
         Xref sourceXref = map3xref2;
@@ -166,7 +174,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapUri method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapUri_sourceXref_lensId_tgtUriPatterns() throws Exception {
         report("MapUri_sourceXref_lensId_tgtUriPatterns");
         Xref sourceXref = map3xref2;
@@ -190,7 +199,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapUri method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapUri_sourceUri_lensId_tgtUriPattern() throws Exception {
         report("MapUri_sourceUri_lensId_tgtUriPattern");
         String sourceUri = map3Uri2;
@@ -213,7 +223,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapUri method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapUri_sourceUri_lensId() throws Exception {
         report("MapUri_sourceUri_lensId");
         String sourceUri = map3Uri2;
@@ -245,7 +256,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapFull_sourceXref_lensId_tgtDataSources() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources");
         Xref sourceXref = map3xref2;
@@ -288,7 +300,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapFull_sourceXref_lensId_tgtDataSources_noURI() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources_noURI");
         Xref sourceXref = map3xref2;
@@ -308,7 +321,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapFull_sourceXref_lensId_tgtDataSources_default() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources_default");
         Xref sourceXref = map3xref2;
@@ -327,7 +341,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapFull_sourceXref_lensId_tgtDataSource() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources");
         Xref sourceXref = map3xref2;
@@ -374,7 +389,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapFull_sourceXref_lensId() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources");
         Xref sourceXref = map3xref2;
@@ -414,7 +430,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapFull_sourceXref_lensId_noUris() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources_noUris");
         Xref sourceXref = map3xref2;
@@ -430,7 +447,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapFull_sourceXref_lensId_default() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources_default");
         Xref sourceXref = map3xref2;
@@ -446,7 +464,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapFull_sourceXref_lensId_tgtUriPatterns() throws Exception {
         report("MapFull_sourceXref_lensId_tgtUriPatterns");
         Xref sourceXref = map3xref2;
@@ -490,7 +509,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapFull_sourceXref_lensId_tgtUriPattern() throws Exception {
         report("MapFull_sourceXref_lensId_tgtUriPattern");
         Xref sourceXref = map3xref2;
@@ -532,7 +552,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapFull_sourceUri_lensId_tgtDataSources() throws Exception {
         report("MapFull_sourceUri_lensId_tgtDataSources");
         String sourceUri = map3Uri2;
@@ -579,7 +600,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapFull_sourceUri_lensId_tgtDataSource() throws Exception {
         report("MapFull_sourceUri_lensId_tgtDataSource");
         String sourceUri = map3Uri2;
@@ -624,7 +646,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapFull_MapFull_sourceUri_lensId() throws Exception {
         report("MapFull_sourceUri_lensId");
         String sourceUri = map3Uri2;
@@ -667,7 +690,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapFull_MapFull_sourceUri_lensId_noXref() throws Exception {
         report("MapFull_sourceUri_lensId_noXref");
         String sourceUri = map3Uri2;
@@ -685,7 +709,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
      /**
      * Test of mapFull method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapFull_sourceUri_lensId_tgtUriPattern() throws Exception {
         report("MapFull_sourceUri_lensId_tgtUriPattern");
         String sourceUri = map3Uri2;
@@ -730,7 +755,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapFull_sourceUri_lensId_tgtUriPattern_noUris() throws Exception {
         report("MapFull_sourceUri_lensId_tgtUriPattern_noUris");
         String sourceUri = map3Uri2;
@@ -748,7 +774,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapFull_sourceUri_lensId_tgtUriPattern_default() throws Exception {
         report("MapFull_sourceUri_lensId_tgtUriPattern_default");
         String sourceUri = map3Uri2;
@@ -766,7 +793,8 @@ public abstract class UriMapperAllLensTest extends UriListenerTest{
     /**
      * Test of mapFull method, of class UriMapper.
      */
-    @org.junit.jupiter.api.Test
+    @Tag("mysql")
+    @Test
     public void testMapFull_sourceUri_lensId_tgtUriPatterns() throws Exception {
         report("MapFull_sourceUri_lensId_tgtUriPatterns");
         String sourceUri = map3Uri2;
