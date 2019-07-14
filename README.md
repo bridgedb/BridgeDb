@@ -6,8 +6,7 @@ BridgeDb
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bridgedb/bridgedb-bundle/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bridgedb/bridgedb-bundle)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c4feefd66d5349f8b51c2a295216da25)](https://www.codacy.com/app/nunogit/BridgeDb?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bridgedb/BridgeDb&amp;utm_campaign=Badge_Grade)
 
-BridgeDb currently is tested with Java 8. Later versions may work, but Java 11 is yet unsupported, because of
-the removal of the JAXB functionality.
+BridgeDb is currently tested with Java 8 and Java 11.
 
 Using BridgeDb dependencies
 ---------------------------
