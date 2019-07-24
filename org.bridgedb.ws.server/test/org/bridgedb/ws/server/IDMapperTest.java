@@ -21,7 +21,6 @@ package org.bridgedb.ws.server;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -32,11 +31,13 @@ import org.bridgedb.ws.WSCoreInterface;
 import org.bridgedb.ws.WSCoreMapper;
 import org.bridgedb.ws.WSCoreService;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 
 /**
  *
  * @author Christian
  */
+@Tag("mysql")
 public class IDMapperTest extends org.bridgedb.utils.IDMapperTest{
     
     @BeforeAll
