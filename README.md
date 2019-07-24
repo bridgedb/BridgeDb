@@ -80,6 +80,20 @@ abstract class that should not actually be run by JUnit as test suite.
 Note also that the second one may fail because BridgeDb module dependencies
 may not be resolved yet.
 
+Several tests also depend on a running MySQL backend or running BridgeDb
+webservice. You can exclude these tests in Maven with:
+
+```shell
+mvn clean test -Djunit5.excludeGroups=webservice,mysql
+```
+
+The JUnit5 tagging also allows to specifically test the MySQL-backend tests,
+for example with:
+
+```shell
+mvn clean test junit5.groups=mysql
+```
+
 Making releases
 ---------------
 
