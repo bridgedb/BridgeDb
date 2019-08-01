@@ -96,9 +96,9 @@ Other	O				gene		1	O		Other
 Pathway Commons	Pc	http://www.pathwaycommons.org/pc/	http://www.pathwaycommons.org/pc/record2.do?id=$id	485991	pathway		1	urn:miriam:pathwaycommons	^\d+$	Pathway Commons	
 PDB	Pd	http://www.pdb.org/	http://www.rcsb.org/pdb/explore/explore.do?structureId=$id	2gc4	protein		0	urn:miriam:pdb	^[0-9][A-Za-z0-9]{3}$	Protein Data Bank	P638
 Pfam	Pf	http://pfam.sanger.ac.uk/	http://pfam.sanger.ac.uk/family/$id/	PF01234	protein		1	urn:miriam:pfam	^PF\d{5}$	Pfam	P3519
-PharmGKB Drug	Pgd	http://www.pharmgkb.org/	http://www.pharmgkb.org/drug/$id	PA448710	metabolite		1	urn:miriam:pharmgkb.drug	^PA\d+$	PharmGKB Drug	
-PharmGKB Gene	Pgg	http://www.pharmgkb.org/	http://www.pharmgkb.org/gene/$id	PA131	gene		1	urn:miriam:pharmgkb.gene	^PA\w+$	PharmGKB Gene	
-PharmGKB Pathways	Pgp	http://www.pharmgkb.org/	http://www.pharmgkb.org/pathway/$id	PA146123006	pathway		1	urn:miriam:pharmgkb.pathways	^PA\d+$	PharmGKB Pathways	
+PharmGKB Drug	Pgd	http://www.pharmgkb.org/	http://www.pharmgkb.org/drug/$id	PA448710	metabolite		1	urn:miriam:pharmgkb.drug	^PA\d+$	PharmGKB Drug	P7001
+PharmGKB Gene	Pgg	http://www.pharmgkb.org/	http://www.pharmgkb.org/gene/$id	PA131	gene		1	urn:miriam:pharmgkb.gene	^PA\w+$	PharmGKB Gene	P7001
+PharmGKB Pathways	Pgp	http://www.pharmgkb.org/	http://www.pharmgkb.org/pathway/$id	PA146123006	pathway		1	urn:miriam:pharmgkb.pathways	^PA\d+$	PharmGKB Pathways	P7001
 PhosphoSite Protein	Pp	http://www.phosphosite.org/homeAction.do	http://www.phosphosite.org/proteinAction.do?id=$id	12300	protein		1	urn:miriam:phosphosite.protein	^\d{5}$	PhosphoSite Protein	
 PINA	Pi	http://cbg.garvan.unsw.edu.au/pina/	http://cbg.garvan.unsw.edu.au/pina/interactome.oneP.do?ac=$id&showExtend=null	Q13485	interaction		1	urn:miriam:pina	^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9])$	PINA	
 PlantGDB	Pl	http://www.plantgdb.org/		PUT-157a-Vitis_vinifera-37378	gene		1	Pl	PUT-[\w\d-]+	PlantGDB	
