@@ -18,3 +18,4 @@
 9	uri	Official URI for datasource (e.g., from miriam); or repeat of system_code if unknown or unregistered	urn:miriam:affy.probeset	http://www.w3.org/1999/02/22-rdf-syntax-ns#about	http://www.w3.org/2001/XMLSchema#anyURI
 10	regex	Regular expression capturing all possible identifiers as narrowly as possible for datasource (see miriam)	\d{4,}((_[asx])?_at)?	http://vocabularies.bridgedb.org/ops#hasRegexPattern	http://www.w3.org/2001/XMLSchema#string
 11	official_name	Official name of datasource resource; useful as an end-user display name; useful in name resolution	Affymetrix Probeset	http://vocabularies.bridgedb.org/ops#fullName	http://www.w3.org/2001/XMLSchema#string
+12	wikidata_property	Property used by Wikidata to link identifers from external datasources to a Wikidata item	P2410	https://www.mediawiki.org/wiki/Wikibase/DataModel#Property	http://www.w3.org/2001/XMLSchema#string

@@ -243,8 +243,8 @@ H-InvDb Transcript	hinv.transcript		http://h-invitational.jp/hinv/spsoup/transcr
 HAMAP	hamap		http://hamap.expasy.org/unirule/$id	MF_01400	unknown		1	urn:miriam:hamap	^MF_\d+$	
 HCVDB	hcvdb		http://euhcvdb.ibcp.fr/euHCVdb/do/displayHCVEntry?primaryAC=$id	M58335	unknown		1	urn:miriam:hcvdb	^M\d{5}$	
 HGMD	hgmd		http://www.hgmd.cf.ac.uk/ac/gene.php?gene=$id	CALM1	unknown		1	urn:miriam:hgmd	^[A-Z_0-9]+$	
-HGNC	H	http://www.genenames.org	http://www.genenames.org/data/hgnc_data.php?match=$id	DAPK1	gene	Homo sapiens	1	urn:miriam:hgnc.symbol	^[A-Za-z-0-9_]+(\@)?$	HGNC Symbol
-HGNC Accession number	Hac	http://www.genenames.org	http://www.genenames.org/data/hgnc_data.php?hgnc_id=$id	HGNC:2674	gene	Homo sapiens	1	urn:miriam:hgnc	^(HGNC:)?\d{1,5}$	HGNC
+HGNC	H	http://www.genenames.org	https://www.genenames.org/data/gene-symbol-report/#!/symbol/$id	DAPK1	gene	Homo sapiens	1	urn:miriam:hgnc.symbol	^[A-Za-z-0-9_]+(\@)?$	HGNC Symbol
+HGNC Accession number	Hac	http://www.genenames.org	https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/$id	HGNC:2674	gene	Homo sapiens	1	urn:miriam:hgnc	^(HGNC:)?\d{1,5}$	HGNC
 HMDB	Ch	http://www.hmdb.ca/	http://www.hmdb.ca/metabolites/$id	HMDB00001	metabolite		1	urn:miriam:hmdb	^HMDB\d{5}$	HMDB
 HOGENOM	hogenom		http://pbil.univ-lyon1.fr/cgi-bin/view-tree.pl?db=HOGENOM5&query=$id	HBG284870	unknown		1	urn:miriam:hogenom	^\w+$	
 HOMD Sequence Metainformation	homd.seq		http://www.homd.org/modules.php?op=modload&name=GenomeList&file=index&link=detailinfo&seqid=$id	SEQF1003	unknown		1	urn:miriam:homd.seq	^SEQF\d+$	

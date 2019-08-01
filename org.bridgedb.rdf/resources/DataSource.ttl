@@ -577,7 +577,7 @@ bridgeDB:DataSource_HGNC a bridgeDB:DataSource ;
 	bridgeDB:idExample "DAPK1" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.genenames.org/data/hgnc_data.php?match=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.genenames.org/data/gene-symbol-report/#!/symbol/$id> ;
 	bridgeDB:Organism bridgeDB:Organism_Hs ;
  	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/hgnc.symbol/$id> .
 
@@ -588,7 +588,7 @@ bridgeDB:DataSource_HGNC_Accession_number a bridgeDB:DataSource ;
 	bridgeDB:idExample "HGNC:2674" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.genenames.org/data/hgnc_data.php?hgnc_id=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/hgnc/$id> ;
 	bridgeDB:Organism bridgeDB:Organism_Hs ;
 	bridgeDB:hasUriPattern <http://bio2rdf.org/hgnc:$id> .
