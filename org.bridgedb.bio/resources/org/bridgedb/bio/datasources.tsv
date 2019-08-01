@@ -69,7 +69,7 @@ IntAct	Ia	http://www.ebi.ac.uk/intact/	http://www.ebi.ac.uk/intact/pages/details
 InterPro	I	http://www.ebi.ac.uk/interpro/	http://www.ebi.ac.uk/interpro/DisplayIproEntry?ac=$id	IPR000100	protein		1	urn:miriam:interpro	^IPR\d{6}$	InterPro	
 IPI	Ip	http://www.ebi.ac.uk/IPI	http://www.ebi.ac.uk/cgi-bin/dbfetch?db=IPI&id=$id&format=default	IPI00000001	protein		1	urn:miriam:ipi	^IPI\d{8}$	IPI	
 IRGSP Gene	Ir	http://rgp.dna.affrc.go.jp/IRGSP/		Os12g0561000	gene		1	Ir	Os\d{2}g\d+	IRGSP Gene	
-KEGG Compound	Ck	http://www.genome.jp/kegg/ligand.html	http://www.genome.jp/dbget-bin/www_bget?cpd:$id	C12345	metabolite		1	urn:miriam:kegg.compound	^C\d+$	KEGG Compound	
+KEGG Compound	Ck	http://www.genome.jp/kegg/ligand.html	http://www.genome.jp/dbget-bin/www_bget?cpd:$id	C12345	metabolite		1	urn:miriam:kegg.compound	^C\d+$	KEGG Compound	P665
 KEGG Drug	Kd	http://www.genome.jp/kegg/drug/	http://www.genome.jp/dbget-bin/www_bget?dr:$id	D00123	metabolite		1	urn:miriam:kegg.drug	^D\d+$	KEGG Drug	
 KEGG Genes	Kg	http://www.genome.jp/kegg/genes.html	http://www.genome.jp/dbget-bin/www_bget?$id	syn:ssr3451	gene		1	urn:miriam:kegg.genes	^\w+:[\w\d\.-]*$	KEGG Genes	
 KEGG Glycan	Kl	http://www.genome.jp/kegg/glycan/	http://www.genome.jp/dbget-bin/www_bget?gl:$id	G00123	metabolite		1	urn:miriam:kegg.glycan	^G\d+$	KEGG Glycan	
