@@ -49,19 +49,19 @@ public class XrefTest {
 	public void testEquals_DiffId() {
 		Xref xref = new Xref("ENSG000001", EN);
 		Xref xref2 = new Xref("ENSG000002", EN);
-		assertNotEquals(xref, xref2);
-		assertNotEquals(xref2, xref); // and symmetric
+		assertNotEquals(0, xref.compareTo(xref2));
+		assertNotEquals(0, xref.compareTo(xref2));
 	}
 
 	@Test
 	public void testEquals() {
 		Xref xref = new Xref("ENSG000001", EN);
 		Xref xref2 = new Xref("ENSG000001", EN);
-		assertEquals(xref, xref2);
-		assertEquals(xref2, xref); // and symmetric
+		assertEquals(0, xref2.compareTo(xref));
+		assertEquals(0, xref.compareTo(xref2)); // and symmetric
 		Xref xref3 = new Xref("ENSG000001", EN, true);
 		Xref xref4 = new Xref("ENSG000001", EN, false);
-		assertNotEquals(xref3, xref4);
+		assertFalse( xref3.equals(xref4));
 	}
 
 	@Test
@@ -72,9 +72,8 @@ public class XrefTest {
 		assertEquals(0, xref2.compareTo(xref1)); // and symmetric
 		Xref xref3 = new Xref("ENSG000001", EN, true);
 		Xref xref4 = new Xref("ENSG000001", EN, false);
-		assertNotEquals(xref3.isPrimary(), xref4.isPrimary());
-		assertEquals(xref3, xref4);
-		assertEquals(xref4, xref3); // and symmetric
+		assertFalse(xref3.equals(xref4));
+		assertFalse(xref4.equals(xref3)); // and symmetric
 	}
 
 	@Test
