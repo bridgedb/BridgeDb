@@ -129,14 +129,14 @@ TIGR	Ti	http://www.jcvi.org/		12012.t00308	gene		1	Ti		TIGR
 TTD Drug	Td	http://bidd.nus.edu.sg/group/cjttd/TTD_HOME.asp	http://bidd.nus.edu.sg/group/cjttd/ZFTTDDRUG.asp?ID=$id	DAP000773	metabolite		1	urn:miriam:ttd.drug	^DAP\d+$	TTD Drug	
 TTD Target	Tt	http://bidd.nus.edu.sg/group/cjttd/TTD_HOME.asp	http://bidd.nus.edu.sg/group/cjttd/ZFTTDDetail.asp?ID=$id	TTDS00056	protein		1	urn:miriam:ttd.target	^TTDS\d+$	TTD Target	
 TubercuList	Tb	http://tuberculist.epfl.ch	http://tuberculist.epfl.ch/quicksearch.php?gene+name=$id	Rv0064	gene	Mycobacterium tuberculosis	1	urn:miriam:myco.tuber	Rv\d{4}(A|B|c|\.\d)?	TubercuList	
-UCSC Genome Browser	Uc	http://genome.ucsc.edu/	http://genome.ucsc.edu/cgi-bin/hgTracks?position=$id	uc001tyh.1	gene		1	Uc	uc\d{3}[a-z]{3}\.\d	UCSC Genome Browser	
+UCSC Genome Browser	Uc	http://genome.ucsc.edu/	http://genome.ucsc.edu/cgi-bin/hgTracks?position=$id	uc001tyh.1	gene		1	Uc	uc\d{3}[a-z]{3}\.\d	UCSC Genome Browser	P2576
 UniGene	U	http://www.ncbi.nlm.nih.gov/unigene	http://www.ncbi.nlm.nih.gov/unigene?term=$id	Hs.553708	gene		1	U	[A-Z][a-z][a-z]?\.\d+	UniGene	
 Unipathway	Up	http://www.grenoble.prabi.fr/obiwarehouse/unipathway	http://www.grenoble.prabi.fr/obiwarehouse/unipathway/upa?upid=$id	UPA00206	pathway		1	urn:miriam:unipathway	^UPA\d{5}$	Unipathway	
 Uniprot-TrEMBL	S	http://www.uniprot.org/	http://www.uniprot.org/uniprot/$id	P62158	protein		1	urn:miriam:uniprot	^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9])(\.\d+)?|([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])$	UniProtKB/TrEMBL	P352
 VMH metabolite	VmhM	http://vmh.uni.lu	http://vmh.uni.lu/#metabolite/$id	h2o	metabolite		1		[a-zA-Z0-9_\(\_\)\[\]]+	VMH Life_Metabolite	
 Wheat gene names	Wn	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/report?class=gene;name=$id	5S-Rrna-D1_(Triticum)	gene	Triticum aestivum	1	Wn		Wheat gene names	
 Wheat gene refs	Wr	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$id	WGS-95-1333	probe	Triticum aestivum	0	Wr		Wheat gene refs	
-WikiGenes	Wg	http://www.wikigenes.org/	http://www.wikigenes.org/e/gene/e/$id.html	7157	gene		0	urn:miriam:wikigenes		WikiGenes	
+WikiGenes	Wg	http://www.wikigenes.org/	http://www.wikigenes.org/e/gene/e/$id.html	7157	gene		0	urn:miriam:wikigenes		WikiGenes	P351
 WikiPathways	Wp	http://www.wikipathways.org/	http://www.wikipathways.org/index.php/Pathway:$id	WP100	pathway		1	urn:miriam:wikipathways	WP\d{1,5}(_r\d+)?	WikiPathways	P2410
 Wikidata	Wd	http://www.wikidata.org	https://www.wikidata.org/wiki/$id	Q407962	metabolite		1	urn:miriam:wikidata	^Q\d+$	Wikidata	
 Wikipedia	Wi	http://www.wikipedia.org	https://en.wikipedia.org/wiki/$id	Acetate	metabolite		0	urn:miriam:wikipedia.en	^.*$	Wikipedia	
