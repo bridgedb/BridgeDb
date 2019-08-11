@@ -1,4 +1,4 @@
-package org.bridgedb.tools.void;
+package org.bridgedb.tools.VoID;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
