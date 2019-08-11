@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
+@Tag("mysql")
 public class GraphResolverTest {
     
     public GraphResolverTest() {

@@ -29,6 +29,8 @@ import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -40,18 +42,21 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * 
  * @author Christian
  */
+@Tag("mysql")
 public class SQLUriMapperTest extends UriListenerTest{
    
     private static SQLUriMapper sqlUriMapper;
     
     @BeforeAll
+    @Tag("mysql")
     public static void setupIDMapper() throws BridgeDBException{
         TestSqlFactory.checkSQLAccess();
         ConfigReader.useTest();
         sqlUriMapper = SQLUriMapper.createNew();
     }
     
-    @org.junit.jupiter.api.Test
+    @Test
+    @Tag("mysql")
     public void testToUriPattern() throws BridgeDBException{
         report("ToUriPattern");
         IdSysCodePair result = sqlUriMapper.toIdSysCodePair(map1Uri1);
@@ -59,7 +64,8 @@ public class SQLUriMapperTest extends UriListenerTest{
         assertEquals(expected, result);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
+    @Tag("mysql")
     public void testToUriPatternUsingLike() throws BridgeDBException{
         report("ToUriPatternUsingLike");
         IdSysCodePair result = sqlUriMapper.toIdSysCodePair("http://bio2rdf.org/chebi:1234");
@@ -67,14 +73,16 @@ public class SQLUriMapperTest extends UriListenerTest{
         assertEquals(expected, result);
     }
       
-    @org.junit.jupiter.api.Test
+    @Test
+    @Tag("mysql")
     public void testBugInsdc() throws Exception {
         report("LoadBugInsdc");
         RegexUriPattern pattern = sqlUriMapper.toUriPattern("http://identifiers.org/ena.embl/AAG52984");
         assertNotNull(pattern);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
+    @Tag("mysql")
     public void testBugDrugbank() throws Exception {
         report("BugDrugbank");
         RegexUriPattern pattern = sqlUriMapper.toUriPattern("http://drugbank.ca/drugs/DB01269");

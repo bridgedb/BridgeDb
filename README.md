@@ -1,13 +1,12 @@
 BridgeDb
 ========
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2567175.svg)](https://doi.org/10.5281/zenodo.2567175)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3171955.svg)](https://doi.org/10.5281/zenodo.3171955)
 [![Build Status](https://travis-ci.org/bridgedb/BridgeDb.svg?branch=master)](https://travis-ci.org/bridgedb/BridgeDb)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bridgedb/bridgedb-bundle/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bridgedb/bridgedb-bundle)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c4feefd66d5349f8b51c2a295216da25)](https://www.codacy.com/app/nunogit/BridgeDb?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bridgedb/BridgeDb&amp;utm_campaign=Badge_Grade)
 
-BridgeDb currently is tested with Java 8. Later versions may work, but Java 11 is yet unsupported, because of
-the removal of the JAXB functionality.
+BridgeDb is currently tested with Java 8 (2.3.x releases) and Java 11 (master branch).
 
 Using BridgeDb dependencies
 ---------------------------
@@ -74,12 +73,26 @@ ant clean test
 mvn clean test
 ```
 
-Note that teh first call may fail a number of unit tests, like for those
+Note that the first call may fail a number of unit tests, like for those
 of `IDMapperCapabilitiesTest`. For that one, this is because it is an
 abstract class that should not actually be run by JUnit as test suite.
 
 Note also that the second one may fail because BridgeDb module dependencies
 may not be resolved yet.
+
+Several tests also depend on a running MySQL backend or running BridgeDb
+webservice. You can exclude these tests in Maven with:
+
+```shell
+mvn clean test -Djunit5.excludeGroups=webservice,mysql
+```
+
+The JUnit5 tagging also allows to specifically test the MySQL-backend tests,
+for example with:
+
+```shell
+mvn clean test junit5.groups=mysql
+```
 
 Making releases
 ---------------
@@ -87,7 +100,7 @@ Making releases
 If it is time for a release, ensure the code is ready for releases with both
 Ant (to create proper OSGi bundles, which Maven does not currently do) and
 Maven. For the former, the OSGI info must be updated, and particular the
-`MANIFEST.MF` files.
+`MANIFEST.MF` and `CITATION.cff` files.
 
 Then, run the following commands. Mind you, this requires you
 to have an approved Sonatype (http://oss.sonatype.org/) account with push rights:

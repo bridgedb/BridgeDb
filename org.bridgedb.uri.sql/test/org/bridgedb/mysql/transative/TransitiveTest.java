@@ -40,7 +40,7 @@ import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
 
 import org.junit.jupiter.api.BeforeAll;
-
+import org.junit.jupiter.api.Tag;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
 
@@ -51,6 +51,7 @@ import org.openrdf.model.impl.URIImpl;
  * 
  * @author Christian
  */
+@Tag("mysql")
 public class TransitiveTest {
    
     private static SQLUriMapper sqlUriMapper;

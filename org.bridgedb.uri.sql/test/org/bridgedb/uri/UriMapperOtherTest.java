@@ -18,6 +18,7 @@ import org.junit.jupiter.api.*;
  *
  * @author Christian
  */
+@Tag("mysql")
 public abstract class UriMapperOtherTest extends UriListenerTest{
 
 

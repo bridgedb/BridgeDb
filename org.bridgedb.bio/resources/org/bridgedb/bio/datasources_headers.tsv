@@ -1,12 +1,4 @@
-# Column headers and brief descriptions for datasources.txt
-#
-# The term "conventional", as found in the descriptions below, refers to established usage norms for the BridgeDb project.
-# <http://www.w3.org/1999/02/22-rdf-syntax-ns#about> below refers to the identifier we are using for the concept.
-#   The identifier is in the form of a URL (IRI).
-#
-# Tab-delimited table:				
-#
-# column	header	description	example_entry	http://www.w3.org/1999/02/22-rdf-syntax-ns#about	http://www.w3.org/1999/02/22-rdf-syntax-ns#datatype
+column	header	description	example_entry	http://www.w3.org/1999/02/22-rdf-syntax-ns#about	http://www.w3.org/1999/02/22-rdf-syntax-ns#datatype
 1	datasource_name	Conventional name for datasource	Affy	http://vocabularies.bridgedb.org/ops#conventionalName	http://www.w3.org/2001/XMLSchema#string
 2	system_code	Conventional 1-3 letter code for datasource	X	http://vocabularies.bridgedb.org/ops#systemCode	http://www.w3.org/2001/XMLSchema#string
 3	website_url	URL to main webpage for datasource	http://www.affymetrix.com/	http://vocabularies.bridgedb.org/ops#mainUrl	http://www.w3.org/2001/XMLSchema#anyURI

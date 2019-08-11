@@ -27,6 +27,8 @@ import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
+
 
 
 /**
@@ -36,6 +38,7 @@ import org.junit.jupiter.api.BeforeAll;
  *
  * @author Christian
  */
+@Tag("mysql")
 public class UriMapperBySysCodeIdTest extends org.bridgedb.uri.UriMapperBySysCodeIdTest {
     
     private static final String CREATOR1 = "testCreator";
@@ -43,6 +46,7 @@ public class UriMapperBySysCodeIdTest extends org.bridgedb.uri.UriMapperBySysCod
     private static final long CREATION1 = new Date().getTime();
 
     @BeforeAll
+    @Tag("mysql")
     public static void setupIDMapper() throws BridgeDBException{
 
         connectionOk = false;

@@ -31,7 +31,9 @@ import static org.junit.Assert.*;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 
+@Tag("mysql")
 public class LoosePredicateMakerTest {
     
     private static ArrayList<String> equivelentPredicates;

@@ -35,6 +35,7 @@ import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.IDMapperTestBase;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
 
@@ -46,6 +47,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  * Adds a method for loading the test data.
  * @author Christian
  */
+@Tag("mysql")
 public abstract class UriListenerTest extends IDMapperTestBase{
         
     protected static UriListener listener;

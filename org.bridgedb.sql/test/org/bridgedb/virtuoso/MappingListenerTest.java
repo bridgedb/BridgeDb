@@ -29,18 +29,20 @@ import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 
 /**
  * Loads the test data in and then runs the IDmapper and IDCapabiliies tests
  *
  * @author Christian
  */
-//@Ignore 
+//@Ignore
 public class MappingListenerTest extends org.bridgedb.mapping.MappingListenerTest {
     
     static final Logger logger = Logger.getLogger(MappingListenerTest.class);
 
     @BeforeAll
+    @Tag("mysql")
     public static void setupIDMapper() throws BridgeDBException{
         connectionOk = false;
         SqlFactory.setUseMySQL(false);

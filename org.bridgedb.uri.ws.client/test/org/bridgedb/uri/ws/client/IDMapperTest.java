@@ -24,11 +24,13 @@ import org.bridgedb.uri.ws.WSUriMapper;
 import org.bridgedb.utils.BridgeDBException;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 
 /**
  *
  * @author Christian
  */
+@Tag("webservice")
 public class IDMapperTest  extends org.bridgedb.utils.IDMapperTest{
     
     @BeforeAll

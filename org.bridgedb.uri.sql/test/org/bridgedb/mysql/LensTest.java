@@ -33,17 +33,21 @@ import static org.hamcrest.Matchers.*;
 
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import org.openrdf.model.Statement;
 
 /**
  *
  * @author Christian
  */
+@Tag("mysql")
 public class LensTest extends org.bridgedb.uri.UriListenerTest {
     
     static SQLUriMapper sqlUriMapper;
     
     @BeforeAll
+    @Tag("mysql")
     public static void setupIDMapper() throws BridgeDBException{
         connectionOk = false;
         TestSqlFactory.checkSQLAccess();
@@ -55,7 +59,8 @@ public class LensTest extends org.bridgedb.uri.UriListenerTest {
         uriMapper = sqlUriMapper;
     }
         
-    @org.junit.jupiter.api.Test
+    @Test
+    @Tag("mysql")
     public void testDefaultAndAllLens() throws Exception {
         report("DefaultAndAllLens");
         Lens defaultLens = LensTools.byId(Lens.DEFAULT_LENS_NAME);
@@ -66,7 +71,8 @@ public class LensTest extends org.bridgedb.uri.UriListenerTest {
         assertThat (allLens.getJustifications().size(), greaterThanOrEqualTo(justifications.size()));       
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
+    @Tag("mysql")
     public void testCHEMINF_000514() throws Exception {
         report("CHEMINF_000514");
         Lens defaultLens = LensTools.byId(Lens.DEFAULT_LENS_NAME);
@@ -75,7 +81,8 @@ public class LensTest extends org.bridgedb.uri.UriListenerTest {
         assertThat (SpecialLens.getJustifications().size(), greaterThan(defaultLens.getJustifications().size()));
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
+    @Tag("mysql")
     public void testRDF() throws Exception {
         report("RDF");
         Set<Statement> statements = LensTools.getLensAsRdf(null, LensTools.PUBLIC_GROUP_NAME);

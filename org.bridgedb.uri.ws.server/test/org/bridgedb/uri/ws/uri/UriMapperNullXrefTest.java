@@ -28,6 +28,7 @@ import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.ws.uri.WSUriInterfaceService;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 
 /**
  * 
@@ -41,7 +42,8 @@ public class UriMapperNullXrefTest extends org.bridgedb.uri.UriMapperNullXrefTes
     private static final long CREATION1 = new Date().getTime();
 
     @BeforeAll
-    public static void setupIDMapper() throws BridgeDBException{
+    @Tag("mysql")
+    public static void setupIDMapper() throws BridgeDBException {
         connectionOk = false;
         TestSqlFactory.checkSQLAccess();
         connectionOk = true;
@@ -49,7 +51,6 @@ public class UriMapperNullXrefTest extends org.bridgedb.uri.UriMapperNullXrefTes
         listener = SQLUriMapper.createNew();
         loadData();
         SQLUriMapper sqlUriMapper = SQLUriMapper.getExisting();
-        uriMapper = new WSUriMapper(new WSUriInterfaceService(sqlUriMapper)); 
+        uriMapper = new WSUriMapper(new WSUriInterfaceService(sqlUriMapper));
     }
-      
 }

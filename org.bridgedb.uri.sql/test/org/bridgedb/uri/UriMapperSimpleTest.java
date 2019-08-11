@@ -24,6 +24,7 @@ import org.junit.jupiter.api.*;
  *
  * @author Christian
  */
+@Tag("mysql")
 public abstract class UriMapperSimpleTest extends UriListenerTest{
 
     private static  final String NULL_GRAPH = null;
