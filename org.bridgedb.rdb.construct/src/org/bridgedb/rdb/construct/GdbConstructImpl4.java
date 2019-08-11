@@ -1,9 +1,6 @@
 package org.bridgedb.rdb.construct;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
@@ -171,6 +168,30 @@ public class GdbConstructImpl4 implements GdbConstruct
         }
     }
 
+    public int setRDF(String table, String Key, String Value){
+        try {
+            Statement sh = con.createStatement();
+            String query;
+            if (con != null) {
+                DatabaseMetaData dbmd = con.getMetaData();
+                ResultSet rs = dbmd.getTables(null, null, table.toUpperCase(), null);
+                if (rs.next()) {
+                    query = "INSERT INTO " +table +" (ATTRIB, VAL) VALUES( '"  + Key + "','" + Value + "')";
+                    sh.execute(query);
+                } else {
+                    query =  "CREATE TABLE " +table+ " (ATTRIB VARCHAR(256), VAL VARCHAR(256))";
+                    sh.execute(query);
+                    query = "INSERT INTO " +table+ " (ATTRIB, VAL) VALUES ('" + Key + "','" + Value + "')";
+                    sh.execute(query);
+                }
+            }
+        }
+        catch (SQLException ex){
+            recentException = ex;
+            return 1;
+        }
+        return 0;
+    }
 
     /**
      Create indices on the database
