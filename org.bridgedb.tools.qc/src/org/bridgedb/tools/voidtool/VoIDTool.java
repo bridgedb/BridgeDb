@@ -1,4 +1,4 @@
-package org.bridgedb.tools.VoID;
+package org.bridgedb.tools.voidtool;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
@@ -12,24 +12,36 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Utility to extract RDF data from derby database and store it as text file.
+ *  Run with two parameters: [database] and [filename]
+ *  database already contains the RDF data.
+ */
 public class VoIDTool {
-    private final File oldDb;
+    private final File Db;
 
-    private SimpleGdb oldGdb;
+    private SimpleGdb Gdb;
     public FileWriter file ;
 
     private String fileName;
+
+    /**
+     * Reads the database file passed and creates a text file with the name passes containing the RDF data from the database.
+     * @param f1 database file
+     * @param fileName name of the file to be create
+     * @throws IOException
+     */
     public VoIDTool(File f1, String fileName) throws  IOException {
-        oldDb = f1;
+        Db = f1;
         file = new FileWriter(fileName+"txt", true);
         this.fileName = fileName;
     }
 
     /**
-     *
+      *This function adds data to a file without overriding the existing data
       * @param fileName the file in which the rdf data is to be added.
-     * @param str the string that is to be added to the file.
-     */
+      * @param str the string that is to be added to the file.
+      */
     public void appendStrToFile(String fileName,
                                 String str)
     {
@@ -46,8 +58,8 @@ public class VoIDTool {
     }
 
     public void initDatabases() throws IDMapperException{
-        String url = "jdbc:derby:jar:(" + oldDb+ ")database";
-        oldGdb = SimpleGdbFactory.createInstance("db1", url);
+        String url = "jdbc:derby:jar:(" + Db + ")database";
+        Gdb = SimpleGdbFactory.createInstance("db1", url);
     }
 
     /**
@@ -56,15 +68,27 @@ public class VoIDTool {
      * @throws IDMapperException
      */
     public void createRDF() throws SQLException, IDMapperException {
-        Connection con = oldGdb.getConnection();
+        Connection con = Gdb.getConnection();
         Statement st= con.createStatement();
-        for(DataSource ds : oldGdb.getCapabilities().getSupportedSrcDataSources()) {
-            String sql = "SELECT * from "+(ds.getFullName()).toUpperCase();
-            ResultSet resultSet = st.executeQuery(sql);
-            while (resultSet.next()) {
-                appendStrToFile(fileName, resultSet.getString("ATTRIB") + " " + resultSet.getString("VAL"));
+        boolean isSchemaUpdated = false;
+        String sqlSchema = "SELECT schemaversion FROM info ";
+        ResultSet schema = st.executeQuery(sqlSchema);
+        while (schema.next()) {
+            if (schema.getInt("schemaversion") == 4) {
+                isSchemaUpdated = true;
             }
         }
+        if (isSchemaUpdated) {
+            for (DataSource ds : Gdb.getCapabilities().getSupportedSrcDataSources()) {
+                String sql = "SELECT * from " + (ds.getFullName()).toUpperCase();
+                ResultSet resultSet = st.executeQuery(sql);
+                while (resultSet.next()) {
+                    appendStrToFile(fileName, resultSet.getString("ATTRIB") + " " + resultSet.getString("VAL"));
+                }
+            }
+        }
+        else
+            System.out.println("Schema version less than 4 isn't supported");
     }
 
     public void run() throws IDMapperException, SQLException {
