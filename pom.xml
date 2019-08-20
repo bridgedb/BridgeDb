@@ -354,6 +354,11 @@
   		<name>Egon Willighagen</name>
   		<url>http://orcid.org/0000-0001-7542-0286</url>
   	</developer>
+        <developer>
+                <id>The-Marvex</id>
+                <email>awasthi.manas98@ducic.ac.in</email>
+                <name>Manas Awasthi</name>
+        </developer>
 	</developers>
 	<issueManagement>
     <system>GitHub</system>
