@@ -2,6 +2,9 @@ language: java
 
 script: mvn clean install -DskipTests=true
 
+jdk:
+  - openjdk8
+
 ##services:
 ##  - mysql
 ##
