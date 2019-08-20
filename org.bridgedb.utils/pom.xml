@@ -10,6 +10,27 @@
   	<groupId>org.bridgedb</groupId>
   	<version>2.3.4-SNAPSHOT</version>
   </parent>
+
+        <build>
+                <directory>target</directory>
+                <outputDirectory>target/classes</outputDirectory>
+                <finalName>${project.artifactId}-${project.version}</finalName>
+                <testOutputDirectory>target/test-classes</testOutputDirectory>
+                <sourceDirectory>src</sourceDirectory>
+                <scriptSourceDirectory>scripts</scriptSourceDirectory>
+                <testSourceDirectory>test</testSourceDirectory>
+                <resources>
+                        <resource>
+                                <directory>resources</directory>
+                        </resource>
+                </resources>
+                <testResources>
+                        <testResource>
+                                <directory>test-resources</directory>
+                        </testResource>
+                </testResources>
+        </build>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
