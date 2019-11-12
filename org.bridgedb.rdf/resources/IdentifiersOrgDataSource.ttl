@@ -10558,7 +10558,7 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	bridgeDB:hasPrefix "http://mi.caspur.it/PMDB/user/search.php?idsearch=" .
 
 <http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=" .
+	bridgeDB:hasPrefix "http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=" .
 
 <http://microsporidiadb.org/micro/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://microsporidiadb.org/micro/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=" .
