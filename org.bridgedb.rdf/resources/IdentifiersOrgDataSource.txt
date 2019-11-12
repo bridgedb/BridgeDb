@@ -332,7 +332,7 @@ MimoDB	mimodb		http://immunet.cn/mimodb/browse.php?table=mimoset&ID=$id	1	unknow
 MINT	Mi	http://mint.bio.uniroma2.it/mint/	http://mint.bio.uniroma2.it/mint/search/inFrameInteraction.do?interactionAc=$id	MINT-10000	interaction		1	urn:miriam:mint	^MINT\-\d{1,5}$	MINT
 MIPModDB	mipmod		http://bioinfo.iitk.ac.in/MIPModDB/result.php?code=$id	HOSAPI0399	unknown		1	urn:miriam:mipmod	^\w+$	
 miRBase mature sequence	Mbm	http://www.mirbase.org/	http://www.mirbase.org/cgi-bin/mature.pl?mature_acc=$id	MIMAT0000001	gene		1	urn:miriam:mirbase.mature	MIMAT\d{7}	miRBase mature sequence
-miRBase Sequence	Mb	http://microrna.sanger.ac.uk/	http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=$id	MI0000001	gene		1	urn:miriam:mirbase	MI\d{7}	miRBase Sequence
+miRBase Sequence	Mb	http://microrna.sanger.ac.uk/	http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$id	MI0000001	gene		1	urn:miriam:mirbase	MI\d{7}	miRBase Sequence
 mirEX	mirex		http://comgen.pl/mirex/?page=results%2Frecord&name=$id&web_temp=1683440&exref=pp2a&limit=yes	165a	unknown		1	urn:miriam:mirex	^\d+(\w+)?$	
 MIRIAM Registry collection	miriam.collection		http://www.ebi.ac.uk/miriam/main/$id	MIR:00000008	unknown		1	urn:miriam:miriam.collection	^MIR:000\d{5}$	
 MIRIAM Registry resource	miriam.resource		http://www.ebi.ac.uk/miriam/main/resources/$id	MIR:00100005	unknown		1	urn:miriam:miriam.resource	^MIR:001\d{5}$	
