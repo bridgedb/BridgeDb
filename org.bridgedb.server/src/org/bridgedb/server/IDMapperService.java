@@ -299,8 +299,8 @@ public class IDMapperService extends Application {
                 //Register the route for a url pattern that doesn't match other patterns
                 router.attach(URL_NO_MATCH, NoMatch.class);
                 
-		String xrefs = "/batch/{" + PAR_ORGANISM + "}/xrefs/{" + PAR_SYSTEM + "}";
-		router.attach("/batch/{" + PAR_ORGANISM + "}/xrefs",Batch.class);
+		String xrefs = "/{" + PAR_ORGANISM + "}/xrefsBatch/{" + PAR_SYSTEM + "}";
+		router.attach("/{" + PAR_ORGANISM + "}/xrefsBatch",Batch.class);
 		Route batchRoute = router.attach(xrefs,Batch.class);
 		batchRoute.extractQuery(PAR_TARGET_SYSTEM, PAR_TARGET_SYSTEM, true);
 		return router;
