@@ -3,7 +3,7 @@ language: java
 jdk:
   - oraclejdk11
 
-script: mvn clean install -DskipTests=true
+script: mvn clean install -Dmaven.test.failure.ignore=true -Dproject.build.sourceEncoding=UTF-8 -Djunit5.excludeGroups=webservice,mysql
 
 ##services:
 ##  - mysql
