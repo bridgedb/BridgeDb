@@ -1,6 +1,6 @@
 language: java
 
-script: mvn clean install -DskipTests=true
+script: mvn clean install
 
 jdk:
   - openjdk8
