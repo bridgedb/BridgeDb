@@ -70,7 +70,7 @@ ant clean test
 mvn clean test
 ```
 
-Note that teh first call may fail a number of unit tests, like for those
+Note that the first call may fail a number of unit tests, like for those
 of `IDMapperCapabilitiesTest`. For that one, this is because it is an
 abstract class that should not actually be run by JUnit as test suite.
 
