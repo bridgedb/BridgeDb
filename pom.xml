@@ -119,6 +119,21 @@
           <configuration>
             <testFailureIgnore>true</testFailureIgnore>
             <forkCount>0</forkCount>
+            <excludes>
+              <exclude>**/SQLUriMapperTest.java</exclude>
+              <exclude>**/TransitiveTest.java</exclude>
+              <exclude>**/UriMapperSpecialTest.java</exclude>
+              <exclude>**/UriMapperOtherTest.java</exclude>
+              <exclude>**/UriMapperTestLensTest.java</exclude>
+              <exclude>**/UriMapperNullTargetTest.java</exclude>
+              <exclude>**/UriMapperNullXrefTest.java</exclude>
+              <exclude>**/TransativeCreatorTest.java</exclude>
+              <exclude>**/LinksetListenerTest.java</exclude>
+              <exclude>**/UriMapperSimpleTest.java</exclude>
+              <exclude>**/UriMapperTestProfileTest.java</exclude>
+              <exclude>**/UriMapperNullProfileTest.java</exclude>
+              <exclude>**/UriMapperAllProfileTest.java</exclude>
+            </excludes>
           </configuration>
         </plugin>
         </plugins>
