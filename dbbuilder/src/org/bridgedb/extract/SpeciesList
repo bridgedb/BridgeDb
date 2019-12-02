@@ -21,7 +21,7 @@ Ornithorhynchus anatinus	Platypus	 	 	Oa
 Tetraodon nigroviridis	Pufferfish	99883	 	Tn
 Oryctolagus cuniculus	Rabbit	 	 	Oc
 Rattus norvegicus	Rat	10116	rno	Rn
-Macaca mulatta	Rhesus Monkey		mml	Ml
+Macaca mulatta	Rhesus Monkey	 	mml	Ml
 Sorex araneus	Shrew	42254	 	Sa
 Ciona intestinalis	Sea Squirt 	7719	 	Ci
 Ciona savignyi	Pacific Sea Squirt 	 	 	Cs
@@ -33,7 +33,7 @@ Danio rerio	Zebrafish	7955	dre	Dr
 Arabidopsis thaliana	Arabidopsis	3702	ath	At
 Oryza glaberrima	African Rice	4538		Og
 Oryza rufipogon	Red Rice	4529		Or
-Oryza indica	Indian Rice	39946		Oi
+Oryza indica	Indian Rice	39946	 	Oi
 Oryza sativa	Japanese Rice	39947	osa	Oj
 Sorghum bicolor	Sorghum	4558	sbi	Sb
 Vitis vinifera	Wine Grape	29760	vvi	Vv
