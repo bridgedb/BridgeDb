@@ -137,7 +137,7 @@ public class Xref implements Comparable<Xref>
     /**
 	 * Uses DataSource.getURN() to create a global identifier, such as urn:miriam:uniprot:P12345. 
      * 
-     * Depricated as this method is inconsistant as to the type of urn returned
+     * Deprecated as this method is inconsistent as to the type of urn returned
      * @deprecated 
 	 * @return the URN as string 
 	 */
@@ -150,7 +150,7 @@ public class Xref implements Comparable<Xref>
 	 * Uses DataSource.getMiriamURN() to create a global identifier, such as urn:miriam:uniprot:P12345. 
      * 
  	 * @since Version 2.0.0
-     * @return the URN as string  or null if no valid miriam urn is known
+     * @return the URN as string  or null if no valid Miriam urn is known
 	 */
 	public String getMiriamURN()
 	{
@@ -158,7 +158,7 @@ public class Xref implements Comparable<Xref>
 	}
     
     /**
-     * This method will convert a known Miraim Urn to an Xref
+     * This method will convert a known Miriam Urn to an Xref
      * 
      * @since Version 2.0.0
      * @param urn
