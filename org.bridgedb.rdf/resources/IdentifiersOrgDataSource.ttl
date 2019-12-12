@@ -6416,7 +6416,7 @@ bridgeDB:DataSource_WikiPathways a bridgeDB:DataSource ;
 	bridgeDB:idExample "WP100" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "pathway" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.wikipathways.org/index.php/Pathway:$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.wikipathways.org/instance/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/wikipathways/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/wikipathways/$id> ;
 	bridgeDB:hasRegexPattern "WP\\d{1,5}(\\_r\\d+)?$" ;
