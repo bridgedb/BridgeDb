@@ -165,6 +165,7 @@ Authors
 
 BridgeDb and related tools are developed by (alphabetic order):
 
+ * Manas Awasthi
  * Christian Brenninkmeijer
  * Jianjiong Gao
  * Alasdair Gray
