@@ -24,7 +24,7 @@ DrugBank	Dr	http://www.drugbank.ca/	http://www.drugbank.ca/drugs/$id	DB00001	met
 EcoCyc	Eco	http://ecocyc.org/	http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=$id	325-BISPHOSPHATE-NUCLEOTIDASE-RXN	interaction	Escherichia coli	1	Eco		EcoCyc	
 EcoGene	Ec	http://ecogene.org/	http://ecogene.org/geneInfo.php?eg_id=$id	EG10173	gene	Escherichia coli	1	urn:miriam:ecogene	^EG\d+$	EcoGene	
 EMBL	Em	http://www.ebi.ac.uk/embl/	http://www.ebi.ac.uk/ena/data/view/$id	X58356	gene		1	urn:miriam:ena.embl	^[A-Z]+[0-9]+$	European Nucleotide Archive	
-Ensembl	En	http://www.ensembl.org/	http://ensemblgenomes.org/id/$id	ENSG00000139618	gene		1	urn:miriam:ensembl	^ENS[A-Z]*[FPTG]\d{11}$	Ensembl	P594
+Ensembl	En	http://www.ensembl.org/	https://www.ensembl.org/id/$id	ENSG00000139618	gene		1	urn:miriam:ensembl	^ENS[A-Z]*[FPTG]\d{11}$	Ensembl	P594
 Ensembl B. subtilis	EnBs	http://www.ensembl.org	http://bacteria.ensembl.org/Bacillus/B_subtilis/Gene/Summary?g=$id	EBBACG00000000013	gene	Bacillus subtilis	1	EnBs	EBBACG\d{11}	Ensembl	P594
 Ensembl C. elegans	EnCe	http://www.ensembl.org	http://www.ensembl.org/Caenorhabditis_elegans/Gene/Summary?g=$id	Y42H9B.1	gene	Caenorhabditis elegans	1	EnCe		Ensembl	P594
 Ensembl Chicken	EnGg	http://www.ensembl.org	http://www.ensembl.org/Gallus_gallus/Gene/Summary?g=$id	ENSGALG00000021736	gene	Gallus gallus	1	EnGg	ENSGALG\d{11}	Ensembl	P594
