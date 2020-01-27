@@ -105,7 +105,7 @@ PlantGDB	Pl	http://www.plantgdb.org/		PUT-157a-Vitis_vinifera-37378	gene		1	Pl	P
 PubChem-bioassay	Cpb	http://www.ncbi.nlm.nih.gov/sites/entrez?db=pcassay 	http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=$id	1018	metabolite		0	urn:miriam:pubchem.bioassay	^\d+$	PubChem-bioassay	
 PubChem-compound	Cpc	http://pubchem.ncbi.nlm.nih.gov/	http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=$id	100101	metabolite		1	urn:miriam:pubchem.compound	^\d+$	PubChem-compound	P662
 PubChem-substance	Cps	http://pubchem.ncbi.nlm.nih.gov/	http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=$id	100101	metabolite		1	urn:miriam:pubchem.substance	^\d+$	PubChem-substance	P2153
-Reactome	Re	http://www.reactome.org/	http://www.reactome.org/cgi-bin/eventbrowser_st_id?FROM_REACTOME=1&ST_ID=$id	REACT_1590	pathway		1	urn:miriam:reactome	^REACT_\d+(\.\d+)?$	Reactome	P3937
+Reactome	Re	http://www.reactome.org/	https://reactome.org/content/detail/$id	REACT_1590	pathway		1	urn:miriam:reactome	^REACT_\d+(\.\d+)?$	Reactome	P3937
 RefSeq	Q	http://www.ncbi.nlm.nih.gov/projects/RefSeq/	http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=$id	NP_012345	gene		1	urn:miriam:refseq	^(NC|AC|NG|NT|NW|NZ|NM|NR|XM|XR|NP|AP|XP|ZP)_\d+$	RefSeq	P656
 RESID	Res	http://www.ebi.ac.uk/RESID/	http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+6JSUg1NA6u4+-e+[RESID:'$id']	AA0001	protein		1	urn:miriam:resid	^AA\d{4}$	RESID	
 Rfam	Rf		http://www.sanger.ac.uk/cgi-bin/Rfam/getacc?$id	RF00066	gene		1	Rf	RF\d+	RFAM	
