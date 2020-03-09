@@ -32,9 +32,9 @@ import org.openrdf.model.Value;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
- * Reads and RDF linkset file and passes the information on to a RdfLoader.
+ * Reads an RDF linkset file and passes the information on to a RdfLoader.
  *
- * Sperates the data into the different types supported by RDFLoader abd calls the appropriate methods
+ * Seperates the data into the different types supported by RDFLoader and calls the appropriate methods
  *
  * What actually happens then is RDFLoader specific.
  *
