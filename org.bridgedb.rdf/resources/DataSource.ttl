@@ -421,7 +421,7 @@ bridgeDB:DataSource_Ensembl a bridgeDB:DataSource ;
 	bridgeDB:idExample "ENSG00000139618" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-    bridgeDB:hasPrimaryUriPattern <http://ensemblgenomes.org/id/$id> ;
+    bridgeDB:hasPrimaryUriPattern <https://www.ensembl.org/id/$id> ;
 	bridgeDB:hasUriPattern <http://www.ensembl.org/id/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/ensembl/$id> ;
     bridgeDB:hasUriPattern <http://purl.uniprot.org/ensembl/$id> ;
