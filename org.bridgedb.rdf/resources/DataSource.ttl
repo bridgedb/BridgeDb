@@ -1008,7 +1008,7 @@ bridgeDB:DataSource_Reactome a bridgeDB:DataSource ;
 	bridgeDB:idExample "REACT_1590" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "pathway" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.reactome.org/cgi-bin/eventbrowser_st_id?FROM_REACTOME=1&ST_ID=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://reactome.org/content/detail/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/reactome/$id> .
 
 bridgeDB:DataSource_RefSeq a bridgeDB:DataSource ;
