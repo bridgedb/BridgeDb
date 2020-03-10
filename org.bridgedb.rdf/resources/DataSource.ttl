@@ -624,7 +624,7 @@ bridgeDB:DataSource_HsGene a bridgeDB:DataSource ;
 
 bridgeDB:DataSource_Human_Disease_Ontology a bridgeDB:DataSource ;
 	bridgeDB:fullName "Human Disease Ontology" ;
-	bridgeDB:systemCode "doid" ;
+	bridgeDB:systemCode "Do" ;
 	bridgeDB:idExample "DOID:11337" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
