@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Orthoxml
 Bundle-SymbolicName: org.bridgedb.file.orthoxml
-Bundle-Version: 2.3.4
+Bundle-Version: 2.3.5
 Export-Package: org.bridgedb.file.orthoxml
 Require-Bundle: org.bridgedb,
  org.bridgedb.bio

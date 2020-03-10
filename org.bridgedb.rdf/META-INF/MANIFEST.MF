@@ -1,5 +1,5 @@
 Bundle-Name: org.bridgedb.linksets
-Bundle-Version: 2.3.4
+Bundle-Version: 2.3.5
 Bundle-SymbolicName: org.bridgedb.linksets
 Export-Package: * 
 Require-Bundle: org.bridgedb,
