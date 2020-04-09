@@ -17,7 +17,7 @@ ChEMBL compound	Cl	https://www.ebi.ac.uk/chembldb/	https://www.ebi.ac.uk/chembl/
 ChEBI	Ce	http://www.ebi.ac.uk/chebi/	http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id	CHEBI:36927	metabolite		1	urn:miriam:chebi	^(CHEBI:)?\d+$	ChEBI	P683
 Chemspider	Cs	http://www.chemspider.com/	http://www.chemspider.com/Chemical-Structure.$id.html	56586	metabolite		1	urn:miriam:chemspider	^\d+$	ChemSpider	P661
 CodeLink	Ge	http://www.appliedmicroarrays.com/		GE86325	probe		0	Ge		CodeLink	
-Complex Portal	Cpx	https://www.ebi.ac.uk/complexportal/	https://www.ebi.ac.uk/complexportal/complex/$id	CPX-373	complex		1		^.+$	Complex Portal	
+Complex Portal	Cpx	https://www.ebi.ac.uk/complexportal/	https://www.ebi.ac.uk/complexportal/complex/$id	CPX-373	complex		1	urn:miriam:complexportal	^CPX-[0-9]+$	Complex Portal	
 Database of Interacting Proteins	Dip	http://dip.doe-mbi.ucla.edu/	http://dip.doe-mbi.ucla.edu/dip/DIPview.cgi?ID=$id	DIP-743N	interaction		1	urn:miriam:dip	^DIP[\:\-]\d{3}[EN]$	Database of Interacting Proteins	
 dbSNP	Sn	http://www.ncbi.nlm.nih.gov/sites/entrez?db=snp	http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$id	121909098	gene		1	urn:miriam:dbsnp	^\d+$	dbSNP	P6861
 DrugBank	Dr	http://www.drugbank.ca/	http://www.drugbank.ca/drugs/$id	DB00001	metabolite		1	urn:miriam:drugbank	^D(B|BSALT)(\d{1})?\d{5}$	DrugBank	P715
