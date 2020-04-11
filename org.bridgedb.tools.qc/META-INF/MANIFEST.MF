@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.bridgedb.tools.qc
 Bundle-SymbolicName: org.bridgedb.tools.qc
-Bundle-Version: 2.3.5
+Bundle-Version: 2.3.6
 Export-Package: org.bridgedb.tools.qc
 Require-Bundle: org.bridgedb,
  org.bridgedb.bio,

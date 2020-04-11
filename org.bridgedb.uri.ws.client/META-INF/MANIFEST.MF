@@ -1,4 +1,4 @@
 Bundle-Name: org.bridgedb.uri.ws.client
-Bundle-Version: 2.3.5
+Bundle-Version: 2.3.6
 Bundle-SymbolicName: org.bridgedb.uri.ws.client
 Export-Package: * 
