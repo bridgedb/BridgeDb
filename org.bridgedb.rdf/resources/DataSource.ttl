@@ -992,12 +992,12 @@ bridgeDB:DataSource_PubChem_substance a bridgeDB:DataSource ;
 
 bridgeDB:DataSource_PubMed a bridgeDB:DataSource ;
 	bridgeDB:fullName "PubMed" ;
-	bridgeDB:systemCode "pubmed" ;
-	bridgeDB:mainUrl "http://www.ncbi.nlm.nih.gov/PubMed/" ;
+	bridgeDB:systemCode "Pbm" ;
+	bridgeDB:mainUrl "https://pubmed.ncbi.nlm.nih.gov/" ;
 	bridgeDB:idExample "16333295" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "publication" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.ncbi.nlm.nih.gov/pubmed/$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://pubmed.ncbi.nlm.nih.gov/$id> ;
     bridgeDB:hasUriPattern <http://bio2rdf.org/pubmed/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/pubmed/$id> .
 
