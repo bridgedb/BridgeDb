@@ -46,7 +46,7 @@ public class WebTemplates
     	props.put("resource.loader", "class");
     	props.put("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
     	VelocityEngine ve = new VelocityEngine();
-        ve.setProperty( RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,
+        ve.setProperty( RuntimeConstants.RUNTIME_LOG_INSTANCE,
             "org.apache.velocity.runtime.log.Log4JLogChute" );
         ve.setProperty("runtime.log.logsystem.log4j.logger",
                         WebTemplates.class.toString());
