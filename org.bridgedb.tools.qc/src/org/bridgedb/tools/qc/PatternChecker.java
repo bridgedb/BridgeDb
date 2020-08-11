@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.bio.BioDataSource;
+import org.bridgedb.bio.DataSourceTxt;
 import org.bridgedb.rdb.construct.DBConnector;
 import org.bridgedb.rdb.construct.DataDerby;
 
@@ -140,7 +140,7 @@ public class PatternChecker
 	 */
 	public static void main (String[] args) throws IDMapperException, SQLException
 	{
-		BioDataSource.init();
+		DataSourceTxt.init();
 		PatternChecker checker = new PatternChecker();
 		
 		if (args.length == 0)

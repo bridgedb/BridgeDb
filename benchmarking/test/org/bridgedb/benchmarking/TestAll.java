@@ -100,7 +100,7 @@ public class TestAll extends Base
 		Class.forName ("org.bridgedb.webservice.cronos.IDMapperCronos");
 		BioDataSource.init();
 		Xref insr1 = new Xref ("ENSG00000171105", BioDataSource.ENSEMBL);
-		Xref insr2 = new Xref ("3643", BioDataSource.ENTREZ_GENE);
+		Xref insr2 = new Xref ("3643", DataSource.getExistingBySystemCode("L"));
 		basicMapperTest (measure, "cronos", "idmapper-cronos:hsa", insr1, insr2);		
 	}
 }

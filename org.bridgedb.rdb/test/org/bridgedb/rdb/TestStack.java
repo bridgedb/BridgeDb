@@ -14,6 +14,10 @@
 
 package org.bridgedb.rdb;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.HashSet;
@@ -21,19 +25,14 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bridgedb.BridgeDb;
+import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
-import org.bridgedb.bio.BioDataSource;
 import org.bridgedb.bio.DataSourceTxt;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @Disabled
 public class TestStack {
@@ -44,12 +43,12 @@ public class TestStack {
 	private static final File NUGO_CUSTOM_MAPPINGS = new File ("test-data/Nugo-hs-custom.txt");
 
 	private Set<Xref> src = new HashSet<Xref>();
-	private static final Xref RAD51 = new Xref ("YER095W", BioDataSource.ENSEMBL_SCEREVISIAE);
-	private static final Xref INSR = new Xref ("Hs.705877", BioDataSource.UNIGENE);
+	private static final Xref RAD51 = new Xref ("YER095W", DataSource.getExistingBySystemCode("En"));
+	private static final Xref INSR = new Xref ("Hs.705877", DataSource.getExistingBySystemCode("U"));
 
-	private static final Xref NUGO = new Xref ("NuGO_eht0320285_at", BioDataSource.AFFY);
-	private static final Xref ENSEMBL = new Xref ("ENSG00000026652", BioDataSource.ENSEMBL);
-	private static final Xref ENTREZ = new Xref ("56895", BioDataSource.ENTREZ_GENE);
+	private static final Xref NUGO = new Xref ("NuGO_eht0320285_at", DataSource.getExistingBySystemCode("X"));
+	private static final Xref ENSEMBL = new Xref ("ENSG00000026652", DataSource.getExistingBySystemCode("En"));
+	private static final Xref ENTREZ = new Xref ("56895", DataSource.getExistingBySystemCode("L"));
 
 	@BeforeEach
 	public void setUp() throws ClassNotFoundException {
@@ -66,9 +65,9 @@ public class TestStack {
 	public void testFile() throws IDMapperException, MalformedURLException {
 		IDMapper mapper = BridgeDb.connect ("idmapper-text:" + YEAST_ID_MAPPING.toURL());
 		src.add (RAD51);
-		Map<Xref, Set<Xref>> refmap = mapper.mapID(src, BioDataSource.ENTREZ_GENE);
+		Map<Xref, Set<Xref>> refmap = mapper.mapID(src, DataSource.getExistingBySystemCode("L"));
 		Set<Xref> expected = new HashSet<Xref>();
-		expected.add (new Xref ("856831", BioDataSource.ENTREZ_GENE));
+		expected.add (new Xref ("856831", DataSource.getExistingBySystemCode("L")));
 		assertEquals (expected, refmap.get(RAD51));
 		
 		System.out.println (mapper.getCapabilities().getSupportedTgtDataSources());
@@ -77,9 +76,9 @@ public class TestStack {
 	public void testPgdb() throws IDMapperException {
 		IDMapper mapper = BridgeDb.connect("idmapper-pgdb:" + GDB_HUMAN);
 		src.add (INSR);
-		Map<Xref, Set<Xref>> refmap = mapper.mapID(src, BioDataSource.ENTREZ_GENE);
+		Map<Xref, Set<Xref>> refmap = mapper.mapID(src, DataSource.getExistingBySystemCode("L"));
 		Set<Xref> expected = new HashSet<Xref>();
-		expected.add (new Xref ("3643", BioDataSource.ENTREZ_GENE));
+		expected.add (new Xref ("3643", DataSource.getExistingBySystemCode("L")));
 		assertEquals (expected, refmap.get(INSR));
 	}
 
@@ -89,12 +88,12 @@ public class TestStack {
 		stack.addIDMapper("idmapper-text:" + YEAST_ID_MAPPING.toURL());
 		src.add (INSR);
 		src.add (RAD51);
-		Map<Xref, Set<Xref>> refmap = stack.mapID(src, BioDataSource.ENTREZ_GENE);
+		Map<Xref, Set<Xref>> refmap = stack.mapID(src, DataSource.getExistingBySystemCode("L"));
 		Set<Xref> expected = new HashSet<Xref>();
-		expected.add (new Xref ("3643", BioDataSource.ENTREZ_GENE));
+		expected.add (new Xref ("3643", DataSource.getExistingBySystemCode("L")));
 		assertEquals (expected, refmap.get(INSR));
 		expected.clear();
-		expected.add (new Xref ("856831", BioDataSource.ENTREZ_GENE));
+		expected.add (new Xref ("856831", DataSource.getExistingBySystemCode("L")));
 		assertEquals (expected, refmap.get(RAD51));
 	}
 

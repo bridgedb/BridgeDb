@@ -347,7 +347,9 @@ public final class DataSource
             }
             int pos = urlPattern.indexOf("$id");
             if (pos == -1) {
-                throw new IllegalArgumentException("Url maker pattern for " + current + "' should have $id in it");
+                throw new IllegalArgumentException(
+                    "URL maker pattern for " + current + "' should have $id in it, but found '" + urlPattern + "' for " + current
+                );
             }
             current.prefix = urlPattern.substring(0, pos);
 			current.postfix = urlPattern.substring(pos + 3);

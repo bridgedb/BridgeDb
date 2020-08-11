@@ -7,7 +7,6 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.bio.BioDataSource;
 import org.bridgedb.bio.DataSourceTxt;
 
 public class ExHello 
@@ -28,10 +27,10 @@ public class ExHello
 		
 		// We create an Xref instance for the identifier that we want to look up.
 		// In this case we want to look up Entrez gene 3643.
-		Xref src = new Xref ("3643", BioDataSource.ENTREZ_GENE);
+		Xref src = new Xref ("3643", DataSource.getExistingBySystemCode("L"));
 		
-		// let's see if there are cross-references to Ensembl Human
-		Set<Xref> dests = mapper.mapID(src, DataSource.getBySystemCode("EnHs"));
+		// let's see if there are cross-references to Ensembl
+		Set<Xref> dests = mapper.mapID(src, DataSource.getExistingBySystemCode("En"));
 		
 		// and print the results.
 		// with getURN we obtain valid MIRIAM urn's if possible.

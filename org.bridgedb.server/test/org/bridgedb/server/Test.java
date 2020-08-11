@@ -14,6 +14,11 @@
 
 package org.bridgedb.server;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.util.Map;
 import java.util.Set;
@@ -25,12 +30,8 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.bio.BioDataSource;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class Test {
 	private IDMapper mapper;
@@ -91,8 +92,8 @@ public class Test {
 	    {
     	    IDMapper mapper = getLocalService();
     		
-    		Xref insr = new Xref ("3643", BioDataSource.ENTREZ_GENE);
-    		Xref affy = new Xref ("33162_at", BioDataSource.AFFY);
+    		Xref insr = new Xref ("3643", DataSource.getExistingBySystemCode("L"));
+    		Xref affy = new Xref ("33162_at", DataSource.getExistingBySystemCode("X"));
     		Set<Xref> result = mapper.mapID(insr);
     		assertTrue (result.contains(affy));
     		assertTrue(mapper.xrefExists(insr));
@@ -117,7 +118,7 @@ public class Test {
     		Set<DataSource> srcDs = cap.getSupportedSrcDataSources();
     		assertTrue(srcDs.size() > 0);
     		assertTrue(cap.isFreeSearchSupported());
-    		assertTrue(cap.isMappingSupported(BioDataSource.UNIPROT, BioDataSource.ENTREZ_GENE));
+    		assertTrue(cap.isMappingSupported(DataSource.getExistingBySystemCode("S"), DataSource.getExistingBySystemCode("L")));
     		assertFalse(cap.isMappingSupported(
     				DataSource.getBySystemCode("??"), DataSource.getBySystemCode("!!")));
 	    }
@@ -143,7 +144,7 @@ public class Test {
         {
     	    AttributeMapper mapper = (AttributeMapper)getLocalService();
     		
-    		Xref insr = new Xref("3643", BioDataSource.ENTREZ_GENE);
+    		Xref insr = new Xref("3643", DataSource.getExistingBySystemCode("L"));
     		Map<String, Set<String>> attrMap = mapper.getAttributes(insr);
     		assertNotNull(attrMap.get("Symbol"));
 			assertEquals(2, attrMap.get("Symbol").size());

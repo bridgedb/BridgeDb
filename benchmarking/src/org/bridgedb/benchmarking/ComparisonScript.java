@@ -355,40 +355,40 @@ public class ComparisonScript
 		ensembl_hgnc.tests.add (new SingleTest(Connector.CRONOS, BioDataSource.ENSEMBL_HUMAN, BioDataSource.HUGO)); 
 
 
-		TestSet ensembl_entrez = new TestSet(BioDataSource.ENSEMBL, BioDataSource.ENTREZ_GENE, new File(parent, "comparison-ens-entrez" + version));
+		TestSet ensembl_entrez = new TestSet(BioDataSource.ENSEMBL, DataSource.getExistingBySystemCode("L"), new File(parent, "comparison-ens-entrez" + version));
 		ensembl_entrez.readList(new File("IDMapping_En_Test.txt"));
 //		ensembl_entrez.readList(new File("ensembl_genes_X.txt"));
-//		ensembl_entrez.tests.add (new SingleTest(Connector.DERBY_LOCAL, BioDataSource.ENSEMBL_HUMAN, BioDataSource.ENTREZ_GENE)); 
+//		ensembl_entrez.tests.add (new SingleTest(Connector.DERBY_LOCAL, BioDataSource.ENSEMBL_HUMAN, DataSource.getExistingBySystemCode("L"))); 
 		ensembl_entrez.tests.add (new SingleTest(Connector.SYNERGIZER_ENSEMBL, DataSource.getByFullName("ensembl_gene_id"),
 				DataSource.getByFullName("entrezgene")));
 		ensembl_entrez.tests.add (new SingleTest(Connector.SYNERGIZER_NCBI, DataSource.getByFullName("ensembl"),
 				DataSource.getByFullName("entrezgene"))); 
-		ensembl_entrez.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE, BioDataSource.ENSEMBL_HUMAN, BioDataSource.ENTREZ_GENE)); 
-//		ensembl_entrez.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE_LOCAL, BioDataSource.ENSEMBL_HUMAN, BioDataSource.ENTREZ_GENE)); 
+		ensembl_entrez.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE, BioDataSource.ENSEMBL_HUMAN, DataSource.getExistingBySystemCode("L"))); 
+//		ensembl_entrez.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE_LOCAL, BioDataSource.ENSEMBL_HUMAN, DataSource.getExistingBySystemCode("L"))); 
 		ensembl_entrez.tests.add (new SingleTest(Connector.BIOMART, DataSource.getByFullName("ensembl_gene_id"),
 				DataSource.getByFullName("entrezgene")));
 		ensembl_entrez.tests.add (new SingleTest(Connector.CRONOS, 
-				BioDataSource.ENSEMBL_HUMAN, BioDataSource.ENTREZ_GENE));
+				BioDataSource.ENSEMBL_HUMAN, DataSource.getExistingBySystemCode("L")));
 	
-		TestSet affy = new TestSet(BioDataSource.AFFY, BioDataSource.ENSEMBL, new File(parent, "comparison-affy-ens" + version));
+		TestSet affy = new TestSet(DataSource.getExistingBySystemCode("X"), BioDataSource.ENSEMBL, new File(parent, "comparison-affy-ens" + version));
 //		affy.readList (new File("IDMapping_X_Test.txt"));
 		affy.readList (new File("U133A2-randomset.txt"));
-//		affy.tests.add (new SingleTest(Connector.DERBY_LOCAL, BioDataSource.AFFY, BioDataSource.ENSEMBL_HUMAN));
+//		affy.tests.add (new SingleTest(Connector.DERBY_LOCAL, DataSource.getExistingBySystemCode("X"), BioDataSource.ENSEMBL_HUMAN));
 		affy.tests.add (new SingleTest(Connector.SYNERGIZER_ENSEMBL, DataSource.getByFullName("affy_hg_u133a_2"),
 				DataSource.getByFullName("ensembl_gene_id")));
 		// affy mapping currently not available in BridgeWebservice
 		affy.tests.add (new SingleTest(Connector.BIOMART, DataSource.getByFullName("affy_hg_u133a_2"),
 				DataSource.getByFullName("ensembl_gene_id")));
-		affy.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE, BioDataSource.AFFY, BioDataSource.ENSEMBL_HUMAN));
-//		affy.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE_LOCAL, BioDataSource.AFFY, BioDataSource.ENSEMBL_HUMAN));
-		affy.tests.add (new SingleTest(Connector.CRONOS, BioDataSource.AFFY, BioDataSource.ENSEMBL_HUMAN)); 
+		affy.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE, DataSource.getExistingBySystemCode("X"), BioDataSource.ENSEMBL_HUMAN));
+//		affy.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE_LOCAL, DataSource.getExistingBySystemCode("X"), BioDataSource.ENSEMBL_HUMAN));
+		affy.tests.add (new SingleTest(Connector.CRONOS, DataSource.getExistingBySystemCode("X"), BioDataSource.ENSEMBL_HUMAN)); 
 		
-		TestSet bridgedb_only = new TestSet(BioDataSource.ENSEMBL, BioDataSource.ENTREZ_GENE, new File(parent, "comparison-bridgedb-only" + version));
+		TestSet bridgedb_only = new TestSet(BioDataSource.ENSEMBL, DataSource.getExistingBySystemCode("L"), new File(parent, "comparison-bridgedb-only" + version));
 		bridgedb_only.readList(new File("IDMapping_En_Test.txt"));
-		bridgedb_only.tests.add (new SingleTest(Connector.DERBY_LOCAL, BioDataSource.ENSEMBL_HUMAN, BioDataSource.ENTREZ_GENE)); 
-		bridgedb_only.tests.add (new SingleTest(Connector.DERBY_REMOTE, BioDataSource.ENSEMBL_HUMAN, BioDataSource.ENTREZ_GENE)); 
-		bridgedb_only.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE, BioDataSource.ENSEMBL_HUMAN, BioDataSource.ENTREZ_GENE)); 
-		bridgedb_only.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE_LOCAL, BioDataSource.ENSEMBL_HUMAN, BioDataSource.ENTREZ_GENE)); 
+		bridgedb_only.tests.add (new SingleTest(Connector.DERBY_LOCAL, BioDataSource.ENSEMBL_HUMAN, DataSource.getExistingBySystemCode("L"))); 
+		bridgedb_only.tests.add (new SingleTest(Connector.DERBY_REMOTE, BioDataSource.ENSEMBL_HUMAN, DataSource.getExistingBySystemCode("L"))); 
+		bridgedb_only.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE, BioDataSource.ENSEMBL_HUMAN, DataSource.getExistingBySystemCode("L"))); 
+		bridgedb_only.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE_LOCAL, BioDataSource.ENSEMBL_HUMAN, DataSource.getExistingBySystemCode("L"))); 
 
 		// comment test that you want to skip.
 //		allTests.add (bridgedb_only);

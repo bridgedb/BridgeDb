@@ -23,7 +23,6 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.bio.BioDataSource;
 import org.bridgedb.impl.InternalUtils;
 
 import sbc.orthoxml.Database;
@@ -75,8 +74,8 @@ public class IDMapperOrthoXml implements IDMapper
     static
     {
     	aliases = new HashMap<String, DataSource>();
-    	aliases.put ("FlyBase", BioDataSource.FLYBASE);
-    	aliases.put ("Ensembl", BioDataSource.ENSEMBL_HUMAN); //TODO: change to regular Ensembl
+    	aliases.put ("FlyBase", DataSource.getExistingBySystemCode("F"));
+    	aliases.put ("Ensembl", DataSource.getExistingBySystemCode("En"));
     }
     
 	private void readMappings(Reader in) throws FileNotFoundException, XMLStreamException, XMLParseException

@@ -21,7 +21,7 @@ public class Base extends TestCase
 {
 	static final Xref NONEXISTENT = new Xref("123", DataSource.getBySystemCode("??"));
 	static final Xref HALFNULL1 = new Xref("123", null);
-	static final Xref HALFNULL2 = new Xref(null, BioDataSource.ENTREZ_GENE);
+	static final Xref HALFNULL2 = new Xref(null, DataSource.getExistingBySystemCode("L"));
 	
 	/**
 	 * Basic check for a mapper.

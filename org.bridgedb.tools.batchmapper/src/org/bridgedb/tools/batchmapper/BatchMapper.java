@@ -36,11 +36,11 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.bridgedb.BridgeDb;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.DataSource;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
-import org.bridgedb.bio.BioDataSource;
+import org.bridgedb.bio.DataSourceTxt;
 
 public class BatchMapper 
 {
@@ -425,7 +425,7 @@ public class BatchMapper
 	
 	public void run(String[] args)
 	{
-		BioDataSource.init();
+		DataSourceTxt.init();
 		Settings settings = new Settings();
 		String error = parseArgs(settings, args);
 		if (error != null)

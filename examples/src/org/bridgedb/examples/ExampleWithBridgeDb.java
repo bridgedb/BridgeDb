@@ -5,7 +5,6 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.bio.BioDataSource;
 import org.bridgedb.bio.DataSourceTxt;
 
 /*
@@ -40,13 +39,13 @@ public class ExampleWithBridgeDb
 		String id = "3643";
 		
 		Class.forName ("org.bridgedb.webservice.cronos.IDMapperCronos");
-		domapping ("idmapper-cronos:hsa", "3643", BioDataSource.ENTREZ_GENE,
-				BioDataSource.ENSEMBL_HUMAN);
+		domapping ("idmapper-cronos:hsa", "3643", DataSource.getExistingBySystemCode("L"),
+				DataSource.getExistingBySystemCode("En"));
 
 		Class.forName ("org.bridgedb.webservice.synergizer.IDMapperSynergizer");
 		domapping ("idmapper-synergizer:?authority=ensembl&species=Homo sapiens",
-				id, DataSource.getByFullName("entrezgene"),
-				DataSource.getByFullName("ensembl_gene_id"));
+				id, DataSource.getExistingBySystemCode("L"),
+				DataSource.getExistingBySystemCode("En"));
 	}
 	
 	public static void main(String[] args) throws ClassNotFoundException, IDMapperException
