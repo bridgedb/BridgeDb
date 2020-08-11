@@ -31,14 +31,14 @@ import org.bridgedb.DataSourcePatterns;
 public class DataSourceTxt 
 {
 
-    /** Call this to initialize the DataSourcs from org/bridgedb/bio/datasources.txt
+    /** Call this to initialize the DataSourcs from org/bridgedb/bio/datasources.tsv
 	 * 	You should call this before using any of these constants, 
 	 * 	or they may be undefined.
 	 */
 	public static void init() 
 	{
         try{
-    		InputStream is = DataSourceTxt.class.getClassLoader().getResourceAsStream("org/bridgedb/bio/datasources.txt");	
+    		InputStream is = DataSourceTxt.class.getClassLoader().getResourceAsStream("org/bridgedb/bio/datasources.tsv");	
             new DataSourceTxt().loadAnInputStream(is);
 		}
 		catch (IOException ex)
