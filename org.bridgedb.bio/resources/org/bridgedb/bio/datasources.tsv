@@ -27,25 +27,6 @@ EcoCyc	Eco	http://ecocyc.org/	http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=
 EcoGene	Ec	http://ecogene.org/	http://ecogene.org/geneInfo.php?eg_id=$id	EG10173	gene	Escherichia coli	1	urn:miriam:ecogene	^EG\d+$	EcoGene	
 EMBL	Em	http://www.ebi.ac.uk/embl/	http://www.ebi.ac.uk/ena/data/view/$id	X58356	gene		1	urn:miriam:ena.embl	^[A-Z]+[0-9]+$	European Nucleotide Archive	
 Ensembl	En	http://www.ensembl.org/	https://www.ensembl.org/id/$id	ENSG00000139618	gene		1	urn:miriam:ensembl	^ENS[A-Z]*[FPTG]\d{11}$	Ensembl	P594
-Ensembl B. subtilis	EnBs	http://www.ensembl.org	http://bacteria.ensembl.org/Bacillus/B_subtilis/Gene/Summary?g=$id	EBBACG00000000013	gene	Bacillus subtilis	1	EnBs	EBBACG\d{11}	Ensembl	P594
-Ensembl C. elegans	EnCe	http://www.ensembl.org	http://www.ensembl.org/Caenorhabditis_elegans/Gene/Summary?g=$id	Y42H9B.1	gene	Caenorhabditis elegans	1	EnCe		Ensembl	P594
-Ensembl Chicken	EnGg	http://www.ensembl.org	http://www.ensembl.org/Gallus_gallus/Gene/Summary?g=$id	ENSGALG00000021736	gene	Gallus gallus	1	EnGg	ENSGALG\d{11}	Ensembl	P594
-Ensembl Chimp	EnPt	http://www.ensembl.org	http://www.ensembl.org/Pan_troglodytes/Gene/Summary?g=$id	ENSPTRG00000036034	gene	Pan troglodytes	1	EnPt	ENSPTRG\d{11}	Ensembl	P594
-Ensembl Cow	EnBt	http://www.ensembl.org	http://www.ensembl.org/Bos_taurus/Gene/Summary?g=$id	ENSBTAG00000043548	gene	Bos taurus	1	EnBt	ENSBTAG\d{11}	Ensembl	P594
-Ensembl Dog	EnCf	http://www.ensembl.org	http://www.ensembl.org/Canis_familiaris/Gene/Summary?g=$id	ENSCAFG00000025860	gene	Canis familiaris	1	EnCf	ENSCAFG\d{11}	Ensembl	P594
-Ensembl E. coli	EnEc	http://www.ensembl.org	http://bacteria.ensembl.org/Escherichia_Shigella/E_coli_K12/Gene/Summary?g=$id	EBESCG00000000010	gene	Escherichia coli	1	EnEc	EBESCG\d{11}	Ensembl	P594
-Ensembl Fruitfly	EnDm	http://www.ensembl.org	http://www.ensembl.org/Drosophila_melanogaster/Gene/Summary?g=$id	FBgn0032956	gene	Drosophila melanogaster	1	EnDm	FBgn\d{7}	Ensembl	P594
-Ensembl Horse	EnQc	http://www.ensembl.org	http://www.ensembl.org/Equus_caballus/Gene/Summary?g=$id	ENSECAG00000026160	gene	Equus caballus	1	EnQc	ENSECAG\d{11}	Ensembl	P594
-Ensembl Human	EnHs	http://www.ensembl.org	http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=$id	ENSG00000139618	gene	Homo sapiens	1	EnHs	ENSG\d{11}	Ensembl	P594
-Ensembl M. tuberculosis	EnMx	http://www.ensembl.org	http://bacteria.ensembl.org/Mycobacterium/M_tuberculosis_H37Rv/Gene/Summary?g=$id	EBMYCG00000003122	gene	Mycobacterium tuberculosis	1	EnMx	EBMYCG\d{11}	Ensembl	P594
-Ensembl Mosquito	EnAg	http://www.ensembl.org	http://www.ensembl.org/Anopheles_gambiae/Gene/Summary?_q=$id	AGAP006864	gene	Anopheles gambiae	1	EnAg	AGAP\d{6}	Ensembl	P594
-Ensembl Mouse	EnMm	http://www.ensembl.org	http://www.ensembl.org/Mus_musculus/Gene/Summary?g=$id	ENSMUSG00000017167	gene	Mus musculus	1	EnMm	ENSMUSG\d{11}	Ensembl	P594
-Ensembl Pig	EnSs	http://www.ensembl.org	http://www.ensembl.org/Sus_scrofa/Gene/Summary?g=$id	ENSSSCG00000004244	gene	Sus scrofa	1	EnSs	ENSSSCG\d{11}	Ensembl	P594
-Ensembl Plants	EP	http://plants.ensembl.org/	http://plants.ensembl.org/id/$id	AT1G73965	gene		1	urn:miriam:ensembl.plant	^\w+$	Ensembl Plants	P594
-Ensembl Rat	EnRn	http://www.ensembl.org	http://www.ensembl.org/Rattus_norvegicus/Gene/Summary?g=$id	ENSRNOG00000016648	gene	Rattus norvegicus	1	EnRn	ENSRNOG\d{11}	Ensembl	P594
-Ensembl Xenopus	EnXt	http://www.ensembl.org	http://www.ensembl.org/Xenopus_tropicalis/Gene/Summary?g=$id	ENSXETG00000029448	gene	Xenopus tropicalis	1	EnXt	ENSXETG\d{11}	Ensembl	P594
-Ensembl Yeast	EnSc	http://www.ensembl.org	http://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=$id	YGR147C	gene	Saccharomyces cerevisiae	1	EnSc	Y[A-Z][RL]\d{3}[WC](?:\-[A-Z])?	Ensembl	P594
-Ensembl Zebrafish	EnDr	http://www.ensembl.org	http://www.ensembl.org/Danio_rerio/Gene/Summary?g=$id	ENSDARG00000024771	gene	Danio rerio	1	EnDr	ENSDARG\d{11}	Ensembl	P594
 Entrez Gene	L	http://www.ncbi.nlm.nih.gov/gene	http://www.ncbi.nlm.nih.gov/gene/$id	100010	gene		1	urn:miriam:ncbigene	^\d+$	Entrez Gene	P351
 Enzyme Nomenclature	E	http://www.ebi.ac.uk/intenz/	http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec=$id	1.1.1.1	gene		1	urn:miriam:ec-code	^\d+\.-\.-\.-|\d+\.\d+\.-\.-|\d+\.\d+\.\d+\.-|\d+\.\d+\.\d+\.(n)?\d+$	Enzyme Nomenclature	P591
 EPA CompTox	Ect	https://comptox.epa.gov/dashboard	https://comptox.epa.gov/dashboard/$id	DTXSID7020637	metabolite		1	Ect	^DTXSID\d{7}\d?$	EPA CompTox Dashboard	P3117
