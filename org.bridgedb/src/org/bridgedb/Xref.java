@@ -173,36 +173,5 @@ public class Xref implements Comparable<Xref>
 		
 		return new Xref (id, ds);
 	}
-    
-    /**
-     * Returns an xref based on this urn, even if it has to create a new DataSource to do so
-     * 
-     * This method could end up creating an previously none existing DataSource so is not recommended.
-     * 
-     * @param urn
-     * @deprecated 
-     * @return 
-     */
-    public static Xref fromUrn(String urn)
-	{
-		int pos = urn.lastIndexOf(":");
-		if (pos < 0) return null;
-		
-		String base = urn.substring(0, pos);
-		String id;
-		try
-		{
-			id = URLDecoder.decode(urn.substring(pos + 1), "UTF-8");
-		}
-		catch (UnsupportedEncodingException e)
-		{
-			return null;
-		}
-		
-		DataSource ds = DataSource.getByUrnBase(base);
-		if (ds == null) return null;
-		
-		return new Xref (id, ds);
-	}
 
 }

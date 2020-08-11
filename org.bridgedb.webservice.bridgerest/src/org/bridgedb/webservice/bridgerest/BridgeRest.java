@@ -91,7 +91,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 				BufferedReader in = new UrlBuilder (cmd).openReader();
 				String line = null;
 				while((line = in.readLine()) != null) {
-					results.add(DataSource.getByFullName(line));
+					results.add(DataSource.getExistingByFullName(line));
 				}
 				in.close();
 				return results;
@@ -384,7 +384,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 			case -1:
 				return null; // end of the stream
 			case '\n': 
-				DataSource ds = DataSource.getByFullName(builder.toString());
+				DataSource ds = DataSource.getExistingByFullName(builder.toString());
 				return new Xref(id, ds);
 			case '\t':
 				id = builder.toString();
@@ -434,7 +434,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 			String line;
 			while ((line = in.readLine()) != null) {
 				String[] cols = line.split("\t", -1);
-				Xref x = new Xref (cols[0], DataSource.getByFullName(cols[1]));
+				Xref x = new Xref (cols[0], DataSource.getExistingByFullName(cols[1]));
 				String value = cols[2];
 				result.put(x, value);
 			}
@@ -527,7 +527,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 			String line;
 			while ((line = in.readLine()) != null) {
 				String[] cols = line.split("\t", -1);
-				Xref x = new Xref (cols[0], DataSource.getByFullName(cols[1]));
+				Xref x = new Xref (cols[0], DataSource.getExistingByFullName(cols[1]));
 				String value = cols[2];
 				InternalUtils.multiMapPut(result, x, value);
 			}

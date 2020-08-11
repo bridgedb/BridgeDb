@@ -109,7 +109,7 @@ public class BatchMapper
 			}
 		}
 		System.out.println ("WARNING: " + arg + " is not a standard system code or DataSource name");
-		return DataSource.getByFullName(arg);
+		return DataSource.getExistingByFullName(arg);
 	}
 	
 	public String parseArgs(Settings settings, String[] args)

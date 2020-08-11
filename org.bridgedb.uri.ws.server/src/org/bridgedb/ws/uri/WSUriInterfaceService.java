@@ -880,7 +880,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         if (id.isEmpty()) {
             throw new BridgeDBException("Path parameter may not be null.");
         }
-        DataSource ds = DataSource.getBySystemCode(id);
+        DataSource ds = DataSource.getExistingBySystemCode(id);
         return new DataSourceUriPatternBean(ds, uriMapper.getUriPatterns(id));
     }
     

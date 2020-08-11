@@ -56,15 +56,15 @@ public class IDMapperStackTest
 			stack.addIDMapper(m);
 		}
 		
-		dsW = DataSource.getByFullName("W");
-		dsX = DataSource.getByFullName("X");
-		dsY = DataSource.getByFullName("Y");
-		dsZ = DataSource.getByFullName("Z");
-		dsA = DataSource.getByFullName("A");
-		dsB = DataSource.getByFullName("B");
-		dsC = DataSource.getByFullName("C");
-		dsD = DataSource.getByFullName("D");
-		dsE = DataSource.getByFullName("E");
+		dsW = DataSource.register("dsW", "W").asDataSource();
+		dsX = DataSource.register("dsX", "X").asDataSource();
+		dsY = DataSource.register("dsY", "Y").asDataSource();
+		dsZ = DataSource.register("dsZ", "Z").asDataSource();
+		dsA = DataSource.register("dsA", "A").asDataSource();
+		dsB = DataSource.register("dsB", "B").asDataSource();
+		dsC = DataSource.register("dsC", "C").asDataSource();
+		dsD = DataSource.register("dsD", "D").asDataSource();
+		dsE = DataSource.register("dsE", "E").asDataSource();
 	}
 
 	@Test

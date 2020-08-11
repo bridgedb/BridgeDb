@@ -269,7 +269,7 @@ public final class DataSource
         if (miriamBase == null){
             return null;
         }
-		return this.IDENTIFIERS_ORG_PREFIX + miriamBase + "/" + id;
+		return DataSource.IDENTIFIERS_ORG_PREFIX + miriamBase + "/" + id;
     }
     
     /**
@@ -687,24 +687,6 @@ public final class DataSource
 		return !(key == null || "".equals(key));
 	}
 	
-	
-	/** 
-	 * @param systemCode short unique code to query for
-	 * @return pre-existing DataSource object by system code, 
-	 * 	if it exists, or creates a new one. 
-     * @deprecated As could return a non existing DataSource with a null fullName
-	 */
-	public static DataSource getBySystemCode(String systemCode)
-	{
-		if (!bySysCode.containsKey(systemCode) && isSuitableKey(systemCode))
-		{
-            System.err.println("Warning creating a new DataSource with systemCode " + systemCode 
-                    + " and null fullName!");
-			findOrRegister (systemCode, null);
-		}
-		return bySysCode.get(systemCode);
-	}
-	
 	/** 
 	 * @param systemCode short unique code to query for
 	 * @return pre-existing DataSource object by system code if it exists
@@ -729,25 +711,6 @@ public final class DataSource
         return bySysCode.containsKey(systemCode);
     }
     
-    /** 
-	 * returns pre-existing DataSource object by 
-	 * full name, if it exists, 
-	 * or creates a new one. 
-	 * @param fullName full name to query for
-	 * @return DataSource
-     * @deprecated As could return a non existing DataSource with a null sysCode
-	 */
-	public static DataSource getByFullName(String fullName)
-	{
-		if (!byFullName.containsKey(fullName) && isSuitableKey(fullName))
-		{
-            System.err.println("Warning creating a new DataSource with fullName " + fullName 
-                    + " and null systemCode!");
-			findOrRegister (null, fullName);
-		}
-		return byFullName.get(fullName);
-	}
-	
 	/** 
 	 * returns pre-existing DataSource object 
 	 * @param fullName full name to query for
@@ -898,28 +861,6 @@ public final class DataSource
      * Since version 2.0 this method will return null if no DataSource is known
 	 * @param base the base urn, which must start with "urn:miriam:". It it isn't, null is returned.
 	 * @returns the DataSource for a given urn base, or null if the base is invalid or unknown.
-     * @deprecated 
-	 */
-	public static DataSource getByUrnBase(String base)
-	{
-		if (base == null || !base.startsWith (URN_PREFIX))
-		{
-			return null;
-		}
-        String key = base.substring(URN_PREFIX.length());      
-        if (byMiriamBase.containsKey(key)){
-            return byMiriamBase.get(key);
-        }
-        DataSource current = getByFullName(key);
-        current.miriamBase = key;
-        byMiriamBase.put (key, current);
-        return current;
-	}
-
-	/**
-     * Since version 2.0 this method will return null if no DataSource is known
-	 * @param base the base urn, which must start with "urn:miriam:". It it isn't, null is returned.
-	 * @returns the DataSource for a given urn base, or null if the base is invalid or unknown.
 	 */
 	public static DataSource getByMiriamBase(String base)
 	{
@@ -941,7 +882,6 @@ public final class DataSource
 		{
 			return null;
 		}
-		DataSource current = null;
 		
         String key = base.substring(IDENTIFIERS_ORG_PREFIX.length());
         if (key.endsWith("/")){

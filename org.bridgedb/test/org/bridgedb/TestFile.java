@@ -26,10 +26,11 @@ import java.util.Set;
 
 import org.bridgedb.file.IDMapperFile;
 import org.bridgedb.file.IDMapperText;
-
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.Assert.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -40,11 +41,19 @@ public class TestFile {
 	//private Measure measure;
 	
 	private static final File YEAST_IDS = new File ("test-data/yeast_id_mapping.txt");
-	private static final DataSource ENS_YEAST = DataSource.getByFullName("Ensembl Yeast");
-    private static final DataSource ENTREZ = DataSource.getByFullName("Entrez Gene");
-    private static final DataSource EMBL = DataSource.getByFullName("EMBL");
-    private static final Xref XREF1 = new Xref("YHR055C", ENS_YEAST);
-	
+	private static DataSource ENS_YEAST;
+    private static DataSource ENTREZ;
+    private static DataSource EMBL;
+    private static Xref XREF1;
+
+    @BeforeAll
+    public static void init() {
+    	ENS_YEAST = DataSource.getExistingByFullName("Ensembl");
+        ENTREZ = DataSource.register("L", "Entrez Gene").asDataSource();
+        EMBL = DataSource.register("Em", "EMBL").asDataSource();
+        XREF1 = new Xref("YHR055C", ENS_YEAST);
+    }
+
 	@BeforeEach
 	public void setUp()
 	{
@@ -92,7 +101,7 @@ public class TestFile {
             System.out.println(xr.getDataSource().getFullName() + ": " + xr.getId());
         }
         
-        Xref nonsense = new Xref ("Humbug", DataSource.getByFullName("Ebenizer Scrooge"));
+        Xref nonsense = new Xref ("Humbug", DataSource.register("EbSc", "Ebenizer Scrooge").asDataSource());
         // non-existent id should just return empty list.
         assertEquals (0, idMapper.mapID(nonsense).size());
 

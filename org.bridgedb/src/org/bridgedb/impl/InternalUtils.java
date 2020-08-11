@@ -342,7 +342,7 @@ public final class InternalUtils
 			{
 				String fullname = atts.getValue("fullname");
 				if (fullname == null) throw new SAXException ("missing attribute fullname");
-				current = DataSource.getByFullName(fullname);
+				current = DataSource.getExistingByFullName(fullname);
 			}
 			
 			if ("alias".equals (localName))

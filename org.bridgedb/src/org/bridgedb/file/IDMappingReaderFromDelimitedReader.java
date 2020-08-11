@@ -173,7 +173,11 @@ public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
                 return;
             }
 
-            dss[ids] = DataSource.getByFullName(type);
+            if (DataSource.fullNameExists(type)) {
+                dss[ids] = DataSource.getExistingByFullName(type);
+            } else {
+            	dss[ids] = DataSource.register("ds" + type, type).asDataSource();
+            }
             dataSources.add(dss[ids]);
         }
 

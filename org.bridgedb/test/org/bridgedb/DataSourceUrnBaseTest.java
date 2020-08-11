@@ -201,7 +201,7 @@ public class DataSourceUrnBaseTest{
         String urnBase = "urn:miriam:" + fullName;
 		DataSource source1 = DataSource.register(fullName, fullName).identifiersOrgBase(rootURL)
                 .asDataSource();
-		DataSource source2 = DataSource.getByUrnBase(urnBase);
+		DataSource source2 = DataSource.getByMiriamBase(urnBase);
         assertEquals(source1, source2);
 		DataSource source3 = DataSource.getByIdentiferOrgBase(urnBase);
         assertEquals(source1, source2);

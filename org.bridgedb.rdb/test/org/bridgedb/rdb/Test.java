@@ -81,7 +81,7 @@ public class Test {
 		
 		// time the case of getting all attributes for backpage info
 		start = System.currentTimeMillis();
-		Xref insr = new Xref ("ENSG00000171105", DataSource.getBySystemCode("EnHs"));
+		Xref insr = new Xref ("ENSG00000171105", DataSource.getExistingBySystemCode("En"));
 		for (String x : new String[] {"Description", "Symbol", "Chromosome"})
 		//TODO: Synonyms is also available, but not on ENSG.... ids
 		{

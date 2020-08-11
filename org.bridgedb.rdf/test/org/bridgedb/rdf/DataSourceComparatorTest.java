@@ -39,32 +39,13 @@ public class DataSourceComparatorTest {
    
     private static final String DATA_SOURCE_MIN_TTL = "/DataSourceMin.ttl";
 
-	public DataSourceComparatorTest() {
-    }
-    
-    @BeforeAll
-    public static void setUpClass() {
-    }
-    
-    @AfterAll
-    public static void tearDownClass() {
-    }
-    
-    @BeforeEach
-    public void setUp() {
-    }
-    
-    @AfterEach
-    public void tearDown() {
-    }
-
    /**
      * Test of getResourceId method, of class DataSourceUris.
      */
     @Test
     public void testGetResourceId() {
         Reporter.println("getResourceId");
-        DataSource dataSource = DataSource.getByFullName("DataSourceUrisTest_testGetResourceId");
+        DataSource dataSource = DataSource.register("DataSourceUrisTest_testGetResourceId", "DataSourceUrisTest_testGetResourceId").asDataSource();
         Resource expResult = new URIImpl("http://vocabularies.bridgedb.org/ops#DataSource_DataSourceUrisTest_testGetResourceId");
         Resource result = BridgeDBRdfHandler.asResource(dataSource);
         assertEquals(expResult, result);
@@ -77,27 +58,30 @@ public class DataSourceComparatorTest {
                 DataSource.register("DataSourceUrisTest_testCompare1", "DataSourceUrisTest_testCompare1").asDataSource();
         DataSource dataSource2 = 
                 DataSource.register("DataSourceUrisTest_testCompare2", "DataSourceUrisTest_testCompare2").asDataSource();
-        DataSource dataSource3 = DataSource.getByFullName("dataSourceUrisTest_testCompare3");
-        DataSource dataSource4 = DataSource.getBySystemCode("DataSourceUrisTest_testCompare4");
-        DataSource dataSource5 = DataSource.getBySystemCode("DataSourceUrisTest_testCompare5");
+        DataSource dataSource3 =  
+                DataSource.register("dataSourceUrisTest_testCompare3", "dataSourceUrisTest_testCompare3").asDataSource();
+        DataSource dataSource4 =  
+                DataSource.register("DataSourceUrisTest_testCompare4", "DataSourceUrisTest_testCompare4").asDataSource();
+        DataSource dataSource5 = 
+                DataSource.register("DataSourceUrisTest_testCompare5", "DataSourceUrisTest_testCompare5").asDataSource();
         DataSourceComparator comparator = new DataSourceComparator();
         assertEquals(0, comparator.compare(dataSource1, dataSource1));
         assertThat(comparator.compare(dataSource1, dataSource2), lessThan(0));
         assertThat(comparator.compare(dataSource2, dataSource1), greaterThan(0));
         assertThat(comparator.compare(dataSource1, dataSource3), lessThan(0));
         assertThat(comparator.compare(dataSource3, dataSource1), greaterThan(0));
-        assertThat(comparator.compare(dataSource5, dataSource1), lessThan(0));
-        assertThat(comparator.compare(dataSource1, dataSource5), greaterThan(0));
+        assertThat(comparator.compare(dataSource1, dataSource5), lessThan(0));
+        assertThat(comparator.compare(dataSource5, dataSource1), greaterThan(0));
         assertThat(comparator.compare(dataSource2, dataSource3), lessThan(0));
         assertThat(comparator.compare(dataSource3, dataSource2), greaterThan(0));
-        assertThat(comparator.compare(dataSource4, dataSource2), lessThan(0));
-        assertThat(comparator.compare(dataSource2, dataSource4), greaterThan(0));
-        assertThat(comparator.compare(dataSource5, dataSource2), lessThan(0));
-        assertThat(comparator.compare(dataSource2, dataSource5), greaterThan(0));
-        assertThat(comparator.compare(dataSource4, dataSource3), lessThan(0));
-        assertThat(comparator.compare(dataSource3, dataSource4), greaterThan(0));
-        assertThat(comparator.compare(dataSource4, dataSource1), lessThan(0));
-        assertThat(comparator.compare(dataSource3, dataSource5), greaterThan(0));
+        assertThat(comparator.compare(dataSource2, dataSource4), lessThan(0));
+        assertThat(comparator.compare(dataSource4, dataSource2), greaterThan(0));
+        assertThat(comparator.compare(dataSource2, dataSource5), lessThan(0));
+        assertThat(comparator.compare(dataSource5, dataSource2), greaterThan(0));
+        assertThat(comparator.compare(dataSource3, dataSource4), lessThan(0));
+        assertThat(comparator.compare(dataSource4, dataSource3), greaterThan(0));
+        assertThat(comparator.compare(dataSource1, dataSource4), lessThan(0));
+        assertThat(comparator.compare(dataSource5, dataSource3), greaterThan(0));
         assertThat(comparator.compare(dataSource4, dataSource5), lessThan(0));
         assertThat(comparator.compare(dataSource5, dataSource4), greaterThan(0));
     }

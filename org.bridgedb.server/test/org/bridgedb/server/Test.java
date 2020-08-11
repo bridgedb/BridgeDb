@@ -31,15 +31,17 @@ import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 
+@Disabled("Not run by default as it depends on local Derby files, as specified in the gdb.config")
 public class Test {
-	private IDMapper mapper;
-	private Server server;
-	private boolean configExists;
+	private static IDMapper mapper;
+	private static Server server;
+	private static boolean configExists;
 	
-	@BeforeEach
-	public void setUp() throws Exception {
+	@BeforeAll
+	public static void setUp() throws Exception {
 	    
 	   
 	    File f= new File(IDMapperService.CONF_GDBS);
@@ -110,7 +112,7 @@ public class Test {
     		IDMapperCapabilities cap = mapper.getCapabilities();
     		
     		Set<DataSource> supported = cap.getSupportedSrcDataSources();
-    		assertTrue (supported.contains(DataSource.getBySystemCode("L")));
+    		assertTrue (supported.contains(DataSource.getExistingBySystemCode("L")));
     
     		String val = cap.getProperty("SCHEMAVERSION");
     		assertNotNull(val);
@@ -120,7 +122,7 @@ public class Test {
     		assertTrue(cap.isFreeSearchSupported());
     		assertTrue(cap.isMappingSupported(DataSource.getExistingBySystemCode("S"), DataSource.getExistingBySystemCode("L")));
     		assertFalse(cap.isMappingSupported(
-    				DataSource.getBySystemCode("??"), DataSource.getBySystemCode("!!")));
+    				DataSource.getExistingBySystemCode("??"), DataSource.getExistingBySystemCode("!!")));
 	    }
 	}
 	

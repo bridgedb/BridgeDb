@@ -39,9 +39,9 @@ public class IDMapperResource extends ServerResource {
 		DataSource ds = null;
 		//Try parsing by full name
 		if(DataSource.getFullNames().contains(dsName)) {
-			ds = DataSource.getByFullName(dsName);
+			ds = DataSource.getExistingByFullName(dsName);
 		} else { //If not possible, use system code
-			ds = DataSource.getBySystemCode(dsName);
+			ds = DataSource.getExistingBySystemCode(dsName);
 		}
 		return ds;
 	}

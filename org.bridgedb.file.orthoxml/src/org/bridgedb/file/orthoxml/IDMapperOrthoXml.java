@@ -102,7 +102,7 @@ public class IDMapperOrthoXml implements IDMapper
 				Database database = gene.getDatabase();
 				
 				DataSource ds = aliases.get(database.getName());
-				if (ds == null) ds = DataSource.getByFullName(database.getName());
+				if (ds == null) ds = DataSource.getExistingByFullName(database.getName());
 				
 				dataSources.add(ds);
 				groupRefs.add (new Xref(gene.getGeneIdentifier(), ds));

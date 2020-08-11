@@ -232,7 +232,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
                 for (int itgt=0; itgt<tgts.length; itgt++) {
                     for (String tgtId : tgtIds[itgt]) {
                         Xref tgtXref = new Xref(tgtId,
-                                DataSource.getByFullName(tgts[itgt]));
+                                DataSource.getExistingByFullName(tgts[itgt]));
                         tgtXrefs.add(tgtXref);
                     }
                 }
@@ -252,8 +252,8 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
     	// We query specifically for ensembl_gene_id etc.
     	// Biomart doesn't like querying for everything
         Set<Xref> set = mapID(xref, 
-        		DataSource.getByFullName("ensembl_gene_id"),
-        		DataSource.getByFullName("ensembl_transcript_id"));
+        		DataSource.getExistingByFullName("ensembl_gene_id"),
+        		DataSource.getExistingByFullName("ensembl_transcript_id"));
         return !set.isEmpty();
     }
 
@@ -276,7 +276,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
         Set<DataSource> dss = new HashSet<DataSource>();
         Set<String> filters = stub.availableSrcIDTypes(mart, dataset);
         for (String filter : filters) {
-            DataSource ds = DataSource.getByFullName(filter);
+            DataSource ds = DataSource.getExistingByFullName(filter);
             if (ds!=null) {
                 dss.add(ds);
             }
@@ -295,7 +295,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
         Set<String> types = stub.availableTgtIDTypes(mart, dataset);
 
         for (String type : types) {
-            DataSource ds = DataSource.getByFullName(type);
+            DataSource ds = DataSource.getExistingByFullName(type);
             if (ds!=null) {
                 dss.add(ds);
             }

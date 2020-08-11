@@ -113,11 +113,11 @@ public class TestBiomart // do not need to extend TestCase
  		Set<DataSource> dest = mapper.getCapabilities().getSupportedTgtDataSources(); 
 		 
 		assertTrue (dest.size() > 0);
-		assertTrue (dest.contains (DataSource.getByFullName("entrezgene")));
+		assertTrue (dest.contains (DataSource.getExistingByFullName("entrezgene")));
 
 		Set<DataSource> src = mapper.getCapabilities().getSupportedSrcDataSources();
 		assertTrue (src.size() > 0);
-		assertTrue (dest.contains (DataSource.getByFullName("entrezgene")));
+		assertTrue (dest.contains (DataSource.getExistingByFullName("entrezgene")));
     }
 
 	@Tag("webservice")
@@ -130,11 +130,11 @@ public class TestBiomart // do not need to extend TestCase
 		Set<DataSource> dest = mapper.getCapabilities().getSupportedTgtDataSources(); 
 		 
 		assertTrue (dest.size() > 0);
-		assertTrue (dest.contains (DataSource.getByFullName("entrezgene")));
+		assertTrue (dest.contains (DataSource.getExistingByFullName("entrezgene")));
 
 		Set<DataSource> src = mapper.getCapabilities().getSupportedSrcDataSources();
 		assertTrue (src.size() > 0);
-		assertTrue (dest.contains (DataSource.getByFullName("entrezgene")));
+		assertTrue (dest.contains (DataSource.getExistingByFullName("entrezgene")));
 	}
 
     //TODO: put in Utility class
@@ -168,14 +168,14 @@ public class TestBiomart // do not need to extend TestCase
        IDMapper mapper = BridgeDb.connect ("idmapper-biomart:http://www.biomart.org/biomart/martservice?mart=ensembl&dataset=hsapiens_gene_ensembl");
        
        Set<Xref> result = mapper.mapID(
-    		   new Xref("ENSG00000171105", DataSource.getByFullName("ensembl_gene_id")),
-    		   DataSource.getByFullName("entrezgene"));
+    		   new Xref("ENSG00000171105", DataSource.getExistingByFullName("ensembl_gene_id")),
+    		   DataSource.getExistingByFullName("entrezgene"));
        for (Xref ref : result)
        {
     	   System.out.println (ref);
        }
        
        assertTrue (
-    		   result.contains (new Xref ("3643", DataSource.getByFullName("entrezgene"))), "Expected entrezgene:3643. Got " + setRep (result));
+    		   result.contains (new Xref ("3643", DataSource.getExistingByFullName("entrezgene"))), "Expected entrezgene:3643. Got " + setRep (result));
    }
 }

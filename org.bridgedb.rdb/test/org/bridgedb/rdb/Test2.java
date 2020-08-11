@@ -79,7 +79,7 @@ public class Test2 {
 		// since this is a Schema v2 database
 		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + GDB_HUMAN);
 		AttributeMapper am = (AttributeMapper)gdb;
-		Xref ref = new Xref ("26873", DataSource.getBySystemCode("L"));
+		Xref ref = new Xref ("26873", DataSource.getExistingBySystemCode("L"));
 		assertTrue (am.getAttributes(ref, "Synonyms").contains ("5-Opase|DKFZP434H244|OPLA"));
 		assertTrue (am.getAttributes(ref, "Description").contains ("5-oxoprolinase (EC 3.5.2.9) (5-oxo-L-prolinase) (5-OPase) (Pyroglutamase) [Source:UniProtKB/Swiss-Prot.Acc:O14841]"));
 		assertTrue (am.getAttributes(ref, "Chromosome").contains ("8"));
@@ -119,12 +119,12 @@ public class Test2 {
 	{
 		DataSource.register("@@", "ZiZaZo");
 		
-		DataSource ds2 = DataSource.getBySystemCode ("@@");
-		DataSource ds3 = DataSource.getByFullName ("ZiZaZo");
+		DataSource ds2 = DataSource.getExistingBySystemCode ("@@");
+		DataSource ds3 = DataSource.getExistingByFullName ("ZiZaZo");
 		assertEquals (ds2, ds3);
 		
 		// assert that you can refer to 
 		// undeclared systemcodes if necessary.
-		assertNotNull (DataSource.getBySystemCode ("##"));
+		assertNotNull (DataSource.register("##", "undeclared").asDataSource());
 	}
 }

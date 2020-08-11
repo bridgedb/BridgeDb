@@ -135,9 +135,9 @@ public class SQLListener extends SQLBase implements MappingListener{
     private final DataSource keyToDataSource(String key){
         if (key.startsWith(FULL_NAME_PREFIX)){
             String fullName = key.substring(FULL_NAME_PREFIX.length());
-            return DataSource.getByFullName(fullName);
+            return DataSource.getExistingByFullName(fullName);
         } else {
-            return DataSource.getBySystemCode(key);
+            return DataSource.getExistingBySystemCode(key);
         }
     }
     
