@@ -31,7 +31,7 @@ public class ExIDSearch
 		// with getURN we obtain valid MIRIAM urn's if possible.
 		System.out.println (query + " search results:");
 		for (Xref hit : hits)
-			System.out.println("  " + hit.getURN());
+			System.out.println("  " + hit.getMiriamURN());
 	}
 	
 }

@@ -84,14 +84,4 @@ public class XrefTest {
 		assertNotSame(0, xref2.compareTo(xref)); // and symmetric
 	}
 
-	@Test
-	public void testURNRoundtripping() {
-		Xref xref = new Xref("P12345", UNIPROT);
-		String urn = xref.getURN();
-		assertNotNull(urn);
-		assertNotSame(0, urn.length());
-		Xref xref2 = Xref.fromUrn(urn);
-		assertEquals(xref, xref2);
-		assertEquals(xref2, xref); // and symmetric
-	}
 }

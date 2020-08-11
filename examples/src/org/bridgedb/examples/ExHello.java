@@ -34,9 +34,9 @@ public class ExHello
 		
 		// and print the results.
 		// with getURN we obtain valid MIRIAM urn's if possible.
-		System.out.println (src.getURN() + " maps to:");
+		System.out.println (src.getMiriamURN() + " maps to:");
 		for (Xref dest : dests)
-			System.out.println("  " + dest.getURN());
+			System.out.println("  " + dest.getMiriamURN());
 		
 	}
 	

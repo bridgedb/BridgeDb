@@ -134,18 +134,6 @@ public class Xref implements Comparable<Xref>
 		return ds.getKnownUrl(id);
 	}
 
-    /**
-	 * Uses DataSource.getURN() to create a global identifier, such as urn:miriam:uniprot:P12345. 
-     * 
-     * Deprecated as this method is inconsistent as to the type of urn returned
-     * @deprecated 
-	 * @return the URN as string 
-	 */
-	public String getURN()
-	{
-		return ds.getURN (id);
-	}
-	
 	/**
 	 * Uses DataSource.getMiriamURN() to create a global identifier, such as urn:miriam:uniprot:P12345. 
      * 
