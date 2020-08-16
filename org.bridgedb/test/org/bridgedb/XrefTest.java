@@ -13,9 +13,13 @@
  */
 package org.bridgedb;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 public class XrefTest {
 
@@ -82,6 +86,18 @@ public class XrefTest {
 		Xref xref2 = new Xref("ENSG000002", EN);
 		assertNotSame(0, xref.compareTo(xref2));
 		assertNotSame(0, xref2.compareTo(xref)); // and symmetric
+	}
+
+	@Test
+	public void testGetDataSource() {
+		Xref xref = new Xref("ENSG000001", EN);
+		assertEquals(EN, xref.getDataSource());
+	}
+
+	@Test
+	public void testGetId() {
+		Xref xref = new Xref("P12345", UNIPROT);
+		assertEquals("P12345", xref.getId());
 	}
 
 }
