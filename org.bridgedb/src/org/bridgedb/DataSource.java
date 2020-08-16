@@ -206,6 +206,23 @@ public final class DataSource
 		return URN_PREFIX + miriamBase + ":" + idPart;
 	}
 
+	/**
+	 * Creates a compact identifier. 
+	 * It uses the MIRIAM data type list to create a compact identifier like "uniprot:P12345".
+	 * 
+     * @since Version 3.0.0
+     * 
+	 * @param id identifier to generate compact identifier from.
+	 * @return the compact identifier.
+	 */
+	public String getCompactIdentifier(String id)
+	{
+        if (miriamBase == null){
+            return null;
+        }
+		return miriamBase + ":" + id;
+	}
+
     public String getIdentifiersOrgUri(String id) {
         if (miriamBase == null){
             return null;

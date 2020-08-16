@@ -19,14 +19,20 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class XrefTest {
 
-    //Oct 29, 2013 Name changed to match that used elsewhere
-	private final DataSource EN = DataSource.register("En", "Ensembl").asDataSource();
-	private final DataSource UNIPROT = DataSource.register("S", "Uniprot-TrEMBL").
-		urnBase("urn:miriam:uniprot:").asDataSource();
+	private static DataSource EN;
+	private static DataSource UNIPROT;
+	
+    @BeforeAll
+    public static void registerDataSources() {
+    	XrefTest.EN = DataSource.register("En", "Ensembl").asDataSource();
+    	XrefTest.UNIPROT = DataSource.register("S", "Uniprot-TrEMBL").
+    		urnBase("urn:miriam:uniprot").asDataSource();
+    }
 
 	@Test
 	public void testConstructor() {
@@ -97,6 +103,19 @@ public class XrefTest {
 	@Test
 	public void testGetId() {
 		Xref xref = new Xref("P12345", UNIPROT);
+		assertEquals("P12345", xref.getId());
+	}
+
+	@Test
+	public void testGetCompactidentifier() {
+		Xref xref = new Xref("P12345", UNIPROT);
+		assertEquals("uniprot:P12345", xref.getCompactidentifier());
+	}
+
+	@Test
+	public void testFromCompactidentifier() {
+		Xref xref = Xref.fromCompactIdentifier("uniprot:P12345");
+		assertEquals(UNIPROT, xref.getDataSource());
 		assertEquals("P12345", xref.getId());
 	}
 
