@@ -45,13 +45,13 @@ public class DataSourceBean {
     public DataSourceBean (DataSource dataSource){
         sysCode = dataSource.getSystemCode();
         fullName = dataSource.getFullName();
-        urlPattern = dataSource.getUrl("$id");
+        urlPattern = dataSource.getKnownUrl("$id");
         idExample = dataSource.getExample().getId();
         isPrimary = dataSource.isPrimary();
         type = dataSource.getType();
         //Object organism = dataSource.getOrganism();
         //if (organism instanceof Organism)
-        String emptyUrn = dataSource.getURN("");
+        String emptyUrn = dataSource.getMiriamURN("");
         if (emptyUrn != null && emptyUrn.length() > 1){
             urnBase = emptyUrn.substring(0, emptyUrn.length()-1);    
         } else {

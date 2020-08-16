@@ -110,18 +110,7 @@ public class Xref implements Comparable<Xref>
 	{
 		return rep.compareTo(idc.rep);
 	}
-	
-	/**
-	 * Uses DataSource.getUrl() to create a valid URL for an online webpage describing this entity.
-     * @deprecated As it will return just the id if no UriPattern is known
-	 * @return url as a String.
-	 */
-	public String getUrl()
-	{
-		if (ds == null) return null;
-		return ds.getUrl (id);
-	}
-	
+
 	/**
 	 * Uses DataSource.getKnownUrl to create a valid URL for an online webpage describing this entity.
      * 

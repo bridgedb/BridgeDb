@@ -35,7 +35,7 @@ public class DataSourceUrnBaseTest{
                 .urnBase(urnBase)
                 .asDataSource();
         String id = "1234";
-        String result = source.getURN(id);
+        String result = source.getMiriamURN(id);
         String expected = urnBase + ":" + id;
         assertEquals(expected, result);
         result = source.getIdentifiersOrgUri(id);
@@ -78,17 +78,17 @@ public class DataSourceUrnBaseTest{
                 .urnBase(urnBase)
                 .asDataSource();
         String id = "1234";
-        String result = source1.getURN(id);
+        String result = source1.getMiriamURN(id);
         String expected = urnBase + ":" + id;
         assertEquals(expected, result);
 		DataSource source2 = DataSource.register(fullName,  fullName)
                 .urnBase(urnBase)
                 .asDataSource();
         assertEquals(source1, source2);
-        result = source2.getURN(id);
+        result = source2.getMiriamURN(id);
         assertEquals(expected, result);
         //Is it desirable that the old urnPattern is overwritten
-        result = source1.getURN(id);
+        result = source1.getMiriamURN(id);
         assertEquals(expected, result);
     }
 
@@ -99,7 +99,7 @@ public class DataSourceUrnBaseTest{
         String urnBase = "urn:miriam:" + fullName;
 		DataSource source = DataSource.register(fullName,  fullName).identifiersOrgBase(rootURL).asDataSource();
         String id = "1234";
-        String result = source.getURN(id);
+        String result = source.getMiriamURN(id);
         String expected = urnBase + ":" + id;
         assertEquals(expected, result);
         result = source.getIdentifiersOrgUri(id);
@@ -120,7 +120,7 @@ public class DataSourceUrnBaseTest{
                 .asDataSource();
         assertEquals(source1, source2);
         String id = "1234";
-        String result = source1.getURN(id);
+        String result = source1.getMiriamURN(id);
         String expected = urnBase + ":" + id;
         assertEquals(expected, result);
         result = source2.getIdentifiersOrgUri(id);

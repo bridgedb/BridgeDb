@@ -153,30 +153,30 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         link2to3 = uriSpace2 + "->" + uriSpace3;
         link3to2 = uriSpace3 + "->" + uriSpace3;
 
-        map1Uri1 = map1xref1.getUrl();
-        map1Uri2 = map1xref2.getUrl();
+        map1Uri1 = map1xref1.getKnownUrl();
+        map1Uri2 = map1xref2.getKnownUrl();
         uriSpace2a = "http://rdf.chemspider.com/";
-        map1Uri3 = map1xref3.getUrl();
+        map1Uri3 = map1xref3.getKnownUrl();
         uriSpace3a = "http://ops.rsc.org/Compounds/Get/";
-        map1AUri1 = map1Axref1.getUrl();
-        map1AUri2 = map1Axref2.getUrl();
-        map1AUri3 = map1Axref3.getUrl();
+        map1AUri1 = map1Axref1.getKnownUrl();
+        map1AUri2 = map1Axref2.getKnownUrl();
+        map1AUri3 = map1Axref3.getKnownUrl();
         //Second set of URLs that are expected to map together.
-        map2Uri1 = map2xref1.getUrl();
-        map2Uri2 = map2xref2.getUrl();
-        map2Uri3 = map2xref3.getUrl();
-        map2AUri1 = map2Axref1.getUrl();
-        map2AUri2 = map2Axref2.getUrl();
-        map2AUri3 = map2Axref3.getUrl();
+        map2Uri1 = map2xref1.getKnownUrl();
+        map2Uri2 = map2xref2.getKnownUrl();
+        map2Uri3 = map2xref3.getKnownUrl();
+        map2AUri1 = map2Axref1.getKnownUrl();
+        map2AUri2 = map2Axref2.getKnownUrl();
+        map2AUri3 = map2Axref3.getKnownUrl();
         //Third Set of URLs which again should map to each other but not the above
-        map3Uri1 = map3xref1.getUrl();
-        map3Uri2 = map3xref2.getUrl();
+        map3Uri1 = map3xref1.getKnownUrl();
+        map3Uri2 = map3xref2.getKnownUrl();
         map3Uri2a = uriSpace2a + ds2Id3;
-        map3Uri3 = map3xref3.getUrl();
-        map3AUri1 = map3Axref1.getUrl();
-        map3AUri2 = map3Axref2.getUrl();
+        map3Uri3 = map3xref3.getKnownUrl();
+        map3AUri1 = map3Axref1.getKnownUrl();
+        map3AUri2 = map3Axref2.getKnownUrl();
         map3AUri2a = uriSpace2a + ds2Id3+"000001";
-        map3AUri3 = map3Axref3.getUrl();
+        map3AUri3 = map3Axref3.getKnownUrl();
          //And a few Uris also not used
         badUriPrefix = "www.notInUriMapper.com#";
         mapBadUri1 = badUriPrefix + ds1Id1;

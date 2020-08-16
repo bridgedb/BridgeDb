@@ -104,38 +104,6 @@ public final class DataSource
         }
     }
 
-    /**
-     * Compatibility mode with BridgeDb 1.x data sources, where frequently data source information
-     * is incomplete and sometimes contradiction. Setting this flag to false introduces that this
-     * version will not complain about such issues.
-     * 
-     * @param checkDataSources False, if you want BridgeDb 1.x Derby files to work, ignoring
-     *   inconsistencies and contradictions
-     * @deprecated This method will be removed in the future and is here now for backwards compatibility
-     *   until all tools have migrated
-     */
-    @Deprecated
-    public static void setStrictDataSourceChecking(boolean checkDataSources) {
-    	strictDataSourceChecking = checkDataSources;
-    }
-    
-	/** 
-	 * Turn id into url pointing to info page on the web, e.g. "http://www.ensembl.org/get?id=ENSG..."
-     * 
-     * This method will return just the id if no pattern is known so its use is discouraged.
-     * 
-	 * @param id identifier to use in url
-	 * @return Url
-     * @deprecated as could return just the id which is not a valid uri
-	 */
-	public String getUrl(String id)
-	{
-        if (prefix == null){
-            return id + postfix;
-        }
-		return prefix + id + postfix;
-	}
-				
 	/** 
 	 * Turn id into url pointing to info page on the web, e.g. "http://www.ensembl.org/get?id=ENSG..."
      * 
@@ -211,34 +179,7 @@ public final class DataSource
 	{
 		return type;
 	}
-	
-	/**
-	 * Creates a global identifier. 
-	 * It uses the MIRIAM data type list
-	 * to create a MIRIAM URI like "urn:miriam:uniprot:P12345", 
-	 * or if this DataSource is not included
-	 * in the MIRIAM data types list, a bridgedb URI.
-     * Since version 2 if no Miriam base is known this method will use the system code.
-     * Use of this method is discouraged as a non standard urn was returned if no Miriam Base was known
-	 * @param id Id to generate URN from.
-     * @deprecated use getMiriamURN
-	 * @return the URN. 
-	 */
-	public String getURN(String id)
-	{
-		String idPart;
-		try
-		{
-			idPart = URLEncoder.encode(id, "UTF-8");
-		} catch (UnsupportedEncodingException ex) { 
-            idPart = id; 
-        }
-        if (miriamBase == null){
-            return sysCode + ":" + id;
-        }
-		return URN_PREFIX + miriamBase + ":" + idPart;
-	}
-	
+
 	/**
 	 * Creates a global identifier. 
 	 * It uses the MIRIAM data type list
