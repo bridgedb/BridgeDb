@@ -69,7 +69,6 @@ You may want to run the following commands to detect regressions,
 which is particularly important before starting to make a release:
 
 ```shell
-ant clean test
 mvn clean test
 ```
 
@@ -97,10 +96,8 @@ mvn clean test junit5.groups=mysql
 Making releases
 ---------------
 
-If it is time for a release, ensure the code is ready for releases with both
-Ant (to create proper OSGi bundles, which Maven does not currently do) and
-Maven. For the former, the OSGI info must be updated, and particular the
-`MANIFEST.MF` and `CITATION.cff` files.
+If it is time for a release, ensure the code is ready for releases with 
+Maven. 
 
 Then, run the following commands. Mind you, this requires you
 to have an approved Sonatype (http://oss.sonatype.org/) account with push rights:
