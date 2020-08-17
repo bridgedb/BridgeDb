@@ -61,7 +61,7 @@ public final class SimpleGdbFactory
 			} 
 			catch (SQLException e) 
 			{
-				throw new IDMapperException("Could not connect to database", e);
+				throw new IDMapperException("Could not connect to database: " + e.getMessage(), e);
 			}
 			try 
 			{
@@ -70,7 +70,7 @@ public final class SimpleGdbFactory
 			} 
 			catch (SQLException e) 
 			{
-				throw new IDMapperException("Database schema error, info table or schemaversion column missing", e);
+				throw new IDMapperException("Database schema error, info table or schemaversion column missing: " + e.getMessage(), e);
 			}
 		}
 		finally
