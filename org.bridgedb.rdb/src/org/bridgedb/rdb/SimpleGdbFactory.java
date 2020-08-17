@@ -87,6 +87,8 @@ public final class SimpleGdbFactory
 		case 3:
 			return new SimpleGdbImpl3(dbName, connectionString);
 		//NB add future schema versions here
+		case 4:
+			throw new IDMapperException ("Schema version 4 requires BridgeDb 3.0 or higher");
 		default:
 			throw new IDMapperException ("Unrecognized schema version '" + version + "', please make sure you have the latest " +
 					"version of this software and databases");
