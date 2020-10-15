@@ -34,8 +34,10 @@ import org.bridgedb.Xref;
  * TODO: use static initializer - static {...} - instead of multiple initMappings calls...
  * TODO: link to taxonomy, e.g., using int constructor arg.; and new method: public Xref getTaxonomy(){...}
  */
-public enum Organism 
-{	
+public enum Organism {
+
+	Unspecified("Unspecified", "Uns", 0),
+
 	AnophelesGambiae("Anopheles gambiae", "Ag", "Mosquito", 7165),
 	ArabidopsisThaliana("Arabidopsis thaliana", "At", 3702),
 	Aspergillusniger("Aspergillus niger", "An", "Black mold", 5061),
