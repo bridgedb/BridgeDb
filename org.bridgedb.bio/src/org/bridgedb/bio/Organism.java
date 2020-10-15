@@ -50,6 +50,8 @@ public enum Organism {
 	CionaIntestinalis("Ciona intestinalis", "Ci", "Sea Squirt", 7719),
 	Clostridiumthermocellum("Clostridium thermocellum", "Ct", "Cthe", 1515),
 	DanioRerio("Danio rerio", "Dr", "Zebra fish", 7955),
+	DaphniaMagna("Daphnia magna", "Da", 35525),
+	DaphniaPulex("Daphnia pulex", "Dp", 6669),
 	DasypusNovemcinctus("Dasypus novemcinctus", "Dn", "Armadillo", 9361),
 	DrosophilaMelanogaster("Drosophila melanogaster", "Dm", "Fruit fly", 7227),
 	EscherichiaColi("Escherichia coli", "Ec", 562),	
