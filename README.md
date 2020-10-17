@@ -96,8 +96,17 @@ mvn clean test junit5.groups=mysql
 Making releases
 ---------------
 
-If it is time for a release, ensure the code is ready for releases with 
-Maven. 
+If it is time for a release, ensure the code is ready for releases with
+Maven with `mvn clean install` and if it creates working OSGi bundles
+with the following commands, for the various bundles needed by PathVisio:
+
+```shell
+cd org.bridgedb; mvn clean install bundle:bundle; cd ..
+cd org.bridgedb.bio; mvn clean install bundle:bundle; cd ..
+cd org.bridgedb.gui; mvn clean install bundle:bundle; cd ..
+cd org.bridgedb.rdb; mvn clean install bundle:bundle; cd ..
+cd org.bridgedb.rdb.construct; mvn clean install bundle:bundle; cd ..
+```
 
 Then, run the following commands. Mind you, this requires you
 to have an approved Sonatype (http://oss.sonatype.org/) account with push rights:
