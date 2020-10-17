@@ -65,7 +65,6 @@ You may want to run the following commands to detect regressions,
 which is particularly important before starting to make a release:
 
 ```shell
-ant clean test
 mvn clean test
 ```
 
@@ -79,10 +78,17 @@ may not be resolved yet.
 Making releases
 ---------------
 
-If it is time for a release, ensure the code is ready for releases with both
-Ant (to create proper OSGi bundles, which Maven does not currently do) and
-Maven. For the former, the OSGI info must be updated, and particular the
-`MANIFEST.MF` files.
+If it is time for a release, ensure the code is ready for releases with
+Maven with `mvn clean install` and if it creates working OSGi bundles
+with the following commands, for the various bundles needed by PathVisio:
+
+```shell
+cd org.bridgedb; mvn clean install bundle:bundle; cd ..
+cd org.bridgedb.bio; mvn clean install bundle:bundle; cd ..
+cd org.bridgedb.gui; mvn clean install bundle:bundle; cd ..
+cd org.bridgedb.rdb; mvn clean install bundle:bundle; cd ..
+cd org.bridgedb.rdb.construct; mvn clean install bundle:bundle; cd ..
+```
 
 Then, run the following commands. Mind you, this requires you
 to have an approved Sonatype (http://oss.sonatype.org/) account with push rights:
