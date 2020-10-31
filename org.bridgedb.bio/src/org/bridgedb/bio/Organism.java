@@ -38,6 +38,7 @@ public enum Organism {
 
 	Unspecified("Unspecified", "Uns", 0),
 
+	AcetobacteriumWoodii("Acetobacterium woodii", "Aw", 33952),
 	AnophelesGambiae("Anopheles gambiae", "Ag", "Mosquito", 7165),
 	ArabidopsisThaliana("Arabidopsis thaliana", "At", 3702),
 	Aspergillusniger("Aspergillus niger", "An", "Black mold", 5061),
