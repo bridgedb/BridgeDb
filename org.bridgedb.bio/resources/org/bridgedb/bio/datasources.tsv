@@ -28,7 +28,7 @@ EMBL	Em	http://www.ebi.ac.uk/embl/	http://www.ebi.ac.uk/ena/data/view/$id	X58356
 Ensembl	En	http://www.ensembl.org/	https://www.ensembl.org/id/$id	ENSG00000139618	gene		1	urn:miriam:ensembl	^ENS[A-Z]*[FPTG]\d{11}$	Ensembl	P594
 Entrez Gene	L	http://www.ncbi.nlm.nih.gov/gene	http://www.ncbi.nlm.nih.gov/gene/$id	100010	gene		1	urn:miriam:ncbigene	^\d+$	Entrez Gene	P351
 Enzyme Nomenclature	E	http://www.ebi.ac.uk/intenz/	http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec=$id	1.1.1.1	gene		1	urn:miriam:ec-code	^\d+\.-\.-\.-|\d+\.\d+\.-\.-|\d+\.\d+\.\d+\.-|\d+\.\d+\.\d+\.(n)?\d+$	Enzyme Nomenclature	P591
-EPA CompTox	Ect	https://comptox.epa.gov/dashboard	https://comptox.epa.gov/dashboard/$id	DTXSID7020637	metabolite		1	Ect	^DTXSID\d{7}\d?$	EPA CompTox Dashboard	P3117
+EPA CompTox	Ect	https://comptox.epa.gov/dashboard	https://comptox.epa.gov/dashboard/$id	DTXSID7020637	metabolite		1	Ect	^DTXSID(\d{2})?\d{7}\d?$	EPA CompTox Dashboard	P3117
 FlyBase	F	http://flybase.org/	http://flybase.org/reports/$id.html	FBgn0011293	gene	Drosophila melanogaster	1	urn:miriam:flybase	^FB\w{2}\d{7}$	FlyBase	P3852
 GenBank	G	http://www.ncbi.nlm.nih.gov/genbank/	http://www.ncbi.nlm.nih.gov/nuccore/$id	NW_004190323	gene		0	urn:miriam:insdc	(\w\d{5})|(\w{2}\d{6})|(\w{3}\d{5})	GenBank	
 Gene Wiki	Gw	http://en.wikipedia.org/wiki/Portal:Gene_Wiki	http://plugins.biogps.org/cgi-bin/wp.cgi?id=$id	1017	gene		0	urn:miriam:genewiki	\d+	Gene Wiki	P351
