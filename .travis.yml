@@ -12,3 +12,6 @@ script: mvn clean install -Dmaven.test.failure.ignore=true -Dproject.build.sourc
 ##
 ##before_install:
 ## - mysql < mysqlConfig.sql  
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
