@@ -9,16 +9,19 @@
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-surefire-provider</artifactId>
             <version>1.2.0</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>5.2.0</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
             <version>5.2.0</version>
+            <scope>test</scope>
         </dependency>
          <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -34,24 +37,23 @@
   </parent>
 
 	<build>
-		<directory>target</directory>
-		<outputDirectory>target/classes</outputDirectory>
 		<finalName>${project.artifactId}-${project.version}</finalName>
-		<testOutputDirectory>target/test-classes</testOutputDirectory>
-		<sourceDirectory>src</sourceDirectory>
-		<scriptSourceDirectory>scripts</scriptSourceDirectory>
-		<testSourceDirectory>test</testSourceDirectory>
-		<resources>
-			<resource>
-				<directory>resources</directory>
-			</resource>
-		</resources>
-		<testResources>
-			<testResource>
-				<directory>test-data</directory>
-			</testResource>
-		</testResources>
-        <plugins>
+                <directory>target</directory>
+                <outputDirectory>target/classes</outputDirectory>
+                <testOutputDirectory>target/test-classes</testOutputDirectory>
+                <sourceDirectory>src/main/java</sourceDirectory>
+                <testSourceDirectory>src/test/java</testSourceDirectory>
+                <resources>
+                        <resource>
+                                <directory>src/main/resources</directory>
+                        </resource>
+                </resources>
+                <testResources>
+                        <testResource>
+                                <directory>src/test/resources</directory>
+                        </testResource>
+                </testResources>
+         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
