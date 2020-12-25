@@ -88,7 +88,7 @@ class MappingSetInfoTest {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "centre", "none", "SwissLipids", 2, 2, 1, 1);
-        assertEquals(2,mappingSetInfo.getNumberOfLinks());
+        assertEquals(2,mappingSetInfo.getNumberOfLinks().intValue());
     }
 
     @org.junit.jupiter.api.Test
@@ -97,7 +97,7 @@ class MappingSetInfoTest {
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "centre", "none", "SwissLipids", 2, 2, 1, 1);
         mappingSetInfo.setNumberOfLinks(3);
-        assertEquals(3, mappingSetInfo.getNumberOfLinks());
+        assertEquals(3, mappingSetInfo.getNumberOfLinks().intValue());
     }
 
     @org.junit.jupiter.api.Test
@@ -205,7 +205,7 @@ class MappingSetInfoTest {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", "Affy", "SwissLipids", 2, 2, 1, 1);
-        assertEquals(1, mappingSetInfo.getNumberOfSources());
+        assertEquals(1, mappingSetInfo.getNumberOfSources().intValue());
         assertNotEquals(2, mappingSetInfo.getNumberOfSources());
     }
 
@@ -214,7 +214,7 @@ class MappingSetInfoTest {
         DataSetInfo sourceDataSetInfo = new DataSetInfo("Sl", "SwissLipids");
         DataSetInfo targetDataSetInfo = new DataSetInfo("X", "Affy");
         MappingSetInfo mappingSetInfo = new MappingSetInfo(1, sourceDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", targetDataSetInfo, "http://www.swisslipids.org/#/entity/$id/", "Affy", "SwissLipids", 2, 2, 1, 1);
-        assertEquals(1, mappingSetInfo.getNumberOfTargets());
+        assertEquals(1, mappingSetInfo.getNumberOfTargets().intValue());
         assertNotEquals(2, mappingSetInfo.getNumberOfTargets());
     }
 }
