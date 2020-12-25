@@ -65,9 +65,10 @@ public class DataSourceTxtTest {
     	public void testWriteRead() throws IOException {
         System.out.println("WriteRead");
         DataSourceTxt.init();
-        File generated = new File("test-data/generatedDatasources.txt");
+        File generated = File.createTempFile("UnitTest", "testWriteRead");
         BufferedWriter writer = new BufferedWriter(new FileWriter(generated));
- //       DataSourceTxt.writeToBuffer(writer);
+        DataSourceTxt.writeToBuffer(writer);
+        writer.close();
         InputStream is = new FileInputStream(generated);
         DataSourceTxt.loadInputStream(is);
     }
