@@ -5,24 +5,27 @@
 package org.bridgedb.loader;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
+import org.apache.commons.io.IOUtils;
+import org.bridgedb.loader.transative.TransativeCreatorTest;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
-import org.bridgedb.uri.loader.LinksetListener;
-import org.bridgedb.uri.loader.RdfParser;
 import org.bridgedb.uri.lens.Lens;
+import org.bridgedb.uri.loader.LinksetListener;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
-import static org.hamcrest.Matchers.*;
-import org.junit.After;
-import org.junit.AfterClass;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 /**
  *
@@ -37,30 +40,23 @@ public class LinksetListenerTest {
     public LinksetListenerTest() {
     }
     
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws BridgeDBException {
         TestSqlFactory.checkSQLAccess();
         ConfigReader.useTest();
         uriListener = SQLUriMapper.createNew();
         instance = new LinksetListener(uriListener);
     }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
 
-    private void loadFile(String fileName, String justification) throws BridgeDBException{
+    private void loadFile(String fileName, String justification) throws Exception{
         Reporter.println("parsing " + fileName);
-        File file = new File(fileName);
-        int mappingSetId = instance.parse(file, linkPredicate, justification, true);
+    	File tempFile = File.createTempFile("TransativeCreatorTest", fileName.replace('/', '-'));
+        InputStream in = LinksetListenerTest.class.getClassLoader().getResourceAsStream(fileName);
+        try (FileOutputStream out = new FileOutputStream(tempFile)) {
+            IOUtils.copy(in, out);
+            out.close();
+        }
+        int mappingSetId = instance.parse(tempFile, linkPredicate, justification, true);
         MappingSetInfo mapping = uriListener.getMappingSetInfo(mappingSetId);
         int numberOfLinks = mapping.getNumberOfLinks();
         assertThat(numberOfLinks, greaterThanOrEqualTo(3));
@@ -72,11 +68,11 @@ public class LinksetListenerTest {
     @Test
     public void testLoadTestData() throws Exception {
         Reporter.println("LoadTestData");
-        loadFile("../org.bridgedb.uri.loader/test-data/cw-cs.ttl", Lens.getDefaultJustifictaionString());
-        loadFile("../org.bridgedb.uri.loader/test-data/cs-ops.ttl", Lens.getDefaultJustifictaionString());
-        loadFile("../org.bridgedb.uri.loader/test-data/ops-ops_lensed.ttl", Lens.getTestJustifictaion());
-        loadFile("../org.bridgedb.uri.loader/test-data/cw-cs_lensed.ttl", Lens.getTestJustifictaion());
-        loadFile("../org.bridgedb.uri.loader/test-data/cs-ops_lensed.ttl", Lens.getTestJustifictaion());
+        loadFile("test-data/cw-cs.ttl", Lens.getDefaultJustifictaionString());
+        loadFile("test-data/cs-ops.ttl", Lens.getDefaultJustifictaionString());
+        loadFile("test-data/ops-ops_lensed.ttl", Lens.getTestJustifictaion());
+        loadFile("test-data/cw-cs_lensed.ttl", Lens.getTestJustifictaion());
+        loadFile("test-data/cs-ops_lensed.ttl", Lens.getTestJustifictaion());
     }
 
  }

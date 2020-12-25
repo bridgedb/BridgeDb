@@ -16,19 +16,8 @@
                 <outputDirectory>target/classes</outputDirectory>
                 <finalName>${project.artifactId}-${project.version}</finalName>
                 <testOutputDirectory>target/test-classes</testOutputDirectory>
-                <sourceDirectory>src</sourceDirectory>
-                <scriptSourceDirectory>scripts</scriptSourceDirectory>
-                <testSourceDirectory>test</testSourceDirectory>
-                <resources>
-                        <resource>
-                                <directory>resources</directory>
-                        </resource>
-                </resources>
-                <testResources>
-                        <testResource>
-                                <directory>test-resources</directory>
-                        </testResource>
-                </testResources>
+                <sourceDirectory>src/main/java</sourceDirectory>
+                <testSourceDirectory>src/test/java</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
