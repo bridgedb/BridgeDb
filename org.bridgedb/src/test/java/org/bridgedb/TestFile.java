@@ -13,12 +13,11 @@
  */
 package org.bridgedb;
 
-//import buildsystem.Measure;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
@@ -29,18 +28,17 @@ import org.bridgedb.file.IDMapperText;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import static org.junit.Assert.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import buildsystem.Measure;
 
 /**
  * Test identifier mapping using a tab-delimited text file.
  */
 public class TestFile {
-	//private Measure measure;
+	private Measure measure;
 	
-	private static final File YEAST_IDS = new File ("test-data/yeast_id_mapping.txt");
+	private static URL YEAST_IDS;
 	private static DataSource ENS_YEAST;
     private static DataSource ENTREZ;
     private static DataSource EMBL;
@@ -48,6 +46,7 @@ public class TestFile {
 
     @BeforeAll
     public static void init() {
+    	YEAST_IDS = TestFile.class.getClassLoader().getResource("yeast_id_mapping.txt");
     	ENS_YEAST = DataSource.getExistingByFullName("Ensembl");
         ENTREZ = DataSource.register("L", "Entrez Gene").asDataSource();
         EMBL = DataSource.register("Em", "EMBL").asDataSource();
@@ -57,19 +56,19 @@ public class TestFile {
 	@BeforeEach
 	public void setUp()
 	{
-		//measure = new Measure("bridgedb_timing.txt");
+		measure = new Measure("bridgedb_timing.txt");
 	}
 	
 	@Test
 	public void testFiles()
 	{
-		assertTrue (YEAST_IDS.exists());
+		assertNotNull(YEAST_IDS);
 	}
 	
 	@Test
 	public void testRead() throws IDMapperException, IOException
 	{
-		IDMapperFile idMapper = new IDMapperText (YEAST_IDS.toURL());
+		IDMapperFile idMapper = new IDMapperText(YEAST_IDS);
 
         Set<Xref> srcXrefs = new HashSet<Xref>();
         srcXrefs.add(XREF1);
@@ -109,7 +108,7 @@ public class TestFile {
 
 	public void _testTransitive() throws MalformedURLException, IDMapperException
 	{
-		IDMapperFile idMapper = new IDMapperText (YEAST_IDS.toURL(),
+		IDMapperFile idMapper = new IDMapperText(YEAST_IDS,
 				new char[] { '\t' },
 				new char[] { ',' },
 				true);
@@ -125,7 +124,7 @@ public class TestFile {
 		long end = System.currentTimeMillis();
 		long delta = end - start;
 		System.out.println (delta);
-		//measure.add ("timing::text file transitive", "" + delta, "msec");
+		measure.add ("timing::text file transitive", "" + delta, "msec");
 
 		System.out.println (mapXrefs);
         Set<Xref> xrefs = mapXrefs.get(XREF1);
