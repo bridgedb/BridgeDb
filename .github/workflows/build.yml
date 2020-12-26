@@ -1,4 +1,4 @@
-name: Compile with Maven and test all expect webservice,mysql
+name: build
 
 on:
   push:
