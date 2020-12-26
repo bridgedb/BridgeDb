@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Compile with Maven and test all expect webservice,mysql
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK 111
+    - name: Set up JDK 11
       uses: actions/setup-java@v1
       with:
         java-version: 11
