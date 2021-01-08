@@ -1,0 +1,44 @@
+generic_name	specific_name	short_name	symbol
+Anopheles	gambiae	Mosquito	Ag
+Arabidopsis	thaliana	Arabidopsis	At
+Aspergillus 	niger	Black mold	An
+Bacillus	subtilis	Bsubtilis	Bs
+Beta 	vulgaris 	Sugar Beet 	Bv
+Bos	taurus	Cow	Bt
+Brassica 	napus 	Rapeseed 	Bn
+Caenorhabditis	elegans	Celegans	Ce
+Canis	familiaris	Dog	Cf
+Ciona	intestinalis	Sea Squirt	Ci
+Clostridium	thermocellum	Cthe	Ct
+Danio	rerio	Zebrafish	Dr
+Dasypus	novemcinctus	Armadillo	Dn
+Drosophila	melanogaster	Fruitfly	Dm
+Echinops	telfairi	Hedgehog	Et
+Equus	caballus	Horse	Qc
+Escherichia	coli	Ecoli	Ec
+Gallus	gallus	Chicken	Gg
+Glycine	max	Soybean	Gm
+Gibberella	zeae	Fusarium graminearum	Gz
+Homo	sapiens	Human	Hs
+Hordeum 	vulgare 	Barley 	Hv
+Loxodonta	africana	Elephant	La
+Macaca	mulatta	Rhesus Monkey	Ml
+Monodelphis	domestica	Opossum	Md
+Mus	musculus	Mouse	Mm
+Mycobacterium	tuberculosis	Mtuberculosis	Mx
+Ornithorhynchus	anatinus	Platypus	Oa
+Oryctolagus	cuniculus	Rabbit	Oc
+Oryza	sativa	Japanese Rice	Os
+Oryzias	latipes	Medaka Fish	Ol
+Pan 	troglodytes	Chimp	Pt
+Populus 	trichocarpa	Western Balsam Poplar	Pi
+Rattus	norvegicus	Rat	Rn
+Saccharomyces	cerevisiae	Yeast	Sc
+Solanum	lycopersicum	Tomato	Sl
+Sorex	araneus	Shrew	Sa
+Sorghum	bicolor	Sorghum	Sb
+Sus	scrofa	Pig	Ss
+Tetraodon	nigroviridis	Pufferfish	Tn
+Vitis	vinifera	Wine Grape	Vv
+Xenopus	tropicalis	Xenopus	Xt
+Zea	mays	Maize	Zm
