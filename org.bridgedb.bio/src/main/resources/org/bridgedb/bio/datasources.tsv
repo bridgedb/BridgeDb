@@ -8,7 +8,7 @@ BIND	Bi	http://www.bind.ca/	http://www.bind.ca/Action?identifier=bindid&idsearch
 BioCyc	Bc	http://biocyc.org	http://biocyc.org/getid?id=$id	ECOLI:CYT-D-UBIOX-CPLX	gene		1	urn:miriam:biocyc	^\w+\:[A-Za-z0-9-]+$	BioCyc	
 BioGrid	Bg	http://thebiogrid.org/	http://thebiogrid.org/$id	31623	interaction		1	urn:miriam:biogrid	^\d+$	BioGRID	
 BioModels Database	Bm	http://www.ebi.ac.uk/biomodels/	http://www.ebi.ac.uk/biomodels-main/$id	BIOMD0000000048	pathway		1	urn:miriam:biomodels.db	^((BIOMD|MODEL)\d{10})|(BMID\d{12})$	BioModels Database	
-BioSystems	Bs	http://www.ncbi.nlm.nih.gov/biosystems/	http://www.ncbi.nlm.nih.gov/biosystems/$id	001	pathway		1	urn:miriam:biosystems	^\d+$	BioSystems	
+BioSystems	Bs	http://www.ncbi.nlm.nih.gov/biosystems/	http://www.ncbi.nlm.nih.gov/biosystems/$id	1	pathway		1	urn:miriam:biosystems	^\d+$	BioSystems	
 BRENDA	Br	http://www.brenda-enzymes.org/	http://www.brenda-enzymes.org/php/result_flat.php4?ecno=$id	1.1.1.1	protein		1	urn:miriam:brenda	^((\d+\.-\.-\.-)|(\d+\.\d+\.-\.-)|(\d+\.\d+\.\d+\.-)|(\d+\.\d+\.\d+\.\d+))$	BRENDA	
 BRENDA Ligands	Brl	http://www.brenda-enzymes.org/	http://www.brenda-enzymes.de/ligand.php?brenda_ligand_id=$id	278	metabolite		1	Brl	^\d+$	BRENDA Ligands	
 CAS	Ca	http://commonchemistry.org	http://commonchemistry.org/ChemicalDetail.aspx?ref=$id	50-00-0	metabolite		1	urn:miriam:cas	^\d{1,7}\-\d{2}\-\d$	CAS	P231
@@ -20,15 +20,15 @@ CodeLink	Ge	http://www.appliedmicroarrays.com/		GE86325	probe		0	Ge		CodeLink
 Complex Portal	Cpx	https://www.ebi.ac.uk/complexportal/	https://www.ebi.ac.uk/complexportal/complex/$id	CPX-373	complex		1	urn:miriam:complexportal	^CPX-[0-9]+$	Complex Portal	
 Database of Interacting Proteins	Dip	http://dip.doe-mbi.ucla.edu/	http://dip.doe-mbi.ucla.edu/dip/DIPview.cgi?ID=$id	DIP-743N	interaction		1	urn:miriam:dip	^DIP[\:\-]\d{3}[EN]$	Database of Interacting Proteins	
 dbSNP	Sn	http://www.ncbi.nlm.nih.gov/sites/entrez?db=snp	http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$id	121909098	gene		1	urn:miriam:dbsnp	^\d+$	dbSNP	P6861
-DrugBank	Dr	http://www.drugbank.ca/	http://www.drugbank.ca/drugs/$id	DB00001	metabolite		1	urn:miriam:drugbank	^D(B|BSALT)(\d{1})?\d{5}$	DrugBank	P715
+DrugBank	Dr	http://www.drugbank.ca/	http://www.drugbank.ca/drugs/$id	DB00001	metabolite		1	urn:miriam:drugbank	^D(B|BSALT|BCAT)(\d{1})?\d{5}$	DrugBank	P715
 DOI	Pbd	https://doi.org/	https://doi.org/$id	10.1038/s41597-020-0477-8	publication		1	urn:miriam:doi	^\d{2}\.\d{4}.*$	Digital Object Identifier	P356
-EcoCyc	Eco	http://ecocyc.org/	http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=$id	325-BISPHOSPHATE-NUCLEOTIDASE-RXN	interaction	Escherichia coli	1	Eco		EcoCyc	
+EcoCyc	Eco	http://ecocyc.org/	http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=$id	1.1.1.127-RXN	interaction	Escherichia coli	1	Eco	^\d+\.-\.-\.-|\d+\.\d+\.-\.-|\d+\.\d+\.\d+\.-|\d+\.\d+\.\d+\.(n)?\d+-RXN	EcoCyc	
 EcoGene	Ec	http://ecogene.org/	http://ecogene.org/geneInfo.php?eg_id=$id	EG10173	gene	Escherichia coli	1	urn:miriam:ecogene	^EG\d+$	EcoGene	
 EMBL	Em	http://www.ebi.ac.uk/embl/	http://www.ebi.ac.uk/ena/data/view/$id	X58356	gene		1	urn:miriam:ena.embl	^[A-Z]+[0-9]+$	European Nucleotide Archive	
 Ensembl	En	http://www.ensembl.org/	https://www.ensembl.org/id/$id	ENSG00000139618	gene		1	urn:miriam:ensembl	^ENS[A-Z]*[FPTG]\d{11}$	Ensembl	P594
 Entrez Gene	L	http://www.ncbi.nlm.nih.gov/gene	http://www.ncbi.nlm.nih.gov/gene/$id	100010	gene		1	urn:miriam:ncbigene	^\d+$	Entrez Gene	P351
 Enzyme Nomenclature	E	http://www.ebi.ac.uk/intenz/	http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec=$id	1.1.1.1	gene		1	urn:miriam:ec-code	^\d+\.-\.-\.-|\d+\.\d+\.-\.-|\d+\.\d+\.\d+\.-|\d+\.\d+\.\d+\.(n)?\d+$	Enzyme Nomenclature	P591
-EPA CompTox	Ect	https://comptox.epa.gov/dashboard	https://comptox.epa.gov/dashboard/$id	DTXSID7020637	metabolite		1	Ect	^DTXSID\d{7}\d?$	EPA CompTox Dashboard	P3117
+EPA CompTox	Ect	https://comptox.epa.gov/dashboard	https://comptox.epa.gov/dashboard/$id	DTXSID7020637	metabolite		1	Ect	^DTXSID(\d{2})?\d{7}\d?$	EPA CompTox Dashboard	P3117
 FlyBase	F	http://flybase.org/	http://flybase.org/reports/$id.html	FBgn0011293	gene	Drosophila melanogaster	1	urn:miriam:flybase	^FB\w{2}\d{7}$	FlyBase	P3852
 GenBank	G	http://www.ncbi.nlm.nih.gov/genbank/	http://www.ncbi.nlm.nih.gov/nuccore/$id	NW_004190323	gene		0	urn:miriam:insdc	(\w\d{5})|(\w{2}\d{6})|(\w{3}\d{5})	GenBank	
 Gene Wiki	Gw	http://en.wikipedia.org/wiki/Portal:Gene_Wiki	http://plugins.biogps.org/cgi-bin/wp.cgi?id=$id	1017	gene		0	urn:miriam:genewiki	\d+	Gene Wiki	P351
@@ -94,7 +94,7 @@ PubChem-bioassay	Cpb	http://www.ncbi.nlm.nih.gov/sites/entrez?db=pcassay 	http:/
 PubChem-compound	Cpc	http://pubchem.ncbi.nlm.nih.gov/	http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=$id	100101	metabolite		1	urn:miriam:pubchem.compound	^\d+$	PubChem-compound	P662
 PubChem-substance	Cps	http://pubchem.ncbi.nlm.nih.gov/	http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=$id	100101	metabolite		1	urn:miriam:pubchem.substance	^\d+$	PubChem-substance	P2153
 PubMed	Pbm	https://pubmed.ncbi.nlm.nih.gov/	https://pubmed.ncbi.nlm.nih.gov/$id	32169673	publication		1	urn:miriam:pubmed	^\d+$	PubMed Identifier	P698
-Reactome	Re	http://www.reactome.org/	https://reactome.org/content/detail/$id	REACT_1590	pathway		1	urn:miriam:reactome	^REACT_\d+(\.\d+)?$	Reactome	P3937
+Reactome	Re	http://www.reactome.org/	https://reactome.org/content/detail/$id	R-HSA-201451	pathway		1	urn:miriam:reactome	(^R-[A-Z]{3}-\d+(-\d+)?(\.\d+)?$)|(^REACT_\d+(\.\d+)?$)	Reactome	P3937
 RefSeq	Q	http://www.ncbi.nlm.nih.gov/projects/RefSeq/	http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=$id	NP_012345	gene		1	urn:miriam:refseq	^(NC|AC|NG|NT|NW|NZ|NM|NR|XM|XR|NP|AP|XP|ZP)_\d+$	RefSeq	P656
 RESID	Res	http://www.ebi.ac.uk/RESID/	http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+6JSUg1NA6u4+-e+[RESID:'$id']	AA0001	protein		1	urn:miriam:resid	^AA\d{4}$	RESID	
 Rfam	Rf		http://www.sanger.ac.uk/cgi-bin/Rfam/getacc?$id	RF00066	gene		1	Rf	RF\d+	RFAM	
