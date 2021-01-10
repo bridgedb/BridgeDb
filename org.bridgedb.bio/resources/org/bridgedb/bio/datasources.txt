@@ -19,8 +19,8 @@ Chemspider	Cs	http://www.chemspider.com/	http://www.chemspider.com/Chemical-Stru
 CodeLink	Ge	http://www.appliedmicroarrays.com/		GE86325	probe		0	Ge		CodeLink
 Database of Interacting Proteins	Dip	http://dip.doe-mbi.ucla.edu/	http://dip.doe-mbi.ucla.edu/dip/DIPview.cgi?ID=$id	DIP-743N	interaction		1	urn:miriam:dip	^DIP[\:\-]\d{3}[EN]$	Database of Interacting Proteins
 dbSNP	Sn	http://www.ncbi.nlm.nih.gov/sites/entrez?db=snp	http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$id	121909098	gene		1	urn:miriam:dbsnp	^\d+$	dbSNP
-DrugBank	Dr	http://www.drugbank.ca/	http://www.drugbank.ca/drugs/$id	DB00001	metabolite		1	urn:miriam:drugbank	^D(B|BSALT)(\d{1})?\d{5}$	DrugBank
-EcoCyc	Eco	http://ecocyc.org/	http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=$id	325-BISPHOSPHATE-NUCLEOTIDASE-RXN	interaction	Escherichia coli	1	Eco		EcoCyc
+DrugBank	Dr	http://www.drugbank.ca/	http://www.drugbank.ca/drugs/$id	DB00001	metabolite		1	urn:miriam:drugbank	^D(B|BSALT|BCAT)(\d{1})?\d{5}$	DrugBank
+EcoCyc	Eco	http://ecocyc.org/	http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=$id	1.1.1.127-RXN	interaction	Escherichia coli	1	Eco	^\d+\.-\.-\.-|\d+\.\d+\.-\.-|\d+\.\d+\.\d+\.-|\d+\.\d+\.\d+\.(n)?\d+-RXN	EcoCyc
 EcoGene	Ec	http://ecogene.org/	http://ecogene.org/geneInfo.php?eg_id=$id	EG10173	gene	Escherichia coli	1	urn:miriam:ecogene	^EG\d+$	EcoGene
 EMBL	Em	http://www.ebi.ac.uk/embl/	http://www.ebi.ac.uk/ena/data/view/$id	X58356	gene		1	urn:miriam:ena.embl	^[A-Z]+[0-9]+$	European Nucleotide Archive
 Ensembl	En	http://www.ensembl.org/	http://ensemblgenomes.org/id/$id	ENSG00000139618	gene		1	urn:miriam:ensembl	^ENS[A-Z]*[FPTG]\d{11}$	Ensembl
@@ -45,7 +45,7 @@ Ensembl Yeast	EnSc	http://www.ensembl.org	http://www.ensembl.org/Saccharomyces_c
 Ensembl Zebrafish	EnDr	http://www.ensembl.org	http://www.ensembl.org/Danio_rerio/Gene/Summary?g=$id	ENSDARG00000024771	gene	Danio rerio	1	EnDr	ENSDARG\d{11}	Ensembl
 Entrez Gene	L	http://www.ncbi.nlm.nih.gov/gene	http://www.ncbi.nlm.nih.gov/gene/$id	100010	gene		1	urn:miriam:ncbigene	^\d+$	Entrez Gene
 Enzyme Nomenclature	E	http://www.ebi.ac.uk/intenz/	http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec=$id	1.1.1.1	gene		1	urn:miriam:ec-code	^\d+\.-\.-\.-|\d+\.\d+\.-\.-|\d+\.\d+\.\d+\.-|\d+\.\d+\.\d+\.(n)?\d+$	Enzyme Nomenclature
-EPA CompTox	Ect	https://comptox.epa.gov/dashboard	https://comptox.epa.gov/dashboard/$id	DTXSID7020637	metabolite		1	Ect	^DTXSID\d{7}\d?$	EPA CompTox Dashboard
+EPA CompTox	Ect	https://comptox.epa.gov/dashboard	https://comptox.epa.gov/dashboard/$id	DTXSID7020637	metabolite		1	Ect	^DTXSID(\d{2})?\d{7}\d?$	EPA CompTox Dashboard
 FlyBase	F	http://flybase.org/	http://flybase.org/reports/$id.html	FBgn0011293	gene	Drosophila melanogaster	1	urn:miriam:flybase	^FB\w{2}\d{7}$	FlyBase
 GenBank	G	http://www.ncbi.nlm.nih.gov/genbank/	http://www.ncbi.nlm.nih.gov/nuccore/$id	NW_004190323	gene		0	urn:miriam:insdc	(\w\d{5})|(\w{2}\d{6})|(\w{3}\d{5})	GenBank
 Gene Wiki	Gw	http://en.wikipedia.org/wiki/Portal:Gene_Wiki	http://plugins.biogps.org/cgi-bin/wp.cgi?id=$id	1017	gene		0	urn:miriam:genewiki	\d+	Gene Wiki
@@ -110,7 +110,7 @@ PlantGDB	Pl	http://www.plantgdb.org/		PUT-157a-Vitis_vinifera-37378	gene		1	Pl	P
 PubChem-bioassay	Cpb	http://www.ncbi.nlm.nih.gov/sites/entrez?db=pcassay 	http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=$id	1018	metabolite		0	urn:miriam:pubchem.bioassay	^\d+$	PubChem-bioassay
 PubChem-compound	Cpc	http://pubchem.ncbi.nlm.nih.gov/	http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=$id	100101	metabolite		1	urn:miriam:pubchem.compound	^\d+$	PubChem-compound
 PubChem-substance	Cps	http://pubchem.ncbi.nlm.nih.gov/	http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=$id	100101	metabolite		1	urn:miriam:pubchem.substance	^\d+$	PubChem-substance
-Reactome	Re	http://www.reactome.org/	http://www.reactome.org/cgi-bin/eventbrowser_st_id?FROM_REACTOME=1&ST_ID=$id	REACT_1590	pathway		1	urn:miriam:reactome	^REACT_\d+(\.\d+)?$	Reactome
+Reactome	Re	http://www.reactome.org/	http://www.reactome.org/cgi-bin/eventbrowser_st_id?FROM_REACTOME=1&ST_ID=$id	R-HSA-201451	pathway		1	urn:miriam:reactome	(^R-[A-Z]{3}-\d+(-\d+)?(\.\d+)?$)|(^REACT_\d+(\.\d+)?$)	Reactome
 RefSeq	Q	http://www.ncbi.nlm.nih.gov/projects/RefSeq/	http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=$id	NP_012345	gene		1	urn:miriam:refseq	^(NC|AC|NG|NT|NW|NZ|NM|NR|XM|XR|NP|AP|XP|ZP)_\d+$	RefSeq
 RESID	Res	http://www.ebi.ac.uk/RESID/	http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+6JSUg1NA6u4+-e+[RESID:'$id']	AA0001	protein		1	urn:miriam:resid	^AA\d{4}$	RESID
 Rfam	Rf		http://www.sanger.ac.uk/cgi-bin/Rfam/getacc?$id	RF00066	gene		1	Rf	RF\d+	RFAM
