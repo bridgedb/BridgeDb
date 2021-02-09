@@ -63,6 +63,10 @@ public class BridgeQC
 	 */
 	public BridgeQC(File f1, File f2, OutputStream out) throws IDMapperException
 	{
+		if (out == null)
+			throw new NullPointerException(
+				"OutputStream is null"
+			);
 		oldDb = f1;
 		newDb = f2;
 		this.out = new PrintStream(out);
