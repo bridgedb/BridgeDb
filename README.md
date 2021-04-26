@@ -93,6 +93,22 @@ for example with:
 mvn clean test junit5.groups=mysql
 ```
 
+Updating the datasources
+------------------------
+
+The `datasources.tsv` and `organisms.tsv` files were separated from this
+repository, and this BridgeDb library is regularly updated for releases
+from [https://github.com/bridgedb/datasources](https://github.com/bridgedb/datasources).
+
+```shell
+wget -O ./org.bridgedb.bio/src/main/resources/org/bridgedb/bio/datasources.tsv https://bridgedb.github.io/datasources/datasources.tsv
+wget -O ./org.bridgedb.bio/src/main/resources/org/bridgedb/bio/datasources_headers.tsv https://bridgedb.github.io/datasources/datasources_headers.tsv
+wget -O ./org.bridgedb.bio/src/main/resources/org/bridgedb/bio/organisms.tsv https://bridgedb.github.io/datasources/organisms.tsv
+cp ./org.bridgedb.bio/src/main/resources/org/bridgedb/bio/*.tsv ./org.bridgedb.bio/resources/org/bridgedb/bio/.
+```
+
+The last line makes a copy for backwards compatibility.
+
 Making releases
 ---------------
 
