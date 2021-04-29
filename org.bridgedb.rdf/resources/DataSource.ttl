@@ -1018,7 +1018,7 @@ bridgeDB:DataSource_RefSeq a bridgeDB:DataSource ;
 	bridgeDB:idExample "NP_012345" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.ncbi.nlm.nih.gov/protein/$id> ;
 	bridgeDB:hasUriPattern <http://purl.uniprot.org/refseq/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/refseq/$id> .
 
@@ -1185,7 +1185,7 @@ bridgeDB:DataSource_WikiGenes a bridgeDB:DataSource ;
 	bridgeDB:idExample "7157" ;
 	bridgeDB:primary "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.wikigenes.org/e/gene/e/$id.html> .
+	bridgeDB:hasPrimaryUriPattern <https://www.wikigenes.org/e/gene/e/$id.html> .
 
 bridgeDB:DataSource_WikiPathways a bridgeDB:DataSource ;
 	bridgeDB:fullName "WikiPathways" ;
