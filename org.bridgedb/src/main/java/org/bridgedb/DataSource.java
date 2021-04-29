@@ -501,7 +501,7 @@ public final class DataSource
 			
 		}
         
-        private Builder miriamBase(String base){
+        public Builder miriamBase(String base){
             if (current.miriamBase == null){
                 current.miriamBase = base;
                 byMiriamBase.put(base, current);
@@ -511,9 +511,22 @@ public final class DataSource
                             + " from " + current.miriamBase + " to " + base);
                 }
             }           
-			return this;            
+			return this;
         }
-        
+
+        public Builder compactIdentifierPrefix(String prefix) {
+        	if (current.miriamBase == null){
+                current.miriamBase = prefix;
+                byMiriamBase.put(prefix, current);
+            } else {
+                if (!current.miriamBase.equals(prefix)){
+                    throw new IllegalArgumentException("Illegal attempt to change compact identifier prefix for " + current 
+                            + " from " + current.miriamBase + " to " + prefix);
+                }
+            }           
+			return this;
+        }
+
         /**
          * Allow the setting but not changing of an alternative name
          * 
@@ -815,6 +828,11 @@ public final class DataSource
 		return organism;
 	}
 
+	public static DataSource getByCompactIdentifierPrefix(String prefix)
+	{
+        return byMiriamBase.get(prefix);
+	}
+
 	/**
      * Since version 2.0 this method will return null if no DataSource is known
 	 * @param base the base urn, which must start with "urn:miriam:". It it isn't, null is returned.
@@ -848,4 +866,13 @@ public final class DataSource
         return byMiriamBase.get(key);
     }
 	
+    /**
+     * Returns the compact identifier prefix (previously known as MIRIAM base.
+     *
+	 * @returns the compact identifier 
+	 */
+    public String getCompactIdentifierPrefix() {
+		return miriamBase;
+    }
+
 }

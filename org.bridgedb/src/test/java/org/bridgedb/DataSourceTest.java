@@ -14,10 +14,14 @@
  */
 package org.bridgedb;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 public class DataSourceTest {
@@ -211,5 +215,19 @@ public class DataSourceTest {
 		    .description("MetaboLoci description")
 		    .asDataSource();
 		assertEquals("MetaboLoci description", source.getDescription());
+	}
+
+	@org.junit.jupiter.api.Test
+	public void testGetByPrefix() {
+		DataSource chebi = DataSource.register("Ce", "ChEBI")
+			.compactIdentifierPrefix("chebi")
+			.asDataSource();
+		assertNotNull(chebi);
+		DataSource source = DataSource.getByCompactIdentifierPrefix("chebi");
+		assertNotNull(source);
+		assertEquals("ChEBI", source.getFullName());
+		assertEquals("chebi", source.getCompactIdentifierPrefix());
+		assertEquals("chebi", source.getCompactIdentifierPrefix());
+		assertEquals("urn:miriam:chebi:1234", source.getMiriamURN("1234"));
 	}
 }

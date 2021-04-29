@@ -108,4 +108,20 @@ public class DataSourceTxtTest {
     	assertTrue(wikidata.urlPatternKnown());
     	assertEquals("Cks", wikidata.getSystemCode());
     }
+
+	@org.junit.jupiter.api.Test
+	public void testMIRIAMFeatures() throws Exception {
+		DataSourceTxt.init();
+		DataSource chebi = DataSource.getExistingByFullName("ChEBI");
+		assertNotNull(chebi);
+		assertEquals("urn:miriam:chebi:1234", chebi.getMiriamURN("1234"));
+		assertEquals("chebi", chebi.getCompactIdentifierPrefix());
+	}
+
+	@org.junit.jupiter.api.Test
+	public void testPrefix() throws Exception {
+		DataSource ds = DataSource.getExistingBySystemCode("L");
+		String prefix = ds.getCompactIdentifierPrefix();
+		assertEquals("ncbigene", prefix);
+	}
 }
