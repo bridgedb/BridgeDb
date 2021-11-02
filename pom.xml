@@ -36,6 +36,7 @@
   	<module>org.bridgedb.webservice.biomart</module>
   	<module>org.bridgedb.tools.batchmapper</module>
         <module>org.bridgedb.tools.qc</module>
+        <module>org.bridgedb.tools.info</module>
         <module>org.bridgedb.file.orthoxml</module>
   	<module>examples</module>
   </modules>

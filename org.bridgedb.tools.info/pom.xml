@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.bridgedb</groupId>
+  <artifactId>org.bridgedb.tools.info</artifactId>
+  <name>BridgeDb Info Tools</name>
+  
+  <parent>
+  	<artifactId>bridgedb-bundle</artifactId>
+  	<groupId>org.bridgedb</groupId>
+  	<version>3.0.6-SNAPSHOT</version>
+  </parent>
+
+	<build>
+		<directory>target</directory>
+		<outputDirectory>target/classes</outputDirectory>
+		<finalName>${project.artifactId}-${project.version}</finalName>
+		<testOutputDirectory>target/test-classes</testOutputDirectory>
+		<sourceDirectory>src</sourceDirectory>
+		<scriptSourceDirectory>scripts</scriptSourceDirectory>
+		<testSourceDirectory>test</testSourceDirectory>
+	</build>
+	
+	<dependencies>
+                <dependency>
+                        <groupId>org.bridgedb</groupId>
+                        <artifactId>org.bridgedb</artifactId>
+                        <version>${project.parent.version}</version>
+                        <scope>compile</scope>
+                </dependency>
+		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.bio</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>compile</scope>
+		</dependency>
+                <dependency>
+                        <groupId>org.bridgedb</groupId>
+                        <artifactId>org.bridgedb.rdb</artifactId>
+                        <version>${project.parent.version}</version>
+                        <scope>compile</scope>
+                </dependency>
+	</dependencies>
+  
+</project>

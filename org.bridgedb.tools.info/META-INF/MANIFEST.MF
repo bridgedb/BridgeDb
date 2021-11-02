@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.bridgedb.tools.info
+Bundle-SymbolicName: org.bridgedb.tools.info
+Bundle-Version: 3.0.6
+Export-Package: org.bridgedb.tools.info
+Require-Bundle: org.bridgedb,
+ org.bridgedb.bio,
+ org.bridgedb.rdb,
+ org.bridgedb.rdb.construct,
+ com.google.collect;bundle-version="1.0.0"

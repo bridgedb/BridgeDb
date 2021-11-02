@@ -7,7 +7,7 @@ BridgeDb
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c4feefd66d5349f8b51c2a295216da25)](https://www.codacy.com/app/nunogit/BridgeDb?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bridgedb/BridgeDb&amp;utm_campaign=Badge_Grade)
 [![codecov](https://codecov.io/gh/bridgedb/BridgeDb/branch/master/graph/badge.svg?token=F0kJdoEt0x)](https://codecov.io/gh/bridgedb/BridgeDb)
 
-BridgeDb is currently tested with Java 8 (2.3.x releases) and Java 11 (master branch).
+BridgeDb is currently tested with Java 8 (2.3.x releases) and Java 11 (3.0.x releases and master branch).
 
 Using BridgeDb dependencies
 ---------------------------
@@ -61,6 +61,18 @@ mvn clean install
 If you want to ignore failing tests, e.g. because you are not online,
 add this option: -Dmaven.test.failure.ignore=true. Furthermore,
 note that 'mvn clean compile' fails.
+
+Command line tools
+------------------
+
+The BridgeDb distribution comes with a few command line tools. You
+can try:
+
+```shell
+bash info.sh <database.bridge>
+bash qc.sh <database.bridge> <database2.bridge>
+bash voidtool.sh <database.bridge> <fileName.void>
+```
 
 Checking for regressions
 ------------------------
