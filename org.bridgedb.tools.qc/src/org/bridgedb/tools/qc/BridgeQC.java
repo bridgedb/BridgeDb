@@ -422,7 +422,7 @@ public class BridgeQC
 				this.out.println("OLD DB INFO: total number of secondary ids in "+ds.getFullName()+" are "+countofSecondary);
 			}
 			else
-				this.out.println("OLD DB INFO: "+ds.getFullName()+" Schema Version is less than 4 cannot calculate Primary and Secondary ids\'");
+				this.out.println("OLD DB INFO: "+ds.getFullName()+" Schema Version is less than 4 cannot calculate Primary and Secondary identifiers");
 		}
 	}
 
