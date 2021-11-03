@@ -369,7 +369,7 @@ public class BridgeQC
 				while (schema.next()) {
 					if (schema.getInt("schemaversion") == 4) {
 						isSchemaUpdated = true;
-					}
+					} else break;
 					if (isSchemaUpdated) {
 						String sql = "SELECT isPrimary FROM datanode WHERE datanode.id = '" + xref.getId() + "'AND datanode.code = '" + ds.getSystemCode() + "'";
 						ResultSet rs = st1.executeQuery(sql);
@@ -386,8 +386,10 @@ public class BridgeQC
 				this.out.println("NEW DB INFO: total number of primary ids in " + ds.getFullName() + " are " + countOfPrimary);
 				this.out.println("NEW DB INFO: total number of secondary ids in " + ds.getFullName() + " are " + countofSecondary);
 			}
-			else
-				this.out.println("NEW DB INFO: "+ds.getFullName()+" Schema Version is less than 4 cannot calculate Primary and Secondary ids\'");
+			else {
+				this.out.println("NEW DB INFO: Schema Version is less than 4 cannot calculate Primary and Secondary identifiers");
+				break;
+			}
 		}
 		isSchemaUpdated = false;
 		for (DataSource ds : oldGdb.getCapabilities().getSupportedSrcDataSources()){
@@ -404,7 +406,7 @@ public class BridgeQC
 				while (schema.next()) {
 					if (schema.getInt("schemaversion") == 4) {
 						isSchemaUpdated = true;
-					}
+					} else break;
 					if (isSchemaUpdated) {
 						String sql = "SELECT isPrimary FROM datanode WHERE datanode.id ='" + xref.getId() + "'" + " AND datanode.code = '" + ds.getSystemCode() + "'";
 						ResultSet rs = st1.executeQuery(sql);
@@ -421,8 +423,10 @@ public class BridgeQC
 				this.out.println("OLD DB INFO: total number of primary ids in "+ds.getFullName()+" are "+countOfPrimary);
 				this.out.println("OLD DB INFO: total number of secondary ids in "+ds.getFullName()+" are "+countofSecondary);
 			}
-			else
-				this.out.println("OLD DB INFO: "+ds.getFullName()+" Schema Version is less than 4 cannot calculate Primary and Secondary identifiers");
+			else {
+				this.out.println("OLD DB INFO: Schema Version is less than 4 cannot calculate Primary and Secondary identifiers");
+				break;
+			}
 		}
 	}
 
