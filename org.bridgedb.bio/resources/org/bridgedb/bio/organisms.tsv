@@ -1,44 +1,48 @@
-generic_name	specific_name	short_name	symbol
-Anopheles	gambiae	Mosquito	Ag
-Arabidopsis	thaliana	Arabidopsis	At
-Aspergillus 	niger	Black mold	An
-Bacillus	subtilis	Bsubtilis	Bs
-Beta 	vulgaris 	Sugar Beet 	Bv
-Bos	taurus	Cow	Bt
-Brassica 	napus 	Rapeseed 	Bn
-Caenorhabditis	elegans	Celegans	Ce
-Canis	familiaris	Dog	Cf
-Ciona	intestinalis	Sea Squirt	Ci
-Clostridium	thermocellum	Cthe	Ct
-Danio	rerio	Zebrafish	Dr
-Dasypus	novemcinctus	Armadillo	Dn
-Drosophila	melanogaster	Fruitfly	Dm
-Echinops	telfairi	Hedgehog	Et
-Equus	caballus	Horse	Qc
-Escherichia	coli	Ecoli	Ec
-Gallus	gallus	Chicken	Gg
-Glycine	max	Soybean	Gm
-Gibberella	zeae	Fusarium graminearum	Gz
-Homo	sapiens	Human	Hs
-Hordeum 	vulgare 	Barley 	Hv
-Loxodonta	africana	Elephant	La
-Macaca	mulatta	Rhesus Monkey	Ml
-Monodelphis	domestica	Opossum	Md
-Mus	musculus	Mouse	Mm
-Mycobacterium	tuberculosis	Mtuberculosis	Mx
-Ornithorhynchus	anatinus	Platypus	Oa
-Oryctolagus	cuniculus	Rabbit	Oc
-Oryza	sativa	Japanese Rice	Os
-Oryzias	latipes	Medaka Fish	Ol
-Pan 	troglodytes	Chimp	Pt
-Populus 	trichocarpa	Western Balsam Poplar	Pi
-Rattus	norvegicus	Rat	Rn
-Saccharomyces	cerevisiae	Yeast	Sc
-Solanum	lycopersicum	Tomato	Sl
-Sorex	araneus	Shrew	Sa
-Sorghum	bicolor	Sorghum	Sb
-Sus	scrofa	Pig	Ss
-Tetraodon	nigroviridis	Pufferfish	Tn
-Vitis	vinifera	Wine Grape	Vv
-Xenopus	tropicalis	Xenopus	Xt
-Zea	mays	Maize	Zm
+generic_name	specific_name	short_name	symbol	ncbi
+Acetobacterium	woodii		Aw	33952
+Anopheles	gambiae	Mosquito	Ag	7165
+Arabidopsis	thaliana	Arabidopsis	At	3702
+Aspergillus 	niger	Black mold	An	5061
+Bacillus	subtilis	Bsubtilis	Bs	1423
+Beta 	vulgaris 	Sugar Beet 	Bv	3555
+Bos	taurus	Cow	Bt	9913
+Brassica 	napus 	Rapeseed 	Bn	
+Caenorhabditis	elegans	Celegans	Ce	6239
+Canis	familiaris	Dog	Cf	9615
+Ciona	intestinalis	Sea Squirt	Ci	7719
+Clostridium	thermocellum	Cthe	Ct	1515
+Danio	rerio	Zebrafish	Dr	7955
+Daphnia	magna		Da	35525
+Daphnia	pulex		Dp	6669
+Dasypus	novemcinctus	Armadillo	Dn	9361
+Drosophila	melanogaster	Fruitfly	Dm	7227
+Echinops	telfairi	Hedgehog	Et	9371
+Equus	caballus	Horse	Qc	9796
+Escherichia	coli	Ecoli	Ec	562
+Gallus	gallus	Chicken	Gg	9031
+Glycine	max	Soybean	Gm	3847
+Gibberella	zeae	Fusarium graminearum	Gz	5518
+Homo	sapiens	Human	Hs	9606
+Hordeum 	vulgare 	Barley 	Hv	4513
+Loxodonta	africana	Elephant	La	9785
+Macaca	mulatta	Rhesus Monkey	Ml	9544
+Monodelphis	domestica	Opossum	Md	13616
+Mus	musculus	Mouse	Mm	10090
+Mycobacterium	tuberculosis	Mtuberculosis	Mx	1773
+Ornithorhynchus	anatinus	Platypus	Oa	9258
+Oryctolagus	cuniculus	Rabbit	Oc	9986
+Oryza	sativa	Japanese Rice	Os	4530
+Oryzias	latipes	Medaka Fish	Ol	8090
+Pan 	troglodytes	Chimp	Pt	9598
+Plasmodium	falciparum	Malaria parasite	Pf	5833
+Populus 	trichocarpa	Western Balsam Poplar	Pi	3694
+Rattus	norvegicus	Rat	Rn	10116
+Saccharomyces	cerevisiae	Yeast	Sc	4932
+Solanum	lycopersicum	Tomato	Sl	4081
+Sorex	araneus	Shrew	Sa	42254
+Sorghum	bicolor	Sorghum	Sb	4558
+Sus	scrofa	Pig	Ss	9823
+Tetraodon	nigroviridis	Pufferfish	Tn	99883
+Vitis	vinifera	Wine Grape	Vv	29760
+Xenopus	tropicalis	Xenopus	Xt	8364
+Zea	mays	Maize	Zm	4577
