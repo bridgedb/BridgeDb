@@ -100,9 +100,12 @@ public class BridgeQC
 		// not in new
 		for (DataSource ds : oldSet.keySet())
 		{
-			if (!newSet.containsKey(ds))
-			{
-				this.out.println ("WARNING: " + ds.getSystemCode() + " is only in old database");
+			if (!newSet.containsKey(ds)) {
+				this.out.printf("INFO: %s%s is only in old database\n",
+					ds.getSystemCode(),
+					(ds.getFullName() != null && ds.getFullName().length() > 0) ?
+						" (" + ds.getFullName() + ")" : ""
+				);
 			}
 		}
 
@@ -117,8 +120,16 @@ public class BridgeQC
 			
 			if (!oldSet.containsKey(ds))
 			{
-				this.out.println ("INFO: " + ds.getSystemCode() + " is only in new database");
-				this.out.printf ("INFO: Number of ids in %s: %d\n", ds.getSystemCode(), newGenes);
+				this.out.printf("INFO: %s%s is only in new database\n",
+					ds.getSystemCode(),
+					(ds.getFullName() != null && ds.getFullName().length() > 0) ?
+						" (" + ds.getFullName() + ")" : ""
+				);
+				this.out.printf ("INFO: Number of ids in %s%s: %d\n", ds.getSystemCode(),
+					(ds.getFullName() != null && ds.getFullName().length() > 0) ?
+							" (" + ds.getFullName() + ")" : "",
+					newGenes
+				);
 			}
 			else
 			{
