@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 
