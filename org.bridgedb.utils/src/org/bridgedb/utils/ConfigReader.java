@@ -29,7 +29,6 @@ import java.util.Properties;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.SimpleLayout;
 
 /**
  *
@@ -109,7 +108,7 @@ public class ConfigReader {
      
     public static void logToConsole() throws BridgeDBException{
         configureLogger();
-        Logger.getRootLogger().addAppender(new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT));
+        Logger.getRootLogger().addAppender(new ConsoleAppender());
     }
 
     protected ConfigReader(){
