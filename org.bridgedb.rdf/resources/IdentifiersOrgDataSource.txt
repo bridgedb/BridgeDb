@@ -71,7 +71,7 @@ CABRI	cabri		http://www.fr.cabri.org/CABRI/srs-bin/wgetz?-e+-page+EntryPage+%5B$
 Canadian Drug Product Database	cdpd		http://webprod3.hc-sc.gc.ca/dpd-bdpp/info.do?lang=eng&code=$id	63250	unknown		1	urn:miriam:cdpd	^\d+$	
 Candida Genome Database	cgd		http://www.candidagenome.org/cgi-bin/locus.pl?dbid=$id	CAL0003079	unknown		1	urn:miriam:cgd	^CAL\d{7}$	
 CAPS-DB	caps		http://www.bioinsilico.org/cgi-bin/CAPSDB/getCAPScluster?nidcl=$id	434	unknown		1	urn:miriam:caps	^\d+$	
-CAS	Ca	http://commonchemistry.org	http://commonchemistry.org/ChemicalDetail.aspx?ref=$id	50-00-0	metabolite		1	urn:miriam:cas	^\d{1,7}\-\d{2}\-\d$	CAS
+CAS	Ca	https://commonchemistry.cas.org/	https://commonchemistry.cas.org/detail?cas_rn=$id	50-00-0	metabolite		1	urn:miriam:cas	^\d{1,7}\-\d{2}\-\d$	CAS
 CATH domain	cath.domain		http://www.cathdb.info/domain/$id	1cukA01	unknown		1	urn:miriam:cath.domain	^\w+$	
 CATH superfamily	cath.superfamily		http://www.cathdb.info/cathnode/$id	1.10.10.200	unknown		1	urn:miriam:cath.superfamily	^\d+(\.\d+(\.\d+(\.\d+)?)?)?$	
 CAZy	cazy		http://www.cazy.org/$id.html	GT10	unknown		1	urn:miriam:cazy	^GT\d+$	

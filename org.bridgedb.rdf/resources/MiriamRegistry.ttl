@@ -9250,7 +9250,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100301#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://commonchemistry.org/ChemicalDetail.aspx?ref=$id> ;
+      dcat:accessURL <https://commonchemistry.cas.org/detail?cas_rn=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100301> .
 
@@ -18009,7 +18009,7 @@ All content is under the Creative Commons Attribution 3.0 Unported license."""^^
               "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "American Chemistry Society, Washington, DC"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://commonchemistry.org> .
+      dcat:landingPage <https://commonchemistry.cas.org/> .
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000491>
       a       dcat:CatalogRecord ;

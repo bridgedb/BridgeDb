@@ -120,12 +120,12 @@ bridgeDB:DataSource_Bioontology_UMLS_NCIM a bridgeDB:DataSource ;
 bridgeDB:DataSource_CAS a bridgeDB:DataSource ;
 	bridgeDB:fullName "CAS" ;
 	bridgeDB:systemCode "Ca" ;
-	bridgeDB:mainUrl "http://commonchemistry.org" ;
+	bridgeDB:mainUrl "https://commonchemistry.cas.org/" ;
 	bridgeDB:idExample "50-00-0" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
     bridgeDB:hasDataType ChemInf:SIO_010004 ;
-	bridgeDB:hasPrimaryUriPattern <http://commonchemistry.org/ChemicalDetail.aspx?ref=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://commonchemistry.cas.org/detail?cas_rn=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/cas/$id> .
 
 bridgeDB:DataSource_CCDS a bridgeDB:DataSource ;

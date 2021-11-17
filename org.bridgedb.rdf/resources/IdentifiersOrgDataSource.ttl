@@ -782,11 +782,11 @@ bridgeDB:DataSource_CAPS_DB a bridgeDB:DataSource ;
 bridgeDB:DataSource_CAS a bridgeDB:DataSource ;
 	bridgeDB:fullName "CAS" ;
 	bridgeDB:systemCode "Ca" ;
-	bridgeDB:mainUrl "http://commonchemistry.org" ;
+	bridgeDB:mainUrl "https://commonchemistry.cas.org" ;
 	bridgeDB:idExample "50-00-0" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
-	bridgeDB:hasPrimaryUriPattern <http://commonchemistry.org/ChemicalDetail.aspx?ref=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://commonchemistry.cas.org/detail?cas_rn=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/cas/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/cas/$id> ;
 	bridgeDB:hasRegexPattern "^\\d{1,7}\\-\\d{2}\\-\\d$" ;
@@ -7126,8 +7126,8 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	bridgeDB:hasPrefix "http://comgen.pl/mirex/?page=results%2Frecord&name=" ;
 	bridgeDB:hasPostfix "&web_temp=1683440&exref=pp2a&limit=yes" .
 
-<http://commonchemistry.org/ChemicalDetail.aspx?ref=$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://commonchemistry.org/ChemicalDetail.aspx?ref=" .
+<https://commonchemistry.cas.org/detail?cas_rn=$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://commonchemistry.cas.org/detail?cas_rn=" .
 
 <http://compbio.cs.queensu.ca/cgi-bin/compbio/search/main.cgi?search_mode=id&amp%3Bid_type=snp_id&amp%3Bid_val=$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://compbio.cs.queensu.ca/cgi-bin/compbio/search/main.cgi?search_mode=id&amp%3Bid_type=snp_id&amp%3Bid_val=" .
