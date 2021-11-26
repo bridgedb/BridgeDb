@@ -45,6 +45,7 @@ public enum Organism {
 	BacillusSubtilis("Bacillus subtilis", "Bs", 1423),
 	BetaVulgaris("Beta vulgaris", "Bv", "Sugar Beet", 3555),
 	BrachypodiumDistachyon("Brachypodium distachyon", "Bd", 15368),
+	BrassicaNapus("Brassica napus", "Bn", 3708),
 	BosTaurus("Bos taurus", "Bt", "Cow", 9913),
 	CaenorhabditisElegans("Caenorhabditis elegans", "Ce", "Worm", 6239),
 	CanisFamiliaris("Canis familiaris", "Cf", "Dog", 9615),
