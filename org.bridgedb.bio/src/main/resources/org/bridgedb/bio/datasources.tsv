@@ -39,7 +39,8 @@ Gramene Literature	Gl	http://www.gramene.org/	http://www.gramene.org/db/literatu
 Gramene Maize	EnZm	http://www.ensembl.org	http://www.maizesequence.org/Zea_mays/Gene/Summary?g=$id	GRMZM2G174107	gene		1	EnZm		Gramene Maize	
 Gramene Pathway	Gp	http://www.gramene.org/pathway		AAH72400	pathway		1	Gp		Gramene Pathway	
 Gramene Rice	EnOj	http://www.gramene.org/	http://www.gramene.org/Oryza_sativa/Gene/Summary?db=core;g=$id	osa-MIR171a	gene		1	EnOj		Gramene Rice	
-Guide to Pharmacology	Gpl	http://www.guidetopharmacology.org/	http://www.guidetopharmacology.org/GRAC/LigandDisplayForward?ligandId=$id	1627	metabolite		1		^\d+$	Guide to Pharmacology	P595
+Guide to Pharmacology	Gpl	http://www.guidetopharmacology.org/	https://www.guidetopharmacology.org/GRAC/LigandDisplayForward?ligandId=$id	1627	gene		1		^\d+$	Guide to Pharmacology Targets	P5458
+Guide to Pharmacology Targets	Gpt	http://www.guidetopharmacology.org/	https://www.guidetopharmacology.org/GRAC/ObjectDisplayForward?objectId=$id	256	metabolite		1		^\d+$	Guide to Pharmacology	P595
 HGNC	H	http://www.genenames.org		DAPK1	gene	Homo sapiens	1	urn:miriam:hgnc.symbol	^[A-Za-z0-9]+	HGNC Symbol	P353
 HGNC Accession number	Hac	http://www.genenames.org	https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/$id	2674	gene	Homo sapiens	1	urn:miriam:hgnc	^(HGNC:)?\d{1,5}$	HGNC	P354
 HMDB	Ch	http://www.hmdb.ca/	http://www.hmdb.ca/metabolites/$id	HMDB00001	metabolite		1	urn:miriam:hmdb	^HMDB(\d{2})?\d{5}$	HMDB	P2057
