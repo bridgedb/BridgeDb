@@ -15,7 +15,7 @@ Using BridgeDb dependencies
 The [BridgeDb releases](https://github.com/bridgedb/BridgeDb/releases) are published to 
 [Maven Central](http://central.maven.org/maven2/org/bridgedb/), which means you can use the BridgeDb JARs without needing to compile BridgeDb.
 
-Usage depends on which module you require. The examples below assumes artifact `org.bridgedb.bio` and version `3.0.1`:
+Usage depends on which module you require. The examples below assumes artifact `org.bridgedb.bio` and version `3.0.8`:
 
 For [Maven](https://maven.apache.org/):
 
@@ -24,7 +24,7 @@ For [Maven](https://maven.apache.org/):
     <dependency>
         <groupId>org.bridgedb</groupId>
         <artifactId>org.bridgedb.bio</artifactId>
-        <version>3.0.1</version>
+        <version>3.0.8</version>
     </dependency>
 </dependencies>
 ```
@@ -32,19 +32,19 @@ For [Maven](https://maven.apache.org/):
 For [Gradle](https://gradle.org/):
 
 ```gradle
-compile group: 'org.bridgedb', name: 'org.bridgedb.bio', version: '3.0.1'
+compile group: 'org.bridgedb', name: 'org.bridgedb.bio', version: '3.0.8'
 ```
 
 For [Ivy](http://ant.apache.org/ivy/):
 
 ```xml
-<dependency org="org.bridgedb" name="org.bridgedb.bio" rev="3.0.1"/>
+<dependency org="org.bridgedb" name="org.bridgedb.bio" rev="3.0.8"/>
 ```
 
 For [Buildr](https://buildr.apache.org/):
 
 ```buildr
-'org.bridgedb:org.bridgedb.bio:jar:3.0.1'
+'org.bridgedb:org.bridgedb.bio:jar:3.0.8'
 ```
 
 
@@ -124,7 +124,9 @@ The last line makes a copy for backwards compatibility.
 Making releases
 ---------------
 
-If it is time for a release, ensure the code is ready for releases with
+If it is time for a release, first, update `org.bridgedb/version.props`.
+
+Then, ensure the code is ready for releases with
 Maven with `mvn clean install` and if it creates working OSGi bundles
 with the following commands, for the various bundles needed by PathVisio:
 
