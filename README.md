@@ -124,7 +124,8 @@ The last line makes a copy for backwards compatibility.
 Making releases
 ---------------
 
-If it is time for a release, first, update `org.bridgedb/version.props`.
+If it is time for a release, first, update `org.bridgedb/version.props` (for BridgeDb) and
+`CITATION.cff` (for Zenodo).
 
 Then, ensure the code is ready for releases with
 Maven with `mvn clean install` and if it creates working OSGi bundles
