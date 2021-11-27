@@ -79,8 +79,18 @@ public class BridgeQC
 	{
 		String url1 = "jdbc:derby:jar:(" + oldDb + ")database";
 		oldGdb = SimpleGdbFactory.createInstance("old", url1);
+		this.out.printf("INFO: old database is %s %s (build: %s)\n",
+			oldGdb.getCapabilities().getProperty("DATASOURCENAME"),
+			oldGdb.getCapabilities().getProperty("DATASOURCEVERSION"),
+			oldGdb.getCapabilities().getProperty("BUILDDATE")
+		);
 		String url2 = "jdbc:derby:jar:(" + newDb + ")database";
 		newGdb = SimpleGdbFactory.createInstance("new", url2);
+		this.out.printf("INFO: new database is %s %s (build: %s)\n",
+			newGdb.getCapabilities().getProperty("DATASOURCENAME"),
+			newGdb.getCapabilities().getProperty("DATASOURCEVERSION"),
+			newGdb.getCapabilities().getProperty("BUILDDATE")
+		);
 	}
 	
 	public void compareDataSources() throws IDMapperException
