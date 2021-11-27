@@ -1,10 +1,11 @@
-cff-version: 1.0.3
-message: If you use this software, please cite it as below.
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
 title: BridgeDb
-version: 2.3.2
+version: 3.0.9-SNAPSHOT
 doi: 10.5281/zenodo.3171955
 date-released: 2019-05-22
-references:
+url: "https://github.com/bridgedb/BridgeDb"
+preferred-citation:
   - type: article
     authors:
       - family-names: Van Iersel
