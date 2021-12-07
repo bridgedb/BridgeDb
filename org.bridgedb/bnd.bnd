@@ -1,0 +1,6 @@
+Export-Package: \
+	org.bridgedb.webservice,\
+	org.bridgedb.file,\
+	org.bridgedb.impl,\
+	buildsystem,\
+	org.bridgedb
