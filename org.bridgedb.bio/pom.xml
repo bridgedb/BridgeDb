@@ -5,6 +5,7 @@
   <artifactId>org.bridgedb.bio</artifactId>
   <name>BridgeDb Bio</name>
   <description>Defines Datasources</description>
+  <packaging>bundle</packaging>
   
   <parent>
   	<artifactId>bridgedb-bundle</artifactId>
@@ -30,22 +31,10 @@
 			</testResource>
 		</testResources>
         <plugins>
-             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <version>5.1.1</version>
+                <version>5.1.2</version>
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
