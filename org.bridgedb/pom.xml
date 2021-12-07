@@ -69,7 +69,25 @@
                         <Export-Package>buildsystem, org.bridgedb, org.bridgedb.file, org.bridgedb.impl, org.bridgedb.webservice</Export-Package>
                         <Import-Package>javax.xml.parsers,org.xml.sax,org.xml.sax.helpers</Import-Package>
                     </instructions>
-            </configuration>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>bundle-manifest</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>manifest</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
             </plugin>
         </plugins>
 	</build>
