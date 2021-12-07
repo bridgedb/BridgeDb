@@ -5,7 +5,6 @@
   <artifactId>org.bridgedb.bio</artifactId>
   <name>BridgeDb Bio</name>
   <description>Defines Datasources</description>
-  <packaging>bundle</packaging>
   
   <parent>
   	<artifactId>bridgedb-bundle</artifactId>

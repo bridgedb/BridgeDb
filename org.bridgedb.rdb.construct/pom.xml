@@ -4,7 +4,6 @@
   <groupId>org.bridgedb</groupId>
   <artifactId>org.bridgedb.rdb.construct</artifactId>
   <name>BridgeDb RDB Construct</name>
-  <packaging>bundle</packaging>
   
   <parent>
   	<artifactId>bridgedb-bundle</artifactId>

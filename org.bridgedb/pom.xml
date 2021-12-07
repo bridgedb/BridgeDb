@@ -4,7 +4,6 @@
   <groupId>org.bridgedb</groupId>
   <artifactId>org.bridgedb</artifactId>
   <name>BridgeDb</name>
-  <packaging>bundle</packaging>
 
     <dependencies>
         <dependency>
