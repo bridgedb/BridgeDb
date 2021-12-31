@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 title: BridgeDb
-version: 3.0.11
-date-released: 2021-12-14
+version: 3.0.12
+date-released: 2021-12-31
 url: "https://github.com/bridgedb/BridgeDb"
 preferred-citation:
   - type: article
