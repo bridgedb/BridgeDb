@@ -52,7 +52,7 @@
         <mysql.version>8.0.18</mysql.version>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <owlapi-api.version>3.4</owlapi-api.version>
-        <sesame.version>2.7.1</sesame.version>
+        <sesame.version>2.7.16</sesame.version>
         <servlet.version>2.5</servlet.version>
         <slf4j.version>1.6.4</slf4j.version>
         <derby.version>10.14.2.0</derby.version>
