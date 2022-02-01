@@ -47,7 +47,7 @@ public class TestFile {
     @BeforeAll
     public static void init() {
     	YEAST_IDS = TestFile.class.getClassLoader().getResource("yeast_id_mapping.txt");
-    	ENS_YEAST = DataSource.getExistingByFullName("Ensembl");
+    	ENS_YEAST = DataSource.register("En", "Ensembl").asDataSource();
         ENTREZ = DataSource.register("L", "Entrez Gene").asDataSource();
         EMBL = DataSource.register("Em", "EMBL").asDataSource();
         XREF1 = new Xref("YHR055C", ENS_YEAST);
