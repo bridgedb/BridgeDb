@@ -80,6 +80,7 @@ public enum Organism {
 	OryzaIndica("Oryza indica", "Oi", "Indian Rice"),
 	OryzaSativaIndica("Oryza sativa Indica Group", "Osi", "Indian Rice", 39946),
 	OryziasLatipes ("Oryzias latipes", "Ol", "Medaka Fish", 8090),
+	OvisAries("Ovis aries", "Ova", "Sheep", 9940),
 	PanTroglodytes("Pan troglodytes", "Pt", "Chimpanzee", 9598),
 	PlasmodiumFalciparum("Plasmodium falciparum", "Pf", "Malaria Parasite", 5833),
 	
