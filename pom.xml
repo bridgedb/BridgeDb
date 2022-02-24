@@ -379,8 +379,5 @@
     <system>GitHub</system>
     <url>https://github.com/bridgedb/BridgeDb/issues</url>
   </issueManagement>
-	<ciManagement>
-	  <system>jenkins</system>
-		<url>http://build.mygrid.org.uk/ci/job/ops-BridgeDb/</url>
-	</ciManagement>
+
 </project>
