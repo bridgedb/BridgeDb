@@ -374,6 +374,10 @@
                 <email>awasthi.manas98@ducic.ac.in</email>
                 <name>Manas Awasthi</name>
         </developer>
+        <developer>
+                <id>hbasaric</id>
+                <name>Helena Basaric</name>
+        </developer>
 	</developers>
 	<issueManagement>
     <system>GitHub</system>
