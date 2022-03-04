@@ -22,7 +22,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
+
 import org.bridgedb.DataSource;
+import org.bridgedb.DataSourcePatterns;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -123,5 +127,13 @@ public class DataSourceTxtTest {
 		DataSource ds = DataSource.getExistingBySystemCode("L");
 		String prefix = ds.getCompactIdentifierPrefix();
 		assertEquals("ncbigene", prefix);
+	}
+	
+	@org.junit.jupiter.api.Test
+	public void testCatchIllegalArgumentException() throws Exception {
+		DataSourceTxt.init();
+		DataSourceTxt dataSourceTxt = new DataSourceTxt();
+		String[] fields = {"Affy", "X", "", "", "", "", "", "", "","["};		
+		assertThrows(IllegalArgumentException.class, () -> dataSourceTxt.loadLine(fields));
 	}
 }
