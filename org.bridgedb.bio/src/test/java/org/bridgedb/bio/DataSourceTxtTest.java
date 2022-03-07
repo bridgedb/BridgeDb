@@ -145,8 +145,16 @@ public class DataSourceTxtTest {
 	@org.junit.jupiter.api.Test
 	public void testSoftCompare() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Method softCompare = DataSourceComparator.class.getDeclaredMethod("softCompare", String.class, String.class);
+		Method compare = DataSourceComparator.class.getDeclaredMethod("compare", DataSource.class, DataSource.class);
 		softCompare.setAccessible(true);
 		int returnSoftCompare;
+		compare.setAccessible(true);
+		int returnCompare;
+		
+		DataSource dataSource1 = DataSource.register("X", "Affy")
+			    .asDataSource();
+		DataSource dataSource2 = DataSource.register("En", "Ensembl")
+			    .asDataSource();
 		
 		String value1 = null;
 		String value2 = null;
@@ -161,6 +169,11 @@ public class DataSourceTxtTest {
 		value2 = null;
 		returnSoftCompare = (int) softCompare.invoke(dsc, value1, value2);
 		assertEquals(1, returnSoftCompare);
+		
+		returnCompare = (int) compare.invoke(dsc,dataSource1, dataSource2);
+		returnSoftCompare = (int) softCompare.invoke(dsc,dataSource1.getFullName(), dataSource2.getFullName());
+		assertEquals(returnSoftCompare, returnCompare);
+		
 	}
 	
 
