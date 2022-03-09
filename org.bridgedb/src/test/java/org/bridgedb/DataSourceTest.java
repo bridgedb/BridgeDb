@@ -224,10 +224,64 @@ public class DataSourceTest {
 			.asDataSource();
 		assertNotNull(chebi);
 		DataSource source = DataSource.getByCompactIdentifierPrefix("chebi");
-		assertNotNull(source);
-		assertEquals("ChEBI", source.getFullName());
-		assertEquals("chebi", source.getCompactIdentifierPrefix());
-		assertEquals("chebi", source.getCompactIdentifierPrefix());
-		assertEquals("urn:miriam:chebi:1234", source.getMiriamURN("1234"));
+		
+		source = DataSource.register("Gpl", "Guide to Pharmacology")
+			    .asDataSource();
+		assertEquals(null, source.getMiriamURN(""));
+		assertEquals(null, source.getCompactIdentifier(""));
+		assertEquals(null, source.getIdentifiersOrgUri(""));
+		Assertions.assertThrows(IllegalArgumentException.class,
+				() -> {
+					source.getExistingBySystemCode(""); throw new IllegalArgumentException();
+				});
+		assertEquals(false, source.systemCodeExists(""));
+		
+		Assertions.assertThrows(IllegalArgumentException.class,
+				() -> {
+					source.getExistingByFullName(""); throw new IllegalArgumentException();
+				});
+
+	}
+	
+	@org.junit.jupiter.api.Test
+	public void testBuilders() {
+		
+		DataSource source = DataSource.register("X", "Affymetrix")
+				.type("probe")
+				.asDataSource();
+		assertEquals("probe",source.getType());
+		assertEquals("Affymetrix",source.getExistingByFullName("Affymetrix").toString());
+		assertEquals(true,source.fullNameExists("Affymetrix"));
+		DataSource source2 = DataSource.register("Eco", "Ecocyc")
+				.organism("Escherichia coli")
+				.asDataSource();
+		assertEquals("Escherichia coli",source2.getOrganism());
+		assertNotNull(source2.getOrganism());
+			
+		DataSource source3 = DataSource.register("Ec", "Ecogene")
+				.urnBase("urn:miriam:ecogene")
+				.asDataSource();
+		assertEquals("Ecogene",source3.getByMiriamBase("urn:miriam:ecogene").toString());
+		assertEquals("urn:miriam:ecogene:urn%3Amiriam%3Aecogene",source3.getMiriamURN("urn:miriam:ecogene").toString());
+		
+		DataSource source4 = DataSource.register("Ect", "EPA CompTox")
+					.urnBase("urn:miriam:Ect")
+					.asDataSource();
+		assertEquals("EPA CompTox",source4.getByMiriamBase("urn:miriam:Ect").toString());
+			
+		source4.registerAlias("Ect");
+		assertEquals("EPA CompTox", source4.getByAlias("Ect").toString());
+		
+		source4.getExistingBySystemCode("Ect");
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			DataSource source5 = DataSource.register("Ect", "EPA CompTox")
+					.urnBase("urn:miriam:Ect")
+					.asDataSource();
+			source5 = DataSource.register("Ect", "EPA CompTox")
+					.urnBase("urn:miriam:ecogene")
+					.asDataSource();
+			throw new IllegalArgumentException();
+		
+		});
 	}
 }
