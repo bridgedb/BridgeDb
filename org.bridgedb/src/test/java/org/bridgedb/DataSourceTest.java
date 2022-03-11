@@ -48,19 +48,19 @@ public class DataSourceTest {
 		
 		Assertions.assertThrows(IllegalArgumentException.class,
 				() -> {
-					DataSource.register("", ""); throw new IllegalArgumentException();
+					DataSource.register("", "");
 				});
 		Assertions.assertThrows(IllegalArgumentException.class,
 				() -> {
-					DataSource.register(null, ""); throw new IllegalArgumentException();
+					DataSource.register(null, "");
 				});
 		Assertions.assertThrows(IllegalArgumentException.class,
 				() -> {
-					DataSource.register("X", ""); throw new IllegalArgumentException();
+					DataSource.register("X", "");
 				});
 		Assertions.assertThrows(IllegalArgumentException.class,
 				() -> {
-					DataSource.register("X", null); throw new IllegalArgumentException();
+					DataSource.register("X", null);
 				});
 		
 	}
@@ -203,7 +203,6 @@ public class DataSourceTest {
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			DataSource.register("EnAg", "Ensembl Mosquito")
 					.deprecatedBy(null).asDataSource();
-			throw new IllegalArgumentException();
 		});
 	}
 
@@ -232,7 +231,6 @@ public class DataSourceTest {
 			DataSource source2 = DataSource.register("Cpc", "PubChem compound")
 					.asDataSource();
 			assertEquals(source, source2);
-			throw new IllegalArgumentException();
 		});
 	}
     
@@ -249,7 +247,6 @@ public class DataSourceTest {
 					.asDataSource();
 			assertEquals("probe", source.getType());
 			assertFalse(source.isMetabolite());
-			throw new IllegalArgumentException();
 		});
 	}
 
@@ -293,19 +290,19 @@ public class DataSourceTest {
 				() -> {
 					DataSource.register("Ce", "ChEBI")
 					.miriamBase(null)
-					.asDataSource(); throw new IllegalArgumentException();
+					.asDataSource();
 				});
 		Assertions.assertThrows(IllegalArgumentException.class,
 				() -> {
 					DataSource.register("Ce", "ChEBI")
 					.compactIdentifierPrefix(null)
-					.asDataSource(); throw new IllegalArgumentException();
+					.asDataSource();
 				});
 		Assertions.assertThrows(IllegalArgumentException.class,
 				() -> {
 					DataSource.register("Ce", "ChEBI")
 					.urnBase("test")
-					.asDataSource(); throw new IllegalArgumentException();
+					.asDataSource();
 				});
 		
 		DataSource source = DataSource.getByCompactIdentifierPrefix("chebi");
@@ -317,16 +314,16 @@ public class DataSourceTest {
 		assertEquals(null, source.getCompactIdentifier("Gpl"));
 		
 		assertEquals(null, source.getIdentifiersOrgUri(""));
+		assertEquals(false, DataSource.systemCodeExists(""));
 
 		Assertions.assertThrows(IllegalArgumentException.class,
 				() -> {
-					source.getExistingBySystemCode(""); throw new IllegalArgumentException();
+					DataSource.getExistingBySystemCode("");
 				});
-		assertEquals(false, source.systemCodeExists(""));
 		
 		Assertions.assertThrows(IllegalArgumentException.class,
 				() -> {
-					source.getExistingByFullName(""); throw new IllegalArgumentException();
+					DataSource.getExistingByFullName("");
 				});
 	}
     
@@ -343,8 +340,8 @@ public class DataSourceTest {
 				.asDataSource();
 		assertEquals("probe",source.getType());
 		assertEquals(null,source.getOrganism());
-		assertEquals("Affymetrix",source.getExistingByFullName("Affymetrix").toString());
-		assertEquals(true,source.fullNameExists("Affymetrix"));
+		assertEquals("Affymetrix",DataSource.getExistingByFullName("Affymetrix").toString());
+		assertEquals(true,DataSource.fullNameExists("Affymetrix"));
 		
 		DataSource source2 = DataSource.register("Eco", "Ecocyc")
 				.alternative("")
@@ -361,21 +358,21 @@ public class DataSourceTest {
 				.identifiersOrgBase("http://identifiers.org/ecogene/")
 				.alternative("MetaboLoci Alternative")
 				.asDataSource();
-		assertEquals("Ecogene",source3.getByMiriamBase("urn:miriam:ecogene").toString());
+		assertEquals("Ecogene",DataSource.getByMiriamBase("urn:miriam:ecogene").toString());
 		assertEquals("urn:miriam:ecogene:urn%3Amiriam%3Aecogene",source3.getMiriamURN("urn:miriam:ecogene").toString());
 
 		DataSource source4 = DataSource.register("Ect", "EPA CompTox")
 					.urnBase("urn:miriam:Ect")
 					.description("")
 					.asDataSource();
-		assertEquals("EPA CompTox",source4.getByMiriamBase("urn:miriam:Ect").toString());
-		assertEquals(null,source4.getByMiriamBase(null));
-		assertEquals(null,source4.getByMiriamBase("test"));
+		assertEquals("EPA CompTox",DataSource.getByMiriamBase("urn:miriam:Ect").toString());
+		assertEquals(null,DataSource.getByMiriamBase(null));
+		assertEquals(null,DataSource.getByMiriamBase("test"));
 		
 		source4.registerAlias("Ect");
-		assertEquals("EPA CompTox", source4.getByAlias("Ect").toString());
+		assertEquals("EPA CompTox", DataSource.getByAlias("Ect").toString());
 		
-		source4.getExistingBySystemCode("Ect");
+		DataSource.getExistingBySystemCode("Ect");
 		
 		DataSource source6 = DataSource.register("R", "RGD")
 				.organism("Rattus norvegicus")
@@ -392,7 +389,6 @@ public class DataSourceTest {
 			source5 = DataSource.register("R", "RGD")
 					.organism("Rattus")
 					.asDataSource();
-			throw new IllegalArgumentException();
 		});
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -402,7 +398,6 @@ public class DataSourceTest {
 			source5 = DataSource.register("Ect", "EPA CompTox")
 					.urnBase("urn:miriam:ecogene")
 					.asDataSource();
-			throw new IllegalArgumentException();
 		});
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -412,7 +407,6 @@ public class DataSourceTest {
 			source5 = DataSource.register("Ect", "EPA CompTox")
 					.alternative("test")
 					.asDataSource();
-			throw new IllegalArgumentException();
 		});
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -422,7 +416,6 @@ public class DataSourceTest {
 			source5 = DataSource.register("Ect", "EPA CompTox")
 					.alternative("test")
 					.asDataSource();
-			throw new IllegalArgumentException();
 		});
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -432,7 +425,6 @@ public class DataSourceTest {
 			source5 = DataSource.register("Ect", "EPA CompTox")
 					.description("test")
 					.asDataSource();
-			throw new IllegalArgumentException();
 		});
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -440,7 +432,6 @@ public class DataSourceTest {
 					.asDataSource();
 			source5 = DataSource.register("L", "EPA CompTox")
 					.asDataSource();
-			throw new IllegalArgumentException();
 		});
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -448,24 +439,13 @@ public class DataSourceTest {
 					.asDataSource();
 			source5 = DataSource.register(null, "EPA CompTox")
 					.asDataSource();
-			throw new IllegalArgumentException();
-		});
-		
-		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			DataSource source5 = DataSource.register("Ec", "Ecogene")
-					.identifiersOrgBase("http://identifiers.org/ecogene/")
-					.asDataSource();
-			throw new IllegalArgumentException();
 		});
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			DataSource source5 = DataSource.register("Ec", "Ecogene")
 					.identifiersOrgBase("test")
 					.asDataSource();
-			throw new IllegalArgumentException();
 		});
-		
-		
 	}
 	
 	@org.junit.jupiter.api.Test
