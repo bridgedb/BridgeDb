@@ -47,7 +47,6 @@ public class DataSourceRegisterTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             DataSource ds = DataSource.register(null, fullName).asDataSource();
             assertEquals(fullName, ds.getFullName());
-            throw new IllegalArgumentException();
         });
     }
             

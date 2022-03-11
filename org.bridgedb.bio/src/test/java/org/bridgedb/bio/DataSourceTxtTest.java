@@ -20,9 +20,15 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
+
 import org.bridgedb.DataSource;
+import org.bridgedb.DataSourcePatterns;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -124,4 +130,51 @@ public class DataSourceTxtTest {
 		String prefix = ds.getCompactIdentifierPrefix();
 		assertEquals("ncbigene", prefix);
 	}
+	
+	@org.junit.jupiter.api.Test
+	public void testCatchIllegalArgumentException() throws Exception {
+		DataSourceTxt.init();
+		DataSourceTxt dataSourceTxt = new DataSourceTxt();
+		// use "[" as input for fields[9] in order to throw an IllegalArgumentException.
+		String[] fields = {"Affy", "X", "", "", "", "", "", "", "","["};		
+		assertThrows(IllegalArgumentException.class, () -> dataSourceTxt.loadLine(fields));
+	}
+	
+	private DataSourceComparator dsc = new DataSourceComparator();
+
+	@org.junit.jupiter.api.Test
+	public void testSoftCompare() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Method softCompare = DataSourceComparator.class.getDeclaredMethod("softCompare", String.class, String.class);
+		Method compare = DataSourceComparator.class.getDeclaredMethod("compare", DataSource.class, DataSource.class);
+		softCompare.setAccessible(true);
+		int returnSoftCompare;
+		compare.setAccessible(true);
+		int returnCompare;
+		
+		DataSource dataSource1 = DataSource.register("X", "Affy")
+			    .asDataSource();
+		DataSource dataSource2 = DataSource.register("En", "Ensembl")
+			    .asDataSource();
+		
+		String value1 = null;
+		String value2 = null;
+		
+		returnSoftCompare = (int) softCompare.invoke(dsc, value1, value2);
+		assertEquals(0, returnSoftCompare);
+		
+		value2 = "test";
+		returnSoftCompare = (int) softCompare.invoke(dsc, value1, value2);
+		assertEquals(-1, returnSoftCompare);		
+		value1 = "test";
+		value2 = null;
+		returnSoftCompare = (int) softCompare.invoke(dsc, value1, value2);
+		assertEquals(1, returnSoftCompare);
+		
+		returnCompare = (int) compare.invoke(dsc,dataSource1, dataSource2);
+		returnSoftCompare = (int) softCompare.invoke(dsc,dataSource1.getFullName(), dataSource2.getFullName());
+		assertEquals(returnSoftCompare, returnCompare);
+		
+	}
+	
+
 }
