@@ -55,6 +55,7 @@
         <servlet.version>2.5</servlet.version>
         <slf4j.version>1.6.4</slf4j.version>
         <derby.version>10.15.2.0</derby.version>
+        <junit-platform-surefire-provider>1.3.2</junit-platform-surefire-provider>
         <junit5.jupiter.version>5.8.2</junit5.jupiter.version>
         <junit5.excludeGroups>mysql</junit5.excludeGroups>
         <junit5.groups />
