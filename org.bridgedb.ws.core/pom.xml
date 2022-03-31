@@ -77,6 +77,11 @@
             <version>${hamcrest.version}</version>
 			<scope>test</scope>
         </dependency>    
-	</dependencies>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.2.11</version>
+        </dependency>
+    </dependencies>
   
 </project>
