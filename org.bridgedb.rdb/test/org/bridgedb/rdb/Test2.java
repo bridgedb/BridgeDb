@@ -56,8 +56,8 @@ public class Test2 {
 	{
 		assertTrue (new File (GDB_HUMAN).exists()); // if gdb can't be found, rest of test doesn't make sense.
 		long start, end, delta;
-		start = System.currentTimeMillis();		
-		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + GDB_HUMAN);		
+		start = System.currentTimeMillis();
+		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + GDB_HUMAN);
 		end = System.currentTimeMillis();
 		delta = end - start;
 		measure.add ("timing::idmapper-pgdb connect to database", "" + delta, "msec");

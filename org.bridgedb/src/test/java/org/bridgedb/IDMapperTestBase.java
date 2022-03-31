@@ -71,7 +71,7 @@ public abstract class IDMapperTestBase {
     protected static String badKey;
    
     protected static final String uriSpace1 = "http://www.conceptwiki.org/concept/$id";
-    protected static final String uriSpace2 = "http://www.chemspider.com/Chemical-Structure.$id.html";
+    protected static final String uriSpace2 = "http://www.chemspider.com/Chemical-Structure.$id.html"; 
     protected static final String uriSpace3 = "http://chemistry.openphacts.org/OPS$id";
 
     @BeforeAll
@@ -115,7 +115,7 @@ public abstract class IDMapperTestBase {
         map2xref2 = new Xref(ds2Id2, DataSource2);
         ds3Id2 = "70263";
         map2xref3 = new Xref(ds3Id2, DataSource3);
-        //Third Set of Xref which again should map to eachothe but not the above
+        //Third Set of Xref which again should map to each other but not the above
         ds1Id3 = "f65bcedd-f18f-41ae-b1dd-9af4ed6a1f26";
         map3xref1 = new Xref(ds1Id3, DataSource1);
         ds2Id3 = "23202612";

@@ -15,8 +15,17 @@
 
 package org.bridgedb;
 
-import java.util.Set;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -35,7 +44,7 @@ public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
     
     //Must be instantiated by implementation of these tests.
     protected static IDMapperCapabilities capabilities;
-        
+    
     @org.junit.jupiter.api.Test
     public void testDataSourceSupported() throws Exception {
         report("DataSourceSupported");
