@@ -1,5 +1,22 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
+authors:
+- family-names: Van Iersel
+  given-names: Martijn P.
+- family-names: Pico
+  given-names: Alexander R.
+- family-names: Kelder
+  given-names: Thomas
+- family-names: Gao
+  given-names: Jianjiong
+- family-names: Isaac
+  given-names: Ho
+- family-names: Hanspers
+  given-names: Kristina
+- family-names: Conklin
+  given-names: Bruce R.
+- family-names: Evelo
+  given-names: Chris T.
 title: BridgeDb
 version: 3.0.13
 date-released: 2021-12-31
