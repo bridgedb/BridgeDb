@@ -6,7 +6,7 @@ title: BridgeDb
 message: 'If you use this software, please cite it as below.'
 type: software
 authors:
-  - given-names: ' Martijn P.'
+  - given-names: 'Martijn P.'
     family-names: Van Iersel
   - given-names: Alexander R.
     family-names: Pico
@@ -34,6 +34,31 @@ identifiers:
       identifier mapping services
 repository-code: 'https://github.com/bridgedb/BridgeDb'
 url: 'https://bridgedb.github.io/'
+preferred-citation:
+  type: article
+  authors:
+  - given-names: 'Martijn P.'
+    family-names: Van Iersel
+  - given-names: Alexander R.
+    family-names: Pico
+  - given-names: Thomas
+    family-names: Kelder
+  - given-names: Jianjiong
+    family-names: Gao
+  - given-names: Ho
+    family-names: Isaac
+  - given-names: Kristina
+    family-names: Hanspers
+  - given-names: Bruce R.
+    family-names: Conklin
+  - given-names: Chris T.
+    family-names: Evelo
+  doi: "10.1186/1471-2105-11-5"
+  journal: "BMC Bioinformatics"
+  title: "The BridgeDb framework: standardized access to gene, protein and metabolite identifier mapping services"
+  issue: 5
+  volume: 11
+  year: 2010
 keywords:
   - identifier mapping
   - Genes
