@@ -1,32 +1,70 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
 cff-version: 1.2.0
-message: "If you use this software, please cite it as below."
 title: BridgeDb
-version: 3.0.13
-date-released: 2021-12-31
-url: "https://github.com/bridgedb/BridgeDb"
+message: 'If you use this software, please cite it as below.'
+type: software
+authors:
+  - given-names: 'Martijn P.'
+    family-names: Van Iersel
+  - given-names: Alexander R.
+    family-names: Pico
+  - given-names: Thomas
+    family-names: Kelder
+  - given-names: Jianjiong
+    family-names: Gao
+  - given-names: Ho
+    family-names: Isaac
+  - given-names: Kristina
+    family-names: Hanspers
+  - given-names: Bruce R.
+    family-names: Conklin
+  - given-names: Chris T.
+    family-names: Evelo
+identifiers:
+  - type: url
+    value: 'https://github.com/bridgedb/BridgeDb'
+    description: Source code repository for BridgeDb
+  - type: doi
+    value: 10.1186/1471-2105-11-5
+    description: >-
+      Article: The BridgeDb framework: standardized
+      access to gene, protein and metabolite
+      identifier mapping services
+repository-code: 'https://github.com/bridgedb/BridgeDb'
+url: 'https://bridgedb.github.io/'
 preferred-citation:
-  - type: article
-    authors:
-      - family-names: Van Iersel
-        given-names: Martijn P.
-      - family-names: Pico
-        given-names: Alexander R.
-      - family-names: Kelder
-        given-names: Thomas
-      - family-names: Gao
-        given-names: Jianjiong
-      - family-names: Isaac
-        given-names: Ho
-      - family-names: Hanspers
-        given-names: Kristina
-      - family-names: Conklin
-        given-names: Bruce R.
-      - family-names: Evelo
-        given-names: Chris T.
-    title: "The BridgeDb framework: standardized access to gene, protein and metabolite identifier mapping services"
-    year: 2010
-    journal: BMC Bioinformatics
-    volume: 11
-    issue: 5
-    doi: 10.1186/1471-2105-11-5
-    url: https://doi.org/10.1186/1471-2105-11-5
+  type: article
+  authors:
+  - given-names: 'Martijn P.'
+    family-names: Van Iersel
+  - given-names: Alexander R.
+    family-names: Pico
+  - given-names: Thomas
+    family-names: Kelder
+  - given-names: Jianjiong
+    family-names: Gao
+  - given-names: Ho
+    family-names: Isaac
+  - given-names: Kristina
+    family-names: Hanspers
+  - given-names: Bruce R.
+    family-names: Conklin
+  - given-names: Chris T.
+    family-names: Evelo
+  doi: "10.1186/1471-2105-11-5"
+  journal: "BMC Bioinformatics"
+  title: "The BridgeDb framework: standardized access to gene, protein and metabolite identifier mapping services"
+  issue: 5
+  volume: 11
+  year: 2010
+keywords:
+  - identifier mapping
+  - Genes
+  - Proteins
+  - Metabolites
+  - Biological data
+license: Apache-2.0
+version: 3.0.13
+date-released: '2022-01-14'
