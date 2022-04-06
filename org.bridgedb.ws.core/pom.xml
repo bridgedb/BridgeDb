@@ -76,12 +76,13 @@
             <artifactId>hamcrest-core</artifactId>
             <version>${hamcrest.version}</version>
 			<scope>test</scope>
-            <dependency>
+		</dependency>
+         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-surefire-provider</artifactId>
             <version>1.2.0</version>
             <scope>test</scope>
-        </dependency>
+       		 </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -93,13 +94,13 @@
             <artifactId>junit-vintage-engine</artifactId>
             <version>5.2.0</version>
             <scope>test</scope>
-        </dependency>
+        	</dependency>
          <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.2.0</version>
             <scope>test</scope>
-        </dependency>		
+        	</dependency>		
 	</dependencies>
   
 </project>
