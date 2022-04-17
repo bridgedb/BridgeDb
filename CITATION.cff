@@ -2,6 +2,8 @@ cff-version: 1.2.0
 title: BridgeDb
 message: 'If you use this software, please cite it as below.'
 type: software
+version: 3.0.13
+date-released: '2021-12-31'
 authors:
   - given-names: 'Martijn P.'
     family-names: Van Iersel
@@ -23,12 +25,6 @@ identifiers:
   - type: url
     value: 'https://github.com/bridgedb/BridgeDb'
     description: Source code repository for BridgeDb
-  - type: doi
-    value: 10.1186/1471-2105-11-5
-    description: >-
-      Article: The BridgeDb framework: standardized
-      access to gene, protein and metabolite
-      identifier mapping services
 repository-code: 'https://github.com/bridgedb/BridgeDb'
 url: 'https://bridgedb.github.io/'
 preferred-citation:
@@ -63,5 +59,3 @@ keywords:
   - Metabolites
   - Biological data
 license: Apache-2.0
-version: 3.0.13
-date-released: '2022-01-14'
