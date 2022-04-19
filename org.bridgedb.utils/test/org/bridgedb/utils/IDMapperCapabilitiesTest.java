@@ -19,8 +19,10 @@
  */
 package org.bridgedb.utils;
 
-import org.apache.log4j.Logger;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.log4j.Logger;
+import org.bridgedb.pairs.IdSysCodePair;
 import org.junit.jupiter.api.BeforeAll;
 
 /**
