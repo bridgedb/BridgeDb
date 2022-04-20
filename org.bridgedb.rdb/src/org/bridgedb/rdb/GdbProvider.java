@@ -22,11 +22,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.bridgedb.BridgeDb;
+import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperStack;
@@ -131,6 +133,12 @@ public class GdbProvider {
 		GdbProvider gdbs = new GdbProvider(transitive);
 		List<String> drivers = cf.getDrivers();
 		
+	 	Set<DataSource> dsSet = new HashSet<DataSource>();
+	 	dsSet = DataSource.getDataSources();
+	 	if (dsSet.size() <= 5) {
+	 		throw new IDMapperException("Insufficient data sources loaded. Please ensure datasources.tsv is loaded by invoking DataSourceTxt.init() before invoking the GdbProvider.fromConfigFile() method.");
+	 	}
+		
 		// add a few defaults that will always be loaded
 		drivers.add("org.bridgedb.rdb.IDMapperRdb");
 		drivers.add("org.bridgedb.file.IDMapperText");
@@ -148,7 +156,7 @@ public class GdbProvider {
 				System.out.println ("Warning: driver '" + driver + "'  not in classpath, some features may not be available.");
 			}
 		}
-
+		
 		for (String key : cf.getMappers().keySet())
 		{
 			for (String value : cf.getMappers().get(key))
