@@ -70,12 +70,16 @@ public class Xref implements Comparable<Xref>
 	 * @return whether is id is primary or not
 	 */
 	public boolean isPrimary(){ return isPrimary; }
+
 	/**
-	 * @return short string representation for this Xref, for example En:ENSG000001 or X:1004_at
-	 *   This string representation is not meant to be stored or parsed, it is there mostly for
-	 *   debugging purposes.
+	 * This string representation is not meant to be stored or parsed, it is there mostly for
+	 * debugging purposes.
+	 *
+	 * @return short string representation for this Xref, for example En:ENSG000001:T or X:1004_at:F
 	 */
-	public String toString() { return rep;  }
+	public String toString() {
+		return rep + ":" + (isPrimary() ? "T" : "F");
+	}
 	
 	/**
 	 * hashCode calculated from id and datasource combined.
