@@ -506,9 +506,9 @@ public final class DataSource
                 current.miriamBase = base;
                 byMiriamBase.put(base, current);
             } else {
-                if (!current.miriamBase.equals(base)){
+                if (!current.miriamBase.toLowerCase().equals(base.toLowerCase())){
                     throw new IllegalArgumentException("Illegal attempt to change miriam base for " + current 
-                            + " from " + current.miriamBase + " to " + base);
+                            + " from '" + current.miriamBase + "' to '" + base + "'");
                 }
             }           
 			return this;
