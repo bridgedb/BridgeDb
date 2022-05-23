@@ -306,11 +306,11 @@ KnapSack	knapsack		http://kanaya.naist.jp/knapsack_jsp/information.jsp?word=$id	
 Ligand Expo	ligandexpo		http://ligand-depot.rutgers.edu/pyapps/ldHandler.py?formid=cc-index-search&target=$id&operation=ccid	ABC	unknown		1	urn:miriam:ligandexpo	^(\w){3}$	
 Ligand-Gated Ion Channel database	lgic		http://www.ebi.ac.uk/compneur-srv/LGICdb/HTML/$id.php	5HT3Arano	unknown		1	urn:miriam:lgic	^\w+$	
 LigandBox	ligandbox		http://ligandbox.protein.osaka-u.ac.jp/ligandbox/cgi-bin/liginf.cgi?id=$id	D00001	unknown		1	urn:miriam:ligandbox	^D\d{5}	
-LIPID MAPS	Lm	http://www.lipidmaps.org	http://www.lipidmaps.org/data/LMSDRecord.php?LMID=$id	LMPR0102010012	metabolite		1	urn:miriam:lipidmaps	^LM(FA|GL|GP|SP|ST|PR|SL|PK)[0-9]{4}([0-9a-zA-Z]{4,6})?$	LIPID MAPS
+LIPID MAPS	Lm	http://www.lipidmaps.org	https://www.lipidmaps.org/data/structure/LMSDSearch.php?Mode=ProcessClassSearch&LMID=$id	LMPR0102010012	metabolite		1	urn:miriam:lipidmaps	^LM(FA|GL|GP|SP|ST|PR|SL|PK)[0-9]{4}([0-9a-zA-Z]{4,6})?$	LIPID MAPS
 LipidBank	Lb	http://lipidbank.jp/index.html	http://lipidbank.jp/cgi-bin/detail.cgi?id=$id	BBA0001	metabolite		1	urn:miriam:lipidbank	^\w+\d+$	LipidBank
 Locus Reference Genomic	lrg	http://www.lrg-sequence.org/	ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$id.xml	LRG_258	unknown		1	urn:miriam:lrg	^LRG_\d+$	
 MACiE	Ma	http://www.ebi.ac.uk/thornton-srv/databases/MACiE/index.html	http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/MACiE/entry/getPage.pl?id=$id	M0001	protein		1	urn:miriam:macie	^M\d{4}$	MACiE
-MaizeGDB	Mg		http://www.maizegdb.org/cgi-bin/displaylocusresults.cgi?term=$id	acc1	gene	Zea mays	1			MaizeGDB
+MaizeGDB	Mg		https://maizegdb.org/gene_center/gene/$id	acc1	gene	Zea mays	1			MaizeGDB
 MaizeGDB Locus	maizegdb.locus		http://www.maizegdb.org/cgi-bin/displaylocusrecord.cgi?id=$id	25011	unknown		1	urn:miriam:maizegdb.locus	^\d+$	
 MassBank	massbank		http://msbi.ipb-halle.de/MassBank/jsp/Dispatcher.jsp?type=disp&id=$id	PB000166	unknown		1	urn:miriam:massbank	^[A-Z]{2}[A-Z0-9][0-9]{5}$	
 MatrixDB	Md	http://matrixdb.ibcp.fr/	http://matrixdb.ibcp.fr/cgi-bin/model/report/default?name=$id&class=Association	P00747_P07355	interaction		1	urn:miriam:matrixdb.association	^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])_.*|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9]_.*)|(GAG_.*)|(MULT_.*)|(PFRAG_.*)|(LIP_.*)|(CAT_.*)$	MatrixDB
@@ -404,7 +404,7 @@ PANTHER Pathway	panther.pathway		http://www.pantherdb.org/pathway/pathwayDiagram
 PANTHER Pathway Component	panther.pthcmp		http://www.pantherdb.org/pathway/pathCatDetail.do?clsAccession=$id	P00266	unknown		1	urn:miriam:panther.pthcmp	^G|P|U|C|S\d{5}$	
 PASS2	pass2		http://caps.ncbs.res.in/pass2/superfamily/superfamilydetail.php?superfamilyId=$id	46977	unknown		1	urn:miriam:pass2	^\d+$	
 Pathway Commons	Pc	http://www.pathwaycommons.org/pc/	http://www.pathwaycommons.org/pc/record2.do?id=$id	485991	pathway		1	urn:miriam:pathwaycommons	^\d+$	Pathway Commons
-Pathway Ontology	pw	http://rgd.mcw.edu/rgdweb/ontology/search.html	http://purl.bioontology.org/ontology/PW/$id	PW:0000208	unknown		1	urn:miriam:pw	^PW:\d{7}$	
+Pathway Ontology	PW	http://rgd.mcw.edu/rgdweb/ontology/search.html	http://purl.bioontology.org/ontology/PW/$id	PW:0000208	pathway		1	urn:miriam:pw	^PW:\d{7}$	
 PATO	pato		http://www.ebi.ac.uk/ontology-lookup/?termId=$id	PATO:0001998	unknown		1	urn:miriam:pato	^PATO:\d{7}$	
 PaxDb Organism	paxdb.organism		http://pax-db.org/#!species/$id	9606	unknown		1	urn:miriam:paxdb.organism	^\d+$	
 PaxDb Protein	paxdb.protein		http://pax-db.org/#!protein/$id	977869	unknown		1	urn:miriam:paxdb.protein	^\d+$	
@@ -412,7 +412,7 @@ Pazar Transcription Factor	pazar		http://www.pazar.info/cgi-bin/tf_search.cgi?ge
 PDB	Pd	http://www.pdb.org/	http://www.rcsb.org/pdb/explore/explore.do?structureId=$id	2gc4	protein		1	urn:miriam:pdb	^[0-9][A-Za-z0-9]{3}$	Protein Data Bank
 PeptideAtlas	peptideatlas		https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/Summarize_Peptide?query=QUERY&searchForThis=$id	PAp00000009	unknown		1	urn:miriam:peptideatlas	^PAp[0-9]{8}$	
 Peroxibase	peroxibase		http://peroxibase.toulouse.inra.fr/browse/process/view_perox.php?id=$id	5282	unknown		1	urn:miriam:peroxibase	^\d+$	
-Pfam	Pf	http://pfam.sanger.ac.uk/	http://pfam.sanger.ac.uk/family/$id/	PF01234	protein		1	urn:miriam:pfam	^PF\d{5}$	Pfam
+Pfam	Pf	https://pfam.xfam.org/	https://pfam.xfam.org/family/$id/	PF01234	protein		1	urn:miriam:pfam	^PF\d{5}$	Pfam
 PharmGKB Disease	pharmgkb.disease		http://www.pharmgkb.org/disease/$id	PA447218	unknown		1	urn:miriam:pharmgkb.disease	^PA\d+$	
 PharmGKB Drug	Pgd	http://www.pharmgkb.org/	http://www.pharmgkb.org/drug/$id	PA448710	metabolite		1	urn:miriam:pharmgkb.drug	^PA\d+$	PharmGKB Drug
 PharmGKB Gene	Pgg	http://www.pharmgkb.org/	http://www.pharmgkb.org/gene/$id	PA131	gene		1	urn:miriam:pharmgkb.gene	^PA\w+$	PharmGKB Gene
@@ -479,7 +479,7 @@ Science Signaling Pathway-Independent Component	sciencesignaling.pic		http://stk
 SCOP	scop		http://scop.bic.nus.edu.sg/search.cgi?sunid=$id	47419	unknown		1	urn:miriam:scop	^\d+$	
 Sequence Ontology	so		http://purl.bioontology.org/ontology/SO/$id	SO:0000704	unknown		1	urn:miriam:so	^SO:\d{7}$	
 Sequence Read Archive	insdc.sra		http://trace.ddbj.nig.ac.jp/DRASearch/experiment?acc=$id	SRX000007	unknown		1	urn:miriam:insdc.sra	^[SED]R[APRSXZ]\d{6}	
-SGD	D	http://www.yeastgenome.org/	http://www.yeastgenome.org/cgi-bin/locus.fpl?dbid=$id	S000028457	gene	Saccharomyces cerevisiae	1	urn:miriam:sgd	^((S\d+$)|(Y[A-Z]{2}\d{3}[a-zA-Z](\-[A-Z])?))$	SGD
+SGD	D	http://www.yeastgenome.org/	http://www.yeastgenome.org/locus/$id	S000028457	gene	Saccharomyces cerevisiae	1	urn:miriam:sgd	^((S\d+$)|(Y[A-Z]{2}\d{3}[a-zA-Z](\-[A-Z])?))$	SGD
 SIDER Drug	sider.drug		http://sideeffects.embl.de/drugs/$id/	2244	unknown		1	urn:miriam:sider.drug	^\d+$	
 SIDER Side Effect	sider.effect		http://sideeffects.embl.de/se/$id/	C0017565	unknown		1	urn:miriam:sider.effect	^C\d+$	
 Signaling Gateway	signaling-gateway		http://www.signaling-gateway.org/molecule/query?afcsid=$id	A001094	unknown		1	urn:miriam:signaling-gateway	A\d{6}$	

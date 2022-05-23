@@ -8968,7 +8968,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100033#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.yeastgenome.org/cgi-bin/locus.fpl?dbid=$id> ;
+      dcat:accessURL <http://www.yeastgenome.org/locus/$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100033> .
 
@@ -11088,7 +11088,7 @@ Note: Currently, direct access to RNA products is restricted. This is expected t
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000242>
       a       dcat:CatalogRecord ;
       idot:idRegexPattern "^PW:\\d{7}$"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      idot:namespace "pw"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:namespace "PW"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:exampleResource
               "PW:0000208"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:inDataset <http://identifiers.org/registry/> ;
@@ -15043,7 +15043,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
 
 <http://identifiers.org/miriam.resource/MIR:00100080#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.lipidmaps.org/data/LMSDRecord.php?LMID=$id> ;
+      dcat:accessURL <https://www.lipidmaps.org/data/structure/LMSDSearch.php?Mode=ProcessClassSearch&LMID=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100080> .
 

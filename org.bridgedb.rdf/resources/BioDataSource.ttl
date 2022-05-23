@@ -893,7 +893,7 @@ bridgeDB:DataSource_PDB a bridgeDB:DataSource ;
 bridgeDB:DataSource_Pfam a bridgeDB:DataSource ;
 	bridgeDB:fullName "Pfam" ;
 	bridgeDB:systemCode "Pf" ;
-	bridgeDB:mainUrl "http://pfam.sanger.ac.uk/" ;
+	bridgeDB:mainUrl "https://pfam.xfam.org/" ;
 	bridgeDB:idExample "PF01234" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "protein" ;
