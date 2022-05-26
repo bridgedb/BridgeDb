@@ -1,10 +1,10 @@
 Affy	X	http://www.affymetrix.com/	https://www.affymetrix.com/LinkServlet?probeset=$id	1851_s_at	probe		0	urn:miriam:affy.probeset	\d{4,}((_[asx])?_at)?	Affymetrix Probeset		affy.probeset
-Agilent	Ag	http://agilent.com		A_24_P98555	probe		0	Ag	A_\d+_.+	Agilent		
+Agilent	Ag	http://agilent.com		A_24_P98555	probe		0	Ag	A_\d+_.+	Agilent		agilent.probe
 AOP-Wiki KE	AopKe	https://aopwiki.org/	https://aopwiki.org/events/$id	3	unknown		1	urn:miriam:aop.events	^\d+$	AOP-Wiki Key Events		aop.events
 AOP-Wiki AOP	Aop	https://aopwiki.org/	https://aopwiki.org/aops/$id	3	pathway		1	urn:miriam:aop	^\d+$	AOP-Wiki Adverse Outcome Pathway		aop
 AOP-Wiki KER	AopKer	https://aopwiki.org/	https://aopwiki.org/relationships/$id	5	interaction		1	urn:miriam:aop.relationships	^\d+$	AOP-Wiki Key Event Relationships		aop.relationships
 AOP-Wiki Stressor	AopS	https://aopwiki.org/	https://aopwiki.org/stressors/$id	222	metabolite		1	urn:miriam:aop.stressor	^\d+$	AOP-Wiki Stressor		aop.stressor
-BIND	Bi	http://www.bind.ca/	http://www.bind.ca/Action?identifier=bindid&idsearch=$id		interaction		1	urn:miriam:bind	^\d+$	BIND		
+BIND	Bi	http://www.bind.ca/	http://www.bind.ca/Action?identifier=bindid&idsearch=$id		interaction		1		^\d+$	BIND		
 BioCyc	Bc	http://biocyc.org	http://biocyc.org/getid?id=$id	ECOLI:CYT-D-UBIOX-CPLX	gene		1	urn:miriam:biocyc	^\w+\:[A-Za-z0-9-]+$	BioCyc		biocyc
 BioGrid	Bg	http://thebiogrid.org/	http://thebiogrid.org/$id	31623	interaction		1	urn:miriam:biogrid	^\d+$	BioGRID		biogrid
 BioModels Database	Bm	http://www.ebi.ac.uk/biomodels/	http://www.ebi.ac.uk/biomodels-main/$id	BIOMD0000000048	pathway		1	urn:miriam:biomodels.db	^((BIOMD|MODEL)\d{10})|(BMID\d{12})$	BioModels Database		biomodels.db
@@ -16,7 +16,7 @@ CCDS	Cc	http://identifiers.org/ccds/	http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse
 ChEMBL compound	Cl	https://www.ebi.ac.uk/chembldb/	https://www.ebi.ac.uk/chembl/compound/inspect/$id	CHEMBL308052	metabolite		1	urn:miriam:chembl.compound	^CHEMBL\d+$	ChEMBL compound	P592	chembl.compound
 ChEBI	Ce	http://www.ebi.ac.uk/chebi/	http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id	CHEBI:36927	metabolite		1	urn:miriam:chebi	^(CHEBI:)?\d+$	ChEBI	P683	chebi
 Chemspider	Cs	http://www.chemspider.com/	http://www.chemspider.com/Chemical-Structure.$id.html	56586	metabolite		1	urn:miriam:chemspider	^\d+$	ChemSpider	P661	chemspider
-CodeLink	Ge	http://www.appliedmicroarrays.com/		GE86325	probe		0	Ge		CodeLink		
+CodeLink	Ge	http://www.appliedmicroarrays.com/		GE86325	probe		0	Ge		CodeLink		codelink
 Complex Portal	Cpx	https://www.ebi.ac.uk/complexportal/	https://www.ebi.ac.uk/complexportal/complex/$id	CPX-373	complex		1	urn:miriam:complexportal	^CPX-[0-9]+$	Complex Portal		complexportal
 Database of Interacting Proteins	Dip	http://dip.doe-mbi.ucla.edu/	http://dip.doe-mbi.ucla.edu/dip/DIPview.cgi?ID=$id	DIP-743N	interaction		1	urn:miriam:dip	^DIP[\:\-]\d{3}[EN]$	Database of Interacting Proteins		dip
 dbSNP	Sn	http://www.ncbi.nlm.nih.gov/sites/entrez?db=snp	http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$id	121909098	gene		1	urn:miriam:dbsnp	^\d+$	dbSNP	P6861	dbsnp
@@ -29,7 +29,7 @@ Ensembl	En	http://www.ensembl.org/	https://www.ensembl.org/id/$id	ENSG0000013961
 Entrez Gene	L	http://www.ncbi.nlm.nih.gov/gene	http://www.ncbi.nlm.nih.gov/gene/$id	100010	gene		1	urn:miriam:ncbigene	^\d+$	Entrez Gene	P351	ncbigene
 Enzyme Nomenclature	E	http://www.ebi.ac.uk/intenz/	http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec=$id	1.1.1.1	gene		1	urn:miriam:ec-code	^\d+\.-\.-\.-|\d+\.\d+\.-\.-|\d+\.\d+\.\d+\.-|\d+\.\d+\.\d+\.(n)?\d+$	Enzyme Nomenclature	P591	eccode
 EPA CompTox	Ect	https://comptox.epa.gov/dashboard	https://comptox.epa.gov/dashboard/$id	DTXSID7020637	metabolite		1	Ect	^DTXSID(\d{2})?\d{7}\d?$	EPA CompTox Dashboard	P3117	comptox
-FlyBase	F	http://flybase.org/	http://flybase.org/reports/$id.html	FBgn0011293	gene	Drosophila melanogaster	1	urn:miriam:flybase	^FB\w{2}\d{7}$	FlyBase	P3852	flybase
+FlyBase	F	http://flybase.org/	http://flybase.org/reports/$id.html	FBgn0011293	gene	Drosophila melanogaster	1	urn:miriam:fb	^FB\w{2}\d{7}$	FlyBase	P3852	flybase
 GenBank	G	http://www.ncbi.nlm.nih.gov/genbank/	http://www.ncbi.nlm.nih.gov/nuccore/$id	NW_004190323	gene		0	urn:miriam:insdc	(\w\d{5})|(\w{2}\d{6})|(\w{3}\d{5})	GenBank		insdc
 Gene Wiki	Gw	http://en.wikipedia.org/wiki/Portal:Gene_Wiki	http://plugins.biogps.org/cgi-bin/wp.cgi?id=$id	1017	gene		0	urn:miriam:genewiki	\d+	Gene Wiki	P351	genewiki
 GeneOntology	T	http://www.ebi.ac.uk/QuickGO/	http://www.ebi.ac.uk/QuickGO/GTerm?id=$id	GO:0006915	ontology		0	urn:miriam:go	^GO:\d{7}$	Gene Ontology	P686	go
@@ -41,21 +41,21 @@ Gramene Pathway	Gp	http://www.gramene.org/pathway		AAH72400	pathway		1	Gp		Grame
 Gramene Rice	EnOj	http://www.gramene.org/	http://www.gramene.org/Oryza_sativa/Gene/Summary?db=core;g=$id	osa-MIR171a	gene		1	EnOj		Gramene Rice		
 Guide to Pharmacology	Gpl	http://www.guidetopharmacology.org/	https://www.guidetopharmacology.org/GRAC/LigandDisplayForward?ligandId=$id	1627	gene		1		^\d+$	Guide to Pharmacology Targets	P5458	iuphar.receptor
 Guide to Pharmacology Targets	Gpt	http://www.guidetopharmacology.org/	https://www.guidetopharmacology.org/GRAC/ObjectDisplayForward?objectId=$id	256	metabolite		1		^\d+$	Guide to Pharmacology	P595	iuphar.ligand
-HGNC	H	http://www.genenames.org		DAPK1	gene	Homo sapiens	1	urn:miriam:hgnc.symbol	^[A-Za-z0-9]+	HGNC Symbol	P353	
+HGNC	H	http://www.genenames.org		DAPK1	gene	Homo sapiens	1	urn:miriam:hgnc.symbol	^[A-Za-z0-9]+	HGNC Symbol	P353	hgnc.symbol
 HGNC Accession number	Hac	http://www.genenames.org	https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/$id	2674	gene	Homo sapiens	1	urn:miriam:hgnc	^(HGNC:)?\d{1,5}$	HGNC	P354	hgnc
 HMDB	Ch	http://www.hmdb.ca/	http://www.hmdb.ca/metabolites/$id	HMDB0000001	metabolite		1	urn:miriam:hmdb	^HMDB(\d{2})?\d{5}$	HMDB	P2057	hmdb
 HomoloGene	Hg	http://www.ncbi.nlm.nih.gov/homologene/	http://www.ncbi.nlm.nih.gov/homologene/$id	1000	gene		1	urn:miriam:homologene	^\d+$	HomoloGene	P593	homologene
-HPRD	Hp	http://www.hprd.org/			interaction	Homo sapiens	1	urn:miriam:hprd		HPRD		
+HPRD	Hp	http://www.hprd.org/			interaction	Homo sapiens	1	urn:miriam:hprd		HPRD		hprd
 Human Disease Ontology	Do	http://www.disease-ontology.org	https://disease-ontology.org/?id=$id	DOID:11337	unknown	Homo sapiens	1	urn:miriam:doid	^DOID\:\d+$	Disease Ontology		doid
 ICD-9	ICD9	http://www.who.int/classifications/icd/en/	http://www.icd9data.com/getICD9Code.ashx?icd9=$id	104	unknown	Homo sapiens	1	ICD9	^\d+$	International Classification of Diseases		icd9
 ICD-10	ICD10	http://www.who.int/classifications/icd/en/	http://apps.who.int/classifications/icd10/browse/2010/en#/{$id}	C34	unknown	Homo sapiens	1	ICD10	^[A-Z]\d+(\.[-\d+])?$	International Classification of Diseases		icd10
-ICD-11	ICD11	http://www.who.int/classifications/icd/en/		1A95	unknown	Homo sapiens	1	ICD11	^([A-Z]|\d)+(\d|[A-Z])\d+$	International Classification of Diseases		
-Illumina	Il	http://www.illumina.com/		ILMN_5668	probe		0	Il	ILMN_\d+	Illumina		
-InChIKey	Ik	http://inchi.org/		QTBSBXVTEAMEQO-UHFFFAOYSA-N	metabolite		1	urn:miriam:inchikey	^[A-Z]{14}\-[A-Z]{10}(\-[A-Z])?	Standard InChIKey	P235	
+ICD-11	ICD11	http://www.who.int/classifications/icd/en/		1A95	unknown	Homo sapiens	1	ICD11	^([A-Z]|\d)+(\d|[A-Z])\d+$	International Classification of Diseases		icd11
+Illumina	Il	http://www.illumina.com/		ILMN_5668	probe		0	Il	ILMN_\d+	Illumina		illumina.probe
+InChIKey	Ik	http://inchi.org/		QTBSBXVTEAMEQO-UHFFFAOYSA-N	metabolite		1	urn:miriam:inchikey	^[A-Z]{14}\-[A-Z]{10}(\-[A-Z])?	Standard InChIKey	P235	inchikey
 IntAct	Ia	http://www.ebi.ac.uk/intact/	http://www.ebi.ac.uk/intact/pages/details/details.xhtml?interactionAc=$id	EBI-2307691	interaction		1	urn:miriam:intact	^EBI\-[0-9]+$	IntAct		intact
 InterPro	I	http://www.ebi.ac.uk/interpro/	http://www.ebi.ac.uk/interpro/DisplayIproEntry?ac=$id	IPR000100	protein		1	urn:miriam:interpro	^IPR\d{6}$	InterPro	P2926	interpro
-IPI	Ip	http://www.ebi.ac.uk/IPI	http://www.ebi.ac.uk/cgi-bin/dbfetch?db=IPI&id=$id&format=default	IPI00000001	protein		1	urn:miriam:ipi	^IPI\d{8}$	IPI		interpro
-IRGSP Gene	Ir	http://rgp.dna.affrc.go.jp/IRGSP/		Os12g0561000	gene		1	Ir	Os\d{2}g\d+	IRGSP Gene		
+IPI	Ip	http://www.ebi.ac.uk/IPI	http://www.ebi.ac.uk/cgi-bin/dbfetch?db=IPI&id=$id&format=default	IPI00000001	protein		1		^IPI\d{8}$	IPI		interpro
+IRGSP Gene	Ir	http://rgp.dna.affrc.go.jp/IRGSP/	https://rapdb.dna.affrc.go.jp/viewer/gbrowse_details/irgsp1?name=$id	Os12g0561000	gene		1	Ir	Os\d{2}g\d+	IRGSP Gene		rapdb.locus
 ISBN	isbn	http://isbndb.com/	http://isbndb.com/search-all.html?kw=$id	9781584885658	publication		1	urn:miriam:isbn	^(ISBN)?(-13|-10)?[:]?[ ]?(\d{2,3}[ -]?)?\d{1,5}[ -]?\d{1,7}[ -]?\d{1,6}[ -]?(\d|X)$	ISBN	P212	isbn
 ISSN	issn	https://portal.issn.org	https://portal.issn.org/resource/ISSN/$id	1776-3045	publication		1	urn:miriam:issn	^\d{4}-\d{3}[\dX]$	ISSN	P236	issn
 KEGG Compound	Ck	http://www.genome.jp/kegg/ligand.html	http://www.genome.jp/dbget-bin/www_bget?cpd:$id	C12345	metabolite		1	urn:miriam:kegg.compound	^C\d+$	KEGG Compound	P665	kegg.compound
@@ -73,22 +73,22 @@ MatrixDB	Md	http://matrixdb.ibcp.fr/	http://matrixdb.ibcp.fr/cgi-bin/model/repor
 MeSH	Me	http://id.nlm.nih.gov/mesh/	http://id.nlm.nih.gov/mesh/$id	C000100	other		1	urn:miriam:mesh	^(C|D)\d{6}$	Medical Subject Headings		mesh
 MetaboLights Compounds	Ml	http://www.ebi.ac.uk/metabolights/	http://www.ebi.ac.uk/metabolights/$id	MTBLC17170	metabolite		1	Ml	^MTBLC\d{1,6}$	MetaboLights Compounds	P3890	metabolights
 MetaCyc	Mc	http://www.metacyc.org/	http://www.metacyc.org/META/NEW-IMAGE?type=NIL&object=$id	D-GLUTAMATE-OXIDASE-RXN	interaction		1	Mc		MetaCyc		metacyc.reaction
-MGI	M	http://www.informatics.jax.org/	http://www.informatics.jax.org/marker/$id	MGI:2442292	gene	Mus musculus	1	urn:miriam:mgd	^MGI:\d+$	Mouse Genome Database	P671	mgi
+MGI	M	http://www.informatics.jax.org/	http://www.informatics.jax.org/marker/$id	MGI:2442292	gene	Mus musculus	1	urn:miriam:mgi	^MGI:\d+$	Mouse Genome Database	P671	mgi
 MINT	Mi	http://mint.bio.uniroma2.it/mint/	http://mint.bio.uniroma2.it/mint/search/inFrameInteraction.do?interactionAc=$id	MINT-10000	interaction		1	urn:miriam:mint	^MINT\-\d{1,5}$	MINT		mint
 miRBase mature sequence	Mbm	http://www.mirbase.org/	http://www.mirbase.org/cgi-bin/mature.pl?mature_acc=$id	MIMAT0000001	gene		1	urn:miriam:mirbase.mature	MIMAT\d{7}	miRBase mature sequence	P2871	mirbase.mature
 miRBase Sequence	Mb	http://microrna.sanger.ac.uk/	http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$id	MI0000001	gene		1	urn:miriam:mirbase	MI\d{7}	miRBase Sequence	P2870	mirbase
 NASC Gene	N	http://arabidopsis.info/		ATMG00960-TAIR-G	gene	Arabidopsis thaliana	1	N	AT[\dCM]G\d{5}\-TAIR\-G	NASC Gene		
 NCBI Protein	Np	http://www.ncbi.nlm.nih.gov/protein	http://www.ncbi.nlm.nih.gov/protein/$id	CAA71118.1	protein		1	urn:miriam:ncbiprotein	^\w+\d+(\.\d+)?$	NCBI Protein		ncbiprotein
 NCI Pathway Interaction Database	Pid	http://pid.nci.nih.gov/	http://pid.nci.nih.gov/search/pathway_landing.shtml?what=graphic&jpg=on&pathway_id=$id	pi3kcipathway	pathway		1	urn:miriam:pid.pathway	^\w+$	NCI Pathway Interaction Database		pid.pathway
-OMIM	Om	http://omim.org/	http://omim.org/entry/$id	603903	gene		0	urn:miriam:omim	^[*#+%^]?\d{6}$	OMIM	P492	omim
-OpenTargets	Opt	https://www.opentargets.org/	https://genetics.opentargets.org/gene/$id	ENSG00000169174	gene		1		^ENS[A-Z]*[FPTG]\d{11}$			
+OMIM	Om	http://omim.org/	http://omim.org/entry/$id	603903	gene		0	urn:miriam:mim	^[*#+%^]?\d{6}$	OMIM	P492	omim
+OpenTargets	Opt	https://www.opentargets.org/	https://genetics.opentargets.org/gene/$id	ENSG00000169174	gene		1		^ENS[A-Z]*[FPTG]\d{11}$			ensembl
 ORCID	orcid	https://orcid.org	https://orcid.org/$id	0000-0002-5355-2576	other	Homo sapiens	1	urn:miriam:orcid	^\d{4}-\d{4}-\d{4}-\d{3}(\d|X)$	ORCID	P496	orcid
 Orphanet	On	http://www.orpha.net/consor/	https://identifiers.org/orphanet:$id	85163	other	Homo sapiens	1	urn:miriam:orphanet	^\d+$	Bio2RDF		orphanet
 Oryzabase	Ob	http://www.shigen.nig.ac.jp/rice/oryzabase	http://www.shigen.nig.ac.jp/rice/oryzabase/gateway/gatewayAction.do?target=symbol&id=$id	468	gene	Oryza sativa	1	Ob		Oryzabase		oryzabase.gene
 Other	O				gene		1	O		Other		
 Pathway Commons	Pc	http://www.pathwaycommons.org/pc/	http://www.pathwaycommons.org/pc/record2.do?id=$id	485991	pathway		1	urn:miriam:pathwaycommons	^\d+$	Pathway Commons   		pathwaycommons
-Pathway Ontology	PW	http://bioportal.bioontology.org/ontologies/PW	http://purl.bioontology.org/ontology/PW/PW:$id	0000208	pathway		1	urn:miriam:PW	^\d{7}$	Pathway Ontology	P7333	pw
-PATO 	PATO	http://bioportal.bioontology.org/ontologies/PATO	http://purl.bioontology.org/ontology/PATO/PATO:$id	0001998	gene		1	urn:miriam:PATO	^\d{7}$	PATO		pato
+Pathway Ontology	PW	http://bioportal.bioontology.org/ontologies/PW	http://purl.bioontology.org/ontology/PW/PW:$id	0000208	pathway		1	urn:miriam:pw	^\d{7}$	Pathway Ontology	P7333	pw
+PATO 	PATO	http://bioportal.bioontology.org/ontologies/PATO	http://purl.bioontology.org/ontology/PATO/PATO:$id	0001998	gene		1	urn:miriam:pato	^\d{7}$	PATO		pato
 PDB	Pd	http://www.pdb.org/	http://www.rcsb.org/pdb/explore/explore.do?structureId=$id	2gc4	protein		0	urn:miriam:pdb	^[0-9][A-Za-z0-9]{3}$	Protein Data Bank	P638	pdb
 Pfam	Pf	https://pfam.xfam.org/	https://pfam.xfam.org/family/$id/	PF01234	protein		1	urn:miriam:pfam	^PF\d{5}$	Pfam	P3519	pfam
 PharmGKB Drug	Pgd	https://www.pharmgkb.org/	https://www.pharmgkb.org/drug/$id	PA448710	metabolite		1	urn:miriam:pharmgkb.drug	^PA\d+$	PharmGKB Drug	P7001	pharmgkb.drug
@@ -112,14 +112,14 @@ SGD	D	http://www.yeastgenome.org/	http://www.yeastgenome.org/locus/$id	S00002845
 Small Molecule Pathway Database	Sm	http://www.smpdb.ca/pathways	https://smpdb.ca/view/$id	SMP00001	pathway		1	urn:miriam:smpdb	^SMP\d{5}$	Small Molecule Pathway Database		smpdb
 SMART	Sma	http://smart.embl-heidelberg.de/	http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN=$id	SM00015	protein		1	urn:miriam:smart	^SM\d{5}$	SMART	P3524	smart
 SPIKE	Sk	http://www.cs.tau.ac.il/~spike/	http://www.cs.tau.ac.il/~spike/maps/$id.html	spike00001	interaction		1	urn:miriam:spike.map	^spike\d{5}$	SPIKE Map		spike.map
-SPRINT	Spr	http://www.bioinf.manchester.ac.uk/dbbrowser/sprint/	http://www.bioinf.manchester.ac.uk/cgi-bin/dbbrowser/sprint/searchprintss.cgi?prints_accn=$id&display_opts=Prints&category=None&queryform=false&regexpr=off	PR00001	protein		1	urn:miriam:sprint	^PR\d{5}$	SPRINT		sprint
+SPRINT	Spr	http://www.bioinf.manchester.ac.uk/dbbrowser/sprint/	http://www.bioinf.manchester.ac.uk/cgi-bin/dbbrowser/sprint/searchprintss.cgi?prints_accn=$id&display_opts=Prints&category=None&queryform=false&regexpr=off	PR00001	protein		1		^PR\d{5}$	SPRINT		sprint
 STRING	Str	http://string.embl.de/	http://string.embl.de/interactions/$id	P53350	protein		1	urn:miriam:string	^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9])|([0-9][A-Za-z0-9]{3})$	STRING		string
 SubstrateDB	Sdb	http://substrate.burnham.org/	http://substrate.burnham.org/protein/annotation/$id/html	1915	protein		0	urn:miriam:pmap.substratedb	^\d+$	SubstrateDB		pmap.substratedb
 SubtiWiki	Bsu	http://www.subtiwiki.uni-goettingen.de/wiki/index.php/Main_Page	http://www.subtiwiki.uni-goettingen.de/wiki/index.php/$id	BSU29180	gene	Bacillus subtilis	1	urn:miriam:subtiwiki	^BSU\d{5}$	SubtiWiki		subtiwiki
 SUPFAM	Sf	http://supfam.org/SUPERFAMILY/	http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi?ipid=$id	SSF57615	protein		1	urn:miriam:supfam	^\w+$	SUPFAM		supfam
 SWISS-MODEL	Sw	http://swissmodel.expasy.org/	http://swissmodel.expasy.org/repository/smr.php?sptr_ac=$id	P23298	protein		1	urn:miriam:swiss-model	^\w+$	SWISS-MODEL		swiss-model
 SwissLipids	Sl	http://www.swisslipids.org/	http://www.swisslipids.org/#/entity/$id/	SLM:000048885	metabolite		1		^SLM:\d+$	SwissLipids		swisslipid
-Systems Biology Ontology	Sbo	http://www.ebi.ac.uk/sbo/	http://www.ebi.ac.uk/sbo/main/$id	SBO:0000262	ontology		1	urn:miriam:biomodels.sbo	^SBO:\d{7}$	Systems Biology Ontology		sbo
+Systems Biology Ontology	Sbo	http://www.ebi.ac.uk/sbo/	http://www.ebi.ac.uk/sbo/main/$id	SBO:0000262	ontology		1	urn:miriam:sbo	^SBO:\d{7}$	Systems Biology Ontology		sbo
 TAIR	A	http://arabidopsis.org/index.jsp	http://arabidopsis.org/servlets/TairObject?type=locus&name=$id	AT1G01030	gene	Arabidopsis thaliana	1	urn:miriam:tair.locus	^AT[1-5]G\d{5}$	TAIR Locus		tair.locus
 TIGR	Ti	http://www.jcvi.org/		12012.t00308	gene		1	Ti		TIGR		
 TTD Drug	Td	http://bidd.nus.edu.sg/group/cjttd/TTD_HOME.asp	http://bidd.nus.edu.sg/group/cjttd/ZFTTDDRUG.asp?ID=$id	DAP000773	metabolite		1	urn:miriam:ttd.drug	^DAP\d+$	TTD Drug		ttd.drug
@@ -127,15 +127,15 @@ TTD Target	Tt	http://bidd.nus.edu.sg/group/cjttd/TTD_HOME.asp	http://bidd.nus.ed
 TubercuList	Tb	http://tuberculist.epfl.ch	http://tuberculist.epfl.ch/quicksearch.php?gene+name=$id	Rv0064	gene	Mycobacterium tuberculosis	1	urn:miriam:myco.tuber	Rv\d{4}(A|B|c|\.\d)?	TubercuList		myco.tuber
 UCSC Genome Browser	Uc	http://genome.ucsc.edu/	http://genome.ucsc.edu/cgi-bin/hgTracks?position=$id	uc001tyh.1	gene		1	Uc	uc\d{3}[a-z]{3}\.\d	UCSC Genome Browser	P2576	ucsc
 UMLS CUI	Cu	https://www.nlm.nih.gov/research/umls/rxnorm/index.html	https://www.ncbi.nlm.nih.gov/medgen/{$id}	760050	other	Homo sapiens	1	urn:miriam:medgen	^[CN]*\d{4,7}$	MedGen		medgen
-Unipathway	Up	http://www.grenoble.prabi.fr/obiwarehouse/unipathway	http://www.grenoble.prabi.fr/obiwarehouse/unipathway/upa?upid=$id	UPA00206	pathway		1	urn:miriam:unipathway	^UPA\d{5}$	Unipathway		upa
+Unipathway	Up	http://www.grenoble.prabi.fr/obiwarehouse/unipathway	http://www.grenoble.prabi.fr/obiwarehouse/unipathway/upa?upid=$id	UPA00206	pathway		1		^UPA\d{5}$	Unipathway		upa
 Uniprot-TrEMBL	S	http://www.uniprot.org/	http://www.uniprot.org/uniprot/$id	P62158	protein		1	urn:miriam:uniprot	^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9])(\.\d+)?|([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])$	UniProtKB/TrEMBL	P352	uniprot
 VMH metabolite	VmhM	http://www.vmh.life	https://www.vmh.life/#metabolite/$id	h2o	metabolite		1		[a-zA-Z0-9_\(\_\)\[\]]+	VMH Life_Metabolite		vmhmetabolite
-Wheat gene names	Wn	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/report?class=gene;name=$id	5S-Rrna-D1_(Triticum)	gene	Triticum aestivum	1	Wn		Wheat gene names		
-Wheat gene refs	Wr	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$id	WGS-95-1333	probe	Triticum aestivum	0	Wr		Wheat gene refs		
+Wheat gene names	Wn	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/report?class=gene;name=$id	1-FEH+w3	gene	Triticum aestivum	1	Wn		Wheat gene names		graingenes.symbol
+Wheat gene refs	Wr	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$id	WGS-95-1333	probe	Triticum aestivum	0	Wr		Wheat gene refs		graingenes.reference
 WikiGenes	Wg	http://www.wikigenes.org/	https://www.wikigenes.org/e/gene/e/$id.html	7157	gene		0	urn:miriam:wikigenes		WikiGenes	P351	wikigenes
 WikiPathways	Wp	http://www.wikipathways.org/	https://www.wikipathways.org/instance/$id	WP100	pathway		1	urn:miriam:wikipathways	WP\d{1,5}(_r\d+)?	WikiPathways	P2410	wikipathways
 Wikidata	Wd	http://www.wikidata.org	https://scholia.toolforge.org/$id	Q407962	metabolite		1	urn:miriam:wikidata	^Q\d+$	Wikidata		wikidata
 Wikipedia	Wi	http://www.wikipedia.org	https://en.wikipedia.org/wiki/$id	Acetate	metabolite		0	urn:miriam:wikipedia.en	^.*$	Wikipedia		wikipedia.en
-WormBase	W	http://www.wormbase.org/	http://www.wormbase.org/db/gene/gene?name=$id;class=Gene	WBGene00000001	gene	Caenorhabditis elegans	1	urn:miriam:wormbase	^WBGene\d{8}$	WormBase	P3860	wormbase
+WormBase	W	http://www.wormbase.org/	http://www.wormbase.org/db/gene/gene?name=$id;class=Gene	WBGene00000001	gene	Caenorhabditis elegans	1	urn:miriam:wb	^WBGene\d{8}$	WormBase	P3860	wormbase
 XMetDB	Xm	http://www.xmetdb.org/	http://www.xmetdb.org/xmetdb/protocol/$id	XMETDB171	interaction		1		^XMETDB\d+$	Xenobiotics Metabolism Database		xmetdb
 ZFIN	Z	http://zfin.org	http://zfin.org/action/marker/view/$id	ZDB-GENE-041118-11	gene	Danio rerio	1	urn:miriam:zfin	ZDB\-GENE\-\d+\-\d+	ZFIN Gene	P3870	zfin
