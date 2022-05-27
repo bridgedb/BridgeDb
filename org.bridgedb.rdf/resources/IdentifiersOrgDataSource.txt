@@ -376,7 +376,7 @@ Olfactory Receptor Database	ordb		http://senselab.med.yale.edu/OrDB/eavData.aspx
 OMA Group	oma.grp		http://omabrowser.org/cgi-bin/gateway.pl?f=DisplayGroup&p1=$id	LCSCCPN	unknown		1	urn:miriam:oma.grp	^[A-Z]+$	
 OMA Protein	oma.protein		http://omabrowser.org/cgi-bin/gateway.pl?f=DisplayEntry&p1=$id	HUMAN16963	unknown		1	urn:miriam:oma.protein	^[A-Z0-9]{5}\d+$	
 OMIA	omia		http://omia.angis.org.au/$id/	1000	unknown		1	urn:miriam:omia	^\d+$	
-OMIM	Om	http://omim.org/	http://omim.org/entry/$id	603903	gene		1	urn:miriam:omim	^[*#+%^]?\d{6}$	OMIM
+OMIM	Om	http://omim.org/	http://omim.org/entry/$id	603903	gene		1	urn:miriam:mim	^[*#+%^]?\d{6}$	OMIM
 Ontology for Biomedical Investigations	obi		http://purl.bioontology.org/ontology/OBI/obo:$id	OBI_0000225	unknown		1	urn:miriam:obi	^OBI_\d{7}$	
 Ontology of Physics for Biology	opb		http://purl.bioontology.org/ontology/OPB/$id	OPB_00573	unknown		1	urn:miriam:opb	^OPB_\d+$	
 OPM	opm		http://opm.phar.umich.edu/protein.php?pdbid=$id	1h68	unknown		1	urn:miriam:opm	^[0-9][A-Za-z0-9]{3}$	
@@ -561,7 +561,7 @@ WikiGenes	Wg	http://www.wikigenes.org/	http://www.wikigenes.org/e/gene/e/$id.htm
 WikiPathways	Wp	http://www.wikipathways.org/	https://www.wikipathways.org/instance/$id	WP100	pathway		1	urn:miriam:wikipathways	WP\d{1,5}(\_r\d+)?$	WikiPathways
 Wikipedia	Wi	http://www.wikipedia.org	https://en.wikipedia.org/wiki/$id	Acetate	metabolite		1	urn:miriam:wikipedia.en	^[A-Za-z-0-9_]+$	Wikipedia
 Worfdb	worfdb		http://worfdb.dfci.harvard.edu/index.php?search_type=name&page=showresultrc&race_query=$id	T01B6.1	unknown		1	urn:miriam:worfdb	^\w+(\.\d+)?	
-WormBase	W	http://www.wormbase.org/	http://www.wormbase.org/db/gene/gene?name=$id;class=Gene	WBGene00000001	gene	Caenorhabditis elegans	1	urn:miriam:wormbase	^(WBGene\d{8}|([A-Z_a-z0-9]+(\.)?(t)?(\d+)?([a-z])?))$	WormBase
+WormBase	W	http://www.wormbase.org/	http://www.wormbase.org/db/gene/gene?name=$id;class=Gene	WBGene00000001	gene	Caenorhabditis elegans	1	urn:miriam:wb	^(WBGene\d{8}|([A-Z_a-z0-9]+(\.)?(t)?(\d+)?([a-z])?))$	WormBase
 WormBase RNAi	wormbase.rnai		http://www.wormbase.org/species/c_elegans/rnai/$id	WBRNAi00086878	unknown		1	urn:miriam:wormbase.rnai	^WBRNAi\d{8}$	
 Wormpep	wormpep		http://wormbase.sanger.ac.uk/db/seq/protein?name=WP%3A$id	CE28239	unknown		1	urn:miriam:wormpep	^CE\d{5}$	
 Xenbase	xenbase		http://www.xenbase.org/gene/showgene.do?method=displayGeneSummary&geneId=$id	922462	unknown		1	urn:miriam:xenbase	^(XB-GENE-)?\d+$	
