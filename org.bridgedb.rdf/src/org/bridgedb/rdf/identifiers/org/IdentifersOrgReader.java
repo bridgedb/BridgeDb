@@ -194,6 +194,7 @@ public class IdentifersOrgReader extends RdfBase {
     private DataSource readDataSource(RepositoryConnection repositoryConnection, Resource catalogRecord, 
             String identiferOrgBase) throws Exception{
         String sysCode = getSingletonString(repositoryConnection, catalogRecord, IdenitifiersOrgConstants.NAMESPACE_URI);
+        if (sysCode.equals("unipathway")) sysCode = "Up";
         String fullName = getSingletonString(repositoryConnection, catalogRecord, DCatConstants.TITLE_URI);
         if (fullName.equals("UniGene")){
             fullName = "UniGene number";
