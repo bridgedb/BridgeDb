@@ -102,7 +102,6 @@ public class DataSourceTxt
         if (fields.length > 10) builder.alternative(fields[10]);
         // field 11 = Wikidata property
         if (fields.length > 12) {
-        	System.out.println("Bioregistry prefix: " + fields[12]);
         	builder.bioregistryPrefix(fields[12]);
         }
     }		
