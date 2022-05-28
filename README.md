@@ -137,6 +137,12 @@ mvn release:perform
 The second command will make the actual push. These commands will update the version
 and everything.
 
+To make a development (SNAPSHOT) release, use:
+
+```shell
+mvn clean deploy
+```
+
 Library dependencies
 --------------------
 
