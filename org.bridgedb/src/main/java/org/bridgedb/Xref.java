@@ -142,7 +142,7 @@ public class Xref implements Comparable<Xref>
 	 * Uses DataSource.getCompactidentifier() to create a compact identifier, such as uniprot:P12345. 
      * 
  	 * @since Version 3.0.0
-     * @return the compact identifier as string or null if no valid Miriam namespace is known
+     * @return the compact identifier as string or null if no valid Bioregistry.io prefix is known
 	 */
 	public String getBioregistryIdentifier()
 	{
