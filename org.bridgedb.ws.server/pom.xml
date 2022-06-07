@@ -183,7 +183,7 @@
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.bio</artifactId>
 			<version>${project.parent.version}</version>
-            <type>test-jar</type>
+            <type>jar</type>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
