@@ -162,19 +162,5 @@
             <scope>test</scope>
         </dependency>
      </dependencies>
-    <repositories>
-        <!-- April 2014 down repository>
-            <id>aduna-repo</id>
-            <name>Aduna repository</name>
-            <url>http://repo.aduna-software.org/maven2/releases/</url>
-        </repository-->
-    </repositories>
-    <pluginRepositories>
-        <!-- googlecode is dead -->
-        <!--<pluginRepository>-->
-            <!--<id>onejar-maven-plugin.googlecode.com</id>-->
-            <!--<url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>-->
-        <!--</pluginRepository>-->
-    </pluginRepositories>
 
 </project>
