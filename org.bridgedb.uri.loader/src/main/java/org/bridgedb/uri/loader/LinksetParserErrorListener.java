@@ -21,7 +21,7 @@ package org.bridgedb.uri.loader;
 
 import org.apache.log4j.Logger;
 import org.bridgedb.utils.Reporter;
-import org.openrdf.rio.ParseErrorListener;
+import org.eclipse.rdf4j.rio.ParseErrorListener;
 
 /**
  *
@@ -32,19 +32,19 @@ public class LinksetParserErrorListener implements ParseErrorListener{
     static final Logger logger = Logger.getLogger(LinksetParserErrorListener.class);
     
     @Override
-    public void warning(String message, int lineNo, int colNo) {
+    public void warning(String message, long lineNo, long colNo) {
         logger.warn("WARNING *** " + message);
         logger.warn("Line number: " + lineNo + " columns number: " + colNo);
     }
 
     @Override
-    public void error(String message, int lineNo, int colNo) {
+    public void error(String message, long lineNo, long colNo) {
         logger.error("***ERROR*** " + message);
         logger.error("Line number: " + lineNo + " columns number: " + colNo);
     }
 
     @Override
-    public void fatalError(String message, int lineNo, int colNo) {
+    public void fatalError(String message, long lineNo, long colNo) {
         logger.fatal("******* FETAL ERROR  *** ");
         logger.fatal(message);
         logger.fatal ("Line number: " + lineNo + " columns number: " + colNo);

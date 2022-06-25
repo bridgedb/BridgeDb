@@ -18,8 +18,8 @@ import org.bridgedb.uri.loader.LinksetListener;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.model.impl.URIImpl;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

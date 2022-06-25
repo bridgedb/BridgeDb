@@ -27,8 +27,8 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
 
-import org.openrdf.model.Resource;
-import org.openrdf.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.impl.URIImpl;
 
 /**
  *

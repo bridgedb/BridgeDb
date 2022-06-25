@@ -21,7 +21,7 @@ package org.bridgedb.uri.tools;
 
 import java.util.Set;
 import org.bridgedb.utils.BridgeDBException;
-import org.openrdf.model.Resource;
+import org.eclipse.rdf4j.model.Resource;
 
 /**
  * Import Interface that supports the adding of Uris.

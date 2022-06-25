@@ -31,8 +31,8 @@ import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 
 import org.junit.jupiter.api.Test;
-import org.openrdf.model.Resource;
-import org.openrdf.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.impl.URIImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Tag;

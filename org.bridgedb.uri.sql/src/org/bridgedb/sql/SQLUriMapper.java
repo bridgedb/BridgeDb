@@ -65,7 +65,7 @@ import org.bridgedb.uri.tools.GraphResolver;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;
-import org.openrdf.model.Resource;
+import org.eclipse.rdf4j.model.Resource;
 
 /**
  * Implements the UriMapper and UriListener interfaces using SQL.

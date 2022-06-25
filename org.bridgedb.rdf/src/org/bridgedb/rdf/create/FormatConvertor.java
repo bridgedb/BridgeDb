@@ -4,27 +4,27 @@
  */
 package org.bridgedb.rdf.create;
 
-import info.aduna.lang.FileFormat;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Optional;
+
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
-import org.openrdf.model.Statement;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.repository.RepositoryResult;
-import org.openrdf.repository.sail.SailRepository;
-import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.RDFParser;
-import org.openrdf.rio.RDFParserRegistry;
-import org.openrdf.rio.RDFWriter;
-import org.openrdf.rio.turtle.TurtleWriter;
-import org.openrdf.sail.memory.MemoryStore;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.repository.RepositoryResult;
+import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
+import org.eclipse.rdf4j.rio.RDFParserRegistry;
+import org.eclipse.rdf4j.rio.RDFWriter;
+import org.eclipse.rdf4j.rio.turtle.TurtleWriter;
+import org.eclipse.rdf4j.sail.memory.MemoryStore;
 
 /**
  *
@@ -39,12 +39,12 @@ public class FormatConvertor {
             fileName = "try.ttl";
         }
         RDFParserRegistry reg = RDFParserRegistry.getInstance();
-        FileFormat fileFormat = reg.getFileFormatForFileName(fileName);
-        if (fileFormat == null || !(fileFormat instanceof RDFFormat)){
+        Optional<RDFFormat> fileFormat = reg.getFileFormatForFileName(fileName);
+        if (fileFormat.get() == null){
             //added bridgeDB/OPS specific extension here if required.  
             throw new BridgeDBException("failed");
         } else {
-            return (RDFFormat)fileFormat;
+            return fileFormat.get();
         }
     }
 

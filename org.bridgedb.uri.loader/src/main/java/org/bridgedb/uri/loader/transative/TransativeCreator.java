@@ -24,13 +24,13 @@ import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.StatementImpl;
-import org.openrdf.model.impl.URIImpl;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.RDFWriter;
-import org.openrdf.rio.turtle.TurtleWriter;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.model.impl.StatementImpl;
+import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
+import org.eclipse.rdf4j.rio.RDFWriter;
+import org.eclipse.rdf4j.rio.turtle.TurtleWriter;
 
 /**
  *

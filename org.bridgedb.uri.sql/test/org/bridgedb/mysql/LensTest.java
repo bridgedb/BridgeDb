@@ -35,7 +35,7 @@ import static org.hamcrest.Matchers.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.openrdf.model.Statement;
+import org.eclipse.rdf4j.model.Statement;
 
 /**
  *

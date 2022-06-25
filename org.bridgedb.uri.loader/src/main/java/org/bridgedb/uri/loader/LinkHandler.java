@@ -23,12 +23,12 @@ import org.apache.log4j.Logger;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;
-import org.openrdf.model.Resource;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.Value;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.helpers.RDFHandlerBase;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
+import org.eclipse.rdf4j.rio.helpers.RDFHandlerBase;
 
 /**
  * Reads an RDF linkset file and passes the information on to a RdfLoader.

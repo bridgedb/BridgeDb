@@ -12,7 +12,7 @@ import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.utils.BridgeDBException;
-import org.openrdf.model.Statement;
+import org.eclipse.rdf4j.model.Statement;
 
 /**
  *
