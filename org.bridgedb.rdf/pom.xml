@@ -77,7 +77,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.rdf4j</groupId>
-            <artifactId>rdf4j-rio-compliance</artifactId>
+            <artifactId>rdf4j-rio-testsuite</artifactId>
             <version>${rdf4j.version}</version>
             <type>jar</type>
         </dependency>

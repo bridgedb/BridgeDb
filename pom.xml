@@ -51,7 +51,7 @@
         <mysql.version>8.0.28</mysql.version>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <owlapi-api.version>3.4</owlapi-api.version>
-        <rdf4j.version>2.0.3</rdf4j.version>
+        <rdf4j.version>2.5.5</rdf4j.version>
         <servlet.version>2.5</servlet.version>
         <slf4j.version>1.6.4</slf4j.version>
         <derby.version>10.15.2.0</derby.version>
