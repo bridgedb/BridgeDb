@@ -131,8 +131,8 @@ To make the release, run the following commands. Mind you, this requires you
 to have an approved Sonatype (http://oss.sonatype.org/) account with push rights:
 
 ```shell
-mvn release:prepare
-mvn release:perform
+mvn versions:set -DnewVersion=3.0.16-SNAPSHOT
+mvn clean deploy -P release
 ```
 
 The second command will make the actual push. These commands will update the version
