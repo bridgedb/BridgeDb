@@ -613,7 +613,7 @@ public final class DataSource
         }
     }
     
-    /** 
+    /**
 	 * Register a new DataSource with (optional) detailed information.
 	 * This can be used by other modules to define new DataSources.
      * 
@@ -632,6 +632,17 @@ public final class DataSource
             throw new IllegalArgumentException ("Unsuitable fullName " + fullName + " with " + sysCode);
         }
         return findOrRegister(sysCode, fullName);
+    }
+            
+    /**
+	 * Create a new DataSource with (optional) detailed information with registration.
+     * 
+	 * @param sysCode short unique code between 1-4 letters, originally used by GenMAPP
+	 * @param fullName full name used in GPML.
+	 * @return Builder that can be used for adding detailed information.
+	 */
+	public static Builder mock(String sysCode, String fullName){
+		return new Builder(new DataSource (sysCode, fullName));
     }
             
     private static Builder findOrRegister(String sysCode, String fullName)
