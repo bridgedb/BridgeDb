@@ -5,22 +5,44 @@ type: software
 version: 3.0.14
 date-released: '2022-05-27'
 authors:
-  - given-names: 'Martijn P.'
-    family-names: Van Iersel
-  - given-names: Alexander R.
-    family-names: Pico
-  - given-names: Thomas
-    family-names: Kelder
-  - given-names: Jianjiong
-    family-names: Gao
-  - given-names: Ho
-    family-names: Isaac
-  - given-names: Kristina
-    family-names: Hanspers
+  - given-names: Manas
+    family-names: Awasthi
+  - given-names: Helena
+    family-names: Basaric
   - given-names: Bruce R.
     family-names: Conklin
   - given-names: Chris T.
     family-names: Evelo
+  - given-names: Jianjiong
+    family-names: Gao
+  - given-names: Alasdair
+    family-names: Gray
+  - given-names: Kristina
+    family-names: Hanspers
+  - given-names: Ho
+    family-names: Isaac
+  - given-names: Thomas
+    family-names: Kelder
+  - given-names: Randy
+    family-names: Kerber
+  - given-names: Martina
+    family-names: Kutmon
+  - given-names: Jonathan
+    family-names: Mélius
+  - given-names: Nuno
+    family-names: Nunes
+  - given-names: Alexander R.
+    family-names: Pico
+  - given-names: Anders
+    family-names: Riutta
+  - given-names: Denise
+    family-names: Slenter
+  - given-names: Stian
+    family-names: Soiland-Reyes
+  - given-names: 'Martijn P.'
+    family-names: Van Iersel
+  - given-names: Egon L.
+    family-names: Willighagen  
 identifiers:
   - type: url
     value: 'https://github.com/bridgedb/BridgeDb'
