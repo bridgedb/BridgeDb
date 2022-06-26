@@ -528,7 +528,9 @@ public final class DataSource
 		}
         
         public Builder miriamBase(String base){
-            if (current.miriamBase == null){
+            if (base == null) {
+                throw new IllegalArgumentException("Illegal attempt to set the miriam base to null");
+            } else if (current.miriamBase == null){
                 current.miriamBase = base;
                 byMiriamBase.put(base, current);
             } else {
