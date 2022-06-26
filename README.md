@@ -15,7 +15,7 @@ Using BridgeDb dependencies
 The [BridgeDb releases](https://github.com/bridgedb/BridgeDb/releases) are published to 
 [Maven Central](http://central.maven.org/maven2/org/bridgedb/), which means you can use the BridgeDb JARs without needing to compile BridgeDb.
 
-Usage depends on which module you require. The examples below assumes artifact `org.bridgedb.bio` and version `3.0.13`:
+Usage depends on which module you require. The examples below assumes artifact `org.bridgedb.bio` and version `3.0.15`:
 
 For [Maven](https://maven.apache.org/):
 
@@ -24,7 +24,7 @@ For [Maven](https://maven.apache.org/):
     <dependency>
         <groupId>org.bridgedb</groupId>
         <artifactId>org.bridgedb.bio</artifactId>
-        <version>3.0.13</version>
+        <version>3.0.15</version>
     </dependency>
 </dependencies>
 ```
@@ -32,19 +32,19 @@ For [Maven](https://maven.apache.org/):
 For [Gradle](https://gradle.org/):
 
 ```gradle
-compile group: 'org.bridgedb', name: 'org.bridgedb.bio', version: '3.0.13'
+compile group: 'org.bridgedb', name: 'org.bridgedb.bio', version: '3.0.15'
 ```
 
 For [Ivy](http://ant.apache.org/ivy/):
 
 ```xml
-<dependency org="org.bridgedb" name="org.bridgedb.bio" rev="3.0.13"/>
+<dependency org="org.bridgedb" name="org.bridgedb.bio" rev="3.0.15"/>
 ```
 
 For [Buildr](https://buildr.apache.org/):
 
 ```buildr
-'org.bridgedb:org.bridgedb.bio:jar:3.0.13'
+'org.bridgedb:org.bridgedb.bio:jar:3.0.15'
 ```
 
 
