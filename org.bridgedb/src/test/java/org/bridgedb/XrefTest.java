@@ -29,11 +29,11 @@ public class XrefTest {
 	
     @BeforeAll
     public static void registerDataSources() {
-    	XrefTest.EN = DataSource.register("En", "Ensembl").asDataSource();
-    	XrefTest.UNIPROT = DataSource.register("S", "Uniprot-TrEMBL").
-    		urnBase("urn:miriam:uniprot").
-    		bioregistryPrefix("uniprot").
-    		asDataSource();
+    	XrefTest.EN = DataSource.mock("En", "Ensembl").asDataSource();
+    	XrefTest.UNIPROT = DataSource.mock("S", "Uniprot-TrEMBL").
+    		    urnBase("urn:miriam:uniprot").
+    		    bioregistryPrefix("uniprot").
+    		    asDataSource();
     }
 
 	@Test

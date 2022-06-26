@@ -49,15 +49,9 @@ public class TestFile {
     @BeforeAll
     public static void init() {
     	YEAST_IDS = TestFile.class.getClassLoader().getResource("yeast_id_mapping.txt");
-        ENSEMBL = DataSource.fullNameExists("Ensembl")
-            ? DataSource.getExistingByFullName("Ensembl") 
-            : DataSource.register("En", "Ensembl").asDataSource();
-        ENTREZ = DataSource.fullNameExists("Entrez Gene")
-            ? DataSource.getExistingByFullName("Entrez Gene") 
-            : DataSource.register("L", "Entrez Gene").asDataSource();
-        EMBL = DataSource.fullNameExists("EMBL")
-            ? DataSource.getExistingByFullName("EMBL") 
-            : DataSource.register("Em", "EMBL").asDataSource();
+        ENSEMBL = DataSource.mock("En", "Ensembl").asDataSource();
+        ENTREZ = DataSource.mock("L", "Entrez Gene").asDataSource();
+        EMBL = DataSource.mock("Em", "EMBL").asDataSource();
         XREF1 = new Xref("YHR055C", ENSEMBL);
     }
 
