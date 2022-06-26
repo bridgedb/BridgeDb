@@ -17,26 +17,26 @@
  */
 package org.bridgedb.webservice.biomart;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.IOException;
+import java.util.Set;
+
 import org.bridgedb.BridgeDb;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-
-import java.io.IOException;
-
-import java.util.*;
-
-
-import org.junit.jupiter.api.*;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 
 /**
  * Test identifier mapping using Biomart web service.
  */
+@Disabled("Service seems offline")
 public class TestBiomart // do not need to extend TestCase
 {
 
