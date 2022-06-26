@@ -153,7 +153,7 @@ public class Test {
 		Class.forName("org.bridgedb.file.IDMapperText");
 		Class.forName("org.bridgedb.rdb.IDMapperRdb");
 		Class.forName("com.mysql.jdbc.Driver");
-		Class.forName("org.apache.derby.jdbc.ClientDriver");
+		// no longer needed?? Class.forName("org.apache.derby.jdbc.ClientDriver");
 
 		String fileName = "yeast_id_mapping";
 		String fullName = fileName + ".txt";
