@@ -58,6 +58,8 @@ able to compile with a simple:
 mvn clean install
 ```
 
+You can find the libraries in the folder called "target" (used to be called "dist" in ant).
+
 If you want to ignore failing tests, e.g. because you are not online,
 add this option: -Dmaven.test.failure.ignore=true. Furthermore,
 note that 'mvn clean compile' fails.
