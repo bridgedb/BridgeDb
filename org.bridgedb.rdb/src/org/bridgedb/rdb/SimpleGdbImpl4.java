@@ -2,11 +2,13 @@ package org.bridgedb.rdb;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 
@@ -29,6 +31,20 @@ class SimpleGdbImpl4 extends SimpleGdbImplCommon {
         super(dbName, connectionString);
         checkSchemaVersion();
     }
+
+	final SimpleGdb.QueryLifeCycle qCrossRefs4 = new SimpleGdb.QueryLifeCycle (
+			"SELECT dest.idRight, dest.codeRight, node.isPrimary FROM link AS src " +
+	        "JOIN link AS dest ON src.idLeft = dest.idLeft and src.codeLeft = dest.codeLeft " +
+	        "JOIN datanode AS node ON node.id = dest.idRight " +
+			"WHERE src.idRight = ? AND src.codeRight = ?"
+		);
+	final SimpleGdb.QueryLifeCycle qCrossRefsWithCode4 = new SimpleGdb.QueryLifeCycle (
+			"SELECT dest.idRight, dest.codeRight, node.isPrimary FROM link AS src JOIN link AS dest " +
+			"ON src.idLeft = dest.idLeft and src.codeLeft = dest.codeLeft " +
+	        "JOIN datanode AS node ON node.id = dest.idRight " +
+			"WHERE src.idRight = ? AND src.codeRight = ? AND dest.codeRight = ?"
+		);
+
     /**
      * look at the info table of the current database to determine the schema version.
      * @throws IDMapperException when looking up the schema version failed
@@ -111,4 +127,44 @@ class SimpleGdbImpl4 extends SimpleGdbImplCommon {
             finally {pst.cleanup(); }
         }
     }
+
+	@Override
+	public Set<Xref> mapID (Xref idc, DataSource... resultDs) throws IDMapperException
+	{
+		final QueryLifeCycle pst = resultDs.length != 1 ? qCrossRefs4 : qCrossRefsWithCode4;
+		Set<Xref> refs = new HashSet<Xref>();
+		
+		if (idc.getDataSource() == null) return refs;
+		synchronized (pst) {
+			try
+			{
+				pst.init();
+				pst.setString(1, idc.getId());
+				pst.setString(2, idc.getDataSource().getSystemCode());
+				if (resultDs.length == 1) pst.setString(3, resultDs[0].getSystemCode());			
+				
+				Set<DataSource> dsFilter = new HashSet<DataSource>(Arrays.asList(resultDs));
+	
+				ResultSet rs = pst.executeQuery();
+				while (rs.next())
+				{
+					DataSource ds = DataSource.getExistingBySystemCode(rs.getString(2));
+					if (resultDs.length == 0 || dsFilter.contains(ds))
+					{
+						Xref xref = (rs.getString(3) != null && rs.getBoolean(3))
+							? new Xref (rs.getString(1), ds, true) : new Xref (rs.getString(1), ds, false);
+						refs.add (xref);
+					}
+				}
+			}
+			catch (SQLException e)
+			{
+				throw new IDMapperException (e);
+			}
+			finally {pst.cleanup(); }
+		
+			return refs;
+		}
+	}
+
 }

@@ -100,6 +100,10 @@ public class DataSourceTxt
             }    
         }
         if (fields.length > 10) builder.alternative(fields[10]);
+        // field 11 = Wikidata property
+        if (fields.length > 12) {
+        	builder.bioregistryPrefix(fields[12]);
+        }
     }		
 
     /** 
@@ -162,6 +166,10 @@ public class DataSourceTxt
                 writer.write("\t");
                 if (dataSource.getAlternative() != null){
                     writer.write(dataSource.getAlternative());//[10]
+                }
+                writer.write("\t");
+                if (dataSource.getBioregistryPrefix() != null){
+                    writer.write(dataSource.getBioregistryPrefix());//[11]
                 }
                 writer.newLine();
             }   

@@ -23,6 +23,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.crypto.Data;
+
 import org.bridgedb.file.IDMapperFile;
 import org.bridgedb.file.IDMapperText;
 import org.junit.jupiter.api.BeforeAll;
@@ -39,7 +41,7 @@ public class TestFile {
 	private Measure measure;
 	
 	private static URL YEAST_IDS;
-	private static DataSource ENS_YEAST;
+	private static DataSource ENSEMBL;
     private static DataSource ENTREZ;
     private static DataSource EMBL;
     private static Xref XREF1;
@@ -47,10 +49,10 @@ public class TestFile {
     @BeforeAll
     public static void init() {
     	YEAST_IDS = TestFile.class.getClassLoader().getResource("yeast_id_mapping.txt");
-    	ENS_YEAST = DataSource.register("En", "Ensembl").asDataSource();
-        ENTREZ = DataSource.register("L", "Entrez Gene").asDataSource();
-        EMBL = DataSource.register("Em", "EMBL").asDataSource();
-        XREF1 = new Xref("YHR055C", ENS_YEAST);
+        ENSEMBL = DataSource.mock("En", "Ensembl").asDataSource();
+        ENTREZ = DataSource.mock("L", "Entrez Gene").asDataSource();
+        EMBL = DataSource.mock("Em", "EMBL").asDataSource();
+        XREF1 = new Xref("YHR055C", ENSEMBL);
     }
 
 	@BeforeEach
@@ -73,7 +75,7 @@ public class TestFile {
         Set<Xref> srcXrefs = new HashSet<Xref>();
         srcXrefs.add(XREF1);
 
-        DataSource[] tgtDataSources = new DataSource[] { ENS_YEAST, ENTREZ, EMBL };
+        DataSource[] tgtDataSources = new DataSource[] { ENSEMBL, ENTREZ, EMBL };
 
 		long start = System.currentTimeMillis();
         // mapID for the first time will trigger reading
@@ -85,7 +87,7 @@ public class TestFile {
 
 		Set<Xref> expected = new HashSet<Xref>();
         expected.addAll (Arrays.asList(
-        		new Xref("YHR055C", ENS_YEAST),
+        		new Xref("YHR055C", ENSEMBL),
         		new Xref("U00061", EMBL),
         		new Xref("K02204", EMBL),
         		new Xref("AY558517", EMBL),
@@ -116,7 +118,7 @@ public class TestFile {
         Set<Xref> srcXrefs = new HashSet<Xref>();
         srcXrefs.add(XREF1);
 
-        DataSource[] tgtDataSources = new DataSource[] { ENS_YEAST, ENTREZ, EMBL };
+        DataSource[] tgtDataSources = new DataSource[] { ENSEMBL, ENTREZ, EMBL };
 
 		long start = System.currentTimeMillis();
         // mapID for the first time will trigger reading

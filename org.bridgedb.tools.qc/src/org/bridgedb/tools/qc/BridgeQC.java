@@ -335,13 +335,13 @@ public class BridgeQC
 			this.mustBeDefined = mustBeDefined;
 		}
 		
-		public void checkWrap(String oldVal, String newVal)
+		public void checkWrap(String oldVal, String newVal, PrintStream out)
 		{
 			if (mustBeSame && !safeEquals (oldVal, newVal))
-				this.out.println ("WARNING: old " + name() + " '" + oldVal + "' doesn\'t match new " + name() + " '" + newVal + "'");
+				out.println ("WARNING: old " + name() + " '" + oldVal + "' doesn\'t match new " + name() + " '" + newVal + "'");
 			if (mustBeDefined && (newVal == null || newVal.equals("")))
-				this.out.println ("WARNING: property " + name() + " is undefined");
-			check(oldVal, newVal, this.out);
+				out.println ("WARNING: property " + name() + " is undefined");
+			check(oldVal, newVal, out);
 		}
 	}
 	
@@ -350,7 +350,7 @@ public class BridgeQC
 		for (Props p : Props.values())
 		{
 			p.checkWrap(oldGdb.getCapabilities().getProperty(p.name()),
-					newGdb.getCapabilities().getProperty(p.name()));
+					newGdb.getCapabilities().getProperty(p.name()), System.out);
 		}
 	}
 	

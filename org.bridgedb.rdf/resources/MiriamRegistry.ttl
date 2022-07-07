@@ -8968,7 +8968,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100033#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.yeastgenome.org/cgi-bin/locus.fpl?dbid=$id> ;
+      dcat:accessURL <http://www.yeastgenome.org/locus/$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100033> .
 
@@ -9224,12 +9224,12 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000016>
       a       dcat:CatalogRecord ;
       idot:idRegexPattern "^[*#+%^]?\\d{6}$"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      idot:namespace "omim"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:namespace "mim"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:alternative "MIM"^^<http://www.w3.org/2001/XMLSchema#string> , "Mendelian Inheritance in Man"^^<http://www.w3.org/2001/XMLSchema#string> , "Online Mendelian Inheritance in Man"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:exampleResource
               "603903"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:inDataset <http://identifiers.org/registry/> ;
-      void:uriSpace <http://identifiers.org/omim/> ;
+      void:uriSpace <http://identifiers.org/mim/> ;
       dcat:description "Online Mendelian Inheritance in Man is a catalog of human genes and genetic disorders."^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:distribution <http://identifiers.org/miriam.resource/MIR:00100481#application/xhtml+xml> , <http://identifiers.org/miriam.resource/MIR:00100024#application/xhtml+xml> , <http://identifiers.org/miriam.resource/MIR:00100480#application/xhtml+xml> ;
       dcat:identifier "MIR:00000016"^^<http://www.w3.org/2001/XMLSchema#string> ;
@@ -10084,11 +10084,11 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000027>
       a       dcat:CatalogRecord ;
       idot:idRegexPattern "^(WBGene\\d{8}|([A-Z_a-z0-9]+(\\.)?(t)?(\\d+)?([a-z])?))$"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      idot:namespace "wormbase"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:namespace "wb"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:exampleResource
               "WBGene00000001"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:inDataset <http://identifiers.org/registry/> ;
-      void:uriSpace <http://identifiers.org/wormbase/> ;
+      void:uriSpace <http://identifiers.org/wb/> ;
       dcat:description "WormBase is an online bioinformatics database of the biology and genome of the model organism Caenorhabditis elegans and related nematodes. It is used by the C. elegans research community both as an information resource and as a mode to publish and distribute their results. This collection references genes."^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:distribution <http://identifiers.org/miriam.resource/MIR:00100038#application/xhtml+xml> ;
       dcat:identifier "MIR:00000027"^^<http://www.w3.org/2001/XMLSchema#string> ;
@@ -10263,12 +10263,12 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000024>
       a       dcat:CatalogRecord ;
       idot:idRegexPattern "^SBO:\\d{7}$"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      idot:namespace "biomodels.sbo"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:namespace "sbo"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:alternative "SBO"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:exampleResource
               "SBO:0000262"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:inDataset <http://identifiers.org/registry/> ;
-      void:uriSpace <http://identifiers.org/biomodels.sbo/> ;
+      void:uriSpace <http://identifiers.org/sbo/> ;
       dcat:description "The goal of the Systems Biology Ontology is to develop controlled vocabularies and ontologies tailored specifically for the kinds of problems being faced in Systems Biology, especially in the context of computational modeling. SBO is a project of the BioModels.net effort."^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:distribution <http://identifiers.org/miriam.resource/MIR:00100242#application/xhtml+xml> , <http://identifiers.org/miriam.resource/MIR:00100034#application/xhtml+xml> , <http://identifiers.org/miriam.resource/MIR:00100176#application/xhtml+xml> ;
       dcat:identifier "MIR:00000024"^^<http://www.w3.org/2001/XMLSchema#string> ;
@@ -11088,7 +11088,7 @@ Note: Currently, direct access to RNA products is restricted. This is expected t
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000242>
       a       dcat:CatalogRecord ;
       idot:idRegexPattern "^PW:\\d{7}$"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      idot:namespace "pw"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:namespace "PW"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:exampleResource
               "PW:0000208"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:inDataset <http://identifiers.org/registry/> ;
@@ -14240,7 +14240,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000061>
       a       dcat:CatalogRecord ;
       idot:idRegexPattern "^PR\\d{5}$"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      idot:namespace "sprint"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:namespace "Spr"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:exampleResource
               "PR00001"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:inDataset <http://identifiers.org/registry/> ;
@@ -14836,12 +14836,12 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000037>
       a       dcat:CatalogRecord ;
       idot:idRegexPattern "^MGI:\\d+$"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      idot:namespace "mgd"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:namespace "mgi"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:alternative "MGD"^^<http://www.w3.org/2001/XMLSchema#string> , "Mouse Genome Informatics"^^<http://www.w3.org/2001/XMLSchema#string> , "MGI"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:exampleResource
               "MGI:2442292"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:inDataset <http://identifiers.org/registry/> ;
-      void:uriSpace <http://identifiers.org/mgd/> ;
+      void:uriSpace <http://identifiers.org/mgi/> ;
       dcat:description "The Mouse Genome Database (MGD) project includes data on gene characterization, nomenclature, mapping, gene homologies among mammals, sequence links, phenotypes, allelic variants and mutants, and strain data."^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:distribution <http://identifiers.org/miriam.resource/MIR:00100062#application/xhtml+xml> ;
       dcat:identifier "MIR:00000037"^^<http://www.w3.org/2001/XMLSchema#string> ;
@@ -15043,7 +15043,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
 
 <http://identifiers.org/miriam.resource/MIR:00100080#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.lipidmaps.org/data/LMSDRecord.php?LMID=$id> ;
+      dcat:accessURL <https://www.lipidmaps.org/data/structure/LMSDSearch.php?Mode=ProcessClassSearch&LMID=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100080> .
 
@@ -18325,11 +18325,11 @@ All content is under the Creative Commons Attribution 3.0 Unported license."""^^
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000030>
       a       dcat:CatalogRecord ;
       idot:idRegexPattern "^FB\\w{2}\\d{7}$"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      idot:namespace "flybase"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:namespace "fb"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:exampleResource
               "FBgn0011293"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:inDataset <http://identifiers.org/registry/> ;
-      void:uriSpace <http://identifiers.org/flybase/> ;
+      void:uriSpace <http://identifiers.org/fb/> ;
       dcat:description "FlyBase is the database of the Drosophila Genome Projects and of associated literature."^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:distribution <http://identifiers.org/miriam.resource/MIR:00100050#application/xhtml+xml> ;
       dcat:identifier "MIR:00000030"^^<http://www.w3.org/2001/XMLSchema#string> ;

@@ -19,7 +19,6 @@
 //
 package org.bridgedb.rdf;
 
-import info.aduna.lang.FileFormat;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -27,10 +26,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
 import java.util.HashMap;
-import java.util.Set;
+import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
+
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
@@ -44,24 +44,24 @@ import org.bridgedb.rdf.pairs.RdfBasedCodeMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
-import org.openrdf.model.Resource;
-import org.openrdf.model.Statement;
-import org.openrdf.model.Value;
-import org.openrdf.model.impl.BooleanLiteralImpl;
-import org.openrdf.model.impl.LiteralImpl;
-import org.openrdf.model.impl.URIImpl;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.repository.RepositoryResult;
-import org.openrdf.repository.sail.SailRepository;
-import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.RDFParseException;
-import org.openrdf.rio.RDFParserRegistry;
-import org.openrdf.rio.RDFWriter;
-import org.openrdf.rio.turtle.TurtleWriter;
-import org.openrdf.sail.memory.MemoryStore;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.impl.BooleanLiteralImpl;
+import org.eclipse.rdf4j.model.impl.LiteralImpl;
+import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.repository.RepositoryResult;
+import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
+import org.eclipse.rdf4j.rio.RDFParseException;
+import org.eclipse.rdf4j.rio.RDFParserRegistry;
+import org.eclipse.rdf4j.rio.RDFWriter;
+import org.eclipse.rdf4j.rio.turtle.TurtleWriter;
+import org.eclipse.rdf4j.sail.memory.MemoryStore;
 
 /**
  *
@@ -463,14 +463,14 @@ public class BridgeDBRdfHandler extends RdfBase{
             fileName = "try.ttl";
         }
         RDFParserRegistry reg = RDFParserRegistry.getInstance();
-        FileFormat fileFormat = reg.getFileFormatForFileName(fileName);
-        if (fileFormat == null || !(fileFormat instanceof RDFFormat)){
+        Optional<RDFFormat> fileFormat = reg.getFileFormatForFileName(fileName);
+        if (fileFormat == null){
             //added bridgeDB/OPS specific extension here if required.           
             logger.warn("OpenRDF does not know the RDF Format for " + fileName);
             logger.warn("Using the default format " + DEFAULT_FILE_FORMAT);
             return DEFAULT_FILE_FORMAT;
         } else {
-            return (RDFFormat)fileFormat;
+            return fileFormat.get();
         }
     }
 

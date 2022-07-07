@@ -1,37 +1,52 @@
-# This CITATION.cff file was generated with cffinit.
-# Visit https://bit.ly/cffinit to generate yours today!
-
 cff-version: 1.2.0
 title: BridgeDb
 message: 'If you use this software, please cite it as below.'
 type: software
+version: 3.0.15
+date-released: '2022-06-26'
 authors:
-  - given-names: 'Martijn P.'
-    family-names: Van Iersel
-  - given-names: Alexander R.
-    family-names: Pico
-  - given-names: Thomas
-    family-names: Kelder
-  - given-names: Jianjiong
-    family-names: Gao
-  - given-names: Ho
-    family-names: Isaac
-  - given-names: Kristina
-    family-names: Hanspers
+  - given-names: Manas
+    family-names: Awasthi
+  - given-names: Helena
+    family-names: Basaric
   - given-names: Bruce R.
     family-names: Conklin
   - given-names: Chris T.
     family-names: Evelo
+  - given-names: Jianjiong
+    family-names: Gao
+  - given-names: Alasdair
+    family-names: Gray
+  - given-names: Kristina
+    family-names: Hanspers
+  - given-names: Ho
+    family-names: Isaac
+  - given-names: Thomas
+    family-names: Kelder
+  - given-names: Randy
+    family-names: Kerber
+  - given-names: Martina
+    family-names: Kutmon
+  - given-names: Jonathan
+    family-names: Mélius
+  - given-names: Nuno
+    family-names: Nunes
+  - given-names: Alexander R.
+    family-names: Pico
+  - given-names: Anders
+    family-names: Riutta
+  - given-names: Denise
+    family-names: Slenter
+  - given-names: Stian
+    family-names: Soiland-Reyes
+  - given-names: 'Martijn P.'
+    family-names: Van Iersel
+  - given-names: Egon L.
+    family-names: Willighagen  
 identifiers:
   - type: url
     value: 'https://github.com/bridgedb/BridgeDb'
     description: Source code repository for BridgeDb
-  - type: doi
-    value: 10.1186/1471-2105-11-5
-    description: >-
-      Article: The BridgeDb framework: standardized
-      access to gene, protein and metabolite
-      identifier mapping services
 repository-code: 'https://github.com/bridgedb/BridgeDb'
 url: 'https://bridgedb.github.io/'
 preferred-citation:
@@ -66,5 +81,3 @@ keywords:
   - Metabolites
   - Biological data
 license: Apache-2.0
-version: 3.0.13
-date-released: '2022-01-14'

@@ -89,9 +89,9 @@ public class DataSourceTxtTest {
     }
 
 	@org.junit.jupiter.api.Test
-    	public void testWikidataBySystemCode() throws Exception {
+    public void testWikidataBySystemCode() throws Exception {
     	DataSourceTxt.init();
-    	DataSource wikidata = DataSource.getExistingBySystemCode("Wd");
+    	DataSource wikidata = DataSource.getExistingByBioregistryPrefix("wikidata");
     	assertNotNull(wikidata);
     	assertTrue(wikidata.urlPatternKnown());
     	assertEquals("Wikidata", wikidata.getFullName());

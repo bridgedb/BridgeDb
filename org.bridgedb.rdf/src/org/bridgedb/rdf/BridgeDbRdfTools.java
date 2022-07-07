@@ -9,26 +9,29 @@ package org.bridgedb.rdf;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.rdf.constants.DulConstants;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
-import org.openrdf.model.Statement;
-import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.RDFWriter;
-import org.openrdf.rio.RDFWriterFactory;
-import org.openrdf.rio.RDFWriterRegistry;
-import org.openrdf.rio.n3.N3Writer;
-import org.openrdf.rio.ntriples.NTriplesWriter;
-import org.openrdf.rio.rdfxml.RDFXMLWriter;
-import org.openrdf.rio.rdfxml.util.RDFXMLPrettyWriter;
-import org.openrdf.rio.trig.TriGWriter;
-import org.openrdf.rio.trix.TriXWriter;
-import org.openrdf.rio.turtle.TurtleWriter;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
+import org.eclipse.rdf4j.rio.RDFWriter;
+import org.eclipse.rdf4j.rio.RDFWriterFactory;
+import org.eclipse.rdf4j.rio.RDFWriterRegistry;
+import org.eclipse.rdf4j.rio.n3.N3Writer;
+import org.eclipse.rdf4j.rio.ntriples.NTriplesWriter;
+import org.eclipse.rdf4j.rio.rdfxml.RDFXMLWriter;
+import org.eclipse.rdf4j.rio.rdfxml.util.RDFXMLPrettyWriter;
+import org.eclipse.rdf4j.rio.trig.TriGWriter;
+import org.eclipse.rdf4j.rio.trix.TriXWriter;
+import org.eclipse.rdf4j.rio.turtle.TurtleWriter;
 
 /**
  *
@@ -38,15 +41,12 @@ public class BridgeDbRdfTools {
     
     static final Logger logger = Logger.getLogger(BridgeDbRdfTools.class);
 
-    public static final String DEFAULT_FORMAT = "TriX";
+    public static final RDFFormat DEFAULT_FORMAT = RDFFormat.TRIX;
     
-    public static String writeRDF(Set<Statement> statements, String formatName) throws BridgeDBException{
+    public static String writeRDF(Set<Statement> statements, RDFFormat formatName) throws BridgeDBException{
         StringWriter writer = new StringWriter();
-        if (formatName == null){
-            formatName = DEFAULT_FORMAT;
-        }
-        RDFFormat rdfFormat = RDFFormat.valueOf(formatName);
-        writeRDF(statements,  rdfFormat, writer);
+        if (formatName == null) formatName = DEFAULT_FORMAT;
+        writeRDF(statements,  formatName, writer);
         return writer.toString();
     }
     
@@ -86,7 +86,18 @@ public class BridgeDbRdfTools {
         TurtleWriter t = null;
         HashSet<String> results = new HashSet<String>();
         StringWriter writer = new StringWriter();
-        for (RDFFormat rdfFormat:RDFFormat.values()){
+        List<RDFFormat> rdfFormats = new ArrayList<>();
+        rdfFormats.add(RDFFormat.N3);
+        rdfFormats.add(RDFFormat.NQUADS);
+        rdfFormats.add(RDFFormat.NTRIPLES);
+        rdfFormats.add(RDFFormat.JSONLD);
+        rdfFormats.add(RDFFormat.RDFA);
+        rdfFormats.add(RDFFormat.RDFJSON);
+        rdfFormats.add(RDFFormat.RDFXML);
+        rdfFormats.add(RDFFormat.TRIG);
+        rdfFormats.add(RDFFormat.TRIX);
+        rdfFormats.add(RDFFormat.TURTLE);
+        for (RDFFormat rdfFormat: rdfFormats){
             RDFWriter rdfWriter = getWriterIfPossible(rdfFormat, writer); 
             if (rdfWriter != null){
                 results.add(rdfFormat.getName());
@@ -98,7 +109,18 @@ public class BridgeDbRdfTools {
     public static Set<RDFFormat> getAvaiableFormats(){
         HashSet<RDFFormat> results = new HashSet<RDFFormat>();
         StringWriter writer = new StringWriter();
-        for (RDFFormat rdfFormat:RDFFormat.values()){
+        List<RDFFormat> rdfFormats = new ArrayList<>();
+        rdfFormats.add(RDFFormat.N3);
+        rdfFormats.add(RDFFormat.NQUADS);
+        rdfFormats.add(RDFFormat.NTRIPLES);
+        rdfFormats.add(RDFFormat.JSONLD);
+        rdfFormats.add(RDFFormat.RDFA);
+        rdfFormats.add(RDFFormat.RDFJSON);
+        rdfFormats.add(RDFFormat.RDFXML);
+        rdfFormats.add(RDFFormat.TRIG);
+        rdfFormats.add(RDFFormat.TRIX);
+        rdfFormats.add(RDFFormat.TURTLE);
+        for (RDFFormat rdfFormat: rdfFormats){
             RDFWriter rdfWriter = getWriterIfPossible(rdfFormat, writer); 
             if (rdfWriter != null){
                 results.add(rdfFormat);
@@ -115,12 +137,12 @@ public class BridgeDbRdfTools {
      */
     private static RDFWriter getWriterIfPossible(RDFFormat format, Writer writer){
         RDFWriterRegistry register =  RDFWriterRegistry.getInstance();
-        RDFWriterFactory factory = register.get(format);
-        if (factory == null){
+        Optional<RDFWriterFactory> factory = register.get(format);
+        if (factory.get() == null){
             return null;
         }
         try {
-            return factory.getWriter(writer);
+            return factory.get().getWriter(writer);
         } catch (Exception ex){
             logger.error(ex);
             return null;

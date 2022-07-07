@@ -35,12 +35,12 @@ import org.bridgedb.rdf.constants.RdfConstants;
 import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.CalendarLiteralImpl;
-import org.openrdf.model.impl.LiteralImpl;
-import org.openrdf.model.impl.StatementImpl;
-import org.openrdf.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.model.impl.LiteralImpl;
+import org.eclipse.rdf4j.model.impl.StatementImpl;
+import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.sail.memory.model.CalendarMemLiteral;
 
 /**
  *
@@ -296,7 +296,7 @@ public class LensTools {
         results.add(new StatementImpl(subject, DCTermsConstants.TITLE_URI, new LiteralImpl(lens.getName())));
         results.add(new StatementImpl(subject, DCTermsConstants.DESCRIPTION_URI, new LiteralImpl(lens.getDescription())));
         results.add(new StatementImpl(subject, PavConstants.CREATED_BY, new LiteralImpl(lens.getCreatedBy())));
-        CalendarLiteralImpl createdOnLiteral = new CalendarLiteralImpl(lens.getCreatedOn());
+        CalendarMemLiteral createdOnLiteral = new CalendarMemLiteral(lens, lens.getCreatedOn());
         results.add(new StatementImpl(subject, PavConstants.CREATED_ON, createdOnLiteral));
         for (String justification:lens.getJustifications()){
             results.add(new StatementImpl(subject, BridgeDBConstants.LINKSET_JUSTIFICATION, new URIImpl(justification)));

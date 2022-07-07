@@ -16,6 +16,7 @@ package org.bridgedb.rdb;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.bridgedb.AttributeMapper;
@@ -113,7 +114,21 @@ public class Test2 {
 		assertEquals ("2", gdb2.getCapabilities().getProperty("SCHEMAVERSION"));
 		assertEquals ("20081119", gdb2.getCapabilities().getProperty("BUILDDATE"));
 	}
+
+	@Disabled
+	public void testSimpleGdbImpl4() throws IDMapperException {
+		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + System.getProperty ("user.home") + File.separator +
+				"/tmp/secID/hgncSymbol.bridge");
+		assertEquals ("4", gdb.getCapabilities().getProperty("SCHEMAVERSION"));
+		Set<Xref> xrefs = gdb.mapID(new Xref("TIC1", DataSource.getExistingBySystemCode("H")));
+		assertSame(2, xrefs.size());
+		Iterator<Xref> iter = xrefs.iterator();
+		assertTrue(iter.next().isPrimary() || iter.next().isPrimary());
+		iter = xrefs.iterator();
+		assertFalse(iter.next().isPrimary() && iter.next().isPrimary());
+	}
 	
+
 	@Test
 	public void testRegisterDataSource()
 	{

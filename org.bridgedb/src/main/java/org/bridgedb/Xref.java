@@ -70,12 +70,16 @@ public class Xref implements Comparable<Xref>
 	 * @return whether is id is primary or not
 	 */
 	public boolean isPrimary(){ return isPrimary; }
+
 	/**
-	 * @return short string representation for this Xref, for example En:ENSG000001 or X:1004_at
-	 *   This string representation is not meant to be stored or parsed, it is there mostly for
-	 *   debugging purposes.
+	 * This string representation is not meant to be stored or parsed, it is there mostly for
+	 * debugging purposes.
+	 *
+	 * @return short string representation for this Xref, for example En:ENSG000001:T or X:1004_at:F
 	 */
-	public String toString() { return rep;  }
+	public String toString() {
+		return rep + ":" + (isPrimary() ? "T" : "F");
+	}
 	
 	/**
 	 * hashCode calculated from id and datasource combined.
@@ -138,6 +142,17 @@ public class Xref implements Comparable<Xref>
 	 * Uses DataSource.getCompactidentifier() to create a compact identifier, such as uniprot:P12345. 
      * 
  	 * @since Version 3.0.0
+     * @return the compact identifier as string or null if no valid Bioregistry.io prefix is known
+	 */
+	public String getBioregistryIdentifier()
+	{
+		return ds.getBioregistryIdentifier(id);
+	}
+
+	/**
+	 * Uses DataSource.getCompactidentifier() to create a compact identifier, such as uniprot:P12345. 
+     * 
+ 	 * @since Version 3.0.0
      * @return the compact identifier as string or null if no valid Miriam namespace is known
 	 */
 	public String getCompactidentifier()
@@ -175,7 +190,7 @@ public class Xref implements Comparable<Xref>
 	}
 
     /**
-     * This method will convert a compact identifier to an Xref
+     * This method will convert a compact identifier to an Xref.
      * 
      * @since Version 3.0.0
      * @param compact a compact identifier
@@ -190,6 +205,27 @@ public class Xref implements Comparable<Xref>
 		String id = compact.substring(pos + 1);
 		
 		DataSource ds = DataSource.getByMiriamBase("urn:miriam:" + base);
+		if (ds == null) return null;
+		
+		return new Xref (id, ds);
+	}
+
+    /**
+     * This method will convert a Bioregistry.io identifier to an Xref.
+     * 
+     * @since Version 3.0.14
+     * @param compact a Bioregistry.io compact identifier
+     * @return A Xref or null if the urn is not in a compact identifier 
+     */
+	public static Xref fromBioregistryIdentifier(String compact)
+	{
+		int pos = compact.lastIndexOf(":");
+		if (pos < 0) return null;
+		
+		String prefix = compact.substring(0, pos);
+		String id = compact.substring(pos + 1);
+		
+		DataSource ds = DataSource.getExistingByBioregistryPrefix(prefix);
 		if (ds == null) return null;
 		
 		return new Xref (id, ds);

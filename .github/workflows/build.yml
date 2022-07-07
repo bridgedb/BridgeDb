@@ -18,7 +18,7 @@ jobs:
       with:
         java-version: 11
     - name: Build with Maven
-      run: mvn clean install -Dmaven.test.failure.ignore=true -Dproject.build.sourceEncoding=UTF-8 -Djunit5.excludeGroups=webservice,mysql
+      run: mvn clean install -Dgpg.skip -Dmaven.javadoc.skip=true -Dmaven.test.failure.ignore=true -Dproject.build.sourceEncoding=UTF-8 -Djunit5.excludeGroups=webservice,mysql
     - name: push JaCoCo stats to codecov.io
       run: bash <(curl -s https://codecov.io/bash)
   

@@ -71,8 +71,8 @@ import org.bridgedb.uri.ws.bean.URISpacesInGraphBean;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WsConstants;
 import org.bridgedb.ws.templates.WebTemplates;
-import org.openrdf.model.Statement;
-import org.openrdf.rio.RDFFormat;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.rio.RDFFormat;
 
 import com.sun.jersey.core.header.MediaTypes;
 
@@ -92,6 +92,20 @@ public class WSUriServer extends WSAPI {
     private final StatementMaker statementMaker;
     
     static final Logger logger = Logger.getLogger(WSUriServer.class);
+
+    static List<RDFFormat> rdfFormats = new ArrayList<>();
+    {{
+    	rdfFormats.add(RDFFormat.N3);
+    	rdfFormats.add(RDFFormat.NQUADS);
+    	rdfFormats.add(RDFFormat.NTRIPLES);
+    	rdfFormats.add(RDFFormat.JSONLD);
+    	rdfFormats.add(RDFFormat.RDFA);
+    	rdfFormats.add(RDFFormat.RDFJSON);
+    	rdfFormats.add(RDFFormat.RDFXML);
+    	rdfFormats.add(RDFFormat.TRIG);
+    	rdfFormats.add(RDFFormat.TRIX);
+    	rdfFormats.add(RDFFormat.TURTLE);
+    }}
 
     public WSUriServer()  throws BridgeDBException   {
         this(SQLUriMapper.getExisting(), new DirectStatementMaker());
@@ -341,19 +355,15 @@ public class WSUriServer extends WSAPI {
         } 
         
         List<MediaType> types = new ArrayList<MediaType>();
-        for (RDFFormat f :RDFFormat.values() ) {
+        for (RDFFormat f: rdfFormats){
         	types.add(MediaType.valueOf(f.getDefaultMIMEType()));
         	types.addAll(MediaTypes.createMediaTypes(f.getMIMETypes().toArray(new String[]{})));
         }
         List<Variant> variants = VariantListBuilder.newInstance().mediaTypes(types.toArray(new MediaType[]{})).build();        
         Variant variant = request.selectVariant(variants);
-        
-        if (formatName == null || formatName.isEmpty()) {
-        	RDFFormat format = RDFFormat.forMIMEType(variant.getMediaType().toString(), RDFFormat.NTRIPLES);
-        	formatName = format.getName();
-        }
-        
-        String rdfInfo = BridgeDbRdfTools.writeRDF(statements, formatName); 
+
+        RDFFormat format = RDFFormat.matchMIMEType(variant.getMediaType().toString(), rdfFormats).get();
+        String rdfInfo = BridgeDbRdfTools.writeRDF(statements, format); 
         return Response.ok(rdfInfo, MediaType.TEXT_PLAIN_TYPE).build();
     }    
     
@@ -373,8 +383,9 @@ public class WSUriServer extends WSAPI {
         Set<Statement> statements = getMappingSetStatements(idString, baseUri, context);
         sb.append("<h4>Use MediaType.TEXT_PLAIN to return remove HTML stuff</h4>");
         sb.append("<p>Warning MediaType.TEXT_PLAIN version returns status 204 if no mappings found.</p>");
+        RDFFormat format = RDFFormat.matchMIMEType(formatName, rdfFormats).get();
         if (formatName != null || formatName != null){
-            generateTextarea(sb, "RDF", BridgeDbRdfTools.writeRDF(statements, formatName));
+            generateTextarea(sb, "RDF", BridgeDbRdfTools.writeRDF(statements, format));
         } else {
             sb.append("<p>Warning MediaType.TEXT_PLAIN version returns RDF using the default format even if no format specified.</p>");
             VelocityContext velocityContext = new VelocityContext();
@@ -475,7 +486,8 @@ public class WSUriServer extends WSAPI {
         String fullPage;
         if (formatName != null || formatName != null){
             StringBuilder sb = new StringBuilder();
-            generateTextarea(sb, "RDF", BridgeDbRdfTools.writeRDF(statements, formatName));
+            RDFFormat format = RDFFormat.matchMIMEType(formatName, rdfFormats).get();
+            generateTextarea(sb, "RDF", BridgeDbRdfTools.writeRDF(statements, format));
             fullPage = this.createHtmlPage(WsUriConstants.MAP_URI + " as RDF", sb.toString(), httpServletRequest);
         } else {
             String contextPath = httpServletRequest.getContextPath();
@@ -524,8 +536,9 @@ public class WSUriServer extends WSAPI {
                 linksetInfo, overridePredicateURI, httpServletRequest);
         if (noContentOnEmpty & statements.isEmpty()){
             return Response.noContent().build();
-        } 
-        String rdfInfo = BridgeDbRdfTools.writeRDF(statements, formatName); 
+        }
+        RDFFormat format = RDFFormat.matchMIMEType(formatName, rdfFormats).get();
+        String rdfInfo = BridgeDbRdfTools.writeRDF(statements, format); 
         return Response.ok(rdfInfo, MediaType.TEXT_PLAIN_TYPE).build();
     }
     
@@ -554,9 +567,9 @@ public class WSUriServer extends WSAPI {
         String context = checkContext(baseUri, httpServletRequest);
         Set<Statement> statements = statementMaker.asRDF(mappings, baseUri, addLinks, overridePredicateURI);
         if (formatName != null || formatName != null){
-            RDFFormat rdfFormat = RDFFormat.valueOf(formatName);
-            if (linksetInfo != null && linksetInfo){
-                if (rdfFormat.supportsContexts()){
+        	RDFFormat format = RDFFormat.matchMIMEType(formatName, rdfFormats).get();
+        	if (linksetInfo != null && linksetInfo){
+                if (format.supportsContexts()){
                     statements.addAll(getMappingSetStatements(mappings, baseUri, context));
                 }
             }
@@ -715,7 +728,8 @@ public class WSUriServer extends WSAPI {
         } else {
             Set<Statement> statements = statementMaker.asRDF(mappingsBySet, getBaseUri(httpServletRequest), 
                     WsUriConstants.MAPPING_SET + WsUriConstants.RDF);
-            String rdf =BridgeDbRdfTools.writeRDF(statements, formatName);     
+            RDFFormat format = RDFFormat.matchMIMEType(formatName, rdfFormats).get();
+            String rdf =BridgeDbRdfTools.writeRDF(statements, format);
             return Response.ok(rdf, MediaType.TEXT_PLAIN_TYPE).build();
         }
     }
@@ -753,7 +767,8 @@ public class WSUriServer extends WSAPI {
         String pureBaseUri = fullBaseUri.substring(0, pureLenght);
         Set<Statement> statements = statementMaker.asRDF(mappingsBySet, pureBaseUri, 
                 WsUriConstants.MAPPING_SET + WsUriConstants.RDF);
-        String rdf =BridgeDbRdfTools.writeRDF(statements, formatName);     
+        RDFFormat format = RDFFormat.matchMIMEType(formatName, rdfFormats).get();
+        String rdf =BridgeDbRdfTools.writeRDF(statements, format);
         generateTextarea(sb, "RDF", rdf);
 
         String title = "HTML friendly " + WsUriConstants.MAP_BY_SET + WsUriConstants.RDF + " Output";
@@ -770,7 +785,8 @@ public class WSUriServer extends WSAPI {
         if (statements.isEmpty()){
             return Response.noContent().build();
         } else {
-            String rdf = BridgeDbRdfTools.writeRDF(statements, formatName);     
+        	RDFFormat format = RDFFormat.matchMIMEType(formatName, rdfFormats).get();
+            String rdf = BridgeDbRdfTools.writeRDF(statements, format);
             return Response.ok(rdf, MediaType.TEXT_PLAIN_TYPE).build();
         }
     }
@@ -788,7 +804,8 @@ public class WSUriServer extends WSAPI {
         sb.append(" this method does not include any protential mapping to self.</h2>");
         sb.append("<h4>Use MediaType.TEXT_PLAIN to remove HTML stuff</h4>");
         sb.append("<p>Warning MediaType.TEXT_PLAIN version returns status 204 if no mappings found.</p>");
-        String rdf = BridgeDbRdfTools.writeRDF(statements, formatName);   
+        RDFFormat format = RDFFormat.matchMIMEType(formatName, rdfFormats).get();
+        String rdf = BridgeDbRdfTools.writeRDF(statements, format);
         generateTextarea(sb, "RDF", rdf);
 
         String title = "HTML friendly " + WsUriConstants.MAP_BY_SET + WsUriConstants.RDF + " Output";

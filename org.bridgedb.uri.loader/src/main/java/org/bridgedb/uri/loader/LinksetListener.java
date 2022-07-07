@@ -24,9 +24,9 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;
-import org.openrdf.model.Resource;
-import org.openrdf.model.URI;
-import org.openrdf.rio.RDFHandler;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.rio.RDFHandler;
 
 public class LinksetListener {
     

@@ -3509,7 +3509,7 @@ bridgeDB:DataSource_LIPID_MAPS a bridgeDB:DataSource ;
 	bridgeDB:idExample "LMPR0102010012" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.lipidmaps.org/data/LMSDRecord.php?LMID=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.lipidmaps.org/data/structure/LMSDSearch.php?Mode=ProcessClassSearch&LMID=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/lipidmaps/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/lipidmaps/$id> ;
 	bridgeDB:hasRegexPattern "^LM(FA|GL|GP|SP|ST|PR|SL|PK)[0-9]{4}([0-9a-zA-Z]{4,6})?$" ;
@@ -3560,7 +3560,7 @@ bridgeDB:DataSource_MaizeGDB a bridgeDB:DataSource ;
 	bridgeDB:idExample "acc1" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.maizegdb.org/cgi-bin/displaylocusresults.cgi?term=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://maizegdb.org/gene_center/gene/$id> ;
 	bridgeDB:Organism bridgeDB:Organism_Zm ;
 	dcterms:alternative "MaizeGDB" .
 
@@ -4308,8 +4308,8 @@ bridgeDB:DataSource_OMIM a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
 	bridgeDB:hasPrimaryUriPattern <http://omim.org/entry/$id> ;
-	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/omim/$id> ;
-	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/omim/$id> ;
+	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/mim/$id> ;
+	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/mim/$id> ;
 	bridgeDB:hasRegexPattern "^[*#+%^]?\\d{6}$" ;
 	dcterms:alternative "OMIM" ;
 	bridgeDB:hasUriPattern <http://bio2rdf.org/omim:$id> , <http://europe.omim.org/entry/$id> , <http://purl.uniprot.org/mim/$id> , <http://us-east.omim.org/entry/$id> .
@@ -4607,7 +4607,7 @@ bridgeDB:DataSource_Pathway_Commons a bridgeDB:DataSource ;
 
 bridgeDB:DataSource_Pathway_Ontology a bridgeDB:DataSource ;
 	bridgeDB:fullName "Pathway Ontology" ;
-	bridgeDB:systemCode "pw" ;
+	bridgeDB:systemCode "PW" ;
 	bridgeDB:mainUrl "http://rgd.mcw.edu/rgdweb/ontology/search.html" ;
 	bridgeDB:idExample "PW:0000208" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
@@ -4619,7 +4619,7 @@ bridgeDB:DataSource_Pathway_Ontology a bridgeDB:DataSource ;
 	bridgeDB:hasUriPattern <http://rgd.mcw.edu/rgdweb/ontology/annot.html?acc_id=$id> , <http://www.ebi.ac.uk/ontology-lookup/?termId=$id> .
 
 bridgeDB:CodeMapper_Pathway_Ontology a bridgeDB:CodeMapper ;
-	bridgeDB:systemCode "pw" ;
+	bridgeDB:systemCode "PW" ;
 	bridgeDB:xrefPrefix "PW:" ;
 	bridgeDB:hasUriPattern <http://identifiers.org/obo.pw/PW:$id> , <http://purl.bioontology.org/ontology/PW/PW:$id> , <http://purl.obolibrary.org/obo/PW_$id> , <http://rgd.mcw.edu/rgdweb/ontology/annot.html?acc_id=PW:$id> , <http://www.ebi.ac.uk/ontology-lookup/?termId=PW:$id> .
 
@@ -4707,11 +4707,11 @@ bridgeDB:DataSource_Peroxibase a bridgeDB:DataSource ;
 bridgeDB:DataSource_Pfam a bridgeDB:DataSource ;
 	bridgeDB:fullName "Pfam" ;
 	bridgeDB:systemCode "Pf" ;
-	bridgeDB:mainUrl "http://pfam.sanger.ac.uk/" ;
+	bridgeDB:mainUrl "https://pfam.xfam.org/" ;
 	bridgeDB:idExample "PF01234" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "protein" ;
-	bridgeDB:hasPrimaryUriPattern <http://pfam.sanger.ac.uk/family/$id/> ;
+	bridgeDB:hasPrimaryUriPattern <https://pfam.xfam.org/family/$id/> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/pfam/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/pfam/$id> ;
 	bridgeDB:hasRegexPattern "^PF\\d{5}$" ;
@@ -5493,7 +5493,7 @@ bridgeDB:DataSource_SGD a bridgeDB:DataSource ;
 	bridgeDB:idExample "S000028457" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.yeastgenome.org/cgi-bin/locus.fpl?dbid=$id> ;
+	bridgeDB:hasPrimaryUriPattern <http://www.yeastgenome.org/locus/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/sgd/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/sgd/$id> ;
 	bridgeDB:Organism bridgeDB:Organism_Sc ;
@@ -6456,8 +6456,8 @@ bridgeDB:DataSource_WormBase a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
 	bridgeDB:hasPrimaryUriPattern <http://www.wormbase.org/db/gene/gene?name=$id;class=Gene> ;
-	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/wormbase/$id> ;
-	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/wormbase/$id> ;
+	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/wb/$id> ;
+	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/wb/$id> ;
 	bridgeDB:Organism bridgeDB:Organism_Ce ;
 	bridgeDB:hasRegexPattern "^(WBGene\\d{8}|([A-Z_a-z0-9]+(\\.)?(t)?(\\d+)?([a-z])?))$" ;
 	dcterms:alternative "WormBase" ;
@@ -10685,8 +10685,8 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://pfam.janelia.org/family/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://pfam.janelia.org/family/" .
 
-<http://pfam.sanger.ac.uk/family/$id/> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://pfam.sanger.ac.uk/family/" ;
+<https://pfam.xfam.org/family/$id/> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://pfam.xfam.org/family/" ;
 	bridgeDB:hasPostfix "/" .
 
 <http://pfam.sbc.su.se/family/$id> a bridgeDB:UriPattern ;
@@ -11713,13 +11713,13 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	bridgeDB:hasPrefix "http://www.lgcstandards-atcc.org/Products/All/" ;
 	bridgeDB:hasPostfix ".aspx" .
 
-<http://www.lipidmaps.org/data/LMSDRecord.php?LMID=$id> a bridgeDB:UriPattern ;
+<https://www.lipidmaps.org/data/structure/LMSDSearch.php?Mode=ProcessClassSearch&LMID=$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.lipidmaps.org/data/get_lm_lipids_dbgif.php?LM_ID=" .
 
 <http://www.maizegdb.org/cgi-bin/displaylocusrecord.cgi?id=$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.maizegdb.org/cgi-bin/displaylocusrecord.cgi?id=" .
 
-<http://www.maizegdb.org/cgi-bin/displaylocusresults.cgi?term=$id> a bridgeDB:UriPattern ;
+<https://maizegdb.org/gene_center/gene/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.maizegdb.org/cgi-bin/displaylocusresults.cgi?term=" .
 
 <http://www.maizesequence.org/Zea_mays/Gene/Summary?g=$id> a bridgeDB:UriPattern ;
@@ -12100,8 +12100,8 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://www.xenbase.org/gene/showgene.do?method=displayGeneSummary&geneId=$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.xenbase.org/gene/showgene.do?method=displayGeneSummary&geneId=" .
 
-<http://www.yeastgenome.org/cgi-bin/locus.fpl?dbid=$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://www.yeastgenome.org/cgi-bin/locus.fpl?dbid=" .
+<http://www.yeastgenome.org/locus/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "http://www.yeastgenome.org/locus/" .
 
 <http://www.york.ac.uk/res/thomas/Gene.cfm?recordID=$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.york.ac.uk/res/thomas/Gene.cfm?recordID=" .

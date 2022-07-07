@@ -64,6 +64,7 @@ public final class DataSource
 	private static Set<DataSource> registry = new HashSet<DataSource>();
 	private static Map<String, DataSource> byAlias = new HashMap<String, DataSource>();
 	private static Map<String, DataSource> byMiriamBase = new HashMap<String, DataSource>();
+	private static Map<String, DataSource> byBioregistryPrefix = new HashMap<String, DataSource>();
 	
 	private String sysCode = null;
 	private String fullName = null;
@@ -77,6 +78,7 @@ public final class DataSource
 	private DataSource isDeprecatedBy = null;
 	private String type = UNKOWN;
 	private String miriamBase = null;
+	private String bioregistryPrefix = null;
     private String alternative = null;
     private String description = null;
 
@@ -181,6 +183,14 @@ public final class DataSource
 	}
 
 	/**
+	 * @return the Bioregistry.io prefix 
+	 */
+	public String getBioregistryPrefix()
+	{
+		return bioregistryPrefix;
+	}
+
+	/**
 	 * Creates a global identifier. 
 	 * It uses the MIRIAM data type list
 	 * to create a MIRIAM URI like "urn:miriam:uniprot:P12345", 
@@ -204,6 +214,22 @@ public final class DataSource
             idPart = id; 
         }
 		return URN_PREFIX + miriamBase + ":" + idPart;
+	}
+
+	/**
+	 * Creates a Bioregistry.io compact identifier. 
+	 * 
+     * @since Version 3.0.14
+     * 
+	 * @param id identifier to generate compact identifier from.
+	 * @return the compact identifier.
+	 */
+	public String getBioregistryIdentifier(String id)
+	{
+        if (bioregistryPrefix == null){
+            return null;
+        }
+		return bioregistryPrefix + ":" + id;
 	}
 
 	/**
@@ -502,13 +528,28 @@ public final class DataSource
 		}
         
         public Builder miriamBase(String base){
-            if (current.miriamBase == null){
+            if (base == null) {
+                throw new IllegalArgumentException("Illegal attempt to set the miriam base to null");
+            } else if (current.miriamBase == null){
                 current.miriamBase = base;
                 byMiriamBase.put(base, current);
             } else {
-                if (!current.miriamBase.equals(base)){
+                if (!current.miriamBase.toLowerCase().equals(base.toLowerCase())){
                     throw new IllegalArgumentException("Illegal attempt to change miriam base for " + current 
-                            + " from " + current.miriamBase + " to " + base);
+                            + " from '" + current.miriamBase + "' to '" + base + "'");
+                }
+            }           
+			return this;
+        }
+        
+        public Builder bioregistryPrefix(String prefix) {
+        	if (current.bioregistryPrefix == null){
+                current.bioregistryPrefix = prefix;
+                byBioregistryPrefix.put(prefix, current);
+            } else {
+                if (!current.bioregistryPrefix.equals(prefix)){
+                    throw new IllegalArgumentException("Illegal attempt to change Bioregistry.io prefix for " + current 
+                            + " from " + current.bioregistryPrefix + " to " + prefix);
                 }
             }           
 			return this;
@@ -572,7 +613,7 @@ public final class DataSource
         }
     }
     
-    /** 
+    /**
 	 * Register a new DataSource with (optional) detailed information.
 	 * This can be used by other modules to define new DataSources.
      * 
@@ -591,6 +632,17 @@ public final class DataSource
             throw new IllegalArgumentException ("Unsuitable fullName " + fullName + " with " + sysCode);
         }
         return findOrRegister(sysCode, fullName);
+    }
+            
+    /**
+	 * Create a new DataSource with (optional) detailed information with registration.
+     * 
+	 * @param sysCode short unique code between 1-4 letters, originally used by GenMAPP
+	 * @param fullName full name used in GPML.
+	 * @return Builder that can be used for adding detailed information.
+	 */
+	public static Builder mock(String sysCode, String fullName){
+		return new Builder(new DataSource (sysCode, fullName));
     }
             
     private static Builder findOrRegister(String sysCode, String fullName)
@@ -658,7 +710,7 @@ public final class DataSource
 		return !(key == null || "".equals(key));
 	}
 	
-	/** 
+	/**
 	 * @param systemCode short unique code to query for
 	 * @return pre-existing DataSource object by system code if it exists
      * @throws IllegalArgumentException if no DataSource is known with this systemCode
@@ -671,8 +723,21 @@ public final class DataSource
         throw new IllegalArgumentException("No DataSource known for " + systemCode);
 	}
 
+	/**
+	 * @param prefix a Bioregistry.io prefix
+	 * @return pre-existing DataSource object by Bioregistry.io prefix if it exists
+     * @throws IllegalArgumentException if no DataSource is known with this prefix
+	 */
+	public static DataSource getExistingByBioregistryPrefix(String prefix)
+	{
+		if (byBioregistryPrefix.containsKey(prefix)){
+    		return byBioregistryPrefix.get(prefix);
+		}
+        throw new IllegalArgumentException("No DataSource known for the Bioregistry.io prefix " + prefix);
+	}
+
     /**
-     * Check if a DataSoucre with this systemCode has been registered
+     * Check if a DataSource with this systemCode has been registered
      * 
      * @param systemCode to check
      * @return True if and only if a DataSource has been registered with this systemCode.

@@ -83,7 +83,7 @@ public class ConfigReader {
             localReader.properties.load(localReader.getInputStream());
             localReader.inputStream.close();
         } catch (IOException ex) {
-            throw new BridgeDBException("Unexpected file not fond exception after file.exists returns true.", ex);
+            throw new BridgeDBException("Unexpected file not found exception after file.exists returns true.", ex);
         }
         original.putAll(localReader.properties);
         return original;

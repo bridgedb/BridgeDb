@@ -5,6 +5,7 @@ BridgeDb
 [![Actions Status](https://github.com/bridgedb/BridgeDb/workflows/build/badge.svg)](https://github.com/bridgedb/BridgeDb/actions)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bridgedb/bridgedb-bundle/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bridgedb/bridgedb-bundle)
 [![codecov](https://codecov.io/gh/bridgedb/BridgeDb/branch/master/graph/badge.svg?token=F0kJdoEt0x)](https://codecov.io/gh/bridgedb/BridgeDb)
+[![NWO](https://img.shields.io/badge/NWO%20Open%20Science-203.001.121-orange)](https://www.nwo.nl/en/projects/203001121)
 
 BridgeDb is currently tested with Java 8 (2.3.x releases) and Java 11 (3.0.x releases and master branch).
 
@@ -14,7 +15,7 @@ Using BridgeDb dependencies
 The [BridgeDb releases](https://github.com/bridgedb/BridgeDb/releases) are published to 
 [Maven Central](http://central.maven.org/maven2/org/bridgedb/), which means you can use the BridgeDb JARs without needing to compile BridgeDb.
 
-Usage depends on which module you require. The examples below assumes artifact `org.bridgedb.bio` and version `3.0.13`:
+Usage depends on which module you require. The examples below assumes artifact `org.bridgedb.bio` and version `3.0.15`:
 
 For [Maven](https://maven.apache.org/):
 
@@ -23,7 +24,7 @@ For [Maven](https://maven.apache.org/):
     <dependency>
         <groupId>org.bridgedb</groupId>
         <artifactId>org.bridgedb.bio</artifactId>
-        <version>3.0.13</version>
+        <version>3.0.15</version>
     </dependency>
 </dependencies>
 ```
@@ -31,19 +32,19 @@ For [Maven](https://maven.apache.org/):
 For [Gradle](https://gradle.org/):
 
 ```gradle
-compile group: 'org.bridgedb', name: 'org.bridgedb.bio', version: '3.0.13'
+compile group: 'org.bridgedb', name: 'org.bridgedb.bio', version: '3.0.15'
 ```
 
 For [Ivy](http://ant.apache.org/ivy/):
 
 ```xml
-<dependency org="org.bridgedb" name="org.bridgedb.bio" rev="3.0.13"/>
+<dependency org="org.bridgedb" name="org.bridgedb.bio" rev="3.0.15"/>
 ```
 
 For [Buildr](https://buildr.apache.org/):
 
 ```buildr
-'org.bridgedb:org.bridgedb.bio:jar:3.0.13'
+'org.bridgedb:org.bridgedb.bio:jar:3.0.15'
 ```
 
 
@@ -56,6 +57,8 @@ able to compile with a simple:
 ```shell
 mvn clean install
 ```
+
+You can find the libraries in the folder called "target", in each sublibrary folder (used to be called "dist" in ant).
 
 If you want to ignore failing tests, e.g. because you are not online,
 add this option: -Dmaven.test.failure.ignore=true. Furthermore,
@@ -130,12 +133,18 @@ To make the release, run the following commands. Mind you, this requires you
 to have an approved Sonatype (http://oss.sonatype.org/) account with push rights:
 
 ```shell
-mvn release:prepare
-mvn release:perform
+mvn versions:set -DnewVersion=3.0.16-SNAPSHOT
+mvn clean deploy -P release
 ```
 
 The second command will make the actual push. These commands will update the version
 and everything.
+
+To make a development (SNAPSHOT) release, use:
+
+```shell
+mvn clean deploy
+```
 
 Library dependencies
 --------------------

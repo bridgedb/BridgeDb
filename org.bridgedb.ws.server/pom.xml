@@ -8,7 +8,7 @@
     <parent>
         <artifactId>bridgedb-bundle</artifactId>
         <groupId>org.bridgedb</groupId>
-        <version>3.0.14-SNAPSHOT</version>
+        <version>3.0.15</version>
     </parent>
 
      <build>
@@ -179,6 +179,13 @@
             <version>${junit5.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
+		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.bio</artifactId>
+			<version>${project.parent.version}</version>
+            <type>jar</type>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
   
 </project>

@@ -8,7 +8,7 @@
   <parent>
   	<artifactId>bridgedb-bundle</artifactId>
   	<groupId>org.bridgedb</groupId>
-  	<version>3.0.14-SNAPSHOT</version>
+  	<version>3.0.15</version>
   </parent>
 
 	<build>
@@ -43,7 +43,16 @@
                         <Export-Package>org.bridgedb.webservice.bridgerest</Export-Package>
                         <Require-Bundle>org.bridgedb,org.bridgedb.bio</Require-Bundle>
                     </instructions>
-            </configuration>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>bundle-manifest</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>manifest</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
 	</build>

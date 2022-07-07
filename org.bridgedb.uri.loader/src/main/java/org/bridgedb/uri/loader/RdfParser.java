@@ -19,25 +19,28 @@
 //
 package org.bridgedb.uri.loader;
 
-import info.aduna.lang.FileFormat;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.apache.log4j.Logger;
 import org.bridgedb.uri.loader.transative.TransativeConfig;
 import org.bridgedb.utils.BridgeDBException;
-import org.openrdf.OpenRDFException;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.URIImpl;
-import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFHandler;
-import org.openrdf.rio.RDFParser;
-import org.openrdf.rio.RDFParserFactory;
-import org.openrdf.rio.RDFParserRegistry;
-import org.openrdf.rio.turtle.TurtleParser;
+import org.eclipse.rdf4j.OpenRDFException;
+import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFHandler;
+import org.eclipse.rdf4j.rio.RDFParser;
+import org.eclipse.rdf4j.rio.RDFParserFactory;
+import org.eclipse.rdf4j.rio.RDFParserRegistry;
+import org.eclipse.rdf4j.rio.turtle.TurtleParser;
 
 public class RdfParser {
     
@@ -156,16 +159,27 @@ public class RdfParser {
             if (address.endsWith(".n3")){
                 address = "try.ttl";
             }
-            FileFormat fileFormat = reg.getFileFormatForFileName(address);
-            if (fileFormat == null || !(fileFormat instanceof RDFFormat)){
+            Optional<RDFFormat> fileFormat = reg.getFileFormatForFileName(address);
+            if (fileFormat.isEmpty()){
                 //added bridgeDB/OPS specific extension here if required.           
                 logger.warn("OpenRDF does not know the RDF Format for " + address);
                 logger.warn("Using the default format " + DEFAULT_PARSER);
                 return DEFAULT_PARSER;
             }
-            format = (RDFFormat)fileFormat;
+            format = fileFormat.get();
         } else {
-            for (RDFFormat rdfFormat:RDFFormat.values()){
+            List<RDFFormat> rdfFormats = new ArrayList<>();
+            rdfFormats.add(RDFFormat.N3);
+            rdfFormats.add(RDFFormat.NQUADS);
+            rdfFormats.add(RDFFormat.NTRIPLES);
+            rdfFormats.add(RDFFormat.JSONLD);
+            rdfFormats.add(RDFFormat.RDFA);
+            rdfFormats.add(RDFFormat.RDFJSON);
+            rdfFormats.add(RDFFormat.RDFXML);
+            rdfFormats.add(RDFFormat.TRIG);
+            rdfFormats.add(RDFFormat.TRIX);
+            rdfFormats.add(RDFFormat.TURTLE);
+            for (RDFFormat rdfFormat: rdfFormats){
                 if (rdfFormat.getName().equalsIgnoreCase(rdfFormatName)){
                     format = rdfFormat;
                 }
@@ -174,8 +188,8 @@ public class RdfParser {
                 }
             }
         }
-        RDFParserFactory factory = reg.get(format);
-        return factory.getParser();
+        Optional<RDFParserFactory> factory = reg.get(format);
+        return factory.get().getParser();
     }
 
  }
