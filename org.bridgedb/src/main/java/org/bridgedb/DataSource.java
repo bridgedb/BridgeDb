@@ -77,6 +77,7 @@ public final class DataSource
 	private boolean isDeprecated = false;
 	private DataSource isDeprecatedBy = null;
 	private String type = UNKOWN;
+	private String[] categories = null;
 	private String miriamBase = null;
 	private String bioregistryPrefix = null;
     private String alternative = null;
@@ -180,6 +181,11 @@ public final class DataSource
 	public String getType()
 	{
 		return type;
+	}
+	
+	public String[] getCategories()
+	{
+		return categories;
 	}
 
 	/**
@@ -439,6 +445,41 @@ public final class DataSource
                     + current.type + " to " + type);  
 		}
 		
+		public Builder categories (String[] categories)
+		{
+            if (categories == null){
+                return this;
+            }
+            if (current.categories == null){
+                current.categories = categories;
+                return this;
+            }
+            if (current.categories.equals(categories)){
+                return this;
+            }
+            throw new IllegalArgumentException("Illegal attempt to change the categories of DataSource " + current + " from "
+                    + current.categories + " to " + categories);  
+		}
+		public Builder categories (String categories)
+		{
+			String[] categoriesArray = null;
+			if (categories != null) {
+				categoriesArray = categories.split(",");
+			}
+            if (categories == null){
+                return this;
+            }
+            if (current.categories == null){
+            	categoriesArray = categories.split(",");
+                current.categories = categoriesArray;
+                return this;
+            }
+            if (current.categories.equals(categoriesArray)){
+                return this;
+            }
+            throw new IllegalArgumentException("Illegal attempt to change the categories of DataSource " + current + " from "
+                    + current.categories + " to " + categories);  
+		}
 		/**
          * Since version 2 This method no longer allows you to change the Organism of a DataSource once set.
          * 
