@@ -55,8 +55,10 @@ If you've obtained the source code of BridgeDb, you should be
 able to compile with a simple:
 
 ```shell
-mvn clean install
+mvn clean install -Dgpg.skip
 ```
+
+You can find the libraries in the folder called "target", in each sublibrary folder (used to be called "dist" in ant).
 
 If you want to ignore failing tests, e.g. because you are not online,
 add this option: -Dmaven.test.failure.ignore=true. Furthermore,
