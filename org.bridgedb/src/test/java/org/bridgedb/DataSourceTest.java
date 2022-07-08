@@ -39,6 +39,23 @@ public class DataSourceTest {
 		    .asDataSource();
 		assertNotNull(source);
 	}
+	
+	@org.junit.jupiter.api.Test
+	public void testDataSourceCategories() {
+		DataSource source = DataSource.getExistingBySystemCode("Me");
+		assertNotNull(source);
+		System.out.println(source.getCategories());
+	}
+	
+	@org.junit.jupiter.api.Test
+	public void testAddingCategories() {
+		String[] categoriesArray =new String[] {"metabolites", "test", "test2"};
+		DataSource source = DataSource.register("F", "MetaboLoci")
+		    .categories(categoriesArray)
+		    .asDataSource();
+		assertEquals("metabolite", source.getType());
+		assertTrue(source.isMetabolite());
+	}
 
 	@org.junit.jupiter.api.Test
 	public void testBuilding() {
@@ -152,6 +169,7 @@ public class DataSourceTest {
 		assertEquals("metabolite", source.getType());
 		assertTrue(source.isMetabolite());
 	}
+
 
 	@org.junit.jupiter.api.Test
 	public void testDeprecated() {

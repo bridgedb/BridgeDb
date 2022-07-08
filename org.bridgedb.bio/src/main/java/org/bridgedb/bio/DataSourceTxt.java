@@ -104,6 +104,9 @@ public class DataSourceTxt
         if (fields.length > 12) {
         	builder.bioregistryPrefix(fields[12]);
         }
+        if (fields.length > 13) {
+        	builder.categories(fields[13]);
+        }
     }		
 
     /** 

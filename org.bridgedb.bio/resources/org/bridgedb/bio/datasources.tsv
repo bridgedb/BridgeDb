@@ -1,4 +1,4 @@
-Affy	X	http://www.affymetrix.com/	https://www.affymetrix.com/LinkServlet?probeset=$id	1851_s_at	probe		0	urn:miriam:affy.probeset	\d{4,}((_[asx])?_at)?	Affymetrix Probeset		affy.probeset
+Affy	X	http://www.affymetrix.com/	https://www.affymetrix.com/LinkServlet?probeset=$id	1851_s_at	probe		0	urn:miriam:affy.probeset	\d{4,}((_[asx])?_at)?	Affymetrix Probeset		affy.probeset	probe
 Agilent	Ag	http://agilent.com		A_24_P98555	probe		0	Ag	A_\d+_.+	Agilent		agilent.probe
 AOP-Wiki KE	AopKe	https://aopwiki.org/	https://aopwiki.org/events/$id	3	unknown		1	urn:miriam:aop.events	^\d+$	AOP-Wiki Key Events		aop.events
 AOP-Wiki AOP	Aop	https://aopwiki.org/	https://aopwiki.org/aops/$id	3	pathway		1	urn:miriam:aop	^\d+$	AOP-Wiki Adverse Outcome Pathway		aop
@@ -70,7 +70,7 @@ LipidBank	Lb	http://lipidbank.jp/index.html	http://lipidbank.jp/cgi-bin/detail.c
 MACiE	Ma	http://www.ebi.ac.uk/thornton-srv/databases/MACiE/index.html	http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/MACiE/entry/getPage.pl?id=$id	M0001	protein		1	urn:miriam:macie	^M\d{4}$	MACiE		macie
 MaizeGDB	Mg	https://maizegdb.org/	https://maizegdb.org/gene_center/gene/$id	acc1	gene	Zea mays	1	Mg		MaizeGDB		maizegdb.locus
 MatrixDB	Md	http://matrixdb.ibcp.fr/	http://matrixdb.ibcp.fr/cgi-bin/model/report/default?name=$id&class=Association	P00747_P07355	interaction		1	urn:miriam:matrixdb.association	^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])_.*|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9]_.*)|(GAG_.*)|(MULT_.*)|(PFRAG_.*)|(LIP_.*)|(CAT_.*)$	MatrixDB		matrixdb.association
-MeSH	Me	http://id.nlm.nih.gov/mesh/	http://id.nlm.nih.gov/mesh/$id	C000100	other		1	urn:miriam:mesh	^(C|D)\d{6}$	Medical Subject Headings		mesh
+MeSH	Me	http://id.nlm.nih.gov/mesh/	http://id.nlm.nih.gov/mesh/$id	C000100	other		1	urn:miriam:mesh	^(C|D)\d{6}$	Medical Subject Headings		mesh	disease,metabolite,gene
 MetaboLights Compounds	Ml	http://www.ebi.ac.uk/metabolights/	http://www.ebi.ac.uk/metabolights/$id	MTBLC17170	metabolite		1	Ml	^MTBLC\d{1,6}$	MetaboLights Compounds	P3890	metabolights
 MetaCyc	Mc	http://www.metacyc.org/	http://www.metacyc.org/META/NEW-IMAGE?type=NIL&object=$id	D-GLUTAMATE-OXIDASE-RXN	interaction		1	Mc		MetaCyc		metacyc.reaction
 MGI	M	http://www.informatics.jax.org/	http://www.informatics.jax.org/marker/$id	MGI:2442292	gene	Mus musculus	1	urn:miriam:mgi	^MGI:\d+$	Mouse Genome Database	P671	mgi
