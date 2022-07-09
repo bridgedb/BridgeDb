@@ -284,7 +284,11 @@
   		<name>Anders Riutta</name>
   		<url>http://orcid.org/0000-0002-4693-0591</url>
   	</developer>
-		<developer>
+	<developer>
+		<id>slenter</id>
+		<name>Denise Slenter</name>
+        </developer>
+	<developer>
   		<id>stain</id>
   		<email>stain@apache.org</email>
   		<name>Stian Soiland-Reyes</name>
