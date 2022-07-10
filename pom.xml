@@ -171,9 +171,10 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>3.2.0</version>
+						<version>3.4.0</version>
 						<configuration>
 							<additionalparam>-Xdoclint:none</additionalparam>
+							<source>8</source>
 						</configuration>
 						<executions>
 							<execution>
