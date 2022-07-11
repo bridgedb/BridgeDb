@@ -14,6 +14,7 @@
  */
 package org.bridgedb;
 
+import static org.junit.Assert.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -45,6 +46,11 @@ public class DataSourceTest {
 		DataSource source = DataSource.getExistingBySystemCode("Me");
 		assertNotNull(source);
 		System.out.println(source.getCategories());
+		String[] categories = { "gene", "disease"};
+		DataSource source = DataSource.mock("Me", "MeSH").categories(categories).asDataSource();
+		assertNotNull(source);
+		assertNotNull(source.getCategories());
+		assertEquals(2, source.getCategories().length);
 	}
 	
 	@org.junit.jupiter.api.Test

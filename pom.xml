@@ -4,7 +4,7 @@
   <groupId>org.bridgedb</groupId>
   <artifactId>bridgedb-bundle</artifactId>
   <packaging>pom</packaging>
-  <version>3.0.15</version>	
+  <version>3.0.16-SNAPSHOT</version>	
   <name>BridgeDb bundle</name>
 	<description>
 		BridgeDb is a framework for finding and mapping equivalent database
@@ -171,9 +171,10 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>3.2.0</version>
+						<version>3.4.0</version>
 						<configuration>
 							<additionalparam>-Xdoclint:none</additionalparam>
+							<source>8</source>
 						</configuration>
 						<executions>
 							<execution>
@@ -284,7 +285,11 @@
   		<name>Anders Riutta</name>
   		<url>http://orcid.org/0000-0002-4693-0591</url>
   	</developer>
-		<developer>
+	<developer>
+		<id>slenter</id>
+		<name>Denise Slenter</name>
+        </developer>
+	<developer>
   		<id>stain</id>
   		<email>stain@apache.org</email>
   		<name>Stian Soiland-Reyes</name>
