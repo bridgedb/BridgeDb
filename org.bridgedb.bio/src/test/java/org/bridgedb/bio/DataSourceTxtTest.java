@@ -28,6 +28,8 @@ import java.util.regex.Pattern;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
+import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,9 +40,13 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class DataSourceTxtTest {
 
+	@BeforeAll
+	public static void setUpSources() {
+		DataSourceTxt.init();
+	}
+	
 	@org.junit.jupiter.api.Test
 	public void testUniqueSystemCodes() {
-		DataSourceTxt.init();
 		Set<String> codes = new HashSet<String>();
 		Set<DataSource> sources = DataSource.getDataSources();
 		assertNotSame(0, sources.size());
@@ -52,7 +58,6 @@ public class DataSourceTxtTest {
 
 	@org.junit.jupiter.api.Test
 	public void systemCodesDoNotHaveWhitespace() {
-		DataSourceTxt.init();
 		Set<DataSource> sources = DataSource.getDataSources();
 		assertNotSame(0, sources.size());
 		for (DataSource source : sources) {
@@ -70,7 +75,6 @@ public class DataSourceTxtTest {
 	@org.junit.jupiter.api.Test
     	public void testWriteRead() throws IOException {
         System.out.println("WriteRead");
-        DataSourceTxt.init();
         File generated = File.createTempFile("UnitTest", "testWriteRead");
         BufferedWriter writer = new BufferedWriter(new FileWriter(generated));
         DataSourceTxt.writeToBuffer(writer);
@@ -81,7 +85,6 @@ public class DataSourceTxtTest {
 
 	@org.junit.jupiter.api.Test
     public void testCategories() throws Exception {
-		DataSourceTxt.init();
 		DataSource source = DataSource.getExistingByFullName("MeSH");
 		assertNotNull(source);
 		assertNotNull(source.getCategories());
@@ -90,7 +93,6 @@ public class DataSourceTxtTest {
 
 	@org.junit.jupiter.api.Test
 	public void testWikidata() throws Exception {
-	DataSourceTxt.init();
 	DataSource wikidata = DataSource.getExistingByFullName("Wikidata");
 	assertNotNull(wikidata);
 	assertTrue(wikidata.urlPatternKnown());
@@ -99,7 +101,6 @@ public class DataSourceTxtTest {
 
 	@org.junit.jupiter.api.Test
     public void testWikidataBySystemCode() throws Exception {
-    	DataSourceTxt.init();
     	DataSource wikidata = DataSource.getExistingByBioregistryPrefix("wikidata");
     	assertNotNull(wikidata);
     	assertTrue(wikidata.urlPatternKnown());
@@ -108,7 +109,6 @@ public class DataSourceTxtTest {
 
 	@org.junit.jupiter.api.Test
     	public void testChEMBL() throws Exception {
-    	DataSourceTxt.init();
     	DataSource wikidata = DataSource.getExistingByFullName("ChEMBL compound");
     	assertNotNull(wikidata);
     	assertTrue(wikidata.urlPatternKnown());
@@ -117,7 +117,6 @@ public class DataSourceTxtTest {
 
 	@org.junit.jupiter.api.Test
     	public void testKNApSAcK() throws Exception {
-    	DataSourceTxt.init();
     	DataSource wikidata = DataSource.getExistingByFullName("KNApSAcK");
     	assertNotNull(wikidata);
     	assertTrue(wikidata.urlPatternKnown());
@@ -126,7 +125,6 @@ public class DataSourceTxtTest {
 
 	@org.junit.jupiter.api.Test
 	public void testMIRIAMFeatures() throws Exception {
-		DataSourceTxt.init();
 		DataSource chebi = DataSource.getExistingByFullName("ChEBI");
 		assertNotNull(chebi);
 		assertEquals("urn:miriam:chebi:1234", chebi.getMiriamURN("1234"));
@@ -142,7 +140,6 @@ public class DataSourceTxtTest {
 	
 	@org.junit.jupiter.api.Test
 	public void testCatchIllegalArgumentException() throws Exception {
-		DataSourceTxt.init();
 		DataSourceTxt dataSourceTxt = new DataSourceTxt();
 		// use "[" as input for fields[9] in order to throw an IllegalArgumentException.
 		String[] fields = {"Affy", "X", "", "", "", "", "", "", "","["};		
