@@ -85,7 +85,7 @@ public class DataSourceTxtTest {
 		DataSource source = DataSource.getExistingByFullName("MeSH");
 		assertNotNull(source);
 		assertNotNull(source.getCategories());
-		assertEquals(3, source.getCategories().length);
+		assertEquals(4, source.getCategories().length);
 	}
 
 	@org.junit.jupiter.api.Test
