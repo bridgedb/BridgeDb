@@ -43,6 +43,7 @@ import org.bridgedb.rdb.SimpleGdb.QueryLifeCycle;
 import buildsystem.Measure;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import static org.junit.jupiter.api.Assertions.*;
@@ -66,10 +67,14 @@ public class Test {
 	public void setUp() {
 		measure = new Measure("bridgedb_timing.txt");
 	}
+
+	@BeforeAll
+	public static void setup() {
+		DataSourceTxt.init();
+	}
 	
 	@org.junit.jupiter.api.Test
 	public void testGdbProvider() throws ClassNotFoundException, IDMapperException, IOException{
-		DataSourceTxt.init();
 		Class.forName("org.bridgedb.file.IDMapperText");
 		ClassLoader classLoader = this.getClass().getClassLoader();
 
@@ -148,7 +153,6 @@ public class Test {
 	
 	@org.junit.jupiter.api.Test
 	public void testSimpleGdb() throws ClassNotFoundException, IDMapperException, IOException, SQLException{
-		DataSourceTxt.init();
 		// Load drivers
 		Class.forName("org.bridgedb.file.IDMapperText");
 		Class.forName("org.bridgedb.rdb.IDMapperRdb");
