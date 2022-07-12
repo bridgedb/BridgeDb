@@ -80,13 +80,22 @@ public class DataSourceTxtTest {
     }
 
 	@org.junit.jupiter.api.Test
-    	public void testWikidata() throws Exception {
-    	DataSourceTxt.init();
-    	DataSource wikidata = DataSource.getExistingByFullName("Wikidata");
-    	assertNotNull(wikidata);
-    	assertTrue(wikidata.urlPatternKnown());
-    	assertEquals("Wd", wikidata.getSystemCode());
-    }
+    public void testCategories() throws Exception {
+		DataSourceTxt.init();
+		DataSource source = DataSource.getExistingByFullName("MeSH");
+		assertNotNull(source);
+		assertNotNull(source.getCategories());
+		assertEquals(3, source.getCategories().length);
+	}
+
+	@org.junit.jupiter.api.Test
+	public void testWikidata() throws Exception {
+	DataSourceTxt.init();
+	DataSource wikidata = DataSource.getExistingByFullName("Wikidata");
+	assertNotNull(wikidata);
+	assertTrue(wikidata.urlPatternKnown());
+	assertEquals("Wd", wikidata.getSystemCode());
+}
 
 	@org.junit.jupiter.api.Test
     public void testWikidataBySystemCode() throws Exception {
