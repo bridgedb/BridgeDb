@@ -33,7 +33,7 @@
     <parent>
   	<artifactId>bridgedb-bundle</artifactId>
   	<groupId>org.bridgedb</groupId>
-  	<version>3.0.16</version>
+  	<version>3.0.17-SNAPSHOT</version>
   </parent>
 
 	<build>
