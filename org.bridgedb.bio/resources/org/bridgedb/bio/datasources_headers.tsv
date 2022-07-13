@@ -12,3 +12,4 @@ column	header	description	example_entry	http://www.w3.org/1999/02/22-rdf-syntax-
 11	official_name	Official name of datasource resource; useful as an end-user display name; useful in name resolution	Affymetrix Probeset	http://vocabularies.bridgedb.org/ops#fullName	http://www.w3.org/2001/XMLSchema#string
 12	wikidata_property	Property used by Wikidata to link identifiers from external datasources to a Wikidata item	P2410	https://www.mediawiki.org/wiki/Wikibase/DataModel#Property	http://www.w3.org/2001/XMLSchema#string
 13	bioregistry	The canonical prefix used by the Bioregistry	uniprot	https://github.com/biopragmatics/bioregistry	http://www.w3.org/2001/XMLSchema#string
+14	category	A comma separated list of categories of (biological) entities for which this data source is suitable. For example used by PathVisio 4.	metabolite,protein		http://www.w3.org/2001/XMLSchema#string
