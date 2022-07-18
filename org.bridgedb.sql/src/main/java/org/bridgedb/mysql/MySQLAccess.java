@@ -40,8 +40,10 @@ public class MySQLAccess implements SQLAccess{
 
     /**
      * Instantiate a connection to the database
-     *
-     * @throws IMSException If there is a problem connecting to the database.
+     * @param dbUrl - URL of the database
+     * @param username - username
+     * @param password - password
+     * @throws BridgeDBException - if there is a problem connecting to the database.
      */
     public MySQLAccess(String dbUrl, String username, String password) throws BridgeDBException {
         try {
@@ -67,7 +69,7 @@ public class MySQLAccess implements SQLAccess{
      * Retrieve an active connection to the database
      *
      * @return database connection
-     * @throws IMSException if there is a problem establishing a connection
+     * @throws BridgeDBException - if there is a problem establishing a connection
      */
     @Override
     public Connection getConnection() throws BridgeDBException {

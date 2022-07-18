@@ -23,9 +23,12 @@ public interface BridgeDbParameterModel extends ParameterModel
 	public Category getCategory();
 	
 	/** load the required IDMapper class(es) 
-	 * @throws ClassNotFoundException */
+	 * @throws ClassNotFoundException
+	 * */
 	public void loadClass() throws ClassNotFoundException;
 	
-	/** true if the required IDMapper class is enabled */
+	/** 
+	 * @return boolean true or false: true if the required IDMapper class is enabled
+	 *  */
 	public boolean isEnabled();
 }

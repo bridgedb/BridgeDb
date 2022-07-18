@@ -25,7 +25,7 @@ public interface IResolver {
 
 	/**
 	 * Returns a URL to resolve the identifier for this service.
-	 *
+	 * @param xref - the xref belonging to the URL
 	 * @return a String representation of the URL 
 	 */
 	public String getURL(Xref xref);

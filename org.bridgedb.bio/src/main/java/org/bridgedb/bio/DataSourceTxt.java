@@ -112,10 +112,11 @@ public class DataSourceTxt
     /** 
      * Writes all currently loaded DataSources to a writer
      * 
-     * @see DataSourceTxtTest.testWriteRead() for a working example
+     *
      * 
      * @param writer
-     * @throws IOException 
+     * @throws IOException
+     * See org.bridgedb.bio.DataSourceTxtTest#testWriteRead for a working example
      */
     public static void writeToBuffer(BufferedWriter writer) throws IOException {
         TreeSet sorted = new TreeSet<DataSource>(new DataSourceComparator());

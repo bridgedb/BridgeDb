@@ -40,7 +40,7 @@ public class Database {
 
     /**
      * Get available datasets of a mart/database.
-     * @return {@link Vector} of available datasets
+     * @return Vector of available datasets
      * @throws IOException if failed to read
      */
     public Map<String, Dataset> getAvailableDatasets()

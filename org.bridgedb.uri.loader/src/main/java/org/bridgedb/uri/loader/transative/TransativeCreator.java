@@ -182,7 +182,9 @@ public class TransativeCreator {
 
     /**
      * Empty method to allow subclasses to write headers
-     * @param buffer 
+     * @param writer buffered writer
+     * @throws BridgeDBException exception class
+     * @throws RDFHandlerException exception class
      */
     protected void writeHeader(RDFWriter writer) throws BridgeDBException, RDFHandlerException {
         //Do nothing here

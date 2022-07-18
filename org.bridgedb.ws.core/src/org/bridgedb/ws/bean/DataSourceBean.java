@@ -194,7 +194,7 @@ public class DataSourceBean {
     }
 
     /**
-     * @param organism the organism to set
+     * 
      * /
     public void setOrganism(Object organism) {
         this.organism = organism;

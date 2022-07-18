@@ -51,7 +51,7 @@ but plugins can define new ones and you can
 handle unknown data sources in the same 
 way as predefined ones.
 <p>
-Definitions for common DataSources can be found in {@link org.bridgedb.bio.BioDataSource}.
+Definitions for common DataSources can be found in 
 */
 public final class DataSource
 {
@@ -612,7 +612,7 @@ public final class DataSource
         /**
          * Allow the setting but not changing of an alternative name
          * 
-         * @param alternative
+         * @param alternative - String describing alternative DataSource
  		 * @return the same Builder object so you can chain setters
          * @since version 2.0.0
         */
@@ -634,7 +634,7 @@ public final class DataSource
          /**
          * Allow the setting but not changing of a description
          * 
-         * @param alternative
+         * @param description - String to build a description of a DataSource
  		 * @return the same Builder object so you can chain setters
          * @since version 2.0.0
         */
@@ -678,7 +678,7 @@ public final class DataSource
     /**
 	 * Create a new DataSource with (optional) detailed information with registration.
      * 
-	 * @param sysCode short unique code between 1-4 letters, originally used by GenMAPP
+	 * @param sysCode - short unique code between 1-4 letters, originally used by GenMAPP
 	 * @param fullName full name used in GPML.
 	 * @return Builder that can be used for adding detailed information.
 	 */
@@ -782,7 +782,7 @@ public final class DataSource
      * 
      * @param systemCode to check
      * @return True if and only if a DataSource has been registered with this systemCode.
-     * @Since Version 2.0.0
+     * @since Version 2.0.0
      */
     public static boolean systemCodeExists(String systemCode){
         return bySysCode.containsKey(systemCode);
@@ -807,7 +807,7 @@ public final class DataSource
      * 
      * @param fullName to check
      * @return True if and only if a DataSource has been registered with this systemCode.
-     * @Since Version 2.0.0
+     * @since Version 2.0.0
      */
     public static boolean fullNameExists(String fullName){
         return byFullName.containsKey(fullName);
@@ -942,7 +942,7 @@ public final class DataSource
 	/**
      * Since version 2.0 this method will return null if no DataSource is known
 	 * @param base the base urn, which must start with "urn:miriam:". It it isn't, null is returned.
-	 * @returns the DataSource for a given urn base, or null if the base is invalid or unknown.
+	 * @return the DataSource for a given urn base, or null if the base is invalid or unknown.
 	 */
 	public static DataSource getByMiriamBase(String base)
 	{
@@ -957,7 +957,7 @@ public final class DataSource
     /**
      * Since version 2.0 this method will return null if no DataSource is known
 	 * @param base the base urn, which must start with "http://identifiers.org/". It it isn't, null is returned.
-	 * @returns the DataSource for a given base, or null if the base is invalid or unknown.
+	 * @return the DataSource for a given base, or null if the base is invalid or unknown.
 	 */
     public static DataSource getByIdentiferOrgBase(String base) {
 		if (base == null || !base.startsWith (IDENTIFIERS_ORG_PREFIX))
@@ -975,7 +975,7 @@ public final class DataSource
     /**
      * Returns the compact identifier prefix (previously known as MIRIAM base.
      *
-	 * @returns the compact identifier 
+	 * @return the compact identifier 
 	 */
     public String getCompactIdentifierPrefix() {
 		return miriamBase;

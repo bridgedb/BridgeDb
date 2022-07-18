@@ -165,11 +165,11 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
  	/**
 	 * Get all cross-references for the given entity, restricting the
 	 * result to contain only references from the given set of data sources.
-	 * @param ref the entity to get cross-references for. 
-     * @param tgtDataSources target ID types/data source. Can not be null
+	 * @param xref the entity to get cross-references for. 
+     * @param tgtDataSource target ID types/data source. Can not be null
 	 * @return A Set containing the cross references, or an empty
 	 * Set when no cross references could be found. This method does not return null.
-	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 * @throws BridgeDBException if the mapping service is (temporarily) unavailable 
 	 */
     public Set<Xref> mapID(Xref xref, DataSource tgtDataSource) throws BridgeDBException {
         IdSysCodePair ref = toIdSysCodePair(xref);
@@ -490,8 +490,8 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
      * Check if the Xref is invalid in some way.
      * <p>
      * For example if it is null or if either the Id or DataSource part is null. 
-     * @param ref
-     * @return 
+     * @param ref - the xref to check
+     * @return if the xref whether or not the xref is valid
      */
     protected final boolean badXref(Xref ref) {
         if (ref == null) return true;
@@ -521,7 +521,8 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
     /**
      * Add a condition to the query that only mappings with a specific source Xref should be used.
      * @param query Query to add to.
-     * @param ref Xref that forms the base of the condition.
+     * @param id - identifier of the Xref
+     * @param sysCode - system code of the source database of the Xref
      */
     protected final void appendSourceXref(StringBuilder query, String id, String sysCode){
         query.append(" AND ");

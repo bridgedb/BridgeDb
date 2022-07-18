@@ -46,7 +46,7 @@ public class VirtuosoAccess implements SQLAccess{
     /**
      * Instantiate a connection to the database
      * 
-     * @throws IMSException If there is a problem connecting to the database.
+     * @throws BridgeDBException If there is a problem connecting to the database.
      */
     public VirtuosoAccess() throws BridgeDBException {
         Reporter.warn("VirtuosoAccess class used!. There is a high risk that this code will not work.");
@@ -73,7 +73,7 @@ public class VirtuosoAccess implements SQLAccess{
      * Retrieve an active connection to the database
      * 
      * @return database connection
-     * @throws IMSException if there is a problem establishing a connection
+     * @throws BridgeDBException if there is a problem establishing a connection
      */
     @Override
     public Connection getConnection() throws BridgeDBException {

@@ -163,7 +163,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      *
      * @param dropTables Flag to determine if any existing tables should be
      * dropped and new empty tables created.
-     * @throws BridgeDBException
+     * @param codeMapper code mapper 
+     * @throws BridgeDBException if something goes wrong with mapping URI
      */
     protected SQLUriMapper(boolean dropTables, CodeMapper codeMapper) throws BridgeDBException {
         super(dropTables, codeMapper);
@@ -1066,9 +1067,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     /**
      * Generates the meta info from the result of a query
      *
-     * @param rs
-     * @return
-     * @throws BridgeDBException
+     * @param rs - result set to convert to meta info
+     * @return meta info
+     * @throws BridgeDBException - if something goes wrong
      */
     public List<MappingSetInfo> resultSetToMappingSetInfos(ResultSet rs) throws BridgeDBException {
         ArrayList<MappingSetInfo> results = new ArrayList<MappingSetInfo>();
@@ -1101,9 +1102,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     /**
      * Generates the meta info from the result of a query
      *
-     * @param rs
-     * @return
-     * @throws BridgeDBException
+     * @param rs - result set
+     * @return source infos
+     * @throws BridgeDBException - if something goes wrong
      */
     public List<SourceInfo> resultSetToSourceInfos(ResultSet rs) throws BridgeDBException {
         ArrayList<SourceInfo> results = new ArrayList<SourceInfo>();
@@ -1121,9 +1122,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     /**
      * Generates the meta info from the result of a query
      *
-     * @param rs
-     * @return
-     * @throws BridgeDBException
+     * @param rs - result set
+     * @param sourceSysCode - database source system code
+     * @return meta info
+     * @throws BridgeDBException if something goes wrong
      */
     public List<SourceTargetInfo> resultSetToSourceTargetInfos(String sourceSysCode, ResultSet rs) throws BridgeDBException {
         ArrayList<SourceTargetInfo> results = new ArrayList<SourceTargetInfo>();
@@ -1147,8 +1149,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      *
      * @param prefix to find DataSource for
      * @param postfix to find DataSource for
-     * @return sysCode of an existig DataSource or null
-     * @throws BridgeDBException
+     * @return sysCode of an existing DataSource or null
+     * @throws BridgeDBException - if something goes wrong
      */
     private void checkExistingUriPatterns(RegexUriPattern uriPattern) throws BridgeDBException {
         String code = uriPattern.getSysCode();

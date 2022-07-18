@@ -59,7 +59,7 @@ public class XrefExistsBean {
         return exists;
     }
     /**
-     * @param isSupported the isSupported to set
+     * @param exists - the isSupported to set
      */
     public void setExists(Boolean exists) {
         this.exists = exists;

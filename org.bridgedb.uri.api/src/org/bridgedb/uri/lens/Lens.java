@@ -63,11 +63,13 @@ public class Lens {
      * 
      * Use factory method instead.
      * 
-     * @param id
-     * @param name
-     * @param createdOn
-     * @param createdBy
-     * @param justifications 
+     * @param id - id 
+     * @param name - name
+     * @param createdOn - date created
+     * @param createdBy - creator
+     * @param allowedMiddleSources - allowed middle sources
+     * @param description - description
+     * @param justifications - comments
      */
     public Lens(String id, String name, String createdOn, String createdBy, String description,
             Collection<String> justifications, Collection<DataSource> allowedMiddleSources) {

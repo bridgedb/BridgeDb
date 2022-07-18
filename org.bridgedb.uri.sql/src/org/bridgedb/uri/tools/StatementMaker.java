@@ -23,10 +23,11 @@ public interface StatementMaker {
  
     /**
      * @deprecated 
-     * @param mappingsBySet
-     * @param lensBaseUri
-     * @return
-     * @throws BridgeDBException 
+     * @param mappingsBySet mappings by set
+     * @param baseUri base Uri
+     * @param methodName method name
+     * @return mappings by set as RDF
+     * @throws BridgeDBException if something goes wrong
      */
     public Set<Statement> asRDF(MappingsBySet mappingsBySet, String baseUri, String methodName) throws BridgeDBException;
 

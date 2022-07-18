@@ -33,15 +33,16 @@ public interface WSUriInterface extends WSCoreInterface{
 
     /**
      *
-     * @param id
-     * @param scrCode
-     * @param uri
-     * @param lensUri
-     * @param targetCodes
-     * @param graph
-     * @param targetUriPattern
+     * @param id - identifier
+     * @param scrCode - source code
+     * @param uri - the uri link
+     * @param lensUri - the lens uri
+     * @param targetCodes - target system code
+     * @param graph - graph
+     * @param includeXrefResults - whether include xref results
+     * @param targetUriPattern - target uri pattern
      * @return A MappingsBean wrapped in a Response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - exception class
      */
     public Response map(String id, String scrCode, String uri, String lensUri, 
             Boolean includeXrefResults, Boolean includeUriResults,
@@ -49,65 +50,65 @@ public interface WSUriInterface extends WSCoreInterface{
 
     /**
      *
-     * @param uri
-     * @param lensUri
-     * @param graph
-     * @param targetUriPattern
+     * @param uri - the uri link
+     * @param lensUri - the lens uri
+     * @param graph - graph
+     * @param targetUriPattern - target uri pattern
      * @return A MappingsBySetBean wrapped in a Response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - exception class
      */
     public Response mapBySet(List<String> uri, String lensUri, String graph, List<String> targetUriPattern) 
             throws BridgeDBException;
 
     /**
      *
-     * @param Uri
+     * @param Uri - the uri
      * @return An UriExistsBean wrapped in a Response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - the exception class
      */
     public Response UriExists(String Uri) throws BridgeDBException;
 
     /**
      *
-     * @param text
-     * @param limitString
+     * @param text - search text
+     * @param limitString - limit string
      * @return An UriSearchBean wrapped in a Response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - exception class
      */
     public Response UriSearch(String text, String limitString) throws BridgeDBException;
 
     /**
      *
-     * @param Uri
+     * @param Uri - uri link
      * @return A XrefBean wrapped in a Response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - exception class
      */
     public Response toXref(String Uri) throws BridgeDBException;
 
     /**
      * Converts a Xref (represented as id and DataSource scrCode to the known
-     * @param id
-     * @param scrCode
-     * @return
-     * @throws BridgeDBException 
+     * @param id - identifier
+     * @param scrCode - database code
+     * @return the response mapped to uris
+     * @throws BridgeDBException  - exception class
      */
     public Response toUris(String id, String scrCode) throws BridgeDBException;
 
     /**
      *
-     * @param lensUri
+     * @param lensUri - lens uri
      * @return An OverallStatisticsBean wrapped in a Response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - exception class
      */
     public Response getOverallStatistics(String lensUri) throws BridgeDBException;
 
     /**
      *
-     * @param sourceSysCode
-     * @param targetSysCode
-     * @param lensUri
+     * @param sourceSysCode - source database system code
+     * @param targetSysCode - target database system code
+     * @param lensUri - lens uri
      * @return A MappingSetInfosBean wrapped in a Response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - exception class
      */
     public Response getMappingSetInfos(String sourceSysCode, String targetSysCode, String lensUri) 
             throws BridgeDBException;
@@ -118,17 +119,17 @@ public interface WSUriInterface extends WSCoreInterface{
 
     /**
      *
-     * @param mappingSetId
+     * @param mappingSetId - mapping set identifier
      * @return A MappingSetInfoBean wrapped in a Response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - exception class
      */
     public Response getMappingSetInfo(String mappingSetId) throws BridgeDBException;
 
     /**
      *
-     * @param dataSource
+     * @param dataSource - datasource name
      * @return A DataSourceUriPatternBean wrapped in a Response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - exception class
      */
     public Response getDataSource(String dataSource) throws BridgeDBException;
     
@@ -138,35 +139,36 @@ public interface WSUriInterface extends WSCoreInterface{
     /**
      * A simple method to test WebService and underlying SQl engine are running.
      * @return A String wrapped in a Response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - exception class
      */
     public Response getSqlCompatVersion() throws BridgeDBException;
      
     /**
      *
-     * @param uris
-     * @param lensUri
-     * @param graph
-     * @param targetUriPatterns
+     * @param uris - URI link
+     * @param lensUri - lens URI
+     * @param graph - graph
+     * @param targetUriPatterns - target URI pattenrs
      * @return A UriMappings wrapped in a Response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - exception class
      */
     public Response mapUri(List<String> uris, String lensUri, String graph, List<String> targetUriPatterns) 
             throws BridgeDBException;
     
     /**
      *
-     * @param id
+     * @param id - identifier
      * @return A LensBean wrapped in a Response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - exception class
      */
     public Response getLens(@PathParam("id") String id) throws BridgeDBException;
 
  	/**
      *
-     * @param lensUri
+     * @param lensUri - lens URI
+     * @param lensGroup - lens group
      * @return A LensesBean wrapped in a Response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - exception class
      */
     public Response getLenses(String lensUri, String lensGroup) throws BridgeDBException;
 

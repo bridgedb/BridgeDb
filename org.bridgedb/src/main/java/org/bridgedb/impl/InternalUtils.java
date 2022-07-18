@@ -111,9 +111,9 @@ public final class InternalUtils
 	
 	/**
 	 * parse configuration params of the connection string. Connection strings are
-	 * expected to have a formatting like @code{base?arg1=val&arg2=val}.
-	 * @param location configuration string to parse.
-	 * @param allowedParams allowed argument names to appear before =
+	 * expected to have a formatting like <code>{base?arg1=val&amp;arg2=val}</code>.
+	 * @param location - configuration string to parse.
+	 * @param allowedParams - allowed argument names to appear before =
 	 * @return key / value Map of configuration arguments. The base (the part before the ?)
 	 * 	is returned in the special key "BASE". If the part before ? is empty, 
 	 *  the "BASE" key is not created.
@@ -284,7 +284,7 @@ public final class InternalUtils
      * <p>
      * If the input contains {L:3643, L:1234, X:1004_at, X:1234_at},
      * then the output will contain
-     * { L=> {L:3643, L:1234}, X=> {X:1004_at, X:1234_at} }.
+     * { L=&gt; {L:3643, L:1234}, X=&gt; {X:1004_at, X:1234_at} }.
      * @param srcXrefs the set to split
      * @return map with datasources as keys and homogeneous sets as values.
      */
@@ -317,7 +317,12 @@ public final class InternalUtils
 		return builder.toString();
 	}
 
-	/** read a configuration file in the bridgedb xml format */
+	/** read a configuration file in the bridgedb xml format 
+	 * @param is - the input source
+	 * @throws ParserConfigurationException - exception class
+	 * @throws SAXException - exception class
+	 * @throws IOException - exception class
+	 * */
 	public static void readXmlConfig(InputSource is) throws ParserConfigurationException, SAXException, IOException
 	{	
 		SAXParserFactory spf = SAXParserFactory.newInstance();

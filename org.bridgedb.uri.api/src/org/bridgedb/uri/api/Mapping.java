@@ -32,11 +32,8 @@ import org.bridgedb.utils.BridgeDBException;
 /**
  * Contains the information held for a particular mapping.
  * <p>
- * @See getMethods for what is returned.
+ * See getMethods for what is returned.
  * <p>
- * A few things that are not returned and why included:
- * <ul>
- * <li>UriSpace: 
  * @author Christian
  */
 public class Mapping implements Comparable<Mapping>{
@@ -68,7 +65,7 @@ public class Mapping implements Comparable<Mapping>{
      * @param mappingSetId
      * @param mappingResource
      * @param mappingSource
-     * @param lens 
+     * @param lens
      */
     public Mapping(String predicate, String justification, int mappingSetId, String mappingResource, String mappingSource, String lens){
         this.predicate = predicate;

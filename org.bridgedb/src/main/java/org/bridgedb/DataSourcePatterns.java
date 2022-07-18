@@ -66,7 +66,7 @@ public final class DataSourcePatterns
 	 * their BioDataSource.
 	 * For example, this map will contain:
 	 * <pre>
-	 *    BioDataSource.ENSEMBL_HUMAN -> Pattern.compile("ENSG\d+")
+	 *    BioDataSource.ENSEMBL_HUMAN -&gt; Pattern.compile("ENSG\d+")
 	 * </pre>
 	 * <p>
 	 * There is not guaranteed to be a Pattern for every

@@ -61,7 +61,6 @@ public interface UriListener {
      * @param sourceUriPattern A registered UriPattern used by the source UriS
      * @param predicate The predicate to be associated. Can be null
      * @param justification The URI that states why the link holds in the forward direction, and if applicable backwards as well.
-     * @param backwardJustification The URI that states why the link holds in the reverse direction. Can not be null
      * @param targetUriPattern A registered UriPattern used by the source UriS
      * @param mappingSource The File or URI the data was read from
      * @param symetric Determines if mappingSet should be loaded in both directions
@@ -88,11 +87,11 @@ public interface UriListener {
      * For speed, the implemented methods is also not required to check that the MappingsSet exists 
      * nor that the mapping Set's semantic setting matches that in the insert call. 
      * 
-     * @param sourceId ID of the source xref
-     * @param targetId ID of the target xref
+     * @param sourceUri URI of the source xref
+     * @param targetUri URI of the target xref
      * @param mappingSet The ID of the mapping set to be inserted into.
      * @param symetric If true the inverse mapping will be inserted into the mapping set one number higher.
-     * @throws BridgeDBException 
+     * @throws BridgeDBException if something goes wrong with mapping insertion
      */
    public void insertUriMapping(String sourceUri, String targetUri, int mappingSet, boolean symetric) 
             throws BridgeDBException;
@@ -104,7 +103,7 @@ public interface UriListener {
      * <p>
      * This method and MappingListener method are intended to be duplicates of each other.
      * A single actual method can implement closeInput() for both interfaces. 
-     * @throws BridgeDBException 
+     * @throws BridgeDBException if something goes wrong with closing the input
      */
    public void closeInput() throws BridgeDBException;
    

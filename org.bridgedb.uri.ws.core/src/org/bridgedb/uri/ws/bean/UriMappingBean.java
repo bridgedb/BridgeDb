@@ -25,11 +25,8 @@ import org.bridgedb.uri.api.UriMapping;
 /**
  * Contains the information held for a particular mapping.
  * <p>
- * @See getMethods for what is returned.
- * <p>
- * A few things that are not returned and why included:
- * <ul>
- * <li>UriSpace: 
+ * See getMethods for what is returned.
+ * <p> 
  * @author Christian
  */
 @XmlRootElement(name="UriMapping")

@@ -30,7 +30,7 @@ public class URISpacesInGraphBean {
     }
 
     /**
-     * @param graph the graph to set
+     * @param Graph the graph to set
      */
     public void setGraph(String Graph) {
         this.graph = Graph;

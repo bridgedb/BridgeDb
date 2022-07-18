@@ -29,7 +29,7 @@ import org.bridgedb.virtuoso.VirtuosoAccess;
 /**
  * Finds the SQL Configuration file and uses it to open the database with the correct database name, user name and password.
  * <p>
- * @See load() for where and in which order the file will be looked for.
+ * See load() for where and in which order the file will be looked for.
  * @author Christian
  */
 public class SqlFactory extends ConfigReader{
@@ -56,8 +56,8 @@ public class SqlFactory extends ConfigReader{
     /**
      * Create a wrapper around the live SQL Database, 
      *     using the database name, user name and password found in the config file.
-     * @return 
-     * @throws BridgeDBException 
+     * @return sqlAccess - a wrapper around the individual SQL database drivers
+     * @throws BridgeDBException - if something goes wrong with the connection
      */
     public static SQLAccess createTheSQLAccess() throws BridgeDBException {
         SQLAccess sqlAccess;
@@ -80,8 +80,9 @@ public class SqlFactory extends ConfigReader{
     /**
      * Create a wrapper around the live SQL Database, 
      *     using the database name, user name and password found in the config file.
-     * @return 
-     * @throws BridgeDBException 
+     * @param database - the name of the database
+     * @return sqlAccess - a wrapper around the individual SQL database drivers
+     * @throws BridgeDBException - if something goes wrong with the connection
      */
     public static SQLAccess createASQLAccess(String database) throws BridgeDBException {
         SQLAccess sqlAccess=  new MySQLAccess(sqlPort() + "/" + database, sqlUser(), sqlPassword());

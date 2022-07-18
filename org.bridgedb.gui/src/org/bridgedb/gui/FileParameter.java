@@ -31,7 +31,10 @@ public class FileParameter
 	}
 	
 	/**
-	 * @param fileType one of JFileChooser.FILE_AND_DIRECTORIES, ... 
+	 * @param fileType - one of JFileChooser.FILE_AND_DIRECTORIES, ... 
+	 * @param fileTypeName - file type name
+	 * @param simpleFilter - filter
+	 * @param isSave - boolean to choose whether or not file is saved
 	 */
 	public FileParameter (String fileTypeName, String simpleFilter, boolean isSave, int fileType)
 	{

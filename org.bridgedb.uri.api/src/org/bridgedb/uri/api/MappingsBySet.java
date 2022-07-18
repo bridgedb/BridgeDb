@@ -45,7 +45,7 @@ public class MappingsBySet {
     /**
      * @deprecated 
      * @param lens
-     * @param mappings 
+     * @param mappings
      */
     public MappingsBySet(String lens, Set<Mapping> mappings){
         this.lens = lens;
@@ -144,7 +144,7 @@ public class MappingsBySet {
     
     /**
      * @deprecated 
-     * @return 
+     * @return the target uris
      */
     public Set<String> getTargetUris(){
         HashSet<String> targetUris = new HashSet<String>();
@@ -160,7 +160,7 @@ public class MappingsBySet {
 
     /**
      * @deprecated 
-     * @return 
+     * @return to string
      */
     public String toString(){
         StringBuilder sb = new StringBuilder("Lens: ");
@@ -201,7 +201,7 @@ public class MappingsBySet {
     
     /**
      * @deprecated 
-     * @return 
+     * @return isEmpty
      */
     public boolean isEmpty(){
         return mappings.isEmpty() && setMappings.isEmpty();
