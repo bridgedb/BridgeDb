@@ -52,6 +52,7 @@ public class ParameterModelEvent
 	/**
 	 * Constructor.
 	 * @param type Type of the parameter.
+	 * @param index - index of the parameter if applicable
 	 */
 	public ParameterModelEvent(ParameterModelEvent.Type type, int index)
 	{

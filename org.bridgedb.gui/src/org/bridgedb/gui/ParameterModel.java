@@ -32,11 +32,11 @@ public interface ParameterModel
 	 * <p>
 	 * Possible return values:
 	 * <ul>
-	 * <li>File -> JTextField with JButton("Browse")
-	 * <li>String -> JTextField 
-	 * <li>URL -> radiobutton file / url and JTextField + Browse button 
-	 * <li>Boolean -> checkbox
-	 * <li>List<String> or String[] -> combobox
+	 * <li>File -&gt; JTextField with JButton("Browse")
+	 * <li>String -&gt; JTextField 
+	 * <li>URL -&gt; radiobutton file / url and JTextField + Browse button 
+	 * <li>Boolean -&gt; checkbox
+	 * <li>List&lt;String&gt; or String[] -&gt; combobox
 	 * </ul>
 	 */
 	public Object getMetaData(int i);

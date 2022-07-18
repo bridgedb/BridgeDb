@@ -154,7 +154,7 @@ public class LensBean {
 	}
 
 	/**
-	 * @return the Allowed Middle Source
+	 * @param allowedMiddleSource
 	 */
 	public void setAllowedMiddleSource(Set<DataSourceBean> allowedMiddleSource) {
             this.allowedMiddleSource = allowedMiddleSource;

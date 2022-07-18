@@ -34,13 +34,17 @@ public class UriExistsBean {
     public UriExistsBean(){
     }
     
+    /**
+     * @param Uri - the uri
+     * @param exists - whether the uri exists
+     */
     public UriExistsBean(String Uri, boolean exists){
         this.exists = exists;
         this.Uri = Uri;
     }
     
     /**
-     * @return the isSupported
+     * @return the getExists
      */
     public Boolean getExists() {
         return exists;
@@ -53,7 +57,7 @@ public class UriExistsBean {
         return exists;
     }
     /**
-     * @param isSupported the isSupported to set
+     * @param exists the exists boolean to set
      */
     public void setExists(Boolean exists) {
         this.exists = exists;

@@ -72,8 +72,8 @@ public class SQLBase {
 
     /**
      * 
-     * @return
-     * @throws BridgeDBException 
+     * @return the SQL statement
+     * @throws BridgeDBException - if something goes wrong creating the SQL statement
      */
     public final Statement createStatement() throws BridgeDBException{
         try {

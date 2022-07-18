@@ -38,7 +38,7 @@ public interface MappingListener {
      * @param symetric Flag to say if mapping should be loaded one way of both ways. 
      *     Creates two mapping sets this one and the inverse with one number higher.
      * @return Id of the forward mappingSet.
-     * @throws BridgeDBException If something goes wrong. 
+     * @throws BridgeDBException - if something goes wrong
      * Always thrown by the URI based version as it requires extra parameters to register a mapping Set. 
      */
     public int registerMappingSet(DataSource source, DataSource target, boolean symetric) throws BridgeDBException;
@@ -57,7 +57,7 @@ public interface MappingListener {
      * @param targetId ID of the target xref
      * @param mappingSet The ID of the mapping set to be inserted into.
      * @param symetric If true the inverse mapping will be inserted into the mapping set one number higher.
-     * @throws BridgeDBException 
+     * @throws BridgeDBException - if something goes wrong
      */
     public void insertLink(String sourceId, String targetId, int mappingSet, boolean symetric) throws BridgeDBException;
 
@@ -67,7 +67,7 @@ public interface MappingListener {
      * May also update any cashed counts ext.
      * <p>
      * This method and URLListener method are intended to be duplicates of each other.
-     * @throws BridgeDBException 
+     * @throws BridgeDBException - if something goes wrong
      */
     public void closeInput()throws BridgeDBException;
 }

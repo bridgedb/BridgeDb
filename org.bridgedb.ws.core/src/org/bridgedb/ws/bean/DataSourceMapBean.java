@@ -82,7 +82,7 @@ public class DataSourceMapBean {
     }
 
     /**
-     * @param targets the targets to set
+     * @param target - the list of targets to set
      */
     public void setTarget(List<DataSourceBean> target) {
         this.target = target;

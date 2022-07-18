@@ -26,6 +26,8 @@ public class UriMapping {
     
     /**
      * Default constructor for webService
+     * @param sourceUri (see Class java docs). 
+     * @param targetUri (see Class java docs). 
      */
     public UriMapping(String sourceUri, String targetUri){
         this.sourceUri = sourceUri;

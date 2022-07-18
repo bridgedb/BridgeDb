@@ -30,27 +30,27 @@ import org.bridgedb.utils.BridgeDBException;
 public interface WSCoreInterface {
 
     /**
-     * @param id
-     * @param scrCode
+     * @param id - the id to map
+     * @param scrCode - data source code
      * @param targetCodes Optional
      * @return An XrefMapsBean wrapped in a Response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - exception class
      */
     Response mapID(List<String> id, List<String> scrCode, List<String> targetCodes) throws BridgeDBException;
 
     /**
-     * @param id
-     * @param scrCode
+     * @param id - the id to map
+     * @param scrCode - data source code
      * @return A XrefExistsBean wrapped in a response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - exception class
      */
     Response xrefExists(String id, String scrCode) throws BridgeDBException;
 
     /**
-     * @param text
+     * @param text - text to search
      * @param limit Optional
      * @return A XrefsBean wrapped in a Response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - exception class
      */
     Response freeSearch(String text, String limit) throws BridgeDBException;
 
@@ -66,7 +66,7 @@ public interface WSCoreInterface {
 
     /**
      * @return A DataSourcesBean wrapped in a Response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - exception class
      */
     Response getSupportedSrcDataSources() throws BridgeDBException;
 
@@ -77,15 +77,15 @@ public interface WSCoreInterface {
     Response getSupportedTgtDataSources() throws BridgeDBException;
 
     /**
-     * @param sourceCode
-     * @param targetCode
+     * @param sourceCode - source db syscode
+     * @param targetCode - target db syscode
      * @return A MappingSupportedBean wrapped in a Response
-     * @throws BridgeDBException
+     * @throws BridgeDBException - exception class
      */
     Response isMappingSupported( String sourceCode, String targetCode) throws BridgeDBException;
 
     /**
-     * @param key
+     * @param key - name of the property
      * @return A PropertyBean wrapped in a Response
      */
     Response getProperty(String key);

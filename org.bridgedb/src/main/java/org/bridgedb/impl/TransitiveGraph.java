@@ -41,7 +41,10 @@ public class TransitiveGraph
 	/** all possible paths indexed by their target (end node) */
 	private Map<DataSource, Set<Path> > targetMap = new HashMap<DataSource, Set<Path>>(); 
 	
-	/** Constructor: immediately starts calculating paths. */
+	/** Constructor: immediately starts calculating paths.
+	 * @param gdbs - list of IDMappers
+	 * @throws IDMapperException - exception class
+	 *  */
 	public TransitiveGraph(List<IDMapper> gdbs) throws IDMapperException
 	{
 		Set<Path> openSet = getDirectPaths(gdbs); // initialize map
@@ -122,6 +125,7 @@ public class TransitiveGraph
 
 	/** 
 	 * This is for testing. May be removed in the future.
+	 * @param map - map of DataSource and Set of Paths
 	 */
 	public void printMap(Map<DataSource, Set<Path> > map) 
 	{

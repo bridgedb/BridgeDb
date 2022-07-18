@@ -42,7 +42,7 @@ public class SimpleFileFilter extends FileFilter
 
 	/**
 	 * @param name example: "Data files"
-	 * @param glob example: "*.txt|*.csv"
+	 * @param globs example: "*.txt|*.csv"
 	 */
 	public SimpleFileFilter (String name, String globs)
 	{

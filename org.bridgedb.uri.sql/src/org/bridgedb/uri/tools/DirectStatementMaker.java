@@ -80,10 +80,10 @@ public class DirectStatementMaker implements StatementMaker{
     
     /***
      * @deprecated 
-     * @param mappingsBySet
-     * @param lensBaseUri
-     * @return
-     * @throws BridgeDBException 
+     * @param mappingsBySet - mappings by set
+     * @param baseUri - base uri
+     * @return RDF set
+     * @throws BridgeDBException if something goes wrong
      */
     @Override
     public Set<Statement> asRDF(MappingsBySet mappingsBySet, String baseUri, String methodName) throws BridgeDBException{

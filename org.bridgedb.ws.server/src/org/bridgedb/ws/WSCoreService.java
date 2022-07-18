@@ -521,8 +521,7 @@ public class WSCoreService implements WSCoreInterface {
      * 
      * Can be overwritten with nicer page
      * @param httpServletRequest Used by super classes
-     * @return
-     * @throws BridgeDBException thrown by super classes
+     * @return the response
      */
     protected Response noContentWrapper(HttpServletRequest httpServletRequest) {
         StringBuilder sb = new StringBuilder();

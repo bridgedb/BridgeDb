@@ -38,6 +38,8 @@ public class SetupWithTestData {
     /**
      * ONLY recommended if using BridgeDB without the OpenPhacts IMS extension.
      * Test of parse method, of class LinksetListener.
+     * @param args arguments
+     * @throws BridgeDBException exception class
      */
    public static void main(String[] args) throws BridgeDBException {
         Reporter.println("LoadTestData");

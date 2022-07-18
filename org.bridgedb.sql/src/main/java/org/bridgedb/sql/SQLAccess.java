@@ -35,7 +35,7 @@ public interface SQLAccess {
     /**
      * Allows SQL code to obtain a new Connection without having access to the Database name, user name and password.
      * @return An open Connection
-     * @throws BridgeDBException 
+     * @throws BridgeDBException - if something goes wrong when establishing connection
      */
     public Connection getConnection()  throws BridgeDBException;
     

@@ -487,7 +487,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	}
 	
 	/**
-	 * @param index in the range 0 <= index < getSize() 
+	 * @param index in the range 0 &lt;= index &lt; getSize() 
 	 * @return the IDMapper at the given position */
 	public IDMapper getIDMapperAt(int index)
 	{
@@ -612,7 +612,9 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	}
 
 	
-	/** get all mappers */
+	/** get all mappers 
+	 *  @return mappers
+	 *  */
 	public List<IDMapper> getMappers()
 	{
 		return gdbs;

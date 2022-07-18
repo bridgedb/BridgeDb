@@ -164,7 +164,7 @@ public class Xref implements Comparable<Xref>
      * This method will convert a known Miriam Urn to an Xref
      * 
      * @since Version 2.0.0
-     * @param urn
+     * @param urn - the miriam URN of the Xref
      * @return A Xref or null if the urn is not in Miriam Format or 
      */
 	public static Xref fromMiriamUrn(String urn)

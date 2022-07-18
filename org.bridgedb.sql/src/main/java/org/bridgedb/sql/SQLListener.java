@@ -301,7 +301,7 @@ public class SQLListener extends SQLBase implements MappingListener{
     
      /**
 	 * Excecutes several SQL statements to drop the tables 
-	 * @throws BridgeDBException 
+	 * @throws BridgeDBException - if something goes wrong
 	 */
 	protected void dropSQLTables() throws BridgeDBException
 	{
@@ -315,8 +315,8 @@ public class SQLListener extends SQLBase implements MappingListener{
      * Drops a single table if it exists.
      * <p>
      * Virtuosos appears not to have the if exists syntax so errors are assumed to be table not found.
-     * @param name
-     * @throws BridgeDBException 
+     * @param name - name of the table
+     * @throws BridgeDBException - if something goes wrong
      */
     protected void dropTable(String name) throws BridgeDBException{
         //"IF NOT EXISTS" is unsupported 
@@ -340,7 +340,7 @@ public class SQLListener extends SQLBase implements MappingListener{
       * <p>
       * Table DataSource holds the org.bridgedb.DataSource registry between deployments of the service.
       * The whole table is loaded into the DataSource.class regisrty in the constructor.
-      * @See org.bridgedb.DataSource.
+      * @see org.bridgedb.DataSource
       * <p>
       * Table "mapping" holds the Id part of the mapping. (The DataSource part is handled by MappingSet)
       * The "id" field is purely for provenace tracking. Ie getting a particular mapping based on its Id.
@@ -357,7 +357,7 @@ public class SQLListener extends SQLBase implements MappingListener{
       * <p>
       * Table "properties" underpins bridgeDB properties methods.
       * "isPublic" field dettermines if the key will be returned by the getKeys() method.
-	  * @throws BridgeDBException 
+	  * @throws BridgeDBException - if something goes wrong
 	  */
     protected void createSQLTables() throws BridgeDBException {
         //"IF NOT EXISTS " is not supported
