@@ -51,6 +51,7 @@ public enum Organism {
 	CanisFamiliaris("Canis familiaris", "Cf", "Dog", 9615),
 	CionaIntestinalis("Ciona intestinalis", "Ci", "Sea Squirt", 7719),
 	Clostridiumthermocellum("Clostridium thermocellum", "Ct", "Cthe", 1515),
+	Caulobactervibrioides("Caulobacter vibrioides", "Cv", 155892),
 	DanioRerio("Danio rerio", "Dr", "Zebra fish", 7955),
 	DaphniaMagna("Daphnia magna", "Da", 35525),
 	DaphniaPulex("Daphnia pulex", "Dp", 6669),
