@@ -45,8 +45,7 @@ public class BridgeQC
 	 * Compares two Derby databases and reports the output
 	 * to STDOUT.
 	 *
-	 * @param f1 the original Derby@prefix gpml:  <http://vocabularies.wikipathways.org/gpml#> .
- database
+	 * @param f1 the original Derby@prefix gpml: <a href="http://vocabularies.wikipathways.org/gpml">database</a>
 	 * @param f2 the new Derby database
 	 */
 	public BridgeQC(File f1, File f2) throws IDMapperException
