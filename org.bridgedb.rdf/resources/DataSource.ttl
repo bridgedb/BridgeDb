@@ -568,7 +568,7 @@ bridgeDB:DataSource_Gramene_Rice a bridgeDB:DataSource ;
 	bridgeDB:idExample "osa-MIR171a" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.gramene.org/Oryza_sativa/Gene/Summary?db=core;g=$id> .
+	bridgeDB:hasPrimaryUriPattern <http://www.gramene.org/Oryza_sativa/Gene/Summary?g=$id> .
 
 bridgeDB:DataSource_HGNC a bridgeDB:DataSource ;
 	bridgeDB:fullName "HGNC" ;
