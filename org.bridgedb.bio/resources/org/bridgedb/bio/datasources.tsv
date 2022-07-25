@@ -141,4 +141,4 @@ XMetDB	Xm	http://www.xmetdb.org/	http://www.xmetdb.org/xmetdb/protocol/$id	XMETD
 ZFIN	Z	http://zfin.org	http://zfin.org/action/marker/view/$id	ZDB-GENE-041118-11	gene	Danio rerio	1	urn:miriam:zfin	ZDB\-GENE\-\d+\-\d+	ZFIN Gene	P3870	zfin	gene
 GitHub	github	https://github.com	https://github.com/$id	hbasaric	author		0	urn:miriam:github	^[a-zA-Z0-9-_]+(/[a-zA-Z0-9-_]+)?$	GitHub		github	author
 Cell Ontology	cl	https://obophenotype.github.io/cell-ontology/	https://www.ebi.ac.uk/ols/ontologies/cl/terms?obo_id=$id	0000062	ontology		1	urn:miriam:cl	^\d{7}$	Cell ontology		cl	ontology,cell
-Evidence Ontology	eco	https://github.com/evidenceontology/evidenceontology/	https://www.ebi.ac.uk/ols/ontologies/eco/terms?obo_id=$id	0007807	ontology		1	urn:miriam:eco	^\d{7}$	Evidence ontology		eco	ontology,evidence
+Evidence Ontology	EcOnt	https://github.com/evidenceontology/evidenceontology/	https://www.ebi.ac.uk/ols/ontologies/eco/terms?obo_id=$id	0007807	ontology		1	urn:miriam:eco	^\d{7}$	Evidence ontology		eco	ontology,evidence
