@@ -1,6 +1,6 @@
 Affy	X	http://www.affymetrix.com/	https://www.affymetrix.com/LinkServlet?probeset=$id	1851_s_at	probe		0	urn:miriam:affy.probeset	\d{4,}((_[asx])?_at)?	Affymetrix Probeset		affy.probeset	probe
 Agilent	Ag	http://agilent.com		A_24_P98555	probe		0	Ag	A_\d+_.+	Agilent		agilent.probe	probe
-AOP-Wiki KE	AopKe	https://aopwiki.org/	https://aopwiki.org/events/$id	3	unknown		1	urn:miriam:aop.events	^\d+$	AOP-Wiki Key Events		aop.events	unknown
+AOP-Wiki KE	AopKe	https://aopwiki.org/	https://aopwiki.org/events/$id	3	unknown		1	urn:miriam:aop.events	^\d+$	AOP-Wiki Key Events		aop.events	unknown,event
 AOP-Wiki AOP	Aop	https://aopwiki.org/	https://aopwiki.org/aops/$id	3	pathway		1	urn:miriam:aop	^\d+$	AOP-Wiki Adverse Outcome Pathway		aop	pathway
 AOP-Wiki KER	AopKer	https://aopwiki.org/	https://aopwiki.org/relationships/$id	5	interaction		1	urn:miriam:aop.relationships	^\d+$	AOP-Wiki Key Event Relationships		aop.relationships	interaction
 AOP-Wiki Stressor	AopS	https://aopwiki.org/	https://aopwiki.org/stressors/$id	222	metabolite		1	urn:miriam:aop.stressor	^\d+$	AOP-Wiki Stressor		aop.stressor	metabolite
@@ -22,7 +22,7 @@ Database of Interacting Proteins	Dip	http://dip.doe-mbi.ucla.edu/	http://dip.doe
 dbSNP	Sn	http://www.ncbi.nlm.nih.gov/sites/entrez?db=snp	http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$id	121909098	gene		1	urn:miriam:dbsnp	^\d+$	dbSNP	P6861	dbsnp	gene
 DrugBank	Dr	http://www.drugbank.ca/	http://www.drugbank.ca/drugs/$id	DB00001	metabolite		1	urn:miriam:drugbank	^D(B|BSALT|BCAT)(\d{1})?\d{5}$	DrugBank	P715	drugbank	metabolite
 DOI	Pbd	https://doi.org/	https://doi.org/$id	10.1038/s41597-020-0477-8	publication		1	urn:miriam:doi	^\d{2}\.\d{4}.*$	Digital Object Identifier	P356	doi	publication
-EcoCyc	Eco	http://ecocyc.org/	http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=$id	1.1.1.127-RXN	interaction	Escherichia coli	1	Eco	^\d+\.-\.-\.-|\d+\.\d+\.-\.-|\d+\.\d+\.\d+\.-|\d+\.\d+\.\d+\.(n)?\d+-RXN	EcoCyc		eco	interaction
+EcoCyc	Eco	http://ecocyc.org/	http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=$id	1.1.1.127-RXN	interaction	Escherichia coli	1	Eco	^\d+\.-\.-\.-|\d+\.\d+\.-\.-|\d+\.\d+\.\d+\.-|\d+\.\d+\.\d+\.(n)?\d+-RXN	EcoCyc		ecocyc	interaction
 EcoGene	Ec	http://ecogene.org/	http://ecogene.org/geneInfo.php?eg_id=$id	EG10173	gene	Escherichia coli	1	urn:miriam:ecogene	^EG\d+$	EcoGene		ecogene	gene
 EMBL	Em	http://www.ebi.ac.uk/embl/	http://www.ebi.ac.uk/ena/data/view/$id	X58356	gene		1	urn:miriam:ena.embl	^[A-Z]+[0-9]+$	European Nucleotide Archive		ena.embl	gene
 Ensembl	En	http://www.ensembl.org/	https://www.ensembl.org/id/$id	ENSG00000139618	gene		1	urn:miriam:ensembl	^ENS[A-Z]*[FPTG]\d{11}$	Ensembl	P594	ensembl	gene
@@ -33,12 +33,12 @@ FlyBase	F	http://flybase.org/	http://flybase.org/reports/$id.html	FBgn0011293	ge
 GenBank	G	http://www.ncbi.nlm.nih.gov/genbank/	http://www.ncbi.nlm.nih.gov/nuccore/$id	NW_004190323	gene		0	urn:miriam:insdc	(\w\d{5})|(\w{2}\d{6})|(\w{3}\d{5})	GenBank		insdc	gene
 Gene Wiki	Gw	http://en.wikipedia.org/wiki/Portal:Gene_Wiki	http://plugins.biogps.org/cgi-bin/wp.cgi?id=$id	1017	gene		0	urn:miriam:genewiki	\d+	Gene Wiki	P351	genewiki	gene
 GeneOntology	T	http://www.ebi.ac.uk/QuickGO/	http://www.ebi.ac.uk/QuickGO/GTerm?id=$id	GO:0006915	ontology		0	urn:miriam:go	^GO:\d{7}$	Gene Ontology	P686	go	ontology
-Gramene Arabidopsis	EnAt	http://www.gramene.org/	http://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?g=$id	ATMG01360-TAIR-G	gene	Arabidopsis thaliana	1	EnAt	AT[\dCM]G\d{5}\-TAIR\-G	Gramene Arabidopsis			gene
+Gramene Arabidopsis	EnAt	http://www.gramene.org/	http://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?g=$id	ATMG01360	gene	Arabidopsis thaliana	1	EnAt	AT[\dCM]G\d{5}	Gramene Arabidopsis			gene
 Gramene Genes DB	Gg	http://www.gramene.org/	http://www.gramene.org/db/genes/search_gene?acc=$id	GR:0060184	gene		1	Gg	GR:\d+	Gramene Genes		gramene.gene	gene
 Gramene Literature	Gl	http://www.gramene.org/	http://www.gramene.org/db/literature/pub_search?ref_id=$id	6200	gene		0	Gl		Gramene Literature		gramene.reference	gene
 Gramene Maize	EnZm	http://www.ensembl.org	http://www.maizesequence.org/Zea_mays/Gene/Summary?g=$id	GRMZM2G174107	gene		1	EnZm		Gramene Maize			gene
 Gramene Pathway	Gp	http://www.gramene.org/pathway		AAH72400	pathway		1	Gp		Gramene Pathway			pathway
-Gramene Rice	EnOj	http://www.gramene.org/	http://www.gramene.org/Oryza_sativa/Gene/Summary?db=core;g=$id	osa-MIR171a	gene		1	EnOj		Gramene Rice			gene
+Gramene Rice	EnOj	http://www.gramene.org/	http://www.gramene.org/Oryza_sativa/Gene/Summary?g=$id	Os05g0113900	gene		1	EnOj		Gramene Rice			gene
 Guide to Pharmacology	Gpl	http://www.guidetopharmacology.org/	https://www.guidetopharmacology.org/GRAC/LigandDisplayForward?ligandId=$id	1627	gene		1		^\d+$	Guide to Pharmacology Targets	P5458	iuphar.receptor	gene
 Guide to Pharmacology Targets	Gpt	http://www.guidetopharmacology.org/	https://www.guidetopharmacology.org/GRAC/ObjectDisplayForward?objectId=$id	256	metabolite		1		^\d+$	Guide to Pharmacology	P595	iuphar.ligand	metabolite
 HGNC	H	http://www.genenames.org		DAPK1	gene	Homo sapiens	1	urn:miriam:hgnc.symbol	^[A-Za-z0-9]+	HGNC Symbol	P353	hgnc.symbol	gene
@@ -46,9 +46,9 @@ HGNC Accession number	Hac	http://www.genenames.org	https://www.genenames.org/dat
 HMDB	Ch	http://www.hmdb.ca/	http://www.hmdb.ca/metabolites/$id	HMDB0000001	metabolite		1	urn:miriam:hmdb	^HMDB(\d{2})?\d{5}$	HMDB	P2057	hmdb	metabolite
 HomoloGene	Hg	http://www.ncbi.nlm.nih.gov/homologene/	http://www.ncbi.nlm.nih.gov/homologene/$id	1000	gene		1	urn:miriam:homologene	^\d+$	HomoloGene	P593	homologene	gene
 HPRD	Hp	http://www.hprd.org/			interaction	Homo sapiens	1	urn:miriam:hprd		HPRD		hprd	interaction
-Human Disease Ontology	Do	http://www.disease-ontology.org	https://disease-ontology.org/?id=$id	DOID:11337	unknown	Homo sapiens	1	urn:miriam:doid	^DOID\:\d+$	Disease Ontology		doid	unknown
+Human Disease Ontology	Do	http://www.disease-ontology.org	https://disease-ontology.org/?id=$id	DOID:11337	unknown	Homo sapiens	1	urn:miriam:doid	^DOID\:\d+$	Disease Ontology		doid	unknown,ontology,disease
 ICD-9	ICD9	http://www.who.int/classifications/icd/en/	http://www.icd9data.com/getICD9Code.ashx?icd9=$id	104	unknown	Homo sapiens	1	ICD9	^\d+$	International Classification of Diseases		icd9	unknown
-ICD-10	ICD10	http://www.who.int/classifications/icd/en/	http://apps.who.int/classifications/icd10/browse/2010/en#/{$id}	C34	unknown	Homo sapiens	1	ICD10	^[A-Z]\d+(\.[-\d+])?$	International Classification of Diseases  unknown			icd10
+ICD-10	ICD10	http://www.who.int/classifications/icd/en/	http://apps.who.int/classifications/icd10/browse/2010/en#/{$id}	C34	unknown	Homo sapiens	1	ICD10	^[A-Z]\d+(\.[-\d+])?$	International Classification of Diseases		icd10	unknown
 ICD-11	ICD11	http://www.who.int/classifications/icd/en/		1A95	unknown	Homo sapiens	1	ICD11	^([A-Z]|\d)+(\d|[A-Z])\d+$	International Classification of Diseases		icd11	unknown
 Illumina	Il	http://www.illumina.com/		ILMN_5668	probe		0	Il	ILMN_\d+	Illumina		illumina.probe	probe
 InChIKey	Ik	http://inchi.org/		QTBSBXVTEAMEQO-UHFFFAOYSA-N	metabolite		1	urn:miriam:inchikey	^[A-Z]{14}\-[A-Z]{10}(\-[A-Z])?	Standard InChIKey	P235	inchikey	metabolite
@@ -80,14 +80,14 @@ miRBase Sequence	Mb	http://microrna.sanger.ac.uk/	http://www.mirbase.org/cgi-bin
 NASC Gene	N	http://arabidopsis.info/		ATMG00960-TAIR-G	gene	Arabidopsis thaliana	1	N	AT[\dCM]G\d{5}\-TAIR\-G	NASC Gene			gene
 NCBI Protein	Np	http://www.ncbi.nlm.nih.gov/protein	http://www.ncbi.nlm.nih.gov/protein/$id	CAA71118.1	protein		1	urn:miriam:ncbiprotein	^\w+\d+(\.\d+)?$	NCBI Protein		ncbiprotein	protein
 NCI Pathway Interaction Database	Pid	http://pid.nci.nih.gov/	http://pid.nci.nih.gov/search/pathway_landing.shtml?what=graphic&jpg=on&pathway_id=$id	pi3kcipathway	pathway		1	urn:miriam:pid.pathway	^\w+$	NCI Pathway Interaction Database		pid.pathway	pathway
-OMIM	Om	http://omim.org/	http://omim.org/entry/$id	603903	gene		0	urn:miriam:mim	^[*#+%^]?\d{6}$	OMIM	P492	omim	gene
+OMIM	Om	http://omim.org/	http://omim.org/entry/$id	603903	gene		0	urn:miriam:mim	^[*#+%^]?\d{6}$	OMIM	P492	omim	gene,disease
 OpenTargets	Opt	https://www.opentargets.org/	https://genetics.opentargets.org/gene/$id	ENSG00000169174	gene		1		^ENS[A-Z]*[FPTG]\d{11}$			ensembl	gene
-ORCID	orcid	https://orcid.org	https://orcid.org/$id	0000-0002-5355-2576	other	Homo sapiens	1	urn:miriam:orcid	^\d{4}-\d{4}-\d{4}-\d{3}(\d|X)$	ORCID	P496	orcid	other
+ORCID	orcid	https://orcid.org	https://orcid.org/$id	0000-0002-5355-2576	other	Homo sapiens	1	urn:miriam:orcid	^\d{4}-\d{4}-\d{4}-\d{3}(\d|X)$	ORCID	P496	orcid	other,author
 Orphanet	On	http://www.orpha.net/consor/	https://identifiers.org/orphanet:$id	85163	other	Homo sapiens	1	urn:miriam:orphanet	^\d+$	Bio2RDF		orphanet	other
 Oryzabase	Ob	http://www.shigen.nig.ac.jp/rice/oryzabase	http://www.shigen.nig.ac.jp/rice/oryzabase/gateway/gatewayAction.do?target=symbol&id=$id	468	gene	Oryza sativa	1	Ob		Oryzabase		oryzabase.gene	gene
 Other	O				gene		1	O		Other			other
 Pathway Commons	Pc	http://www.pathwaycommons.org/pc/	http://www.pathwaycommons.org/pc/record2.do?id=$id	485991	pathway		1	urn:miriam:pathwaycommons	^\d+$	Pathway Commons		pathwaycommons	pathway
-Pathway Ontology	PW	http://bioportal.bioontology.org/ontologies/PW	http://purl.bioontology.org/ontology/PW/PW:$id	0000208	pathway		1	urn:miriam:pw	^\d{7}$	Pathway Ontology	P7333	pw	pathway
+Pathway Ontology	PW	http://bioportal.bioontology.org/ontologies/PW	http://purl.bioontology.org/ontology/PW/PW:$id	0000208	pathway		1	urn:miriam:pw	^\d{7}$	Pathway Ontology	P7333	pw	pathway,ontology
 PATO	PATO	http://bioportal.bioontology.org/ontologies/PATO	http://purl.bioontology.org/ontology/PATO/PATO:$id	0001998	gene		1	urn:miriam:pato	^\d{7}$	PATO		pato	gene
 PDB	Pd	http://www.pdb.org/	http://www.rcsb.org/pdb/explore/explore.do?structureId=$id	2gc4	protein		0	urn:miriam:pdb	^[0-9][A-Za-z0-9]{3}$	Protein Data Bank	P638	pdb	protein
 Pfam	Pf	https://pfam.xfam.org/	https://pfam.xfam.org/family/$id/	PF01234	protein		1	urn:miriam:pfam	^PF\d{5}$	Pfam	P3519	pfam	protein
@@ -107,7 +107,7 @@ RESID	Res	http://www.ebi.ac.uk/RESID/	http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?
 Rfam	Rf		http://www.sanger.ac.uk/cgi-bin/Rfam/getacc?$id	RF00066	gene		1	Rf	RF\d+	RFAM		rfam	gene
 RGD	R	http://rgd.mcw.edu/	http://rgd.mcw.edu/tools/genes/genes_view.cgi?id=$id	2018	gene	Rattus norvegicus	1	urn:miriam:rgd	^\d{4,7}$	Rat Genome Database	P3853	rgd	gene
 Rhea	Rh	http://www.ebi.ac.uk/rhea/	http://www.ebi.ac.uk/rhea/reaction.xhtml?id=$id	12345	interaction		1	urn:miriam:rhea	^\d{5}$	Rhea		rhea	interaction
-Rice Ensembl Gene	Os	http://www.gramene.org/Oryza_sativa	http://www.gramene.org/Oryza_sativa/geneview?gene=$id	LOC_Os04g54800	gene	Oryza sativa	1	Os		Rice Ensembl Gene			gene
+Rice Ensembl Gene	Os	http://www.gramene.org/Oryza_sativa	http://www.gramene.org/Oryza_sativa/geneview?gene=$id	Os04g54800	gene	Oryza sativa	1	Os		Rice Ensembl Gene			gene
 SGD	D	http://www.yeastgenome.org/	http://www.yeastgenome.org/locus/$id	S000028457	gene	Saccharomyces cerevisiae	1	urn:miriam:sgd	^S\d+$	SGD	P3406	sgd	gene
 Small Molecule Pathway Database	Sm	http://www.smpdb.ca/pathways	https://smpdb.ca/view/$id	SMP00001	pathway		1	urn:miriam:smpdb	^SMP\d{5}$	Small Molecule Pathway Database		smpdb	pathway
 SMART	Sma	http://smart.embl-heidelberg.de/	http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN=$id	SM00015	protein		1	urn:miriam:smart	^SM\d{5}$	SMART	P3524	smart	protein
@@ -133,9 +133,12 @@ VMH metabolite	VmhM	http://www.vmh.life	https://www.vmh.life/#metabolite/$id	h2o
 Wheat gene names	Wn	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/report?class=gene;name=$id	1-FEH+w3	gene	Triticum aestivum	1	Wn		Wheat gene names		graingenes.symbol	gene
 Wheat gene refs	Wr	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$id	WGS-95-1333	probe	Triticum aestivum	0	Wr		Wheat gene refs		graingenes.reference	gene
 WikiGenes	Wg	http://www.wikigenes.org/	https://www.wikigenes.org/e/gene/e/$id.html	7157	gene		0	urn:miriam:wikigenes		WikiGenes	P351	wikigenes	gene
-WikiPathways	Wp	http://www.wikipathways.org/	https://www.wikipathways.org/instance/$id	WP100	pathway		1	urn:miriam:wikipathways	WP\d{1,5}(_r\d+)?	WikiPathways	P2410	wikipathways	pathway
+WikiPathways	Wp	http://www.wikipathways.org/	https://www.wikipathways.org/instance/$id	WP100	pathway		1	urn:miriam:wikipathways	WP\d{1,5}(_r\d+)?	WikiPathways	P2410	wikipathways	pathway,author
 Wikidata	Wd	http://www.wikidata.org	https://scholia.toolforge.org/$id	Q407962	metabolite		1	urn:miriam:wikidata	^Q\d+$	Wikidata		wikidata	metabolite 
 Wikipedia	Wi	http://www.wikipedia.org	https://en.wikipedia.org/wiki/$id	Acetate	metabolite		0	urn:miriam:wikipedia.en	^.*$	Wikipedia		wikipedia.en	metabolite
 WormBase	W	http://www.wormbase.org/	http://www.wormbase.org/db/gene/gene?name=$id;class=Gene	WBGene00000001	gene	Caenorhabditis elegans	1	urn:miriam:wb	^WBGene\d{8}$	WormBase	P3860	wormbase	gene
 XMetDB	Xm	http://www.xmetdb.org/	http://www.xmetdb.org/xmetdb/protocol/$id	XMETDB171	interaction		1		^XMETDB\d+$	Xenobiotics Metabolism Database		xmetdb	interaction
 ZFIN	Z	http://zfin.org	http://zfin.org/action/marker/view/$id	ZDB-GENE-041118-11	gene	Danio rerio	1	urn:miriam:zfin	ZDB\-GENE\-\d+\-\d+	ZFIN Gene	P3870	zfin	gene
+GitHub	github	https://github.com	https://github.com/$id	hbasaric	author		0	urn:miriam:github	^[a-zA-Z0-9-_]+(/[a-zA-Z0-9-_]+)?$	GitHub		github	author
+Cell Ontology	cl	https://obophenotype.github.io/cell-ontology/	https://www.ebi.ac.uk/ols/ontologies/cl/terms?obo_id=$id	0000062	ontology		1	urn:miriam:cl	^\d{7}$	Cell ontology		cl	ontology,cell
+Evidence Ontology	eco	https://github.com/evidenceontology/evidenceontology/	https://www.ebi.ac.uk/ols/ontologies/eco/terms?obo_id=$id	0007807	ontology		1	urn:miriam:eco	^\d{7}$	Evidence ontology		eco	ontology,evidence
