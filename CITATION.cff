@@ -2,8 +2,8 @@ cff-version: 1.2.0
 title: BridgeDb
 message: 'If you use this software, please cite it as below.'
 type: software
-version: 3.0.16
-date-released: '2022-07-13'
+version: 3.0.17
+date-released: '2022-08-10'
 authors:
   - given-names: Manas
     family-names: Awasthi
