@@ -28,6 +28,30 @@
 				<directory>test-resources</directory>
 			</testResource>
 		</testResources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>org.bridgedb.tools.qc.BridgeQC</mainClass>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 	
 	<dependencies>
@@ -35,30 +59,58 @@
                         <groupId>org.bridgedb</groupId>
                         <artifactId>org.bridgedb</artifactId>
                         <version>${project.parent.version}</version>
-                        <scope>compile</scope>
                 </dependency>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.bio</artifactId>
 			<version>${project.parent.version}</version>
-			<scope>compile</scope>
 		</dependency>
                 <dependency>
                         <groupId>org.bridgedb</groupId>
                         <artifactId>org.bridgedb.rdb</artifactId>
                         <version>${project.parent.version}</version>
-                        <scope>compile</scope>
+                        <exclusions>
+                                <exclusion>
+                                        <groupId>mysql</groupId>
+                                        <artifactId>mysql-connector-java</artifactId>
+                                </exclusion>
+                        </exclusions>
                 </dependency>
                 <dependency>
                         <groupId>org.bridgedb</groupId>
                         <artifactId>org.bridgedb.rdb.construct</artifactId>
                         <version>${project.parent.version}</version>
-                        <scope>compile</scope>
+                        <exclusions>
+                                <exclusion>
+                                        <groupId>mysql</groupId>
+                                        <artifactId>mysql-connector-java</artifactId>
+                                </exclusion>
+                        </exclusions>
                 </dependency>
                 <dependency>
                         <groupId>com.google.guava</groupId>
                         <artifactId>guava</artifactId>
                         <version>[30.0-jre,)</version>
+                </dependency>
+                <dependency>
+                        <groupId>org.apache.derby</groupId>
+                        <artifactId>derby</artifactId>
+                        <version>${derby.version}</version>
+                </dependency>
+                <dependency>
+                        <groupId>org.apache.derby</groupId>
+                        <artifactId>derbytools</artifactId>
+                        <version>${derby.version}</version>
+                </dependency>
+                <dependency>
+                        <groupId>org.apache.derby</groupId>
+                        <artifactId>derbyshared</artifactId>
+                        <version>${derby.version}</version>
+                </dependency>
+                <dependency> 
+                        <groupId>org.apache.derby</groupId>
+                        <artifactId>derbyclient</artifactId>
+                        <version>${derby.version}</version>
                 </dependency>
 	</dependencies>
   
