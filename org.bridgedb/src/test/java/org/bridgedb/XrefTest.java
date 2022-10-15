@@ -26,10 +26,15 @@ public class XrefTest {
 
 	private static DataSource EN;
 	private static DataSource UNIPROT;
+	private static DataSource CHEBI;
 	
     @BeforeAll
     public static void registerDataSources() {
     	XrefTest.EN = DataSource.mock("En", "Ensembl").asDataSource();
+    	XrefTest.CHEBI = DataSource.mock("Ce", "ChEBI").
+    			urnBase("urn:miriam:chebi").
+    		    bioregistryPrefix("chebi").
+    		    asDataSource();
     	XrefTest.UNIPROT = DataSource.mock("S", "Uniprot-TrEMBL").
     		    urnBase("urn:miriam:uniprot").
     		    bioregistryPrefix("uniprot").
@@ -125,6 +130,14 @@ public class XrefTest {
 	public void testGetBioregistryIdentifier() {
 		Xref xref = new Xref("P12345", UNIPROT);
 		assertEquals("uniprot:P12345", xref.getBioregistryIdentifier());
+	}
+
+	@Test
+	public void testGetBioregistryIdentifier_17855() {
+		Xref xref = new Xref("CHEBI:17855", CHEBI);
+		assertEquals("chebi:17855", xref.getBioregistryIdentifier());
+		xref = new Xref("17855", CHEBI);
+		assertEquals("chebi:17855", xref.getBioregistryIdentifier());
 	}
 
 	@Test

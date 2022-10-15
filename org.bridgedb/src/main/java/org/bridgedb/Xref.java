@@ -146,7 +146,9 @@ public class Xref implements Comparable<Xref>
 	 */
 	public String getBioregistryIdentifier()
 	{
-		return ds.getBioregistryIdentifier(id);
+		String bioregId = id;
+		if (id.startsWith("CHEBI:")) bioregId = bioregId.substring(6); // hack	
+		return ds.getBioregistryIdentifier(bioregId);
 	}
 
 	/**
