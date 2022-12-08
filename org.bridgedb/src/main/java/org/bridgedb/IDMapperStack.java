@@ -383,7 +383,6 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 		return result;
 	}
 
-	/** {@inheritDoc} */
 	public Set<String> getAttributesForAllMappings(Xref ref, String attrname, DataSource... dataSources)
 			throws IDMapperException 
 	{
@@ -598,7 +597,6 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 		return result;
 	}
 	
-	/** {@inheritDoc} */
 	public Map<String, Set<String>> getAttributesForAllMappings(Xref ref, DataSource... dataSources)
 			throws IDMapperException 
 	{
