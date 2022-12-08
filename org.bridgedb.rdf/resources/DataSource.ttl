@@ -568,7 +568,7 @@ bridgeDB:DataSource_Gramene_Rice a bridgeDB:DataSource ;
 	bridgeDB:idExample "osa-MIR171a" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.gramene.org/Oryza_sativa/Gene/Summary?g=$id> .
+	bridgeDB:hasPrimaryUriPattern <http://plants.ensembl.org/Oryza_sativa/Gene/Summary?db=otherfeatures;g=$id> .
 
 bridgeDB:DataSource_HGNC a bridgeDB:DataSource ;
 	bridgeDB:fullName "HGNC" ;
@@ -1028,7 +1028,7 @@ bridgeDB:DataSource_Rfam a bridgeDB:DataSource ;
 	bridgeDB:idExample "RF00066" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.sanger.ac.uk/cgi-bin/Rfam/getacc?$id> ; #not working 7/7/2013
+	bridgeDB:hasPrimaryUriPattern <https://rfam.org/family/$id> ;
     bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/rfam/$id> ;
     bridgeDB:hasUriPattern <http://rfam.sanger.ac.uk/family/$id>;
     bridgeDB:hasUriPattern <http://rfam.janelia.org/family/$id>.
