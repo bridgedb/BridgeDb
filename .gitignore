@@ -6,6 +6,7 @@
 *~
 *.bak
 *.patch
+*.versionsBackup
 
 # ignore target files #
 target/
