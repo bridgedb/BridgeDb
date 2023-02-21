@@ -110,7 +110,7 @@ public class VoIDTool {
         createRDF();
     }
     public static void printUsage(){
-        System.out.println ("Expected 2 argument: <database> <fileName>");
+        System.out.println ("Expected 2 arguments: <database> <fileName>");
     }
     public static void main(String[] args) throws IOException, IDMapperException, SQLException {
         if (args.length != 2) {
