@@ -274,7 +274,7 @@ public class BridgeQC
 				if (newVal != null)
 				{
 					Organism o = Organism.fromLatinName(newVal);
-					if (o == null) this.out.println ("WARNING: species '" + newVal + "' is not a recognized latin name");
+					if (o == null) out.println ("WARNING: species '" + newVal + "' is not a recognized latin name");
 				}
 			}
 		},
@@ -302,7 +302,7 @@ public class BridgeQC
 				}
 				catch (ParseException e)
 				{
-					this.out.println ("ERROR: " + oldVal + " does not match pattern yyyymmdd");
+					out.println ("ERROR: " + oldVal + " does not match pattern yyyymmdd");
 				}
 				try
 				{
@@ -311,11 +311,11 @@ public class BridgeQC
 				}
 				catch (ParseException e)
 				{
-					this.out.println ("ERROR: " + oldVal + " does not match pattern yyyymmdd");
+					out.println ("ERROR: " + oldVal + " does not match pattern yyyymmdd");
 				}
 				if (oldDate != null && newDate != null && oldDate.after(newDate))
 				{
-					this.out.println ("ERROR: new date " + newVal + " is older than old date " + oldVal);
+					out.println ("ERROR: new date " + newVal + " is older than old date " + oldVal);
 				}
 			}
 		},
