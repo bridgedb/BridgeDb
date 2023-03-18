@@ -87,10 +87,13 @@ public enum Organism {
 	
 	//NB: two-letter code is Pi to disambiguate from Pan troglodytes	
 	PopulusTrichocarpa("Populus trichocarpa", "Pi", "Western Balsam Poplar", 3694),
+	PrymnesiumParvum("Prymnesium parvum", "Pp", 97485),
 
 	RattusNorvegicus("Rattus norvegicus", "Rn", "Rat", 10116),
 	SaccharomycesCerevisiae("Saccharomyces cerevisiae", "Sc", "Yeast", 4932),
 	SolanumLycopersicum("Solanum lycopersicum", "Sl", "Tomato", 4081),
+	SkeletonemaMarinoi("Skeletonema marinoi", "Sm", 267567),
+
 	SorexAraneus ("Sorex araneus", "Sa", "Shrew", 42254),
 	SorghumBicolor ("Sorghum bicolor", "Sb", "Sorghum", 4558),
 	SusScrofa("Sus scrofa", "Ss", "Pig", 9823),
