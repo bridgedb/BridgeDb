@@ -328,7 +328,7 @@ Please refer to the log4j documentation for more information.
 RDF format of all the BridgeDb DataSource(s) and Registered UriPatterns,
 Found in $BRIDGEDB_HOME/org.bridgedb.rdf/resources
 
-This file defines all the URI patterns that will match every BridgeDB DataSource.
+This file defines all the URI patterns that will match every BridgeDb DataSource.
 Warning: As additional UriPatterns are constantly being found and created this file is subject to continuous updates. 
 Having a local DataSource.ttl is therefore highly discouraged as it will block future updates being discovered.
 Instead please push any changes into the version inside the source code. 

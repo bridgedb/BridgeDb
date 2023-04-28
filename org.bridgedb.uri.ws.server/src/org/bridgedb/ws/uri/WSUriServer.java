@@ -169,7 +169,7 @@ public class WSUriServer extends WSAPI {
         velocityContext.put("mapUriForm", mapUriForm);
 
         String mainBody = WebTemplates.getForm(velocityContext, WebTemplates.BRIDGEDB_HOME); 
-        String fullPage = this.createHtmlPage("Home page for BridgeDB WebServer", mainBody, httpServletRequest);
+        String fullPage = this.createHtmlPage("Home page for BridgeDb WebServer", mainBody, httpServletRequest);
         return Response.ok(fullPage, MediaType.TEXT_HTML).build();        
     }
 

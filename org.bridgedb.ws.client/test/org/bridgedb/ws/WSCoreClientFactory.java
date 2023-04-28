@@ -41,8 +41,8 @@ public class WSCoreClientFactory extends org.bridgedb.utils.IDMapperTestBase{
             //ystem.out.println("in WSCoreInterface 3");
         } catch (Exception ex) {
             logger.error("Unable to create WS Client", ex);
-            logger.fatal("***** SKIPPING BridgeDB WSClientTest ******");
-            System.err.println("***** SKIPPING BridgeDB WSClientTest ******");
+            logger.fatal("***** SKIPPING BridgeDb WSClientTest ******");
+            System.err.println("***** SKIPPING BridgeDb WSClientTest ******");
             System.err.println("These test are repeated in the OPS client so normally not needed here.");
             System.err.println("Please make sure the specicifc bridgeDB.war based server is running");
             org.junit.Assume.assumeTrue(false);        
@@ -58,7 +58,7 @@ public class WSCoreClientFactory extends org.bridgedb.utils.IDMapperTestBase{
         }
         if (!ok){
             logger.error("Unable to get test data from WS Client");
-            logger.fatal("***** SKIPPING BridgeDB WSClientTest ******");
+            logger.fatal("***** SKIPPING BridgeDb WSClientTest ******");
             System.err.println("***** SKIPPING WSClientTest ******");
             System.err.println("It appears the Test data is not loaded");
             System.err.println("remove ignore in TestDataToMainServerTest (org.bridgedb.ws.sqlserver) ");            

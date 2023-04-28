@@ -10,7 +10,7 @@
     <dd>Searches for Xrefs that have this id.</dd>
 
     <dt><a href="#getCapabilities">getCapabilities</a></dt>
-    <dd>Gives the Capabilitles as defined by BridgeDB.</dd>
+    <dd>Gives the Capabilitles as defined by BridgeDb.</dd>
 
     <dt>Close()</dt>
     <dd>Not supported as clients should not be able to close the server.</dd>
@@ -22,10 +22,10 @@
     <dd>Returns True as freeSearch and URLSearch are supported.</dd>
 
     <dt><a href="#getSupportedSrcDataSources">getSupportedSrcDataSources</a></dt>
-    <dd>Returns Supported Source (BridgeDB)DataSource(s).</dd>
+    <dd>Returns Supported Source (BridgeDb) DataSource(s).</dd>
 
     <dt><a href="#getSupportedTgtDataSources">getSupportedTgtDataSources</a></dt>
-    <dd>Returns Supported Target (BridgeDB)DataSource(s).</dd>
+    <dd>Returns Supported Target (BridgeDb) DataSource(s).</dd>
 
     <dt><a href="#isMappingSupported">isMappingSupported</a></dt>
     <dd>States if two DataSources are mapped at least once.</dd>
@@ -95,7 +95,7 @@
 The following parameters may be applicable to the methods.
 See the individual method description for which are required and which are optional.
 Their behaviour is consistent across all methods, unless stated otherwise
-<h3>BridgeDB Parameters</h3>
+<h3>BridgeDb Parameters</h3>
 
 <h4><a name="id_code">id and code</a></h4>
 <ul>
@@ -309,7 +309,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
     </li>
 </ul>
 
-<h2>Implementations of BridgeDB's IDMapper methods</h2>
+<h2>Implementations of BridgeDb's IDMapper methods</h2>
 
 <h3><a name="mapID">mapID</a></h3>
 <ul>
@@ -391,7 +391,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
 <h3><a name="getCapabilities">getCapabilities</a></h3>
 <ul>
     <li>Implements:  IDMapperCapabilities getCapabilities()</li>
-    <li>Gives the Capabilitles as defined by BridgeDB.</li>
+    <li>Gives the Capabilitles as defined by BridgeDb.</li>
     <li>This method is available for media types XML and JSON.
         <ul>
             <li>Status 204 (no Content) is never returned.</li>
@@ -409,7 +409,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
     <dd>Not supported as Close() is not allowed</dd>
 </dl>
 
-<h2>Implementations of BridgeDB's IDMapperCapabilities methods</h2>
+<h2>Implementations of BridgeDb's IDMapperCapabilities methods</h2>
 
 <h3><a name="isFreeSearchSupported">isFreeSearchSupported</a></h3>
 <ul>
@@ -427,7 +427,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
 <h3><a name="getSupportedSrcDataSources">getSupportedSrcDataSources</a></h3>
 <ul>
     <li>Implements:  Set&lt;DataSource&gt;  getSupportedSrcDataSources()</li>
-    <li>Returns Supported Source (BridgeDB)DataSource(s).</li>
+    <li>Returns Supported Source (BridgeDb) DataSource(s).</li>
     <li>This method is available for media types XML, JSON and HTML.
         <ul>
             <li>Status 204 (no Content) is return if no data available.</li>
@@ -444,7 +444,7 @@ Their behaviour is consistent across all methods, unless stated otherwise
 <h3><a name="getSupportedTgtDataSources">getSupportedTgtDataSources</a></h3>
 <ul>
     <li>Implements:  Set&lt;DataSource&gt;  getSupportedTgtDataSources()</li>
-    <li>Returns Supported Target (BridgeDB)DataSource(s).</li>
+    <li>Returns Supported Target (BridgeDb) DataSource(s).</li>
     <li>This method is available for media types XML, JSON and HTML.
         <ul>
             <li>Status 204 (no Content) is return if no data available.</li>

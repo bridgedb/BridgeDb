@@ -75,8 +75,8 @@ public class OrganismRdf extends RdfBase{
     }
     
     public void addComments(RDFHandler handler) throws RDFHandlerException{
-        handler.handleComment("WARNING: Organism are hard coded into BridgeDB.");   
-        handler.handleComment("WARNING: below is for reference and NON BridgeDB use only!");   
+        handler.handleComment("WARNING: Organism are hard coded into BridgeDb.");   
+        handler.handleComment("WARNING: below is for reference and NON BridgeDb use only!");   
         handler.handleComment("WARNING: Any changes could cause a BridgeDBException.");   
     }
     
