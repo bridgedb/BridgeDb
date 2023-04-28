@@ -79,6 +79,7 @@ MGI	M	http://www.informatics.jax.org/	http://www.informatics.jax.org/marker/$id	
 MINT	Mi	http://mint.bio.uniroma2.it/mint/	http://mint.bio.uniroma2.it/mint/search/inFrameInteraction.do?interactionAc=$id	MINT-10000	interaction		1	urn:miriam:mint	^MINT\-\d{1,5}$	MINT		mint	interaction
 miRBase mature sequence	Mbm	http://www.mirbase.org/	http://www.mirbase.org/cgi-bin/mature.pl?mature_acc=$id	MIMAT0000001	gene		1	urn:miriam:mirbase.mature	MIMAT\d{7}	miRBase mature sequence	P2871	mirbase.mature	gene
 miRBase Sequence	Mb	http://microrna.sanger.ac.uk/	http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$id	MI0000001	gene		1	urn:miriam:mirbase	MI\d{7}	miRBase Sequence	P2870	mirbase	gene
+Mondo	Mo	https://mondo.monarchinitiative.org/	https://monarchinitiative.org/disease/$id	MONDO:0000001	disease		1		MONDO:\d{7}	Mondo Disease Ontology	P5270	mondo	disease
 NanoMILE	Nmnm	https://cordis.europa.eu/project/id/310451		NP00262	material		1		^NP\d{5}$				material
 NASC Gene	N	http://arabidopsis.info/		ATMG00960-TAIR-G	gene	Arabidopsis thaliana	1	N	AT[\dCM]G\d{5}\-TAIR\-G	NASC Gene			gene
 NCBI Protein	Np	http://www.ncbi.nlm.nih.gov/protein	http://www.ncbi.nlm.nih.gov/protein/$id	CAA71118.1	protein		1	urn:miriam:ncbiprotein	^\w+\d+(\.\d+)?$	NCBI Protein		ncbiprotein	protein
@@ -104,6 +105,7 @@ PubChem-bioassay	Cpb	http://www.ncbi.nlm.nih.gov/sites/entrez?db=pcassay	http://
 PubChem-compound	Cpc	http://pubchem.ncbi.nlm.nih.gov/	http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=$id	100101	metabolite		1	urn:miriam:pubchem.compound	^\d+$	PubChem-compound	P662	pubchem.compound	metabolite
 PubChem-substance	Cps	http://pubchem.ncbi.nlm.nih.gov/	http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=$id	100101	metabolite		1	urn:miriam:pubchem.substance	^\d+$	PubChem-substance	P2153	pubchem.substance	metabolite
 PubMed	Pbm	https://pubmed.ncbi.nlm.nih.gov/	https://pubmed.ncbi.nlm.nih.gov/$id	32169673	publication		1	urn:miriam:pubmed	^\d+$	PubMed Identifier	P698	pubmed	publication
+PubMed Centrel	Pmc	https://www.ncbi.nlm.nih.gov/pmc/	https://www.ncbi.nlm.nih.gov/pmc/articles/$id	PMC5461230	publication		1	urn:miriam:pmc	^PMC\d+$	PubMed Central Identifier	P932	pmc	publication
 Reactome	Re	http://www.reactome.org/	https://reactome.org/content/detail/$id	R-HSA-201451	pathway		1	urn:miriam:reactome	(^R-[A-Z]{3}-\d+(-\d+)?(\.\d+)?$)|(^REACT_\d+(\.\d+)?$)	Reactome	P3937	reactome	pathway
 RefSeq	Q	http://www.ncbi.nlm.nih.gov/projects/RefSeq/	https://www.ncbi.nlm.nih.gov/protein/$id	NP_012345	gene		1	urn:miriam:refseq	^(NC|AC|NG|NT|NW|NZ|NM|NR|XM|XR|NP|AP|XP|ZP)_\d+$	RefSeq	P656	refseq	gene
 RESID	Res	http://www.ebi.ac.uk/RESID/	http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+6JSUg1NA6u4+-e+[RESID:'$id']	AA0001	protein		1	urn:miriam:resid	^AA\d{4}$	RESID		resid	protein
