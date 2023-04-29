@@ -134,7 +134,7 @@ to have an approved Sonatype (http://oss.sonatype.org/) account with push rights
 
 ```shell
 mvn versions:set -DnewVersion=3.0.22
-mvn clean deploy -P release
+mvn clean deploy
 ```
 
 The second command will make the actual push. These commands will update the version
@@ -143,6 +143,7 @@ and everything.
 To make a development (SNAPSHOT) release, use:
 
 ```shell
+mvn versions:set -DnewVersion=3.0.23-SNAPSHOT
 mvn clean deploy
 ```
 
