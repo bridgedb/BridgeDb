@@ -227,8 +227,8 @@ public class Xref implements Comparable<Xref>
 		String prefix = compact.substring(0, pos);
 		String id = compact.substring(pos + 1);
 		
+		if (!DataSource.bioregistryPrefixExists(prefix)) return null;
 		DataSource ds = DataSource.getExistingByBioregistryPrefix(prefix);
-		if (ds == null) return null;
 		
 		return new Xref (id, ds);
 	}

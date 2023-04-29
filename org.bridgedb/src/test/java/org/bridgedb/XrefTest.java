@@ -182,13 +182,8 @@ public class XrefTest {
 
 	@Test
 	public void testFromBioregistryIdentifier_UnknownDataSource() {
-		Exception thrown = assertThrows(
-		    IllegalArgumentException.class,
-		    () -> Xref.fromBioregistryIdentifier("unifrot:P12345"),
-		    "Expected an exception because of a non-existing prefix"
-		);
-		assertTrue(thrown.getMessage().contains("No DataSource"));
-		assertTrue(thrown.getMessage().contains("Bioregistry"));
+		Xref xref = Xref.fromBioregistryIdentifier("unifrot:P12345");
+		assertNull(xref);
 	}
 
 	@Test
