@@ -14,6 +14,7 @@
 package org.bridgedb;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -23,22 +24,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.xml.crypto.Data;
-
 import org.bridgedb.file.IDMapperFile;
 import org.bridgedb.file.IDMapperText;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import buildsystem.Measure;
 
 /**
  * Test identifier mapping using a tab-delimited text file.
  */
 public class TestFile {
-	private Measure measure;
 	
 	private static URL YEAST_IDS;
 	private static DataSource ENSEMBL;
@@ -55,12 +50,6 @@ public class TestFile {
         XREF1 = new Xref("YHR055C", ENSEMBL);
     }
 
-	@BeforeEach
-	public void setUp()
-	{
-		measure = new Measure("bridgedb_timing.txt");
-	}
-	
 	@Test
 	public void testFiles()
 	{
@@ -108,7 +97,8 @@ public class TestFile {
 
 	}
 
-	public void _testTransitive() throws MalformedURLException, IDMapperException
+	@Ignore
+	public void testTransitive() throws MalformedURLException, IDMapperException
 	{
 		IDMapperFile idMapper = new IDMapperText(YEAST_IDS,
 				new char[] { '\t' },
@@ -126,8 +116,6 @@ public class TestFile {
 		long end = System.currentTimeMillis();
 		long delta = end - start;
 		System.out.println (delta);
-		measure.add ("timing::text file transitive", "" + delta, "msec");
-
 		System.out.println (mapXrefs);
         Set<Xref> xrefs = mapXrefs.get(XREF1);
 

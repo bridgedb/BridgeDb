@@ -13,18 +13,16 @@
  */
 package org.bridgedb.rdb;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Map;
@@ -38,15 +36,9 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.bio.DataSourceTxt;
 import org.bridgedb.bio.Organism;
-import org.bridgedb.impl.InternalUtils;
-import org.bridgedb.rdb.SimpleGdb.QueryLifeCycle;
-import buildsystem.Measure;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
@@ -54,7 +46,6 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class Test {
 	
-	private Measure measure;
 	public static final String FILENAMES [] = { "yeast_id_mapping"};
 	public static final Organism hS = Organism.HomoSapiens;
 	public static final Organism aG = Organism.AnophelesGambiae;
@@ -63,11 +54,6 @@ public class Test {
 	private SimpleGdb newGdb;
 	private SimpleGdb newGdbNull;
 	
-	@BeforeEach
-	public void setUp() {
-		measure = new Measure("bridgedb_timing.txt");
-	}
-
 	@BeforeAll
 	public static void setup() {
 		DataSourceTxt.init();
@@ -192,7 +178,6 @@ public class Test {
 		IDMapper mapper = BridgeDb.connect ("idmapper-derbyclient:Homo sapiens?host=www.wikipathways.org");
 		end = System.currentTimeMillis();
 		delta = end - start;
-		measure.add ("timing::idmapper-derbyclient connect to two databases", "" + delta, "msec");
 		
 		for (String key : mapper.getCapabilities().getKeys()) {
 			System.out.println (key + " -> " + mapper.getCapabilities().getProperty(key));
@@ -213,7 +198,6 @@ public class Test {
 		end = System.currentTimeMillis();
 		delta = end - start;
 		System.out.println (delta);
-		measure.add ("timing::idmapper-derbyclient free query for p53", "" + delta, "msec");
 		System.out.println (symbols);
 		
 		// time the case of getting all attributes for backpage info
@@ -230,7 +214,6 @@ public class Test {
 		
 		end = System.currentTimeMillis();
 		delta = end - start;
-		measure.add ("timing::idmapper-derbyclient query for backpage attributes", "" + delta, "msec");
 		System.out.println (delta);
 	}
 }

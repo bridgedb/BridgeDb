@@ -14,6 +14,12 @@
 
 package org.bridgedb.rdb;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -25,13 +31,8 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-
-import buildsystem.Measure;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class Test2 {
 	private static final String GDB_HUMAN = 
@@ -44,14 +45,6 @@ public class Test2 {
 		System.getProperty ("user.home") + File.separator + 
 		"/PathVisio-Data/gene databases/Ce_Derby_20090720.bridge";
 	
-	private Measure measure;
-	
-	@BeforeEach
-	public void setUp() throws ClassNotFoundException {
-		measure = new Measure("bridgedb_timing.txt");
-		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
-	}
-	
 	@Disabled
 	public void testGdbConnect() throws IDMapperException
 	{
@@ -61,7 +54,6 @@ public class Test2 {
 		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + GDB_HUMAN);		
 		end = System.currentTimeMillis();
 		delta = end - start;
-		measure.add ("timing::idmapper-pgdb connect to database", "" + delta, "msec");
 		
 		gdb.close();
 	}
