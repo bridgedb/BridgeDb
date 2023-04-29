@@ -18,6 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -30,7 +33,9 @@ public class XrefTest {
 	
     @BeforeAll
     public static void registerDataSources() {
-    	XrefTest.EN = DataSource.mock("En", "Ensembl").asDataSource();
+        XrefTest.EN = DataSource.mock("En", "Ensembl").
+                urnBase("urn:miriam:ensembl").
+                asDataSource();
     	XrefTest.CHEBI = DataSource.mock("Ce", "ChEBI").
     			urnBase("urn:miriam:chebi").
     		    bioregistryPrefix("chebi").
@@ -51,9 +56,19 @@ public class XrefTest {
 	}
 
 	@Test
+	public void testGetMiriamURN() {
+		Xref xref = new Xref("ENSG000001", EN);
+		assertEquals("urn:miriam:ensembl:ENSG000001", xref.getMiriamURN());
+		Xref xref2 = Xref.fromMiriamUrn("urn:miriam:ensembl:ENSG000001");
+		assertEquals(xref.getDataSource().getSystemCode(), xref2.getDataSource().getSystemCode());
+		assertEquals(xref.getId(), xref2.getId());
+	}
+
+	@Test
 	public void testEquals_Null() {
 		Xref xref = new Xref("ENSG000001", EN);
 		assertNotEquals(null, xref);
+		assertNotEquals(xref, null);
 	}
 
 	@Test
@@ -127,6 +142,18 @@ public class XrefTest {
 	}
 
 	@Test
+	public void testFromCompactidentifier_MissingColon() {
+		Xref xref = Xref.fromCompactIdentifier("uniprot/P12345");
+		assertNull(xref);
+	}
+
+	@Test
+	public void testFromCompactidentifier_UnknownDataSource() {
+		Xref xref = Xref.fromCompactIdentifier("unifrot:P12345");
+		assertNull(xref);
+	}
+
+	@Test
 	public void testGetBioregistryIdentifier() {
 		Xref xref = new Xref("P12345", UNIPROT);
 		assertEquals("uniprot:P12345", xref.getBioregistryIdentifier());
@@ -147,4 +174,31 @@ public class XrefTest {
 		assertEquals("P12345", xref.getId());
 	}
 
+	@Test
+	public void testFromBioregistryIdentifier_MissingColon() {
+		Xref xref = Xref.fromBioregistryIdentifier("uniprot/P12345");
+		assertNull(xref);
+	}
+
+	@Test
+	public void testFromBioregistryIdentifier_UnknownDataSource() {
+		Exception thrown = assertThrows(
+		    IllegalArgumentException.class,
+		    () -> Xref.fromBioregistryIdentifier("unifrot:P12345"),
+		    "Expected an exception because of a non-existing prefix"
+		);
+		assertTrue(thrown.getMessage().contains("No DataSource"));
+		assertTrue(thrown.getMessage().contains("Bioregistry"));
+	}
+
+	@Test
+	public void testToString() {
+		assertEquals("Ce:CHEBI:17855:T", new Xref("CHEBI:17855", CHEBI, true).toString());
+		assertEquals("Ce:CHEBI:17855:F", new Xref("CHEBI:17855", CHEBI, false).toString());
+	}
+
+	@Test
+	public void testGetKnownUrl() {
+		System.out.println(new Xref("CHEBI:17855", CHEBI, true).getKnownUrl());
+	}
 }
