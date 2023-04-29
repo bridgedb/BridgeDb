@@ -14,34 +14,29 @@
  */
 package org.bridgedb;
 
-import static org.junit.Assert.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Set;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
-
+import org.junit.jupiter.api.Test;
 
 public class DataSourceTest {
 
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testAsDataSource() {
 		DataSource source = DataSource.register("X", "Affymetrix")
 		    .asDataSource();
 		assertNotNull(source);
 	}
 	
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testDataSourceCategories() {
 		String[] categories = { "gene", "disease"};
 		DataSource source = DataSource.mock("Me", "MeSH").categories(categories).asDataSource();
@@ -50,7 +45,7 @@ public class DataSourceTest {
 		assertEquals(2, source.getCategories().length);
 	}
 	
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testAddingCategories() {
 		String[] categoriesArray =new String[] {"metabolites", "test", "test2"};
 		DataSource source = DataSource.register("F", "MetaboLoci")
@@ -60,7 +55,7 @@ public class DataSourceTest {
 		assertTrue(source.isMetabolite());
 	}
 
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testBuilding() {
 		DataSource source = DataSource.register("X", "Affymetrix").asDataSource();
 		assertEquals("X", source.getSystemCode());
@@ -85,7 +80,7 @@ public class DataSourceTest {
 		
 	}
 
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testBuildingMainUrl() {
 		DataSource source = DataSource.register("X", "Affymetrix")
 		    .mainUrl("http://www.affymetrix.com")
@@ -120,7 +115,7 @@ public class DataSourceTest {
 		
 	}
 
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testChangeMainUrl() {
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			DataSource source = DataSource.register("X", "Affymetrix")
@@ -132,7 +127,7 @@ public class DataSourceTest {
 		});
 	}
 
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testBuildingType() {
 		DataSource source = DataSource.register("X", "Affymetrix")
 		    .type("probe")
@@ -142,7 +137,7 @@ public class DataSourceTest {
 	}
 
 	@Disabled
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testBuildingType1() {
 		DataSource source = DataSource.register("X", "Affymetrix")
 		    .type("metabolite")
@@ -152,7 +147,7 @@ public class DataSourceTest {
 	}
 
     //TODO check if changing primary is a needed functionality   
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testBuildingPrimary() {
 		DataSource source = DataSource.register("X", "Affymetrix")
 		    .primary(false)
@@ -164,7 +159,7 @@ public class DataSourceTest {
 		assertTrue(source.isPrimary());
 	}
 
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testBuildingMetabolite() {
 		DataSource source = DataSource.register("F", "MetaboLoci")
 		    .type("metabolite")
@@ -174,14 +169,14 @@ public class DataSourceTest {
 	}
 
 
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testDeprecated() {
 		DataSource source = DataSource.register("EnAg", "Ensembl Mosquito")
 		    .deprecated(true).asDataSource();
 		assertTrue(source.isDeprecated());
 	}
 
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testDeprecated_False() {
 		DataSource source = DataSource.register("EnAg", "Ensembl Mosquito")
 		    .deprecated(true).deprecated(false).asDataSource();
@@ -191,14 +186,14 @@ public class DataSourceTest {
 	/**
 	 * By default, all new data sources are not deprecated.
 	 */
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testDefaultNotDeprecated() {
 		DataSource source = DataSource.register("F", "MetaboLoci")
 		    .asDataSource();
 		assertFalse(source.isDeprecated());
 	}
 
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testDeprecatedBy() {
 		DataSource source = DataSource.register("EnAg", "Ensembl Mosquito")
 		    .deprecatedBy(
@@ -209,7 +204,7 @@ public class DataSourceTest {
 		assertEquals("En", source.isDeprecatedBy().getSystemCode());
 	}
 
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testDeprecatedByUndoneByDeprecatedFalse() {
 		DataSource source = DataSource.register("EnAg", "Ensembl Mosquito")
 		    .deprecatedBy(
@@ -219,7 +214,7 @@ public class DataSourceTest {
 		assertNull(source.isDeprecatedBy());
 	}
 
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testDeprecatedByNullCausesException() {
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			DataSource.register("EnAg", "Ensembl Mosquito")
@@ -227,14 +222,14 @@ public class DataSourceTest {
 		});
 	}
 
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testDefaultNoDeprecatedBy() {
 		DataSource source = DataSource.register("Cps", "PubChem-substance")
 			.asDataSource();
 		assertNull(source.isDeprecatedBy());
 	}
 
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testEquals() {
 		DataSource source = DataSource.register("Cps", "PubChem-substance")
 			.asDataSource();
@@ -244,7 +239,7 @@ public class DataSourceTest {
 	}
 
     //Since Version 2.0.09 this is no longer allowed!
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testEqualsToo() {
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			DataSource source = DataSource.register("Cpc", "PubChem-compound")
@@ -255,7 +250,7 @@ public class DataSourceTest {
 		});
 	}
     
-    @org.junit.jupiter.api.Test
+    @Test
 	public void testChangeType() {
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			DataSource source = DataSource.register("X", "Affymetrix")
@@ -271,7 +266,7 @@ public class DataSourceTest {
 		});
 	}
 
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testBuildingAlternative() {
 		DataSource source = DataSource.register("F", "MetaboLoci")
 		    .alternative("MetaboLoci Alternative")
@@ -279,7 +274,7 @@ public class DataSourceTest {
 		assertEquals("MetaboLoci Alternative", source.getAlternative());
 	}
 
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testBuildingDescription() {
 		DataSource source = DataSource.register("F", "MetaboLoci")
 		    .description("MetaboLoci description")
@@ -287,7 +282,7 @@ public class DataSourceTest {
 		assertEquals("MetaboLoci description", source.getDescription());
 	}
 
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testGetByPrefix() {
 		DataSource chebi = DataSource.register("Ce", "ChEBI")
 			.compactIdentifierPrefix("chebi")
@@ -349,7 +344,7 @@ public class DataSourceTest {
 	}
     
 
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testBuilders() {
 		
 		DataSource source = DataSource.register("X", "Affymetrix")
@@ -469,7 +464,7 @@ public class DataSourceTest {
 		});
 	}
 	
-	@org.junit.jupiter.api.Test
+	@Test
 	public void testGetters() {
 
 		Set<DataSource> set = DataSource.getDataSources();
@@ -498,6 +493,14 @@ public class DataSourceTest {
 		assertEquals(null, DataSource.getByIdentiferOrgBase("http://identifiers.org/ccds"));
 		assertNotNull(source.getCompactIdentifierPrefix());
 	}
-	
+
+	@Test
+	public void testBioregistry() {
+		DataSource.register("Suniprot", "UniProt")
+		    .bioregistryPrefix("uniprot")
+		    .asDataSource();
+		assertTrue(DataSource.bioregistryPrefixExists("uniprot"));
+		assertFalse(DataSource.bioregistryPrefixExists("unifrot"));
+	}
 	
 }

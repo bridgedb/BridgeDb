@@ -771,10 +771,19 @@ public final class DataSource
 	 */
 	public static DataSource getExistingByBioregistryPrefix(String prefix)
 	{
-		if (byBioregistryPrefix.containsKey(prefix)){
-    		return byBioregistryPrefix.get(prefix);
-		}
+		if (bioregistryPrefixExists(prefix)) return byBioregistryPrefix.get(prefix);
         throw new IllegalArgumentException("No DataSource known for the Bioregistry.io prefix " + prefix);
+	}
+
+    /**
+     * Check if a DataSource with this Bioregistry.io prefix has been registered
+     *
+     * @param Bioregistry.io prefix to check
+     * @return True if and only if a DataSource has been registered with this Bioregistry.io prefix.
+     * @since Version 3.0.22
+     */
+	public static boolean bioregistryPrefixExists(String prefix) {
+		return byBioregistryPrefix.containsKey(prefix);
 	}
 
     /**
