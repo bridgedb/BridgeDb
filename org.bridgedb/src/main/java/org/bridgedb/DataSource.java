@@ -778,7 +778,7 @@ public final class DataSource
     /**
      * Check if a DataSource with this Bioregistry.io prefix has been registered
      *
-     * @param Bioregistry.io prefix to check
+     * @param prefix Bioregistry.io prefix to check
      * @return True if and only if a DataSource has been registered with this Bioregistry.io prefix.
      * @since Version 3.0.22
      */
