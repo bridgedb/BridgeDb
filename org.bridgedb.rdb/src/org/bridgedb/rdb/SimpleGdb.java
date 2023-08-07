@@ -285,4 +285,27 @@ public abstract class SimpleGdb extends IDMapperRdb
 		return result;
 	}
 	
+	/**
+	 * @param ds DataSource to count identifiers for.
+	   @return number of identifiers table for the given datasource
+	   @throws IDMapperException on failure
+	 */
+	final public int getPrimaryIDCount(DataSource ds) throws IDMapperException
+	{
+		int result = 0;
+		try
+		{
+			ResultSet r = getConnection().createStatement().executeQuery(
+					"SELECT COUNT(*) FROM datanode WHERE code = '" + ds.getSystemCode() + "' AND isPrimary = 1");
+			r.next();
+			result = r.getInt (1);
+			r.close();
+		}
+		catch (SQLException e)
+		{
+			throw new IDMapperException (e);
+		}
+		return result;
+	}
+
 }
