@@ -380,7 +380,7 @@ public class BridgeQC
 			countofSecondary = 0;
 			Connection con = newGdb.getConnection();
 			Statement st = con.createStatement();
-			Connection con2 = oldGdb.getConnection();
+			Connection con2 = newGdb.getConnection();
 			Statement st1 = con2.createStatement();
 			con.setAutoCommit(false);
 			for (Xref xref : newGdb.getIterator(ds)) {
