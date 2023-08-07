@@ -365,88 +365,44 @@ public class BridgeQC
 		compareAttributes();
 		compareFileSizes();
 
-		summarizeOverallStats();
+		summarizeOverallStats(oldGdb, "OLD");
+		summarizeOverallStats(newGdb, "NEW");
 	}
-	
-	private void summarizeOverallStats() throws IDMapperException, SQLException
+
+	private void summarizeOverallStats(SimpleGdb gdb, String oldNew) throws IDMapperException, SQLException
 	{
-		this.out.println("INFO: total number of identifiers is " + newGdb.getGeneCount());
-		this.out.println("INFO: total number of mappings is " + newGdb.getLinkCount());
-		Boolean isSchemaUpdated = false;
+		this.out.println("INFO " + oldNew + ": total number of identifiers is " + gdb.getGeneCount());
+		this.out.println("INFO " + oldNew + ": total number of mappings is " + gdb.getLinkCount());
 		int countOfPrimary;
 		int countofSecondary;
-		for (DataSource ds : newGdb.getCapabilities().getSupportedSrcDataSources()) {
-			countOfPrimary = 0;
-			countofSecondary = 0;
-			Connection con = newGdb.getConnection();
-			Statement st = con.createStatement();
-			Connection con2 = newGdb.getConnection();
-			Statement st1 = con2.createStatement();
-			con.setAutoCommit(false);
-			for (Xref xref : newGdb.getIterator(ds)) {
-				String sqlSchema = "SELECT schemaversion FROM info ";
-				ResultSet schema = st.executeQuery(sqlSchema);
-				while (schema.next()) {
-					if (schema.getInt("schemaversion") == 4) {
-						isSchemaUpdated = true;
-					} else break;
-					if (isSchemaUpdated) {
-						String sql = "SELECT isPrimary FROM datanode WHERE datanode.id = '" + xref.getId() + "'AND datanode.code = '" + ds.getSystemCode() + "'";
-						ResultSet rs = st1.executeQuery(sql);
-						while (rs.next()) {
-							if (rs.getBoolean("isPrimary")) {
-								countOfPrimary++;
-							} else
-								countofSecondary++;
-							}
+		Connection con = gdb.getConnection();
+		con.setAutoCommit(false);
+		Statement st = con.createStatement();
+		String sqlSchema = "SELECT schemaversion FROM info ";
+		ResultSet schema = st.executeQuery(sqlSchema);
+		boolean isSchemaUpdated = (schema.next() && schema.getInt("schemaversion") >= 4);
+		if (isSchemaUpdated) {
+			for (DataSource ds : gdb.getCapabilities().getSupportedSrcDataSources()) {
+				countOfPrimary = 0;
+				countofSecondary = 0;
+				Connection con2 = gdb.getConnection();
+				Statement st1 = con2.createStatement();
+				for (Xref xref : gdb.getIterator(ds)) {
+					String sql = "SELECT isPrimary FROM datanode WHERE datanode.id = '" + xref.getId() + "'AND datanode.code = '" + ds.getSystemCode() + "'";
+					ResultSet rs = st1.executeQuery(sql);
+					while (rs.next()) {
+						if (rs.getBoolean("isPrimary")) {
+							countOfPrimary++;
+						} else {
+							countofSecondary++;
 						}
 					}
 				}
-			if (isSchemaUpdated) {
-				this.out.println("NEW DB INFO: total number of primary ids in " + ds.getFullName() + " are " + countOfPrimary);
-				this.out.println("NEW DB INFO: total number of secondary ids in " + ds.getFullName() + " are " + countofSecondary);
+				this.out.println(oldNew + " DB INFO: total number of primary ids in " + ds.getFullName() + " are " + countOfPrimary);
+				this.out.println(oldNew + " DB INFO: total number of secondary ids in " + ds.getFullName() + " are " + countofSecondary);
 			}
-			else {
-				this.out.println("NEW DB INFO: Schema Version is less than 4 cannot calculate Primary and Secondary identifiers");
-				break;
-			}
-		}
-		isSchemaUpdated = false;
-		for (DataSource ds : oldGdb.getCapabilities().getSupportedSrcDataSources()){
-			Connection con = oldGdb.getConnection();
-			Statement st = con.createStatement();
-			Connection con2 = oldGdb.getConnection();
-			Statement st1 = con2.createStatement();
-			con.setAutoCommit(false);
-			countOfPrimary = 0;
-			countofSecondary=0;
-			for (Xref xref : oldGdb.getIterator(ds)) {
-				String sqlSchema = "SELECT schemaversion FROM info ";
-				ResultSet schema = st.executeQuery(sqlSchema);
-				while (schema.next()) {
-					if (schema.getInt("schemaversion") == 4) {
-						isSchemaUpdated = true;
-					} else break;
-					if (isSchemaUpdated) {
-						String sql = "SELECT isPrimary FROM datanode WHERE datanode.id ='" + xref.getId() + "'" + " AND datanode.code = '" + ds.getSystemCode() + "'";
-						ResultSet rs = st1.executeQuery(sql);
-						while (rs.next()) {
-							if (rs.getBoolean("isPrimary")) {
-								countOfPrimary++;
-							} else
-								countofSecondary++;
-						}
-					}
-				}
-			}
-			if (isSchemaUpdated){
-				this.out.println("OLD DB INFO: total number of primary ids in "+ds.getFullName()+" are "+countOfPrimary);
-				this.out.println("OLD DB INFO: total number of secondary ids in "+ds.getFullName()+" are "+countofSecondary);
-			}
-			else {
-				this.out.println("OLD DB INFO: Schema Version is less than 4 cannot calculate Primary and Secondary identifiers");
-				break;
-			}
+		} else {
+			this.out.println(oldNew + " DB INFO: Schema Version is less than 4, and we cannot calculate Primary and Secondary identifier counts");
 		}
 	}
 
