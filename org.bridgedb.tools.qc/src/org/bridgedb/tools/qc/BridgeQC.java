@@ -383,23 +383,8 @@ public class BridgeQC
 		boolean isSchemaUpdated = (schema.next() && schema.getInt("schemaversion") >= 4);
 		if (isSchemaUpdated) {
 			for (DataSource ds : gdb.getCapabilities().getSupportedSrcDataSources()) {
-				countOfPrimary = 0;
-				countofSecondary = 0;
-				Connection con2 = gdb.getConnection();
-				Statement st1 = con2.createStatement();
-				for (Xref xref : gdb.getIterator(ds)) {
-					String sql = "SELECT isPrimary FROM datanode WHERE datanode.id = '" + xref.getId() + "'AND datanode.code = '" + ds.getSystemCode() + "'";
-					ResultSet rs = st1.executeQuery(sql);
-					while (rs.next()) {
-						if (rs.getBoolean("isPrimary")) {
-							countOfPrimary++;
-						} else {
-							countofSecondary++;
-						}
-					}
-				}
-				this.out.println("INFO: " + oldNew + " database data source " + ds.getFullName() + " has " + countOfPrimary + " primary ids");
-				this.out.println("INFO: " + oldNew + " database data source " + ds.getFullName() + " has " + countofSecondary + " secondary ids");
+				this.out.println("INFO: " + oldNew + " database data source " + ds.getFullName() + " has " + gdb.getPrimaryIDCount(ds) + " primary ids");
+				this.out.println("INFO: " + oldNew + " database data source " + ds.getFullName() + " has " + (gdb.getGeneCount(ds) - gdb.getPrimaryIDCount(ds)) + " secondary ids");
 			}
 		} else {
 			this.out.println("INFO: " + oldNew + " database has Schema Version is less than 4, and we cannot calculate Primary and Secondary identifier counts");
