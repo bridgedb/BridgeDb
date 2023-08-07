@@ -371,8 +371,8 @@ public class BridgeQC
 
 	private void summarizeOverallStats(SimpleGdb gdb, String oldNew) throws IDMapperException, SQLException
 	{
-		this.out.println("INFO " + oldNew + ": total number of identifiers is " + gdb.getGeneCount());
-		this.out.println("INFO " + oldNew + ": total number of mappings is " + gdb.getLinkCount());
+		this.out.println("INFO: " + oldNew + " database has a total number of identifiers of " + gdb.getGeneCount());
+		this.out.println("INFO: " + oldNew + " database has a total number of mappings of " + gdb.getLinkCount());
 		int countOfPrimary;
 		int countofSecondary;
 		Connection con = gdb.getConnection();
@@ -398,11 +398,11 @@ public class BridgeQC
 						}
 					}
 				}
-				this.out.println(oldNew + " DB INFO: total number of primary ids in " + ds.getFullName() + " are " + countOfPrimary);
-				this.out.println(oldNew + " DB INFO: total number of secondary ids in " + ds.getFullName() + " are " + countofSecondary);
+				this.out.println("INFO: " + oldNew + " database data source " + ds.getFullName() + " has " + countOfPrimary + " primary ids");
+				this.out.println("INFO: " + oldNew + " database data source " + ds.getFullName() + " has " + countofSecondary + " secondary ids");
 			}
 		} else {
-			this.out.println(oldNew + " DB INFO: Schema Version is less than 4, and we cannot calculate Primary and Secondary identifier counts");
+			this.out.println("INFO: " + oldNew + " database has Schema Version is less than 4, and we cannot calculate Primary and Secondary identifier counts");
 		}
 	}
 
