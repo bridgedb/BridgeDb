@@ -373,8 +373,6 @@ public class BridgeQC
 	{
 		this.out.println("INFO: " + oldNew + " database has a total number of identifiers of " + gdb.getGeneCount());
 		this.out.println("INFO: " + oldNew + " database has a total number of mappings of " + gdb.getLinkCount());
-		int countOfPrimary;
-		int countofSecondary;
 		Connection con = gdb.getConnection();
 		con.setAutoCommit(false);
 		Statement st = con.createStatement();
