@@ -22,7 +22,7 @@ import org.bridgedb.Xref;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class AbstractResolverTest {
+abstract class AbstractResolverTest {
 
 	static IResolver resolver = null;
 
