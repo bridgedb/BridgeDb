@@ -807,6 +807,10 @@ public final class DataSource
 	{
 		if (byFullName.containsKey(fullName)){
     		return byFullName.get(fullName);
+        // the following lines are added on 2023-10 for backwards compatibility
+        } else if ("Uniprot-TrEMBL".equals(fullName) ||
+                   "Uniprot-SwissProt".equals(fullName)) {
+          return byFullName.get("UniProtKB");
         }
         throw new IllegalArgumentException ("No DataSource known for " + fullName);
 	}
