@@ -1263,7 +1263,7 @@ bridgeDB:DataSource_Uniprot_SwissProt a bridgeDB:DataSource ;
 	dcterms:alternative "UniProtKB/Swiss-Prot" .
 
 bridgeDB:DataSource_Uniprot_TrEMBL a bridgeDB:DataSource ;
-	bridgeDB:fullName "Uniprot-TrEMBL" ;
+	bridgeDB:fullName "UniProtKB" ;
 	bridgeDB:systemCode "S" ;
 	bridgeDB:mainUrl "http://www.uniprot.org/" ;
 	bridgeDB:idExample "P62158" ;

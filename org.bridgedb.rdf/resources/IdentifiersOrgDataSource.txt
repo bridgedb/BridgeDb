@@ -540,7 +540,7 @@ Unipathway	Up	http://www.grenoble.prabi.fr/obiwarehouse/unipathway	http://www.gr
 Uniprot Enzyme	Enzyme		http://purl.uniprot.org/enzyme/$id		unknown		1			
 UniProt Isoform	uniprot.isoform		http://www.uniprot.org/uniprot/$id	Q5BJF6-3	unknown		1	urn:miriam:uniprot.isoform	^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9])(\-\d+)$	
 Uniprot-SwissProt	Sp	http://www.uniprot.org/	http://www.uniprot.org/uniprot/$id	CALM_HUMAN	protein		1		^[A-Z0-9]+_[A-Z]+$	UniProtKB/Swiss-Prot
-Uniprot-TrEMBL	S	http://www.uniprot.org/	http://www.uniprot.org/uniprot/$id	P62158	protein		1	urn:miriam:uniprot	^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9])(\.\d+)?$	UniProtKB/TrEMBL
+UniProtKB	S	http://www.uniprot.org/	http://www.uniprot.org/uniprot/$id	P62158	protein		1	urn:miriam:uniprot	^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9])(\.\d+)?$	UniProtKB/TrEMBL
 UniSTS	unists		http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=$id	456789	unknown		1	urn:miriam:unists	^\d+$	
 Unit Ontology	unit		http://purl.bioontology.org/ontology/UO/$id	UO:0000080	unknown		1	urn:miriam:unit	^UO:\d{7}?	
 Unite	unite		http://unite.ut.ee/bl_forw.php?nimi=$id	UDB000691	unknown		1	urn:miriam:unite	^UDB\d{6}$	
