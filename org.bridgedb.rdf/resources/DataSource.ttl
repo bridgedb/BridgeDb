@@ -1135,7 +1135,7 @@ bridgeDB:DataSource_Uniprot_Enzyme a bridgeDB:DataSource ;
 	bridgeDB:hasPrimaryUriPattern <http://purl.uniprot.org/enzyme/$id> .
 
 bridgeDB:DataSource_Uniprot_TrEMBL a bridgeDB:DataSource ;
-	bridgeDB:fullName "Uniprot-TrEMBL" ;
+	bridgeDB:fullName "UniProtKB" ;
 	bridgeDB:alternativeFullName "Uniprot/TrEMBL" ;
 	bridgeDB:systemCode "S" ;
 	bridgeDB:mainUrl "http://www.uniprot.org/" ;
