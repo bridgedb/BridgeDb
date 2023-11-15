@@ -15,8 +15,8 @@ public class BridgeRestParameterModel extends AbstractParameterModel implements 
 {
 	static final int PARAMETER_NUM = 3;
 	
-	private Object[] metadata = new Object[] {"http://webservice.bridgedb.org", "80", Collections.emptyList()};
-	private Object[] values = new Object[] {"http://webservice.bridgedb.org", "80", null};
+	private Object[] metadata = new Object[] {"https://webservice.bridgedb.org", "443", Collections.emptyList()};
+	private Object[] values = new Object[] {"https://webservice.bridgedb.org", "443", null};
 	private String[] labels = new String[] {"Base URL", "Port", "Species"};
 	
 	/**
@@ -68,7 +68,7 @@ public class BridgeRestParameterModel extends AbstractParameterModel implements 
 			"in advance, and no cross-species mapping is possible. Mapping data is derived from " +
 			"Ensembl and HMDB." +
 			"<p><b>maintainer:</b>Gladstone Institute / UCSF and BiGCaT / Maastricht University" +
-			"<p><b>more info:</b><a href=\"http://webservice.bridgedb.org\">http://webservice.bridgedb.org</a>";
+			"<p><b>more info:</b><a href=\"https://webservice.bridgedb.org\">https://webservice.bridgedb.org</a>";
 	}
 
 	@Override
