@@ -23,7 +23,7 @@ public class ExHello
 		DataSourceTxt.init();
 		
 		// now we connect to the driver and create a IDMapper instance.
-		IDMapper mapper = BridgeDb.connect ("idmapper-bridgerest:http://webservice.bridgedb.org/Human");
+		IDMapper mapper = BridgeDb.connect ("idmapper-bridgerest:https://webservice.bridgedb.org/Human");
 		
 		// We create an Xref instance for the identifier that we want to look up.
 		// In this case we want to look up Entrez gene 3643.

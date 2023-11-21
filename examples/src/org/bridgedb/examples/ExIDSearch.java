@@ -20,7 +20,7 @@ public class ExIDSearch
 		DataSourceTxt.init();
 		
 		// now we connect to the driver and create a IDMapper instance.
-		IDMapper mapper = BridgeDb.connect ("idmapper-bridgerest:http://webservice.bridgedb.org/Human");
+		IDMapper mapper = BridgeDb.connect ("idmapper-bridgerest:https://webservice.bridgedb.org/Human");
 		
 		String query = "3643";
 			
