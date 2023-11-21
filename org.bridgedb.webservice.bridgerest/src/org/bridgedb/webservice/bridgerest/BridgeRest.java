@@ -276,7 +276,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 	}
 	
 	/**
-	 * @param baseUrl base Url, e.g. http://webservice.bridgedb.org/Human or
+	 * @param baseUrl base Url, e.g. https://webservice.bridgedb.org/Human or
 	 * 	http://localhost:8182
 	 * @throws IDMapperException when service is unavailable 
 	 */

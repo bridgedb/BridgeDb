@@ -300,7 +300,7 @@ public class ComparisonScript
 		PICR ("picr", "idmapper-picr:"),
 		
 		SYNERGIZER_ENSEMBL  ("synergizer(ensembl)", "idmapper-synergizer:authority=ensembl&species=Homo sapiens"),
-		BRIDGEWEBSERVICE ("BridgeWebservice", "idmapper-bridgerest:http://webservice.bridgedb.org/Human"),
+		BRIDGEWEBSERVICE ("BridgeWebservice", "idmapper-bridgerest:https://webservice.bridgedb.org/Human"),
 		BRIDGEWEBSERVICE_LOCAL ("BridgeWebservice(local)", "idmapper-bridgerest:http://localhost:8183/Human"),
 		BIOMART ("biomart", "idmapper-biomart:http://www.biomart.org/biomart/martservice?mart=ensembl&dataset=hsapiens_gene_ensembl"),
 		CRONOS ("cronos", "idmapper-cronos:hsa"),

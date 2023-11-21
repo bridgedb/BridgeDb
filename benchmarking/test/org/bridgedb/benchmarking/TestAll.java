@@ -74,7 +74,7 @@ public class TestAll extends Base
 		Class.forName("org.bridgedb.webservice.bridgerest.BridgeRest");
 		Xref insr1 = new Xref ("ENSG00000171105", DataSource.getBySystemCode("EnHs"));
 		Xref insr2 = new Xref ("3643", DataSource.getBySystemCode("L"));
-		basicMapperTest (measure, "bridgerest", "idmapper-bridgerest:http://webservice.bridgedb.org/Human", insr1, insr2);
+		basicMapperTest (measure, "bridgerest", "idmapper-bridgerest:https://webservice.bridgedb.org/Human", insr1, insr2);
 	}
 	
 	public void testFile() throws IDMapperException, ClassNotFoundException
