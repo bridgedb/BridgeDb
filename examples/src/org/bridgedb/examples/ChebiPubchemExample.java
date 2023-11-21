@@ -15,7 +15,7 @@ public class ChebiPubchemExample
 		// We'll use the BridgeRest webservice in this case, as it does compound mapping fairly well.
 		// We'll use the human database, but it doesn't really matter which species we pick.
 		Class.forName ("org.bridgedb.webservice.bridgerest.BridgeRest");
-		IDMapper mapper = BridgeDb.connect("idmapper-bridgerest:http://webservice.bridgedb.org/Human");
+		IDMapper mapper = BridgeDb.connect("idmapper-bridgerest:https://webservice.bridgedb.org/Human");
 		DataSourceTxt.init();
 
 		// Start with defining the Chebi identifier for
