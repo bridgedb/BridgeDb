@@ -2,9 +2,9 @@ name: build
 
 on:
   push:
-    branches: [ master ]
+    branches: [ series/4.0 ]
   pull_request:
-    branches: [ master ]
+    branches: [ series/4.0 ]
 
 jobs:
   build:
@@ -16,8 +16,8 @@ jobs:
     - name: Set up Java
       uses: actions/setup-java@v3
       with:
-        distribution: 'adopt'
-        java-version: 11
+        distribution: 'temurin'
+        java-version: 17
         cache: maven
     - name: Build with Maven
       run: mvn clean install -Dgpg.skip -Dmaven.javadoc.skip=true -Dmaven.test.failure.ignore=true -Dproject.build.sourceEncoding=UTF-8 -Djunit5.excludeGroups=webservice,mysql
