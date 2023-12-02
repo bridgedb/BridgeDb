@@ -27,18 +27,17 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
+
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
 import org.bridgedb.bio.DataSourceTxt;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
-import org.bridgedb.rdf.constants.IdenitifiersOrgConstants;
 import org.bridgedb.rdf.constants.RdfConstants;
 import org.bridgedb.rdf.identifiers.org.IdentifersOrgReader;
 import org.bridgedb.utils.BridgeDBException;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
-import org.eclipse.rdf4j.model.URI;
-import org.eclipse.rdf4j.model.impl.LiteralImpl;
-import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryException;
 
@@ -59,7 +58,7 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
     private static HashMap<String,Set<UriPattern>> byCode = new HashMap<String,Set<UriPattern>>();
     static boolean initialized = false;
     
-    private static HashSet<URI> expectedPredicates = new HashSet<URI>(Arrays.asList(new URI[] {
+    private static HashSet<IRI> expectedPredicates = new HashSet<IRI>(Arrays.asList(new IRI[] {
         BridgeDBConstants.HAS_POSTFIX_URI,
         BridgeDBConstants.HAS_PREFIX_URI,
         RdfConstants.TYPE_URI,
@@ -201,8 +200,8 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         return existingByPattern(prefix + "$id" + postfix);
     }
 
-    public final URI getResourceId(){
-        return new URIImpl(getUriPattern());
+    public final IRI getResourceId(){
+        return SimpleValueFactory.getInstance().createIRI(getUriPattern());
     }
     
     public String getUriPattern() {
@@ -221,11 +220,11 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
    }
     
     public void add(RepositoryConnection repositoryConnection) throws RepositoryException{
-        URI id = getResourceId();
+        IRI id = getResourceId();
         repositoryConnection.add(id, RdfConstants.TYPE_URI, BridgeDBConstants.URI_PATTERN_URI);
-        repositoryConnection.add(id, BridgeDBConstants.HAS_PREFIX_URI,  new LiteralImpl(prefix));
+        repositoryConnection.add(id, BridgeDBConstants.HAS_PREFIX_URI,  SimpleValueFactory.getInstance().createLiteral(prefix));
         if (!postfix.isEmpty()){
-            repositoryConnection.add(id, BridgeDBConstants.HAS_POSTFIX_URI,  new LiteralImpl(postfix));
+            repositoryConnection.add(id, BridgeDBConstants.HAS_POSTFIX_URI,  SimpleValueFactory.getInstance().createLiteral(postfix));
         }
     }        
     

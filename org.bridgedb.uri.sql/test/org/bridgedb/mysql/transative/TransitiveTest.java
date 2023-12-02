@@ -20,7 +20,11 @@
 
 package org.bridgedb.mysql.transative;
 
+import static org.bridgedb.uri.UriListenerTest.SYMETRIC;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Set;
+
 import org.bridgedb.DataSource;
 import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.rdf.UriPattern;
@@ -28,9 +32,6 @@ import org.bridgedb.rdf.UriPatternType;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.sql.transative.DirectMapping;
-import static org.bridgedb.uri.UriListenerTest.SYMETRIC;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.lens.LensTools;
@@ -38,11 +39,10 @@ import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
-
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
-import org.eclipse.rdf4j.model.URI;
-import org.eclipse.rdf4j.model.impl.URIImpl;
 
 /**
  * Tests the UriMapper interface (and by loading the UriListener interface)
@@ -162,107 +162,107 @@ public class TransitiveTest {
     
     public static void loadData() throws BridgeDBException{
         
-        URI source = new URIImpl("http://example.com/TransitiveTest/AtoB");
+        IRI source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/AtoB");
         mappingSetAB = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternB, source);
         
-        source = new URIImpl("http://example.com/TransitiveTest/AtoB2");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/AtoB2");
         mappingSetAB2 = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE2, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternB, source);
         
-        source = new URIImpl("http://example.com/TransitiveTest/AtoC");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/AtoC");
         mappingSetAC = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternC, source);
         
-        source = new URIImpl("http://example.com/TransitiveTest/AtoD");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/AtoD");
         mappingSetAD = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternD, source);
 
-        source = new URIImpl("http://example.com/TransitiveTest/AtoE");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/AtoE");
         mappingSetAE = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternE, source);
         
-        source = new URIImpl("http://example.com/TransitiveTest/AtoF");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/AtoF");
         mappingSetAF = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, source);
 
-        source = new URIImpl("http://example.com/TransitiveTest/BtoC");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/BtoC");
         mappingSetBC = sqlUriMapper.registerMappingSet(regexUriPatternB, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternC, source);
         
-        source = new URIImpl("http://example.com/TransitiveTest/BtoC2");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/BtoC2");
         mappingSetBC2 = sqlUriMapper.registerMappingSet(regexUriPatternB, TEST_PREDICATE2, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternC, source);
 
-        source = new URIImpl("http://example.com/TransitiveTest/BtoC9");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/BtoC9");
         mappingSetBC9 = sqlUriMapper.registerMappingSet(regexUriPatternB, TEST_PREDICATE, 
                 TEST_JUSTIFICATION9, TEST_JUSTIFICATION9, regexUriPatternC, source);
 
-        source = new URIImpl("http://example.com/TransitiveTest/BtoD");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/BtoD");
         mappingSetBD = sqlUriMapper.registerMappingSet(regexUriPatternB, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternD, source);
 
-        source = new URIImpl("http://example.com/TransitiveTest/BtoE");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/BtoE");
         mappingSetBE = sqlUriMapper.registerMappingSet(regexUriPatternB, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternE, source);
         
-        source = new URIImpl("http://example.com/TransitiveTest/BtoF");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/BtoF");
         mappingSetBF = sqlUriMapper.registerMappingSet(regexUriPatternB, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, source);
 
-        source = new URIImpl("http://example.com/TransitiveTest/CtoD");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/CtoD");
         mappingSetCD = sqlUriMapper.registerMappingSet(regexUriPatternC, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternD, source);
 
-        source = new URIImpl("http://example.com/TransitiveTest/CtoD2");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/CtoD2");
         mappingSetCD2 = sqlUriMapper.registerMappingSet(regexUriPatternC, TEST_PREDICATE2, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternD, source);
 
-        source = new URIImpl("http://example.com/TransitiveTest/CtoD9");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/CtoD9");
         mappingSetCD9 = sqlUriMapper.registerMappingSet(regexUriPatternC, TEST_PREDICATE, 
                 TEST_JUSTIFICATION9, TEST_JUSTIFICATION9, regexUriPatternD, source);
 
-        source = new URIImpl("http://example.com/TransitiveTest/CtoE");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/CtoE");
         mappingSetCE = sqlUriMapper.registerMappingSet(regexUriPatternC, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternE, source);
 
-        source = new URIImpl("http://example.com/TransitiveTest/CtoF");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/CtoF");
         mappingSetCF = sqlUriMapper.registerMappingSet(regexUriPatternC, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, source);
 
-        source = new URIImpl("http://example.com/TransitiveTest/DtoE");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/DtoE");
         mappingSetDE = sqlUriMapper.registerMappingSet(regexUriPatternD, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternE, source);
 
-        source = new URIImpl("http://example.com/TransitiveTest/DtoF");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/DtoF");
         mappingSetDF = sqlUriMapper.registerMappingSet(regexUriPatternD, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, source);
 
-        source = new URIImpl("http://example.com/TransitiveTest/EtoE");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/EtoE");
         mappingSetEE = sqlUriMapper.registerMappingSet(regexUriPatternE, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternE, source);
 
-        source = new URIImpl("http://example.com/TransitiveTest/EtoF");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/EtoF");
         mappingSetEF = sqlUriMapper.registerMappingSet(regexUriPatternE, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, source);
 
-        source = new URIImpl("http://example.com/TransitiveTest/FtoF");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/FtoF");
         mappingSetFF = sqlUriMapper.registerMappingSet(regexUriPatternF, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternF, source);
 
-        source = new URIImpl("http://example.com/TransitiveTest/AtoX");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/AtoX");
         mappingSetAX = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternX, source);
         
-        source = new URIImpl("http://example.com/TransitiveTest/CtoX");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/CtoX");
         mappingSetCX = sqlUriMapper.registerMappingSet(regexUriPatternC, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternX, source);
         
-        source = new URIImpl("http://example.com/TransitiveTest/AtoY");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/AtoY");
         mappingSetAY = sqlUriMapper.registerMappingSet(regexUriPatternA, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternY, source);
         
-        source = new URIImpl("http://example.com/TransitiveTest/CtoY");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/TransitiveTest/CtoY");
         mappingSetCY = sqlUriMapper.registerMappingSet(regexUriPatternC, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPatternY, source);
 

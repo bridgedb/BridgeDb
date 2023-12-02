@@ -19,37 +19,34 @@
 //
 package org.bridgedb.rdf.constants;
 
-import org.eclipse.rdf4j.model.URI;
-import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
-/**
- *
- */
 public class XMLSchemaConstants {
-
+	private static final SimpleValueFactory factory = SimpleValueFactory.getInstance();
 
     public static final String PREFIX = "http://www.w3.org/2001/XMLSchema#";
     
-    public static final URI STRING = new URIImpl(PREFIX + "string");
-    public static final URI BOOLEAN = new URIImpl(PREFIX + "boolean");
-    public static final URI DECIMAL = new URIImpl(PREFIX + "decimal");
-    public static final URI FLOAT = new URIImpl(PREFIX + "float");
-    public static final URI DOUBLE = new URIImpl(PREFIX + "double");
-    public static final URI DURATION = new URIImpl(PREFIX + "duration");
-    public static final URI DATE_TIME = new URIImpl(PREFIX + "dateTime");
-    public static final URI TIME = new URIImpl(PREFIX + "time");
-    public static final URI DATE = new URIImpl(PREFIX + "date");
-    public static final URI G_YEAR_MONTH = new URIImpl(PREFIX + "gYearMonth");
-    public static final URI G_YEAR = new URIImpl(PREFIX + "gYear");
-    public static final URI G_MONTH_DAY = new URIImpl(PREFIX + "gMonthDay");
-    public static final URI G_DAY = new URIImpl(PREFIX + "gDay");
-    public static final URI G_MONTH = new URIImpl(PREFIX + "gMonth");
-    public static final URI HEX_BINARY = new URIImpl(PREFIX + "hexBinary");
-    public static final URI BASE_64_BINARY = new URIImpl(PREFIX + "base64Binary");
-    public static final URI ANY_URI = new URIImpl(PREFIX + "anyURI");
-    public static final URI QNAME = new URIImpl(PREFIX + "QName");
-    public static final URI NOTATION = new URIImpl(PREFIX + "NOTATION");
-    public static final URI INTEGER = new URIImpl(PREFIX + "integer");
-    public static final URI NON_NEGATIVE_INTEGER = new URIImpl(PREFIX + "nonNegativeInteger");
-    public static final URI UNISGNED_BYTE = new URIImpl(PREFIX + "unsignedByte");
+    public static final IRI STRING = factory.createIRI(PREFIX + "string");
+    public static final IRI BOOLEAN = factory.createIRI(PREFIX + "boolean");
+    public static final IRI DECIMAL = factory.createIRI(PREFIX + "decimal");
+    public static final IRI FLOAT = factory.createIRI(PREFIX + "float");
+    public static final IRI DOUBLE = factory.createIRI(PREFIX + "double");
+    public static final IRI DURATION = factory.createIRI(PREFIX + "duration");
+    public static final IRI DATE_TIME = factory.createIRI(PREFIX + "dateTime");
+    public static final IRI TIME = factory.createIRI(PREFIX + "time");
+    public static final IRI DATE = factory.createIRI(PREFIX + "date");
+    public static final IRI G_YEAR_MONTH = factory.createIRI(PREFIX + "gYearMonth");
+    public static final IRI G_YEAR = factory.createIRI(PREFIX + "gYear");
+    public static final IRI G_MONTH_DAY = factory.createIRI(PREFIX + "gMonthDay");
+    public static final IRI G_DAY = factory.createIRI(PREFIX + "gDay");
+    public static final IRI G_MONTH = factory.createIRI(PREFIX + "gMonth");
+    public static final IRI HEX_BINARY = factory.createIRI(PREFIX + "hexBinary");
+    public static final IRI BASE_64_BINARY = factory.createIRI(PREFIX + "base64Binary");
+    public static final IRI ANY_URI = factory.createIRI(PREFIX + "anyURI");
+    public static final IRI QNAME = factory.createIRI(PREFIX + "QName");
+    public static final IRI NOTATION = factory.createIRI(PREFIX + "NOTATION");
+    public static final IRI INTEGER = factory.createIRI(PREFIX + "integer");
+    public static final IRI NON_NEGATIVE_INTEGER = factory.createIRI(PREFIX + "nonNegativeInteger");
+    public static final IRI UNISGNED_BYTE = factory.createIRI(PREFIX + "unsignedByte");
 }

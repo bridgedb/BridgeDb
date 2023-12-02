@@ -19,8 +19,8 @@
 //
 package org.bridgedb.rdf.constants;
 
-import org.eclipse.rdf4j.model.URI;
-import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
 /**
  *
@@ -31,7 +31,7 @@ public class OWLConstants {
     
     public static final String EQUIVALENT_CLASS = xmlschemans + "equivalentClass";
     public static final String SAME_AS = xmlschemans + "sameAs";
-    public static final URI SAMEAS_URI = new URIImpl(SAME_AS);     
+    public static final IRI SAMEAS_URI = SimpleValueFactory.getInstance().createIRI(SAME_AS);     
     public static final String THING = "owl:Thing";
 
 }

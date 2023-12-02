@@ -20,7 +20,7 @@
 package org.bridgedb.loader.transative;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,10 +37,10 @@ import org.bridgedb.uri.loader.transative.TransativeCreator;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.eclipse.rdf4j.model.URI;
-import org.eclipse.rdf4j.model.impl.URIImpl;
 
 /**
  *
@@ -48,7 +48,7 @@ import org.eclipse.rdf4j.model.impl.URIImpl;
  */
 public class TransativeCreatorTest {
     
-    static final URI linkPredicate = new URIImpl("http://www.w3.org/2004/02/skos/core#exactMatch");
+    static final IRI linkPredicate = SimpleValueFactory.getInstance().createIRI("http://www.w3.org/2004/02/skos/core#exactMatch");
     static SQLUriMapper uriListener;
     static LinksetListener instance;
 
