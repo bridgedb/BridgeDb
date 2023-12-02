@@ -1,4 +1,4 @@
- @prefix bridgeDB: <http://vocabularies.bridgedb.org/ops#> .
+@prefix bridgeDB: <http://vocabularies.bridgedb.org/ops#> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 
@@ -3101,7 +3101,7 @@ bridgeDB:DataSource_InterPro a bridgeDB:DataSource ;
 	bridgeDB:idExample "IPR000100" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "protein" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.ebi.ac.uk/interpro/DisplayIproEntry?ac=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.ebi.ac.uk/interpro/entry/InterPro/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/interpro/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/interpro/$id> ;
 	bridgeDB:hasRegexPattern "^IPR\\d{6}$" ;
@@ -11427,8 +11427,8 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec=$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec=" .
 
-<http://www.ebi.ac.uk/interpro/DisplayIproEntry?ac=$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://www.ebi.ac.uk/interpro/DisplayIproEntry?ac=" .
+<https://www.ebi.ac.uk/interpro/entry/InterPro/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://www.ebi.ac.uk/interpro/entry/InterPro/" .
 
 <http://www.ebi.ac.uk/interpro/entry/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.ebi.ac.uk/interpro/entry/" .

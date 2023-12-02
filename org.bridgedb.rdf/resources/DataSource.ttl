@@ -646,7 +646,7 @@ bridgeDB:DataSource_InterPro a bridgeDB:DataSource ;
 	bridgeDB:idExample "IPR000100" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "protein" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.ebi.ac.uk/interpro/DisplayIproEntry?ac=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.ebi.ac.uk/interpro/entry/InterPro/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/interpro/$id> ;
 	bridgeDB:hasUriPattern <http://bio2rdf.org/interpro:$id> .
 
