@@ -22,16 +22,16 @@ package org.bridgedb.rdf;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
+
 import org.bridgedb.bio.Organism;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.RdfConstants;
 import org.bridgedb.utils.BridgeDBException;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.model.URI;
 import org.eclipse.rdf4j.model.Value;
-import org.eclipse.rdf4j.model.impl.LiteralImpl;
-import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryException;
 import org.eclipse.rdf4j.rio.RDFHandler;
@@ -64,8 +64,8 @@ public class OrganismRdf extends RdfBase{
         return scrub(organism.code());   
     }
     
-    public static final URI getResourceId(Organism organism){
-        return new URIImpl(BridgeDBConstants.ORGANISM1 + "_" + getRdfLabel(organism));
+    public static final IRI getResourceId(Organism organism){
+        return SimpleValueFactory.getInstance().createIRI(BridgeDBConstants.ORGANISM1 + "_" + getRdfLabel(organism));
     }
     
     public static void addAll(RepositoryConnection repositoryConnection) throws IOException, RepositoryException {
@@ -82,11 +82,11 @@ public class OrganismRdf extends RdfBase{
     
     public static void add(RepositoryConnection repositoryConnection, Organism organism) 
             throws IOException, RepositoryException {
-        URI id = getResourceId(organism);
+        IRI id = getResourceId(organism);
         repositoryConnection.add(id, RdfConstants.TYPE_URI, BridgeDBConstants.ORGANISM_URI);
-        repositoryConnection.add(id, BridgeDBConstants.CODE_URI,  new LiteralImpl(organism.code()));
-        repositoryConnection.add(id, BridgeDBConstants.SHORT_NAME_URI,  new LiteralImpl(organism.shortName()));
-        repositoryConnection.add(id, BridgeDBConstants.LATIN_NAME_URI,  new LiteralImpl(organism.latinName()));
+        repositoryConnection.add(id, BridgeDBConstants.CODE_URI,  SimpleValueFactory.getInstance().createLiteral(organism.code()));
+        repositoryConnection.add(id, BridgeDBConstants.SHORT_NAME_URI,  SimpleValueFactory.getInstance().createLiteral(organism.shortName()));
+        repositoryConnection.add(id, BridgeDBConstants.LATIN_NAME_URI,  SimpleValueFactory.getInstance().createLiteral(organism.latinName()));
     }
 
    public static Object readRdf(Resource organismId, Set<Statement> allStatements) throws BridgeDBException {

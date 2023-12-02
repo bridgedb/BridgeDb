@@ -20,12 +20,12 @@
 package org.bridgedb.uri.loader;
 
 import java.io.File;
-import java.util.Set;
+import java.net.URI;
+
 import org.apache.log4j.Logger;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;
-import org.eclipse.rdf4j.model.Resource;
-import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.rio.RDFHandler;
 
 public class LinksetListener {
@@ -39,15 +39,15 @@ public class LinksetListener {
     
     static final Logger logger = Logger.getLogger(LinksetListener.class);
     
-    public int parse(File file, URI linkPredicate, String justification, boolean symetric) throws BridgeDBException{
-        URI mappingUri = RdfParser.fileToURL(file);
+    public int parse(File file, IRI linkPredicate, String justification, boolean symetric) throws BridgeDBException{
+        IRI mappingUri = RdfParser.fileToURL(file);
         LinksetHandler handler = new LinksetHandler(uriListener, linkPredicate, justification, mappingUri, symetric); 
         RdfParser parser = getParser(handler);
         parser.parse(mappingUri.stringValue(), file);
         return handler.getMappingsetId();
     }
     
-    public int parse(File file, URI mappingSource, URI linkPredicate, String justification, 
+    public int parse(File file, IRI mappingSource, IRI linkPredicate, String justification, 
             Boolean symetric) throws BridgeDBException{
         LinksetHandler handler = new LinksetHandler(uriListener, linkPredicate, justification, mappingSource, symetric);
         RdfParser parser = getParser(handler);
@@ -55,7 +55,7 @@ public class LinksetListener {
         return handler.getMappingsetId();
     }
     
-    public int parse(String uri, URI  mappingSource, URI linkPredicate, String justification, boolean symetric) 
+    public int parse(String uri, IRI  mappingSource, IRI linkPredicate, String justification, boolean symetric) 
             throws BridgeDBException{
         LinksetHandler handler = new LinksetHandler(uriListener, linkPredicate, justification, mappingSource, symetric);
         RdfParser parser = getParser(handler);

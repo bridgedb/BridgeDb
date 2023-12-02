@@ -19,6 +19,9 @@
 */
 package org.bridgedb.uri;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Set;
 
 import org.bridgedb.DataSource;
@@ -26,18 +29,16 @@ import org.bridgedb.sql.transative.DirectMapping;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.tools.StatementMaker;
-import org.junit.jupiter.api.*;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.impl.TreeModel;
-import org.eclipse.rdf4j.model.impl.URIImpl;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFHandlerException;
 import org.eclipse.rdf4j.rio.Rio;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests the UriMapper interface (and by loading the UriListener interface)
@@ -57,20 +58,20 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
     
     public static StatementMaker statementMaker;
 
-    URI mappingSet1 = new URIImpl("http://example.com/testBasemappingSetRDF/1");
-    URI linksetJustification = new URIImpl("http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#linksetJustification");
-    URI inChlKey = new URIImpl("http://semanticscience.org/resource/CHEMINF_000059");
+    IRI mappingSet1 = SimpleValueFactory.getInstance().createIRI("http://example.com/testBasemappingSetRDF/1");
+    IRI linksetJustification = SimpleValueFactory.getInstance().createIRI("http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#linksetJustification");
+    IRI inChlKey = SimpleValueFactory.getInstance().createIRI("http://semanticscience.org/resource/CHEMINF_000059");
 
-    URI importedFrom = new URIImpl("http://purl.org/pav/importedFrom");
-    URI derivedFrom = new URIImpl("http://purl.org/pav/derivedFrom");
-    URI example1to2 = new URIImpl("http://example.com/1to2");
-    URI linkPredicate = new URIImpl("http://rdfs.org/ns/void#linkPredicate");
-    URI exactMatch = new URIImpl("http://www.w3.org/2004/02/skos/core#exactMatch");
+    IRI importedFrom = SimpleValueFactory.getInstance().createIRI("http://purl.org/pav/importedFrom");
+    IRI derivedFrom = SimpleValueFactory.getInstance().createIRI("http://purl.org/pav/derivedFrom");
+    IRI example1to2 = SimpleValueFactory.getInstance().createIRI("http://example.com/1to2");
+    IRI linkPredicate = SimpleValueFactory.getInstance().createIRI("http://rdfs.org/ns/void#linkPredicate");
+    IRI exactMatch = SimpleValueFactory.getInstance().createIRI("http://www.w3.org/2004/02/skos/core#exactMatch");
     
-    URI sameAs = new URIImpl("http://www.w3.org/2002/07/owl#sameAs");
-    URI concept = new URIImpl("http://www.conceptwiki.org/concept/f25a234e-df03-419f-8504-cde8689a4d1f");
+    IRI sameAs = SimpleValueFactory.getInstance().createIRI("http://www.w3.org/2002/07/owl#sameAs");
+    IRI concept = SimpleValueFactory.getInstance().createIRI("http://www.conceptwiki.org/concept/f25a234e-df03-419f-8504-cde8689a4d1f");
 
-    URI override = new URIImpl("http://example.com/override");
+    IRI override = SimpleValueFactory.getInstance().createIRI("http://example.com/override");
     
     public void checkMapping(Mapping mapping){
         if (!mapping.isMappingToSelf()){
@@ -116,22 +117,22 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
         Set<Statement> rdf = statementMaker.asRDF(mappings, "http://example.com/testContext", false, null);
         Model m = asModel(rdf);
 
-        assertTrue(m.contains(concept, sameAs, new URIImpl("http://www.conceptwiki.org/concept/index/f25a234e-df03-419f-8504-cde8689a4d1f")));
-        assertTrue(m.contains(concept, sameAs, new URIImpl("http://www.conceptwiki.org/web-ws/concept/get?uuid=f25a234e-df03-419f-8504-cde8689a4d1f")));
+        assertTrue(m.contains(concept, sameAs, SimpleValueFactory.getInstance().createIRI("http://www.conceptwiki.org/concept/index/f25a234e-df03-419f-8504-cde8689a4d1f")));
+        assertTrue(m.contains(concept, sameAs, SimpleValueFactory.getInstance().createIRI("http://www.conceptwiki.org/web-ws/concept/get?uuid=f25a234e-df03-419f-8504-cde8689a4d1f")));
         
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://identifiers.org/chemspider/28509384")));
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://info.identifiers.org/chemspider/28509384")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://identifiers.org/chemspider/28509384")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://info.identifiers.org/chemspider/28509384")));
         
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://ops.rsc.org/Compounds/Get/8")));
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://ops.rsc-us.org/OPS8")));
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://ops.rsc.org/OPS8")));
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://ops.rsc.org/OPS8/rdf")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://ops.rsc.org/Compounds/Get/8")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://ops.rsc-us.org/OPS8")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://ops.rsc.org/OPS8")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://ops.rsc.org/OPS8/rdf")));
         
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://rdf.chemspider.com/28509384")));
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/28509384")));
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384")));
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.html")));
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.rdf")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://rdf.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384.html")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384.rdf")));
         
     }
 
@@ -143,34 +144,34 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
         Set<Statement> rdf = statementMaker.asRDF(mappings, "http://example.com/testContext", true, "http://example.com/override");
         Model m = asModel(rdf);
 
-        assertTrue(m.contains(concept, override, new URIImpl("http://www.conceptwiki.org/concept/index/f25a234e-df03-419f-8504-cde8689a4d1f")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://www.conceptwiki.org/web-ws/concept/get?uuid=f25a234e-df03-419f-8504-cde8689a4d1f")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.conceptwiki.org/concept/index/f25a234e-df03-419f-8504-cde8689a4d1f")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.conceptwiki.org/web-ws/concept/get?uuid=f25a234e-df03-419f-8504-cde8689a4d1f")));
         
-        assertTrue(m.contains(concept, override, new URIImpl("http://identifiers.org/chemspider/28509384")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://info.identifiers.org/chemspider/28509384")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://identifiers.org/chemspider/28509384")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://info.identifiers.org/chemspider/28509384")));
         
-        assertTrue(m.contains(concept, override, new URIImpl("http://ops.rsc.org/Compounds/Get/8")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://ops.rsc-us.org/OPS8")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://ops.rsc.org/OPS8")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://ops.rsc.org/OPS8/rdf")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://ops.rsc.org/Compounds/Get/8")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://ops.rsc-us.org/OPS8")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://ops.rsc.org/OPS8")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://ops.rsc.org/OPS8/rdf")));
         
-        assertTrue(m.contains(concept, override, new URIImpl("http://rdf.chemspider.com/28509384")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://www.chemspider.com/28509384")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.html")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.rdf")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://rdf.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384.html")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384.rdf")));
         
-        URI mapSet1Override = new URIImpl("http://example.com/testContextmappingSetRDF/1?predicate=http%3A%2F%2Fexample.com%2Foverride");
-        URI mapSet1_3Override = new URIImpl("http://example.com/testContextmappingSetRDF/1_3?predicate=http%3A%2F%2Fexample.com%2Foverride");
-        URI example1to2 = new URIImpl("http://example.com/1to2");
-        URI example2to3 = new URIImpl("http://example.com/2to3");
+        IRI mapSet1Override = SimpleValueFactory.getInstance().createIRI("http://example.com/testContextmappingSetRDF/1?predicate=http%3A%2F%2Fexample.com%2Foverride");
+        IRI mapSet1_3Override = SimpleValueFactory.getInstance().createIRI("http://example.com/testContextmappingSetRDF/1_3?predicate=http%3A%2F%2Fexample.com%2Foverride");
+        IRI example1to2 = SimpleValueFactory.getInstance().createIRI("http://example.com/1to2");
+        IRI example2to3 = SimpleValueFactory.getInstance().createIRI("http://example.com/2to3");
         
         // FIXME: Exactly how should the provenance chains go here?
-//        URIImpl mapset1 = new URIImpl("http://example.com/testContextmappingSetRDF/1");
+//        URIImpl mapset1 = SimpleValueFactory.getInstance().createIRI("http://example.com/testContextmappingSetRDF/1");
 //		assertTrue(m.contains(mapSet1Override, derivedFrom, mapset1));
 //        assertTrue(m.contains(mapset1, derivedFrom, example1to2));
 //
-//        URIImpl mapset1_3 = new URIImpl("http://example.com/testContextmappingSetRDF/1_3");
+//        URIImpl mapset1_3 = SimpleValueFactory.getInstance().createIRI("http://example.com/testContextmappingSetRDF/1_3");
 //		assertTrue(m.contains(mapSet1_3Override, derivedFrom, mapset1_3));        
 //        assertTrue(m.contains(mapset1_3, derivedFrom, example1to2));
 //        assertTrue(m.contains(mapset1_3, derivedFrom, example2to3));
@@ -183,22 +184,22 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
         Set<Mapping> mappings = uriMapper.mapFull(map1Uri1,  null, true, null, null);
         Set<Statement> rdf = statementMaker.asRDF(mappings, "http://example.com/testContext", false, "http://example.com/override");
         Model m = asModel(rdf);
-        assertTrue(m.contains(concept, override, new URIImpl("http://www.conceptwiki.org/concept/index/f25a234e-df03-419f-8504-cde8689a4d1f")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://www.conceptwiki.org/web-ws/concept/get?uuid=f25a234e-df03-419f-8504-cde8689a4d1f")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.conceptwiki.org/concept/index/f25a234e-df03-419f-8504-cde8689a4d1f")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.conceptwiki.org/web-ws/concept/get?uuid=f25a234e-df03-419f-8504-cde8689a4d1f")));
         
-        assertTrue(m.contains(concept, override, new URIImpl("http://identifiers.org/chemspider/28509384")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://info.identifiers.org/chemspider/28509384")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://identifiers.org/chemspider/28509384")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://info.identifiers.org/chemspider/28509384")));
         
-        assertTrue(m.contains(concept, override, new URIImpl("http://ops.rsc.org/Compounds/Get/8")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://ops.rsc-us.org/OPS8")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://ops.rsc.org/OPS8")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://ops.rsc.org/OPS8/rdf")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://ops.rsc.org/Compounds/Get/8")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://ops.rsc-us.org/OPS8")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://ops.rsc.org/OPS8")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://ops.rsc.org/OPS8/rdf")));
         
-        assertTrue(m.contains(concept, override, new URIImpl("http://rdf.chemspider.com/28509384")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://www.chemspider.com/28509384")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.html")));
-        assertTrue(m.contains(concept, override, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.rdf")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://rdf.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384.html")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384.rdf")));
     }
     
     @Test 
@@ -207,22 +208,22 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
         Set<Mapping> mappings = uriMapper.mapFull(map1Uri1,  null, true, null, null);
         Set<Statement> rdf = statementMaker.asRDF(mappings, "http://example.com/testContext", false, null);
         Model m = asModel(rdf);
-        assertTrue(m.contains(concept, sameAs, new URIImpl("http://www.conceptwiki.org/concept/index/f25a234e-df03-419f-8504-cde8689a4d1f")));
-        assertTrue(m.contains(concept, sameAs, new URIImpl("http://www.conceptwiki.org/web-ws/concept/get?uuid=f25a234e-df03-419f-8504-cde8689a4d1f")));
+        assertTrue(m.contains(concept, sameAs, SimpleValueFactory.getInstance().createIRI("http://www.conceptwiki.org/concept/index/f25a234e-df03-419f-8504-cde8689a4d1f")));
+        assertTrue(m.contains(concept, sameAs, SimpleValueFactory.getInstance().createIRI("http://www.conceptwiki.org/web-ws/concept/get?uuid=f25a234e-df03-419f-8504-cde8689a4d1f")));
         
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://identifiers.org/chemspider/28509384")));
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://info.identifiers.org/chemspider/28509384")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://identifiers.org/chemspider/28509384")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://info.identifiers.org/chemspider/28509384")));
         
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://ops.rsc.org/Compounds/Get/8")));
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://ops.rsc-us.org/OPS8")));
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://ops.rsc.org/OPS8")));
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://ops.rsc.org/OPS8/rdf")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://ops.rsc.org/Compounds/Get/8")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://ops.rsc-us.org/OPS8")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://ops.rsc.org/OPS8")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://ops.rsc.org/OPS8/rdf")));
         
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://rdf.chemspider.com/28509384")));
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/28509384")));
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384")));
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.html")));
-        assertTrue(m.contains(concept, exactMatch, new URIImpl("http://www.chemspider.com/Chemical-Structure.28509384.rdf")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://rdf.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384.html")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384.rdf")));
     }
 }
  

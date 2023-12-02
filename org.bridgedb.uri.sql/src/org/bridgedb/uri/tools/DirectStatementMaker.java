@@ -26,11 +26,9 @@ import org.bridgedb.uri.api.UriMapping;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.lens.LensTools;
 import org.bridgedb.utils.BridgeDBException;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.model.URI;
-import org.eclipse.rdf4j.model.impl.ContextStatementImpl;
-import org.eclipse.rdf4j.model.impl.StatementImpl;
-import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
 /**
  *
@@ -38,41 +36,41 @@ import org.eclipse.rdf4j.model.impl.URIImpl;
  */
 public class DirectStatementMaker implements StatementMaker{
    
-    protected final URI toURI(String text){
+    protected final IRI toURI(String text){
         try {
-            return new URIImpl(text);
+            return SimpleValueFactory.getInstance().createIRI(text);
         } catch (IllegalArgumentException ex){
-            return new URIImpl("<" + text + ">");
+            return SimpleValueFactory.getInstance().createIRI("<" + text + ">");
         }
     }
     
     private Set<Statement> asRDF(SetMappings setMappings, String lens, String baseUri, String methodName) throws BridgeDBException {
         HashSet<Statement> statements = new HashSet<Statement>();
-        URI setUri;
-        setUri = new URIImpl(baseUri + methodName + "/" + setMappings.getId());
-        URI predicateURI = toURI(setMappings.getPredicate());
-        Statement statement = new StatementImpl(setUri, VoidConstants.LINK_PREDICATE, predicateURI);
+        IRI setUri;
+        setUri = SimpleValueFactory.getInstance().createIRI(baseUri + methodName + "/" + setMappings.getId());
+        IRI predicateURI = toURI(setMappings.getPredicate());
+        Statement statement = SimpleValueFactory.getInstance().createStatement(setUri, VoidConstants.LINK_PREDICATE, predicateURI);
         statements.add(statement);
-        URI justifcationURI = toURI(setMappings.getJustification());
-        statement = new StatementImpl(setUri, DulConstants.EXPRESSES, justifcationURI);
+        IRI justifcationURI = toURI(setMappings.getJustification());
+        statement = SimpleValueFactory.getInstance().createStatement(setUri, DulConstants.EXPRESSES, justifcationURI);
         statements.add(statement);
         String source = setMappings.getMappingSource();
         if (source != null && !source.isEmpty()){
-            URI mappingSourceURI = toURI(setMappings.getMappingSource());
-            statement = new StatementImpl(setUri, VoidConstants.DATA_DUMP, mappingSourceURI);
+        	IRI mappingSourceURI = toURI(setMappings.getMappingSource());
+            statement = SimpleValueFactory.getInstance().createStatement(setUri, VoidConstants.DATA_DUMP, mappingSourceURI);
             statements.add(statement);
         }
         if (lens != null){
             Lens theLens = LensTools.byId(lens);
-            URI lensUri = new URIImpl(theLens.toUri(baseUri));
-            URI hasLensUri = BridgeDBConstants.FULFILLS_LENS;
-            statement = new StatementImpl(setUri, hasLensUri, lensUri);
+            IRI lensUri = SimpleValueFactory.getInstance().createIRI(theLens.toUri(baseUri));
+            IRI hasLensUri = BridgeDBConstants.FULFILLS_LENS;
+            statement = SimpleValueFactory.getInstance().createStatement(setUri, hasLensUri, lensUri);
             statements.add(statement);
         }
         for (UriMapping mapping:setMappings.getMappings()){
-            URI sourceURI = toURI(mapping.getSourceUri());
-            URI targetURI = toURI(mapping.getTargetUri());
-            statement =  new ContextStatementImpl(sourceURI, predicateURI, targetURI, setUri);
+        	IRI sourceURI = toURI(mapping.getSourceUri());
+        	IRI targetURI = toURI(mapping.getTargetUri());
+            statement =  SimpleValueFactory.getInstance().createStatement(sourceURI, predicateURI, targetURI, setUri);
             statements.add(statement);
         }
         return statements;
@@ -95,9 +93,9 @@ public class DirectStatementMaker implements StatementMaker{
         for (UriMapping mapping:mappingsBySet.getMappings()){
             //Inclusion of mapping to self at Antonis request April 2014
             //if (!mapping.getSourceUri().equals(mapping.getTargetUri())){
-                URI sourceURI = toURI(mapping.getSourceUri());
-                URI targetURI = toURI(mapping.getTargetUri());
-                Statement statement =  new StatementImpl(sourceURI, OWLConstants.SAMEAS_URI, targetURI);
+        	IRI sourceURI = toURI(mapping.getSourceUri());
+        	IRI targetURI = toURI(mapping.getTargetUri());
+                Statement statement =  SimpleValueFactory.getInstance().createStatement(sourceURI, OWLConstants.SAMEAS_URI, targetURI);
                 statements.add(statement);
             //}
         }
@@ -105,7 +103,7 @@ public class DirectStatementMaker implements StatementMaker{
        return statements;
     }
 
-    protected URI mappingSetURI(String id, String baseUri, String predicateURI){
+    protected IRI mappingSetURI(String id, String baseUri, String predicateURI){
         String uriStr = baseUri + UriConstants.MAPPING_SET + UriConstants.RDF + "/" + id;
         if (predicateURI != null) {
         	String p;
@@ -129,28 +127,28 @@ public class DirectStatementMaker implements StatementMaker{
 	@Override
     public Set<Statement> asRDF(MappingSetInfo info, String baseUri, String contextString) throws BridgeDBException{
         HashSet<Statement> results = new HashSet<Statement>();
-        URI linksetId = mappingSetURI(info.getStringId(), baseUri, null);
-        URI source = toURI(info.getMappingSource());
-        URI context = new URIImpl(contextString);
-        results.add(new ContextStatementImpl(linksetId, PavConstants.IMPORTED_FROM, source, context));
-        URI predicate = toURI(info.getPredicate());
-        results.add(new ContextStatementImpl(linksetId, VoidConstants.LINK_PREDICATE, predicate, context));
-        URI justification = toURI(info.getJustification());
-        results.add(new ContextStatementImpl(linksetId, BridgeDBConstants.LINKSET_JUSTIFICATION, justification, context));
+        IRI linksetId = mappingSetURI(info.getStringId(), baseUri, null);
+        IRI source = toURI(info.getMappingSource());
+        IRI context = SimpleValueFactory.getInstance().createIRI(contextString);
+        results.add(SimpleValueFactory.getInstance().createStatement(linksetId, PavConstants.IMPORTED_FROM, source, context));
+        IRI predicate = toURI(info.getPredicate());
+        results.add(SimpleValueFactory.getInstance().createStatement(linksetId, VoidConstants.LINK_PREDICATE, predicate, context));
+        IRI justification = toURI(info.getJustification());
+        results.add(SimpleValueFactory.getInstance().createStatement(linksetId, BridgeDBConstants.LINKSET_JUSTIFICATION, justification, context));
         return results;
     }
 
-    private void addMappingsRDF(Set<Statement> statements, Mapping mapping, URI predicateUri, URI mappingSet) throws BridgeDBException{
+    private void addMappingsRDF(Set<Statement> statements, Mapping mapping, IRI predicateUri, IRI mappingSet) throws BridgeDBException{
         for (String source:mapping.getSourceUri()){
-            URI sourceUri = new URIImpl(source);
+            IRI sourceUri = SimpleValueFactory.getInstance().createIRI(source);
             for (String target: mapping.getTargetUri()){
-                URI targetUri = new URIImpl(target);
-                statements.add(new ContextStatementImpl(sourceUri, predicateUri, targetUri, mappingSet));
+                IRI targetUri = SimpleValueFactory.getInstance().createIRI(target);
+                statements.add(SimpleValueFactory.getInstance().createStatement(sourceUri, predicateUri, targetUri, mappingSet));
             }
         }
     }
     
-    protected void addLinksetInfo(Set<Statement> statements, Mapping mapping, URI mappingSet) throws BridgeDBException{
+    protected void addLinksetInfo(Set<Statement> statements, Mapping mapping, IRI mappingSet) throws BridgeDBException{
         if (mapping.isMappingToSelf()){
             //No void for mapping to self at the moment.
         } else if (mapping.isTransitive()){
@@ -162,26 +160,26 @@ public class DirectStatementMaker implements StatementMaker{
         } 
     }
     
-    protected void addMappingVoid(Set<Statement> statements, Mapping mapping, URI mappingSet)
+    protected void addMappingVoid(Set<Statement> statements, Mapping mapping, IRI mappingSet)
             throws BridgeDBException {
-        URI sourceUri = toURI(mapping.getMappingSource());
-        statements.add(new ContextStatementImpl(mappingSet, PavConstants.DERIVED_FROM, sourceUri, mappingSet));
+        IRI sourceUri = toURI(mapping.getMappingSource());
+        statements.add(SimpleValueFactory.getInstance().createStatement(mappingSet, PavConstants.DERIVED_FROM, sourceUri, mappingSet));
     }
      
     private void addSelfMappingsRDF(Set<Statement> statements, Mapping mapping, String selfMappingPredicateURI) throws BridgeDBException{
-        URI predicate;
+    	IRI predicate;
 		if (selfMappingPredicateURI == null || selfMappingPredicateURI.isEmpty()) {
         	predicate = OWLConstants.SAMEAS_URI;
         } else {
-        	predicate = new URIImpl(selfMappingPredicateURI);
+        	predicate = SimpleValueFactory.getInstance().createIRI(selfMappingPredicateURI);
         }
     	
     	for (String source:mapping.getSourceUri()){
-            URI sourceUri = new URIImpl(source);
+            IRI sourceUri = SimpleValueFactory.getInstance().createIRI(source);
             for (String target: mapping.getTargetUri()){
                 if (!source.equals(target)){
-                    URI targetUri = new URIImpl(target);
-                    statements.add(new StatementImpl(sourceUri, predicate, targetUri));
+                    IRI targetUri = SimpleValueFactory.getInstance().createIRI(target);
+                    statements.add(SimpleValueFactory.getInstance().createStatement(sourceUri, predicate, targetUri));
                 }
             }
         }
@@ -200,8 +198,8 @@ public class DirectStatementMaker implements StatementMaker{
         	}
             if (predicate != null){
                 String id = mapping.getMappingSetId();
-                URI mappingSet = mappingSetURI(id, baseUri, overridePredicateURI);
-                URI predicateUri = new URIImpl(predicate);
+                IRI mappingSet = mappingSetURI(id, baseUri, overridePredicateURI);
+                IRI predicateUri = SimpleValueFactory.getInstance().createIRI(predicate);
                 addMappingsRDF(statements, mapping, predicateUri, mappingSet);
                 if (linksetInfo){
                     addLinksetInfo(statements, mapping, mappingSet);   

@@ -21,13 +21,14 @@ package org.bridgedb.rdf;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.bridgedb.utils.BridgeDBException;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.model.URI;
 import org.eclipse.rdf4j.model.Value;
-import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryException;
@@ -61,7 +62,7 @@ public abstract class RdfBase {
         return id;
     }
 
-    public static String getSingletonString(RepositoryConnection repositoryConnection, Resource id, URI predicate) 
+    public static String getSingletonString(RepositoryConnection repositoryConnection, Resource id, IRI predicate) 
             throws BridgeDBException, RepositoryException {
         String result = getPossibleSingletonString(repositoryConnection, id, predicate);
         if (result == null){
@@ -71,7 +72,7 @@ public abstract class RdfBase {
     }
 
     public static String getPossibleSingletonString(RepositoryConnection repositoryConnection, Resource id, 
-            URI predicate) throws RepositoryException, BridgeDBException {
+    		IRI predicate) throws RepositoryException, BridgeDBException {
         Value result = getPossibleSingleton(repositoryConnection, id, predicate);
         if (result == null) {
             return null;
@@ -81,7 +82,7 @@ public abstract class RdfBase {
     }
 
     static Resource getPossibleSingletonResource(RepositoryConnection repositoryConnection, Resource id, 
-            URI predicate) throws RepositoryException, BridgeDBException {
+    		IRI predicate) throws RepositoryException, BridgeDBException {
         Value value = getPossibleSingleton(repositoryConnection, id, predicate);
         return toResource(value);
     }
@@ -92,11 +93,11 @@ public abstract class RdfBase {
         } else if (value instanceof Resource){
             return (Resource)value;
         }
-        return new URIImpl(value.stringValue());        
+        return SimpleValueFactory.getInstance().createIRI(value.stringValue());        
     }
     
     static Value getPossibleSingleton(RepositoryConnection repositoryConnection, Resource id, 
-            URI predicate) throws RepositoryException, BridgeDBException {
+    		IRI predicate) throws RepositoryException, BridgeDBException {
         RepositoryResult<Statement> statements = 
                 repositoryConnection.getStatements(id, predicate, null, true);
         if (statements.hasNext()) {
@@ -111,7 +112,7 @@ public abstract class RdfBase {
         return null;
     }
 
-    static Set<String> getAllStrings(RepositoryConnection repositoryConnection, Resource id, URI predicate) 
+    static Set<String> getAllStrings(RepositoryConnection repositoryConnection, Resource id, IRI predicate) 
             throws RepositoryException {
         HashSet<String> results = new HashSet<String>();
         RepositoryResult<Statement> statements = 
@@ -123,7 +124,7 @@ public abstract class RdfBase {
         return results;
     }
 
-    static Set<Resource> getAllResources(RepositoryConnection repositoryConnection, Resource id, URI predicate) 
+    static Set<Resource> getAllResources(RepositoryConnection repositoryConnection, Resource id, IRI predicate) 
             throws RepositoryException {
         HashSet<Resource> results = new HashSet<Resource>();
         RepositoryResult<Statement> statements = 

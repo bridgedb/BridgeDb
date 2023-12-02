@@ -47,9 +47,7 @@ import org.bridgedb.utils.Reporter;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
-import org.eclipse.rdf4j.model.impl.BooleanLiteralImpl;
-import org.eclipse.rdf4j.model.impl.LiteralImpl;
-import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryException;
@@ -86,7 +84,7 @@ public class BridgeDBRdfHandler extends RdfBase{
         RepositoryConnection repositoryConnection = null;
         try {
             repository = new SailRepository(new MemoryStore());
-            repository.initialize();
+            repository.init();
             repositoryConnection = repository.getConnection();
             repositoryConnection.add(stream, DEFAULT_BASE_URI, DEFAULT_FILE_FORMAT);
             readAllDataSources(repositoryConnection);
@@ -216,7 +214,7 @@ public class BridgeDBRdfHandler extends RdfBase{
     
     private void readCodeMapper(RepositoryConnection repositoryConnection, String systemCode, Pattern regex) throws RepositoryException, BridgeDBException {
         RepositoryResult<Statement> statements = 
-                repositoryConnection.getStatements(null, BridgeDBConstants.SYSTEM_CODE_URI, new LiteralImpl(systemCode), true);
+                repositoryConnection.getStatements(null, BridgeDBConstants.SYSTEM_CODE_URI, SimpleValueFactory.getInstance().createLiteral(systemCode), true);
 //        String xrefPrefix = null;
         Resource codeMapperReseource = null;
         while (statements.hasNext()) {
@@ -321,7 +319,7 @@ public class BridgeDBRdfHandler extends RdfBase{
         RepositoryConnection repositoryConnection = null;
         try {
             repository = new SailRepository(new MemoryStore());
-            repository.initialize();
+            repository.init();
             repositoryConnection = repository.getConnection();
             for (DataSource dataSource: dataSources){
                 writeDataSource(repositoryConnection, dataSource);
@@ -341,29 +339,25 @@ public class BridgeDBRdfHandler extends RdfBase{
         repositoryConnection.add(id, RdfConstants.TYPE_URI, BridgeDBConstants.DATA_SOURCE_URI);         
         
         if (dataSource.getFullName() != null){
-            repositoryConnection.add(id, BridgeDBConstants.FULL_NAME_URI, new LiteralImpl(dataSource.getFullName()));
+            repositoryConnection.add(id, BridgeDBConstants.FULL_NAME_URI, SimpleValueFactory.getInstance().createLiteral(dataSource.getFullName()));
         }
 
         if (dataSource.getSystemCode() != null && (!dataSource.getSystemCode().trim().isEmpty())){
-            repositoryConnection.add(id, BridgeDBConstants.SYSTEM_CODE_URI, new LiteralImpl(dataSource.getSystemCode()));
+            repositoryConnection.add(id, BridgeDBConstants.SYSTEM_CODE_URI, SimpleValueFactory.getInstance().createLiteral(dataSource.getSystemCode()));
         }
         
         if (dataSource.getMainUrl() != null){
-            repositoryConnection.add(id, BridgeDBConstants.MAIN_URL_URI, new LiteralImpl(dataSource.getMainUrl()));
+            repositoryConnection.add(id, BridgeDBConstants.MAIN_URL_URI, SimpleValueFactory.getInstance().createLiteral(dataSource.getMainUrl()));
         }
 
         if (dataSource.getExample() != null && dataSource.getExample().getId() != null){
-            repositoryConnection.add(id, BridgeDBConstants.ID_EXAMPLE_URI, new LiteralImpl(dataSource.getExample().getId()));
+            repositoryConnection.add(id, BridgeDBConstants.ID_EXAMPLE_URI, SimpleValueFactory.getInstance().createLiteral(dataSource.getExample().getId()));
         }
  
-        if (dataSource.isPrimary()){
-            repositoryConnection.add(id, BridgeDBConstants.PRIMARY_URI, BooleanLiteralImpl.TRUE);
-        } else {
-            repositoryConnection.add(id, BridgeDBConstants.PRIMARY_URI, BooleanLiteralImpl.FALSE);
-        }
+        repositoryConnection.add(id, BridgeDBConstants.PRIMARY_URI, SimpleValueFactory.getInstance().createLiteral(dataSource.isPrimary()));
  
         if (dataSource.getType() != null){
-            repositoryConnection.add(id, BridgeDBConstants.TYPE_URI, new LiteralImpl(dataSource.getType()));
+            repositoryConnection.add(id, BridgeDBConstants.TYPE_URI, SimpleValueFactory.getInstance().createLiteral(dataSource.getType()));
         } 
 
         Pattern regex = DataSourcePatterns.getPatterns().get(dataSource);
@@ -391,16 +385,16 @@ public class BridgeDBRdfHandler extends RdfBase{
         
         Pattern pattern = DataSourcePatterns.getPatterns().get(dataSource);
         if (pattern != null && !pattern.toString().isEmpty()){
-            Value patternValue = new LiteralImpl(pattern.toString());
+            Value patternValue = SimpleValueFactory.getInstance().createLiteral(pattern.toString());
             repositoryConnection.add(id, BridgeDBConstants.HAS_REGEX_PATTERN_URI, patternValue);            
         }
         
         if (dataSource.getAlternative() != null){
-            repositoryConnection.add(id, DCTermsConstants.ALTERNATIVE_URI, new LiteralImpl(dataSource.getAlternative()));
+            repositoryConnection.add(id, DCTermsConstants.ALTERNATIVE_URI, SimpleValueFactory.getInstance().createLiteral(dataSource.getAlternative()));
         } 
         
         if (dataSource.getDescription() != null){
-            repositoryConnection.add(id, DCatConstants.DESCRIPTION_URI, new LiteralImpl(dataSource.getDescription()));
+            repositoryConnection.add(id, DCatConstants.DESCRIPTION_URI, SimpleValueFactory.getInstance().createLiteral(dataSource.getDescription()));
         } 
         
        SortedSet<UriPattern> sortedPatterns = UriPattern.byCodeAndType(dataSource.getSystemCode(), UriPatternType.dataSourceUriPattern);
@@ -421,8 +415,8 @@ public class BridgeDBRdfHandler extends RdfBase{
         }
         Resource id = asCodeMapperResource(dataSource);
         repositoryConnection.add(id, RdfConstants.TYPE_URI, BridgeDBConstants.CODE_MAPPER_URI);
-        repositoryConnection.add(id, BridgeDBConstants.SYSTEM_CODE_URI, new LiteralImpl(dataSource.getSystemCode()));
-        Value prefixValue = new LiteralImpl(xrefPrefix);
+        repositoryConnection.add(id, BridgeDBConstants.SYSTEM_CODE_URI, SimpleValueFactory.getInstance().createLiteral(dataSource.getSystemCode()));
+        Value prefixValue = SimpleValueFactory.getInstance().createLiteral(xrefPrefix);
         repositoryConnection.add(id, BridgeDBConstants.XREF_PREFIX_URI, prefixValue);            
    
         SortedSet<UriPattern> sortedPatterns = UriPattern.byCodeAndType(dataSource.getSystemCode(), UriPatternType.codeMapperPattern);
@@ -476,17 +470,17 @@ public class BridgeDBRdfHandler extends RdfBase{
 
     protected static Resource asResource(DataSource dataSource) {
         if (dataSource.getFullName() == null){
-            return new URIImpl(BridgeDBConstants.DATA_SOURCE1 + "_bysysCode_" + scrub(dataSource.getSystemCode()));
+            return SimpleValueFactory.getInstance().createIRI(BridgeDBConstants.DATA_SOURCE1 + "_bysysCode_" + scrub(dataSource.getSystemCode()));
         } else {
-            return new URIImpl(BridgeDBConstants.DATA_SOURCE1 + "_" + scrub(dataSource.getFullName()));
+            return SimpleValueFactory.getInstance().createIRI(BridgeDBConstants.DATA_SOURCE1 + "_" + scrub(dataSource.getFullName()));
         }
     }
 
     protected static Resource asCodeMapperResource(DataSource dataSource) {
         if (dataSource.getFullName() == null){
-            return new URIImpl(BridgeDBConstants.CODE_MAPPER1 + "_bysysCode_" + scrub(dataSource.getSystemCode()));
+            return SimpleValueFactory.getInstance().createIRI(BridgeDBConstants.CODE_MAPPER1 + "_bysysCode_" + scrub(dataSource.getSystemCode()));
         } else {
-            return new URIImpl(BridgeDBConstants.CODE_MAPPER1 + "_" + scrub(dataSource.getFullName()));
+            return SimpleValueFactory.getInstance().createIRI(BridgeDBConstants.CODE_MAPPER1 + "_" + scrub(dataSource.getFullName()));
         }
     }
 

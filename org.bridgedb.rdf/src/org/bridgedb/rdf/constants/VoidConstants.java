@@ -19,33 +19,34 @@
 //
 package org.bridgedb.rdf.constants;
 
-import org.eclipse.rdf4j.model.URI;
-import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
 /**
  *
  */
 public class VoidConstants {
+	private static final SimpleValueFactory factory = SimpleValueFactory.getInstance();
 
     public static final String voidns = "http://rdfs.org/ns/void#";
     public static final String PREFIX_NAME = "void:";
     
-    public static final URI DATA_DUMP = new URIImpl(voidns + "dataDump");
-    public static final URI DATASET = new URIImpl(voidns + "Dataset");
-    public static final URI DATASET_DESCRIPTION = new URIImpl(voidns + "DatasetDescription");
-    public static final URI EXAMPLE_RESOURCE = new URIImpl(voidns + "exampleResource");
-    public static final URI LINK_PREDICATE = new URIImpl(voidns + "linkPredicate");
-    public static final URI IN_DATASET = new URIImpl(voidns + "inDataset");
-    public static final URI LINKSET = new URIImpl(voidns + "Linkset");
-    public static final URI TARGET = new URIImpl(voidns + "target");
-    public static final URI TRIPLES = new URIImpl(voidns + "triples");
-    public static final URI SUBJECTSTARGET = new URIImpl(voidns + "subjectsTarget");
-    public static final URI OBJECTSTARGET = new URIImpl(voidns + "objectsTarget");
-    public static final URI SUBSET = new URIImpl(voidns + "subset");
-    public static final URI SPARQL_ENDPOINT = new URIImpl(voidns + "sparqlEndpoint");
+    public static final IRI DATA_DUMP = factory.createIRI(voidns + "dataDump");
+    public static final IRI DATASET = factory.createIRI(voidns + "Dataset");
+    public static final IRI DATASET_DESCRIPTION = factory.createIRI(voidns + "DatasetDescription");
+    public static final IRI EXAMPLE_RESOURCE = factory.createIRI(voidns + "exampleResource");
+    public static final IRI LINK_PREDICATE = factory.createIRI(voidns + "linkPredicate");
+    public static final IRI IN_DATASET = factory.createIRI(voidns + "inDataset");
+    public static final IRI LINKSET = factory.createIRI(voidns + "Linkset");
+    public static final IRI TARGET = factory.createIRI(voidns + "target");
+    public static final IRI TRIPLES = factory.createIRI(voidns + "triples");
+    public static final IRI SUBJECTSTARGET = factory.createIRI(voidns + "subjectsTarget");
+    public static final IRI OBJECTSTARGET = factory.createIRI(voidns + "objectsTarget");
+    public static final IRI SUBSET = factory.createIRI(voidns + "subset");
+    public static final IRI SPARQL_ENDPOINT = factory.createIRI(voidns + "sparqlEndpoint");
     private static final String URI_SPACE = "uriSpace";
     public static final String URI_SPACE_SHORT = PREFIX_NAME + URI_SPACE;
-    public static final URI URI_SPACE_URI = new URIImpl(voidns + URI_SPACE);
-    public static final URI VOCABULARY = new URIImpl(voidns + "vocabulary");    
+    public static final IRI URI_SPACE_URI = factory.createIRI(voidns + URI_SPACE);
+    public static final IRI VOCABULARY = factory.createIRI(voidns + "vocabulary");    
 
 }

@@ -19,13 +19,13 @@
 //
 package org.bridgedb.rdf.constants;
 
-import org.eclipse.rdf4j.model.URI;
-import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
 public class DulConstants {
 
 	public static final String dulns = "http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#";
 	
-	public static final URI EXPRESSES = new URIImpl(dulns + "expresses");
+	public static final IRI EXPRESSES = SimpleValueFactory.getInstance().createIRI(dulns + "expresses");
     
 }

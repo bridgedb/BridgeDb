@@ -21,8 +21,11 @@
 
 package org.bridgedb.uri;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import java.util.Set;
 import java.util.regex.Pattern;
+
 import org.bridgedb.DataSourcePatterns;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.UriPattern;
@@ -33,13 +36,10 @@ import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.IDMapperTestBase;
-
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
-import org.eclipse.rdf4j.model.URI;
-import org.eclipse.rdf4j.model.impl.URIImpl;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Base class of all Test using Uris
@@ -215,14 +215,14 @@ public abstract class UriListenerTest extends IDMapperTestBase{
      */
     public static void loadDataPart1() throws BridgeDBException{
 
-        URI source = new URIImpl("http://example.com/1to2");
+        IRI source = SimpleValueFactory.getInstance().createIRI("http://example.com/1to2");
         mappingSet1to2 = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
                 Lens.getDefaultJustifictaionString(), Lens.getDefaultJustifictaionString(), regexUriPattern2, source);
         listener.insertUriMapping(map1Uri1, map1Uri2, mappingSet1to2, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2Uri2, mappingSet1to2, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3Uri2, mappingSet1to2, SYMETRIC);
         
-        source = new URIImpl("http://example.com/2to3");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/2to3");
         mappingSet2to3 = listener.registerMappingSet(regexUriPattern2, TEST_PREDICATE, 
                 Lens.getDefaultJustifictaionString(), Lens.getDefaultJustifictaionString(), regexUriPattern3, source);
         listener.insertUriMapping(map1Uri2, map1Uri3, mappingSet2to3, SYMETRIC);
@@ -232,21 +232,21 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         //Close here to test recover
         listener.closeInput();
  
-        source = new URIImpl("http://example.com/3to3Lensed");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/3to3Lensed");
         mappingSet3to3Lensed = listener.registerMappingSet(regexUriPattern3, TEST_PREDICATE, 
         		Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern3, source);
         listener.insertUriMapping(map1Uri3, map1AUri3, mappingSet3to3Lensed, SYMETRIC);
         listener.insertUriMapping(map2Uri3, map2AUri3, mappingSet3to3Lensed, SYMETRIC);
         listener.insertUriMapping(map3Uri3, map3AUri3, mappingSet3to3Lensed, SYMETRIC);
 
-        source = new URIImpl("http://example.com/1to2lensed");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/1to2lensed");
         mappingSet1to2Lensed = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern2, source);
         listener.insertUriMapping(map1AUri1, map1AUri2, mappingSet1to2Lensed, SYMETRIC);
         listener.insertUriMapping(map2AUri1, map2AUri2, mappingSet1to2Lensed, SYMETRIC);
         listener.insertUriMapping(map3AUri1, map3AUri2, mappingSet1to2Lensed, SYMETRIC);
         
-        source = new URIImpl("http://example.com/2to3");
+        source = SimpleValueFactory.getInstance().createIRI("http://example.com/2to3");
         mappingSet2to3Lensed = listener.registerMappingSet(regexUriPattern2, TEST_PREDICATE, 
                 Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern3, source);
         listener.insertUriMapping(map1AUri2, map1AUri3, mappingSet2to3Lensed, SYMETRIC);
@@ -267,7 +267,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
      * @throws BridgeDBException
      */
     public static void loadData2Way() throws BridgeDBException{
-        URI source = new URIImpl("http://example.com/2to3Lensed");
+        IRI source = SimpleValueFactory.getInstance().createIRI("http://example.com/2to3Lensed");
         int mappingSet = listener.registerMappingSet(regexUriPattern2, TEST_PREDICATE, 
         		Lens.getTestJustifictaion() +"Forward", Lens.getTestJustifictaion() +"BackWard", regexUriPattern3, source);
         listener.insertUriMapping(map1Uri2, map1AUri3, mappingSet, SYMETRIC);

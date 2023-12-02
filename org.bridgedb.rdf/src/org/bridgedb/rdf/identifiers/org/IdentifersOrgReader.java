@@ -33,6 +33,7 @@ import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
@@ -48,10 +49,10 @@ import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.model.URI;
-import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryException;
@@ -85,7 +86,7 @@ public class IdentifersOrgReader extends RdfBase {
         RepositoryConnection repositoryConnection = null;
         try {
             repository = new SailRepository(new MemoryStore());
-            repository.initialize();
+            repository.init();
             repositoryConnection = repository.getConnection();
             repositoryConnection.add(stream, DEFAULT_BASE_URI, DEFAULT_FILE_FORMAT);
 //            for (String multiple:multiples){
@@ -283,7 +284,7 @@ public class IdentifersOrgReader extends RdfBase {
     }
     
     private void checkMultiple(RepositoryConnection repositoryConnection, String multiple) throws Exception{
-        URI uri = new URIImpl(multiple);
+        IRI uri = SimpleValueFactory.getInstance().createIRI(multiple);
         RepositoryResult<Statement> accessStatements = 
                 repositoryConnection.getStatements(null, null, uri, true);
         while(accessStatements.hasNext()) {
