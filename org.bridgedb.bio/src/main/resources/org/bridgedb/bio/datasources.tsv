@@ -54,7 +54,7 @@ ICD-11	ICD11	http://www.who.int/classifications/icd/en/		1A95	unknown	Homo sapie
 Illumina	Il	http://www.illumina.com/		ILMN_5668	probe		0	Il	ILMN_\d+	Illumina		illumina.probe	probe
 InChIKey	Ik	http://inchi.org/		QTBSBXVTEAMEQO-UHFFFAOYSA-N	metabolite		1	urn:miriam:inchikey	^[A-Z]{14}\-[A-Z]{10}(\-[A-Z])?	Standard InChIKey	P235	inchikey	metabolite
 IntAct	Ia	http://www.ebi.ac.uk/intact/	http://www.ebi.ac.uk/intact/pages/details/details.xhtml?interactionAc=$id	EBI-2307691	interaction		1	urn:miriam:intact	^EBI\-[0-9]+$	IntAct		intact	interaction
-InterPro	I	http://www.ebi.ac.uk/interpro/	http://www.ebi.ac.uk/interpro/DisplayIproEntry?ac=$id	IPR000100	protein		1	urn:miriam:interpro	^IPR\d{6}$	InterPro	P2926	interpro	protein
+InterPro	I	http://www.ebi.ac.uk/interpro/	https://www.ebi.ac.uk/interpro/entry/InterPro/$id	IPR000100	protein		1	urn:miriam:interpro	^IPR\d{6}$	InterPro	P2926	interpro	protein
 IPI	Ip	http://www.ebi.ac.uk/IPI	http://www.ebi.ac.uk/cgi-bin/dbfetch?db=IPI&id=$id&format=default	IPI00000001	protein		1		^IPI\d{8}$	IPI		interpro	protein
 IRGSP Gene	Ir	http://rgp.dna.affrc.go.jp/IRGSP/	https://rapdb.dna.affrc.go.jp/viewer/gbrowse_details/irgsp1?name=$id	Os12g0561000	gene		1	Ir	Os\d{2}g\d+	IRGSP Gene		rapdb.locus	gene
 ISBN	isbn	http://isbndb.com/	http://isbndb.com/search-all.html?kw=$id	9781584885658	publication		1	urn:miriam:isbn	^(ISBN)?(-13|-10)?[:]?[ ]?(\d{2,3}[ -]?)?\d{1,5}[ -]?\d{1,7}[ -]?\d{1,6}[ -]?(\d|X)$	ISBN	P212	isbn	publication
@@ -123,7 +123,7 @@ SubstrateDB	Sdb	http://substrate.burnham.org/	http://substrate.burnham.org/prote
 SubtiWiki	Bsu	http://www.subtiwiki.uni-goettingen.de/wiki/index.php/Main_Page	http://www.subtiwiki.uni-goettingen.de/wiki/index.php/$id	BSU29180	gene	Bacillus subtilis	1	urn:miriam:subtiwiki	^BSU\d{5}$	SubtiWiki		subtiwiki	gene
 SUPFAM	Sf	http://supfam.org/SUPERFAMILY/	http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi?ipid=$id	SSF57615	protein		1	urn:miriam:supfam	^\w+$	SUPFAM		supfam	protein
 SWISS-MODEL	Sw	http://swissmodel.expasy.org/	http://swissmodel.expasy.org/repository/smr.php?sptr_ac=$id	P23298	protein		1	urn:miriam:swiss-model	^\w+$	SWISS-MODEL		swiss-model	protein
-SwissLipids	Sl	http://www.swisslipids.org/	http://www.swisslipids.org/#/entity/$id/	SLM:000048885	metabolite		1		^SLM:\d+$	SwissLipids		swisslipid	metabolite
+SwissLipids	Sl	http://www.swisslipids.org/	http://www.swisslipids.org/#/entity/$id/	SLM:000048885	metabolite		1		^SLM:\d+$	SwissLipids		slm	metabolite
 Systems Biology Ontology	Sbo	http://www.ebi.ac.uk/sbo/	http://www.ebi.ac.uk/sbo/main/$id	SBO:0000262	ontology		1	urn:miriam:sbo	^SBO:\d{7}$	Systems Biology Ontology		sbo	ontology
 TAIR	A	http://arabidopsis.org/index.jsp	http://arabidopsis.org/servlets/TairObject?type=locus&name=$id	AT1G01030	gene	Arabidopsis thaliana	1	urn:miriam:tair.locus	^AT[1-5]G\d{5}$	TAIR Locus		tair.locus	gene
 TIGR	Ti	http://www.jcvi.org/		12012.t00308	gene		1	Ti		TIGR			gene
