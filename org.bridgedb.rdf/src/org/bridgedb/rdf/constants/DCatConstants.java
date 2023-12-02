@@ -4,35 +4,37 @@
  */
 package org.bridgedb.rdf.constants;
 
-import org.eclipse.rdf4j.model.URI;
-import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
 /**
  *
  * @author Christian
  */
 public class DCatConstants {
+	private static final SimpleValueFactory factory = SimpleValueFactory.getInstance();
+
     public static final String voidns = "http://www.w3.org/ns/dcat#";
     public static final String PREFIX_NAME = "dcat";
     
     public static final String ACCESS_URL = "accessURL";
-    public static final URI ACCESS_URL_URI = new URIImpl(voidns + ACCESS_URL);
+    public static final IRI ACCESS_URL_URI = factory.createIRI(voidns + ACCESS_URL);
     public static final String BYTE_SIZE = "byteSize";
-    public static final URI BYTE_SIZE_URI = new URIImpl(voidns + BYTE_SIZE);
+    public static final IRI BYTE_SIZE_URI = factory.createIRI(voidns + BYTE_SIZE);
     public static final String DESCRIPTION = "description";
-    public static final URI DESCRIPTION_URI = new URIImpl(voidns + DESCRIPTION);
+    public static final IRI DESCRIPTION_URI = factory.createIRI(voidns + DESCRIPTION);
     public static final String DISTRIBUTION = "distribution";
-    public static final URI DISTRIBUTION_URI = new URIImpl(voidns + DISTRIBUTION);
+    public static final IRI DISTRIBUTION_URI = factory.createIRI(voidns + DISTRIBUTION);
     public static final String DOWNLOAD = "downloadURL";
-    public static final URI DOWNLOAD_URI = new URIImpl(voidns + DOWNLOAD);
+    public static final IRI DOWNLOAD_URI = factory.createIRI(voidns + DOWNLOAD);
     public static final String LANDING_PAGE = "landingPage";
-    public static final URI LANDING_PAGE_URI = new URIImpl(voidns + LANDING_PAGE);
+    public static final IRI LANDING_PAGE_URI = factory.createIRI(voidns + LANDING_PAGE);
     public static final String MEDIA_TYPE = "mediaType ";
-    public static final URI MEDIA_TYPE_URI = new URIImpl(voidns + MEDIA_TYPE);
+    public static final IRI MEDIA_TYPE_URI = factory.createIRI(voidns + MEDIA_TYPE);
     public static final String THEME = "theme";
-    public static final URI THEME_URI = new URIImpl(voidns + THEME);
+    public static final IRI THEME_URI = factory.createIRI(voidns + THEME);
     public static final String TITLE = "title";
-    public static final URI TITLE_URI = new URIImpl(voidns + TITLE);
+    public static final IRI TITLE_URI = factory.createIRI(voidns + TITLE);
     
     
 

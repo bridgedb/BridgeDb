@@ -16,19 +16,24 @@
 
 package org.bridgedb.rdf;
 
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.lessThan;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+
 import java.io.InputStream;
 import java.util.Set;
+
 import org.bridgedb.DataSource;
 import org.bridgedb.bio.DataSourceComparator;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
-import static org.hamcrest.Matchers.*;
-
-import static org.junit.Assert.*;
-import org.junit.jupiter.api.*;
-
 import org.eclipse.rdf4j.model.Resource;
-import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -46,7 +51,7 @@ public class DataSourceComparatorTest {
     public void testGetResourceId() {
         Reporter.println("getResourceId");
         DataSource dataSource = DataSource.register("DataSourceUrisTest_testGetResourceId", "DataSourceUrisTest_testGetResourceId").asDataSource();
-        Resource expResult = new URIImpl("http://vocabularies.bridgedb.org/ops#DataSource_DataSourceUrisTest_testGetResourceId");
+        Resource expResult = SimpleValueFactory.getInstance().createIRI("http://vocabularies.bridgedb.org/ops#DataSource_DataSourceUrisTest_testGetResourceId");
         Resource result = BridgeDBRdfHandler.asResource(dataSource);
         assertEquals(expResult, result);
     }

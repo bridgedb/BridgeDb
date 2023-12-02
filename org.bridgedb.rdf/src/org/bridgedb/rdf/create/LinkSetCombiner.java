@@ -77,7 +77,7 @@ public class LinkSetCombiner {
         RepositoryConnection repositoryConnection = null;
         try {
             repository = new SailRepository(new MemoryStore());
-            repository.initialize();
+            repository.init();
             repositoryConnection = repository.getConnection();
             for (File inputFile:inputFiles){
                 Reporter.println("Parsing " + inputFile.getAbsolutePath());
@@ -96,7 +96,7 @@ public class LinkSetCombiner {
         RepositoryConnection repositoryConnection = null;
         try {
             repository = new SailRepository(new MemoryStore());
-            repository.initialize();
+            repository.init();
             repositoryConnection = repository.getConnection();
             Reporter.println("Parsing (to count)" + inputFile.getAbsolutePath());
             repositoryConnection.add(inputFile, DEFAULT_BASE_URI, getFormat(inputFile.getName()));

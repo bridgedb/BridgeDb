@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.bridgedb.rdf.BridgeDBRdfHandler;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
@@ -35,11 +36,9 @@ import org.bridgedb.rdf.constants.RdfConstants;
 import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.model.URI;
-import org.eclipse.rdf4j.model.impl.LiteralImpl;
-import org.eclipse.rdf4j.model.impl.StatementImpl;
-import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.sail.memory.model.CalendarMemLiteral;
 
 /**
@@ -291,15 +290,15 @@ public class LensTools {
     
     public static Set<Statement> asRdf(Lens lens, String baseUri) {
         HashSet<Statement> results = new HashSet<Statement>();
-        URI subject = new URIImpl(lens.toUri(baseUri));
-        results.add(new StatementImpl(subject, RdfConstants.TYPE_URI, BridgeDBConstants.LENS_URI));
-        results.add(new StatementImpl(subject, DCTermsConstants.TITLE_URI, new LiteralImpl(lens.getName())));
-        results.add(new StatementImpl(subject, DCTermsConstants.DESCRIPTION_URI, new LiteralImpl(lens.getDescription())));
-        results.add(new StatementImpl(subject, PavConstants.CREATED_BY, new LiteralImpl(lens.getCreatedBy())));
+        IRI subject = SimpleValueFactory.getInstance().createIRI(lens.toUri(baseUri));
+        results.add(SimpleValueFactory.getInstance().createStatement(subject, RdfConstants.TYPE_URI, BridgeDBConstants.LENS_URI));
+        results.add(SimpleValueFactory.getInstance().createStatement(subject, DCTermsConstants.TITLE_URI, SimpleValueFactory.getInstance().createLiteral(lens.getName())));
+        results.add(SimpleValueFactory.getInstance().createStatement(subject, DCTermsConstants.DESCRIPTION_URI, SimpleValueFactory.getInstance().createLiteral(lens.getDescription())));
+        results.add(SimpleValueFactory.getInstance().createStatement(subject, PavConstants.CREATED_BY, SimpleValueFactory.getInstance().createLiteral(lens.getCreatedBy())));
         CalendarMemLiteral createdOnLiteral = new CalendarMemLiteral(lens, lens.getCreatedOn());
-        results.add(new StatementImpl(subject, PavConstants.CREATED_ON, createdOnLiteral));
+        results.add(SimpleValueFactory.getInstance().createStatement(subject, PavConstants.CREATED_ON, createdOnLiteral));
         for (String justification:lens.getJustifications()){
-            results.add(new StatementImpl(subject, BridgeDBConstants.LINKSET_JUSTIFICATION, new URIImpl(justification)));
+            results.add(SimpleValueFactory.getInstance().createStatement(subject, BridgeDBConstants.LINKSET_JUSTIFICATION, SimpleValueFactory.getInstance().createIRI(justification)));
         }
         return results;
     }

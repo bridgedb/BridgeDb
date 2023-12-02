@@ -4,12 +4,14 @@
  */
 package org.bridgedb.loader;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
-import org.bridgedb.loader.transative.TransativeCreatorTest;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
@@ -18,14 +20,10 @@ import org.bridgedb.uri.loader.LinksetListener;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
-import org.eclipse.rdf4j.model.URI;
-import org.eclipse.rdf4j.model.impl.URIImpl;
-
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 
 /**
  *
@@ -33,7 +31,7 @@ import static org.hamcrest.Matchers.*;
  */
 public class LinksetListenerTest {
     
-    static final URI linkPredicate = new URIImpl("http://www.w3.org/2004/02/skos/core#exactMatch");
+    static final IRI linkPredicate = SimpleValueFactory.getInstance().createIRI("http://www.w3.org/2004/02/skos/core#exactMatch");
     static SQLUriMapper uriListener;
     static LinksetListener instance;
 

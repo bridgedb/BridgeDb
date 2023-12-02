@@ -19,37 +19,38 @@
 //
 package org.bridgedb.rdf.constants;
 
-import org.eclipse.rdf4j.model.URI;
-import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
 /**
  *
  */
 public class PavConstants {
-    
+	private static final SimpleValueFactory factory = SimpleValueFactory.getInstance();
+
     private static final String pavTermns = "http://purl.org/pav/";
     
-    public static final URI SOURCE_ACCESSED_BY = new URIImpl(pavTermns + "sourceAccessedBy");
-    public static final URI SOURCE_ACCESSED_FROM = new URIImpl(pavTermns + "sourceAccessedAt");
-    public static final URI SOURCE_ACCESSED_ON = new URIImpl(pavTermns + "sourceAccessedOn");
-    public static final URI AUTHORED_BY = new URIImpl(pavTermns + "authoredBy");
-    public static final URI AUTHORED_ON = new URIImpl(pavTermns + "authoredOn");
-    public static final URI CREATED_BY = new URIImpl(pavTermns + "createdBy");
-    public static final URI CREATED_ON = new URIImpl(pavTermns + "createdOn");
-    public static final URI CREATED_WITH = new URIImpl(pavTermns + "createdWith");
-    public static final URI DERIVED_BY = new URIImpl(pavTermns + "derivedBy");
-    public static final URI DERIVED_FROM = new URIImpl(pavTermns + "derivedFrom");
-    public static final URI DERIVED_ON = new URIImpl(pavTermns + "derivedOn");
-    public static final URI IMPORTED_BY = new URIImpl(pavTermns + "importedBy");
-    public static final URI IMPORTED_FROM = new URIImpl(pavTermns + "importedFrom");
-    public static final URI IMPORTED_ON = new URIImpl(pavTermns + "importedOn");
-    public static final URI LAST_REFERSHED_ON = new URIImpl(pavTermns + "lastRefreshedOn");
-    public static final URI MODIFIED_ON = new URIImpl(pavTermns + "modified");
-    public static final URI PREVIOUS_VERSION = new URIImpl(pavTermns + "previousVersion");
-    public static final URI RETRIEVED_BY = new URIImpl(pavTermns + "retrievedBy");
-    public static final URI RETRIEVED_ON = new URIImpl(pavTermns + "retrievedOn");
-    public static final URI RETRIEVED_FROM = new URIImpl(pavTermns + "retrievedFrom");
-    public static final URI VERSION = new URIImpl(pavTermns + "version");
+    public static final IRI SOURCE_ACCESSED_BY = factory.createIRI(pavTermns + "sourceAccessedBy");
+    public static final IRI SOURCE_ACCESSED_FROM = factory.createIRI(pavTermns + "sourceAccessedAt");
+    public static final IRI SOURCE_ACCESSED_ON = factory.createIRI(pavTermns + "sourceAccessedOn");
+    public static final IRI AUTHORED_BY = factory.createIRI(pavTermns + "authoredBy");
+    public static final IRI AUTHORED_ON = factory.createIRI(pavTermns + "authoredOn");
+    public static final IRI CREATED_BY = factory.createIRI(pavTermns + "createdBy");
+    public static final IRI CREATED_ON = factory.createIRI(pavTermns + "createdOn");
+    public static final IRI CREATED_WITH = factory.createIRI(pavTermns + "createdWith");
+    public static final IRI DERIVED_BY = factory.createIRI(pavTermns + "derivedBy");
+    public static final IRI DERIVED_FROM = factory.createIRI(pavTermns + "derivedFrom");
+    public static final IRI DERIVED_ON = factory.createIRI(pavTermns + "derivedOn");
+    public static final IRI IMPORTED_BY = factory.createIRI(pavTermns + "importedBy");
+    public static final IRI IMPORTED_FROM = factory.createIRI(pavTermns + "importedFrom");
+    public static final IRI IMPORTED_ON = factory.createIRI(pavTermns + "importedOn");
+    public static final IRI LAST_REFERSHED_ON = factory.createIRI(pavTermns + "lastRefreshedOn");
+    public static final IRI MODIFIED_ON = factory.createIRI(pavTermns + "modified");
+    public static final IRI PREVIOUS_VERSION = factory.createIRI(pavTermns + "previousVersion");
+    public static final IRI RETRIEVED_BY = factory.createIRI(pavTermns + "retrievedBy");
+    public static final IRI RETRIEVED_ON = factory.createIRI(pavTermns + "retrievedOn");
+    public static final IRI RETRIEVED_FROM = factory.createIRI(pavTermns + "retrievedFrom");
+    public static final IRI VERSION = factory.createIRI(pavTermns + "version");
     
     
 }

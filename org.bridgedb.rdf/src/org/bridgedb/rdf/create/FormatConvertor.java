@@ -76,7 +76,7 @@ public class FormatConvertor {
         RepositoryConnection repositoryConnection = null;
         try {
             repository = new SailRepository(new MemoryStore());
-            repository.initialize();
+            repository.init();
             repositoryConnection = repository.getConnection();
             repositoryConnection.add(inputFile, DEFAULT_BASE_URI, getFormat(inputFile.getName()));
             writeRDF(repositoryConnection, outputFile);

@@ -21,7 +21,10 @@
 
 package org.bridgedb.mysql;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Date;
+
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.statistics.OverallStatistics;
@@ -29,13 +32,10 @@ import org.bridgedb.uri.UriListenerTest;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
-
-import org.junit.jupiter.api.Test;
 import org.eclipse.rdf4j.model.Resource;
-import org.eclipse.rdf4j.model.impl.URIImpl;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 
 /**
@@ -68,7 +68,7 @@ public class UriMapperRecoverTest extends UriListenerTest {
         stats = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         assertEquals(12, stats.getNumberOfMappings());
         assertEquals(4, stats.getNumberOfMappingSets());
-        Resource resource = new URIImpl("http://example.com/1to2Another");
+        Resource resource = SimpleValueFactory.getInstance().createIRI("http://example.com/1to2Another");
         int mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 
         		Lens.getTestJustifictaion(), Lens.getTestJustifictaion(), regexUriPattern2, resource);
         assertEquals(5, mappingSet);

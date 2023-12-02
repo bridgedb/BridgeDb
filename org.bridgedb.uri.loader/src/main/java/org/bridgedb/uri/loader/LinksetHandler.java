@@ -25,9 +25,9 @@ import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.model.URI;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.rio.RDFHandlerException;
 
@@ -46,12 +46,12 @@ public class LinksetHandler extends LinkHandler{
     protected final String justification;
     protected final String backwardJustification;
 
-    protected final URI mappingSource;
+    protected final IRI mappingSource;
 
     private int noneLinkStatements;
     static final Logger logger = Logger.getLogger(LinksetHandler.class);
     
-    public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, URI mappingSource){
+    public LinksetHandler(UriListener uriListener, IRI linkPredicate, String justification, IRI mappingSource){
         super(uriListener, linkPredicate);
         this.justification = justification;
         this.mappingSource = mappingSource;
@@ -66,7 +66,7 @@ public class LinksetHandler extends LinkHandler{
      * @param mappingSource
      * @param ignore 
      */
-    public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, URI mappingSource, boolean ignore){
+    public LinksetHandler(UriListener uriListener, IRI linkPredicate, String justification, IRI mappingSource, boolean ignore){
         this(uriListener, linkPredicate, justification, mappingSource);
     }
         
@@ -91,17 +91,17 @@ public class LinksetHandler extends LinkHandler{
      * @throws RDFHandlerException
      */
     private void processFirstStatement(Statement st) throws RDFHandlerException{
-        final URI predicate = st.getPredicate();
+        final IRI predicate = st.getPredicate();
         if (predicate.equals(linkPredicate)) {
             Resource subject = st.getSubject();
             Value object = st.getObject();
             try {
                 processingFirstStatement = false;
-                if (!(subject instanceof URI)){
+                if (!(subject instanceof IRI)){
                     Reporter.error("None URI subject in " + st);
                     return;
                 }
-                if (!(object instanceof URI)){
+                if (!(object instanceof IRI)){
                     Reporter.error("None URI object in " + st);
                     return;
                 }

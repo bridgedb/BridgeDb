@@ -19,16 +19,17 @@
 //
 package org.bridgedb.uri.loader;
 
+import java.net.URI;
+
 import org.apache.log4j.Logger;
-import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.model.URI;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.rio.RDFHandlerException;
-import org.eclipse.rdf4j.rio.helpers.RDFHandlerBase;
+import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 
 /**
  * Reads an RDF linkset file and passes the information on to a RdfLoader.
@@ -39,9 +40,9 @@ import org.eclipse.rdf4j.rio.helpers.RDFHandlerBase;
  *
  * @author Christian
  */
-public class LinkHandler extends RDFHandlerBase{
+public class LinkHandler extends AbstractRDFHandler {
     
-    protected final URI linkPredicate;
+    protected final IRI linkPredicate;
     private boolean symetric;
     protected final UriListener uriListener;
 
@@ -49,13 +50,13 @@ public class LinkHandler extends RDFHandlerBase{
     
     static final Logger logger = Logger.getLogger(LinkHandler.class);
 
-    public LinkHandler(UriListener uriListener, URI linkPredicate, boolean symetric){
+    public LinkHandler(UriListener uriListener, IRI linkPredicate, boolean symetric){
         this.uriListener = uriListener;
         this.linkPredicate = linkPredicate;
         this.symetric = symetric;
     }
     
-    public LinkHandler(UriListener uriListener, URI linkPredicate){
+    public LinkHandler(UriListener uriListener, IRI linkPredicate){
         this (uriListener, linkPredicate, true);
     }
     
@@ -87,10 +88,10 @@ public class LinkHandler extends RDFHandlerBase{
     private void insertUriMapping(Statement st) throws RDFHandlerException {
         Resource subject = st.getSubject();
         Value object = st.getObject();
-        if (!(subject instanceof URI)){
+        if (!(subject instanceof IRI)){
             throw new RDFHandlerException ("None URI subject in " + st);
         }
-        if (!(object instanceof URI)){
+        if (!(object instanceof IRI)){
             throw new RDFHandlerException ("None URI object in " + st);
         }
         String sourceUri = subject.stringValue();

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.rdf.UriPattern;
@@ -24,10 +25,9 @@ import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.model.URI;
-import org.eclipse.rdf4j.model.impl.StatementImpl;
-import org.eclipse.rdf4j.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.rio.RDFHandlerException;
 import org.eclipse.rdf4j.rio.RDFWriter;
 import org.eclipse.rdf4j.rio.turtle.TurtleWriter;
@@ -42,13 +42,13 @@ public class TransativeCreator {
     private final UriMapper mapper;
     protected final MappingSetInfo leftInfo;
     protected final MappingSetInfo rightInfo;
-    protected final URI predicate;
+    protected final IRI predicate;
     protected final String justification;
     private final RegexUriPattern sourceRegexUriPattern;
     private final RegexUriPattern targetRegexUriPattern;
     private final boolean reflexive;
     
-    private static URI GENERATE_PREDICATE = null;
+    private static IRI GENERATE_PREDICATE = null;
 
     static final Logger logger = Logger.getLogger(TransativeCreator.class);
     
@@ -73,7 +73,7 @@ public class TransativeCreator {
         mapper = SQLUriMapper.getExisting();
         leftInfo = left;
         rightInfo = right;
-        predicate = new URIImpl(LoosePredicateMaker.getInstance().combine(left.getPredicate(), right.getPredicate()));
+        predicate = SimpleValueFactory.getInstance().createIRI(LoosePredicateMaker.getInstance().combine(left.getPredicate(), right.getPredicate()));
         justification = OpsJustificationMaker.getInstance().combine(left.getJustification(), right.getJustification());
         reflexive = left.getSource().getSysCode().equals(right.getTarget().getSysCode());
         UriPattern sourceUriPattern = getUriPattern(left.getSource());
@@ -145,10 +145,10 @@ public class TransativeCreator {
                     //do nothing as same uri;
                 } else {
                     String sourceUri = sourceRegexUriPattern.getUri(sourceId);
-                    URI sourceURI = new URIImpl(sourceUri);
+                    IRI sourceURI = SimpleValueFactory.getInstance().createIRI(sourceUri);
                     String targetUri = targetRegexUriPattern.getUri(targetId);
-                    URI targetURI = new URIImpl(targetUri);
-                    Statement statment = new StatementImpl(sourceURI, predicate, targetURI);
+                    IRI targetURI = SimpleValueFactory.getInstance().createIRI(targetUri);
+                    Statement statment = SimpleValueFactory.getInstance().createStatement(sourceURI, predicate, targetURI);
                     rdfwriter.handleStatement(statment);
                     found = true;
                 }
