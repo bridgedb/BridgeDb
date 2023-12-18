@@ -48,7 +48,7 @@
         <cxf.version>3.2.14</cxf.version>
         <hamcrest.version>2.2</hamcrest.version>
         <jersey.version>1.10</jersey.version>
-        <log4j.version>2.20.0</log4j.version>
+        <log4j.version>2.22.0</log4j.version>
         <mysql.version>8.0.33</mysql.version>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <owlapi-api.version>3.4</owlapi-api.version>
