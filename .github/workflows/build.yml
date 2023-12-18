@@ -2,9 +2,7 @@ name: build
 
 on:
   push:
-    branches: [ series/4.0 ]
   pull_request:
-    branches: [ series/4.0 ]
 
 jobs:
   build:
