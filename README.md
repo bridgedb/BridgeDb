@@ -1,6 +1,6 @@
 BridgeDb
 ========
-
+TEST
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.593034.svg)](https://doi.org/10.5281/zenodo.593034)
 [![Actions Status](https://github.com/bridgedb/BridgeDb/workflows/build/badge.svg)](https://github.com/bridgedb/BridgeDb/actions)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bridgedb/bridgedb-bundle/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bridgedb/bridgedb-bundle)
