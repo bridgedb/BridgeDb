@@ -13,7 +13,7 @@ Using BridgeDb dependencies
 ---------------------------
 
 The [BridgeDb releases](https://github.com/bridgedb/BridgeDb/releases) are published to 
-[Maven Central](http://central.maven.org/maven2/org/bridgedb/), which means you can use the BridgeDb JARs without needing to compile BridgeDb.
+[Maven Central](https://search.maven.org/artifact/org.bridgedb/bridgedb-bundle), which means you can use the BridgeDb JARs without needing to compile BridgeDb.
 
 Usage depends on which module you require. The examples below assumes artifact `org.bridgedb.bio` and version `4.0.0`:
 
