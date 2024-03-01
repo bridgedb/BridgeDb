@@ -1,7 +1,7 @@
 /*
  *BridgeDb,
  *An abstraction layer for identifier mapping services, both local and online.
- *Copyright (c) 2012 Egon Willighagen <egonw@users.sf.net>
+ *Copyright (c) 2012 Youp Hendriks<youp_hendriks@hotmail.com>
  *Copyright (c) 2012 OpenPhacts
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,17 +15,15 @@
 
 package org.bridgedb;
 
-import java.util.regex.Pattern;
-
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Assertions;
 
 /**
- * Tests the {@link org.bridgedb.DataSourcePatterns} class
+ * Tests the {@link org.bridgedb.DataSourcePatterns} class.
+ * 
  * @author youphendriks
  */
 public class DataSourcePatternsTest {
@@ -43,9 +41,9 @@ public class DataSourcePatternsTest {
   @DisplayName("Test getDataSourceMatches class, invalid input")
   public void testgetDataSourceMatchesInvalid() {
     Assertions.assertThrows(IllegalArgumentException.class,
-      () -> {
-        DataSourcePatterns.getDataSourceMatches("");
-      });
+        () -> {
+          DataSourcePatterns.getDataSourceMatches("");
+        });
   }
 
 }
