@@ -85,7 +85,7 @@ NASC Gene	N	http://arabidopsis.info/		ATMG00960-TAIR-G	gene	Arabidopsis thaliana
 NCBI Protein	Np	http://www.ncbi.nlm.nih.gov/protein	http://www.ncbi.nlm.nih.gov/protein/$id	CAA71118.1	protein		1	urn:miriam:ncbiprotein	^\w+\d+(\.\d+)?$	NCBI Protein		ncbiprotein	protein
 NCI Pathway Interaction Database	Pid	http://pid.nci.nih.gov/	http://pid.nci.nih.gov/search/pathway_landing.shtml?what=graphic&jpg=on&pathway_id=$id	pi3kcipathway	pathway		1	urn:miriam:pid.pathway	^\w+$	NCI Pathway Interaction Database		pid.pathway	pathway
 OMIM	Om	http://omim.org/	http://omim.org/entry/$id	603903	gene		0	urn:miriam:mim	^[*#+%^]?\d{6}$	OMIM	P492	omim	gene,disease
-OpenTargets	Opt	https://www.opentargets.org/	https://genetics.opentargets.org/gene/$id	ENSG00000169174	gene		1		^ENS[A-Z]*[FPTG]\d{11}$			ensembl	gene
+OpenTargets	Opt	https://www.opentargets.org/	https://genetics.opentargets.org/gene/$id	ENSG00000169174	gene		1		^ENS[A-Z]*[FPTG]\d{11}$				gene
 ORCID	orcid	https://orcid.org	https://orcid.org/$id	0000-0002-5355-2576	other	Homo sapiens	1	urn:miriam:orcid	^\d{4}-\d{4}-\d{4}-\d{3}(\d|X)$	ORCID	P496	orcid	other,author
 Orphanet	On	http://www.orpha.net/consor/	https://identifiers.org/orphanet:$id	85163	other	Homo sapiens	1	urn:miriam:orphanet	^\d+$	Bio2RDF		orphanet	other
 Oryzabase	Ob	http://www.shigen.nig.ac.jp/rice/oryzabase	http://www.shigen.nig.ac.jp/rice/oryzabase/gateway/gatewayAction.do?target=symbol&id=$id	468	gene	Oryza sativa	1	Ob		Oryzabase		oryzabase.gene	gene
