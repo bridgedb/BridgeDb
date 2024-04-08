@@ -19,8 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -200,6 +198,7 @@ public class XrefTest {
 	@Test
 	public void testCheckCorrectBioregistryIdentifier() {
 		Xref xref = Xref.fromBioregistryIdentifier("ensembl:ENSGALG00000007562");
+		assertNotNull(xref);
 		assertEquals("En:ENSGALG00000007562:T", xref.toString());
 	}
 
