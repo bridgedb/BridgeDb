@@ -31,8 +31,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.bridgedb.DataSource;
+import org.bridgedb.DataSourcePatterns;
+import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
@@ -41,6 +47,11 @@ import org.bridgedb.DataSource;
  */
 public class DataSourceTxtTest {
 
+	@BeforeAll
+	public static void setUpSources() {
+		if (DataSource.getDataSources().size() == 0) DataSourceTxt.init();
+	}
+	
 	@org.junit.jupiter.api.Test
 	public void testUniqueSystemCodes() {
 		Set<String> codes = new HashSet<String>();
