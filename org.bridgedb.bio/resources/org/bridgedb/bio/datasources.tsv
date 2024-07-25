@@ -1,21 +1,21 @@
-Affy	X	http://www.affymetrix.com/	https://www.affymetrix.com/LinkServlet?probeset=$id	1851_s_at	probe		0	urn:miriam:affy.probeset	\d{4,}((_[asx])?_at)?	Affymetrix Probeset		affy.probeset	probe
-Agilent	Ag	http://agilent.com		A_24_P98555	probe		0	Ag	A_\d+_.+	Agilent		agilent.probe	probe
+Affy	X			1851_s_at	probe		0	urn:miriam:affy.probeset	\d{4,}((_[asx])?_at)?	Affymetrix Probeset		affy.probeset	probe
+Agilent	Ag	https://agilent.com		A_24_P98555	probe		0	Ag	A_\d+_.+	Agilent		agilent.probe	probe
 AOP-Wiki KE	AopKe	https://aopwiki.org/	https://aopwiki.org/events/$id	3	unknown		1	urn:miriam:aop.events	^\d+$	AOP-Wiki Key Events		aop.events	unknown,event
 AOP-Wiki AOP	Aop	https://aopwiki.org/	https://aopwiki.org/aops/$id	3	pathway		1	urn:miriam:aop	^\d+$	AOP-Wiki Adverse Outcome Pathway		aop	pathway
 AOP-Wiki KER	AopKer	https://aopwiki.org/	https://aopwiki.org/relationships/$id	5	interaction		1	urn:miriam:aop.relationships	^\d+$	AOP-Wiki Key Event Relationships		aop.relationships	interaction
 AOP-Wiki Stressor	AopS	https://aopwiki.org/	https://aopwiki.org/stressors/$id	222	metabolite		1	urn:miriam:aop.stressor	^\d+$	AOP-Wiki Stressor		aop.stressor	metabolite
 BIND	Bi	http://www.bind.ca/	http://www.bind.ca/Action?identifier=bindid&idsearch=$id		interaction		1		^\d+$	BIND			interaction
-BioCyc	Bc	http://biocyc.org	http://biocyc.org/getid?id=$id	ECOLI:CYT-D-UBIOX-CPLX	gene		1	urn:miriam:biocyc	^\w+\:[A-Za-z0-9-]+$	BioCyc		biocyc	gene
-BioGrid	Bg	http://thebiogrid.org/	http://thebiogrid.org/$id	31623	interaction		1	urn:miriam:biogrid	^\d+$	BioGRID		biogrid	interaction
-BioModels Database	Bm	http://www.ebi.ac.uk/biomodels/	http://www.ebi.ac.uk/biomodels-main/$id	BIOMD0000000048	pathway		1	urn:miriam:biomodels.db	^((BIOMD|MODEL)\d{10})|(BMID\d{12})$	BioModels Database		biomodels.db	pathway
-BioSystems	Bs	http://www.ncbi.nlm.nih.gov/biosystems/	http://www.ncbi.nlm.nih.gov/biosystems/$id	1	pathway		1	urn:miriam:biosystems	^\d+$	BioSystems		biosystems	pathway
-BRENDA	Br	http://www.brenda-enzymes.org/	http://www.brenda-enzymes.org/enzyme.php?ecno=$id	1.1.1.1	protein		1	urn:miriam:brenda	^((\d+\.-\.-\.-)|(\d+\.\d+\.-\.-)|(\d+\.\d+\.\d+\.-)|(\d+\.\d+\.\d+\.\d+))$	BRENDA		brenda	protein
-BRENDA Ligands	Brl	http://www.brenda-enzymes.org/	http://www.brenda-enzymes.de/ligand.php?brenda_ligand_id=$id	278	metabolite		1	Brl	^\d+$	BRENDA Ligands		brenda.ligand	metabolite
+BioCyc	Bc	https://biocyc.org	https://biocyc.org/getid?id=$id	ECOLI:CYT-D-UBIOX-CPLX	gene		1	urn:miriam:biocyc	^\w+\:[A-Za-z0-9-]+$	BioCyc		biocyc	gene
+BioGrid	Bg	https://thebiogrid.org/	https://thebiogrid.org/$id	31623	interaction		1	urn:miriam:biogrid	^\d+$	BioGRID		biogrid	interaction
+BioModels Database	Bm	https://www.ebi.ac.uk/biomodels/	https://www.ebi.ac.uk/biomodels/$id	BIOMD0000000048	pathway		1	urn:miriam:biomodels.db	^((BIOMD|MODEL)\d{10})|(BMID\d{12})$	BioModels Database		biomodels.db	pathway
+BioSystems	Bs	https://www.ncbi.nlm.nih.gov/Structure/biosystems/docs/biosystems_about.html	https://pubchem.ncbi.nlm.nih.gov/pathway/BSID:$id	1	pathway		1	urn:miriam:biosystems	^\d+$	BioSystems		biosystems	pathway
+BRENDA	Br	https://www.brenda-enzymes.org/	https://www.brenda-enzymes.org/enzyme.php?ecno=$id	1.1.1.1	protein		1	urn:miriam:brenda	^((\d+\.-\.-\.-)|(\d+\.\d+\.-\.-)|(\d+\.\d+\.\d+\.-)|(\d+\.\d+\.\d+\.\d+))$	BRENDA		brenda	protein
+BRENDA Ligands	Brl	https://www.brenda-enzymes.org/	https://www.brenda-enzymes.de/ligand.php?brenda_ligand_id=$id	278	metabolite		1	Brl	^\d+$	BRENDA Ligands		brenda.ligand	metabolite
 CAS	Ca	https://commonchemistry.cas.org/	https://commonchemistry.cas.org/detail?cas_rn=$id	50-00-0	metabolite		1	urn:miriam:cas	^\d{1,7}\-\d{2}\-\d$	CAS	P231	cas	metabolite
-CCDS	Cc	http://identifiers.org/ccds/	http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=ALLFIELDS&DATA=$id	CCDS33337.1	gene		0	urn:miriam:ccds	^CCDS\d+\.\d+$	Consensus CDS		ccds	gene
+CCDS	Cc	https://identifiers.org/ccds/	https://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=ALLFIELDS&DATA=$id	CCDS33337.1	gene		0	urn:miriam:ccds	^CCDS\d+\.\d+$	Consensus CDS		ccds	gene
 ChEMBL compound	Cl	https://www.ebi.ac.uk/chembldb/	https://www.ebi.ac.uk/chembl/compound/inspect/$id	CHEMBL308052	metabolite		1	urn:miriam:chembl.compound	^CHEMBL\d+$	ChEMBL compound	P592	chembl.compound	metabolite
-ChEBI	Ce	http://www.ebi.ac.uk/chebi/	http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id	CHEBI:36927	metabolite		1	urn:miriam:chebi	^(CHEBI:)?\d+$	ChEBI	P683	chebi	metabolite
-Chemspider	Cs	http://www.chemspider.com/	http://www.chemspider.com/Chemical-Structure.$id.html	56586	metabolite		1	urn:miriam:chemspider	^\d+$	ChemSpider	P661	chemspider	metabolite
+ChEBI	Ce	https://www.ebi.ac.uk/chebi/	https://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id	CHEBI:36927	metabolite		1	urn:miriam:chebi	^(CHEBI:)?\d+$	ChEBI	P683	chebi	metabolite
+Chemspider	Cs	https://www.chemspider.com/	https://www.chemspider.com/$id	56586	metabolite		1	urn:miriam:chemspider	^\d+$	ChemSpider	P661	chemspider	metabolite
 CodeLink	Ge	http://www.appliedmicroarrays.com/		GE86325	probe		0	Ge		CodeLink		codelink	probe
 Complex Portal	Cpx	https://www.ebi.ac.uk/complexportal/	https://www.ebi.ac.uk/complexportal/complex/$id	CPX-373	complex		1	urn:miriam:complexportal	^CPX-[0-9]+$	Complex Portal		complexportal	complex
 Database of Interacting Proteins	Dip	http://dip.doe-mbi.ucla.edu/	http://dip.doe-mbi.ucla.edu/dip/DIPview.cgi?ID=$id	DIP-743N	interaction		1	urn:miriam:dip	^DIP[\:\-]\d{3}[EN]$	Database of Interacting Proteins		dip	interaction
@@ -35,9 +35,9 @@ GenBank	G	http://www.ncbi.nlm.nih.gov/genbank/	http://www.ncbi.nlm.nih.gov/nucco
 Gene Wiki	Gw	http://en.wikipedia.org/wiki/Portal:Gene_Wiki	http://plugins.biogps.org/cgi-bin/wp.cgi?id=$id	1017	gene		0	urn:miriam:genewiki	\d+	Gene Wiki	P351	genewiki	gene
 GeneOntology	T	http://www.ebi.ac.uk/QuickGO/	http://www.ebi.ac.uk/QuickGO/GTerm?id=$id	GO:0006915	ontology		0	urn:miriam:go	^GO:\d{7}$	Gene Ontology	P686	go	ontology
 Gramene Arabidopsis	EnAt	http://www.gramene.org/	http://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?g=$id	ATMG01360	gene	Arabidopsis thaliana	1	EnAt	AT[\dCM]G\d{5}	Gramene Arabidopsis			gene
-Gramene Genes DB	Gg	http://www.gramene.org/	http://www.gramene.org/db/genes/search_gene?acc=$id	GR:0060184	gene		1	Gg	GR:\d+	Gramene Genes		gramene.gene	gene
+Gramene Genes DB	Gg	https://www.gramene.org/	https://archive.gramene.org/db/genes/search_gene?acc=$id	GR:0060184	gene		1	Gg	GR:\d+	Gramene Genes		gramene.gene	gene
 Gramene Literature	Gl	http://www.gramene.org/	http://www.gramene.org/db/literature/pub_search?ref_id=$id	6200	gene		0	Gl		Gramene Literature		gramene.reference	gene
-Gramene Maize	EnZm	http://www.ensembl.org	http://www.maizesequence.org/Zea_mays/Gene/Summary?g=$id	GRMZM2G174107	gene		1	EnZm		Gramene Maize			gene
+Gramene Maize	EnZm	https://www.ensembl.org	https://ensembl.gramene.org/Zea_mays/Search/Results?q=$id	GRMZM2G174107	gene		1	EnZm		Gramene Maize			gene
 Gramene Pathway	Gp	http://www.gramene.org/pathway		AAH72400	pathway		1	Gp		Gramene Pathway			pathway
 Gramene Rice	EnOj	http://www.gramene.org/	http://plants.ensembl.org/Oryza_sativa/Gene/Summary?db=otherfeatures;g=$id	Os05g0113900	gene		1	EnOj		Gramene Rice			gene
 Guide to Pharmacology	Gpl	http://www.guidetopharmacology.org/	https://www.guidetopharmacology.org/GRAC/LigandDisplayForward?ligandId=$id	1627	gene		1		^\d+$	Guide to Pharmacology Targets	P5458	iuphar.receptor	gene
@@ -77,7 +77,7 @@ MetaboLights Compounds	Ml	http://www.ebi.ac.uk/metabolights/	http://www.ebi.ac.u
 MetaCyc	Mc	http://www.metacyc.org/	http://www.metacyc.org/META/NEW-IMAGE?type=NIL&object=$id	D-GLUTAMATE-OXIDASE-RXN	interaction		1	Mc		MetaCyc		metacyc.reaction	interaction
 MGI	M	http://www.informatics.jax.org/	http://www.informatics.jax.org/marker/$id	MGI:2442292	gene	Mus musculus	1	urn:miriam:mgi	^MGI:\d+$	Mouse Genome Database	P671	mgi	gene
 MINT	Mi	http://mint.bio.uniroma2.it/mint/	http://mint.bio.uniroma2.it/mint/search/inFrameInteraction.do?interactionAc=$id	MINT-10000	interaction		1	urn:miriam:mint	^MINT\-\d{1,5}$	MINT		mint	interaction
-miRBase mature sequence	Mbm	http://www.mirbase.org/	http://www.mirbase.org/cgi-bin/mature.pl?mature_acc=$id	MIMAT0000001	gene		1	urn:miriam:mirbase.mature	MIMAT\d{7}	miRBase mature sequence	P2871	mirbase.mature	gene
+miRBase mature sequence	Mbm	https://www.mirbase.org/	https://mirbase.org/mature/$id	MIMAT0000001	gene		1	urn:miriam:mirbase.mature	MIMAT\d{7}	miRBase mature sequence	P2871	mirbase.mature	gene
 miRBase Sequence	Mb	http://microrna.sanger.ac.uk/	http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$id	MI0000001	gene		1	urn:miriam:mirbase	MI\d{7}	miRBase Sequence	P2870	mirbase	gene
 Mondo	Mo	https://mondo.monarchinitiative.org/	https://monarchinitiative.org/disease/$id	MONDO:0000001	disease		1		MONDO:\d{7}	Mondo Disease Ontology	P5270	mondo	disease
 NanoMILE	Nmnm	https://cordis.europa.eu/project/id/310451		NP00262	material		1		^NP\d{5}$				material
@@ -85,7 +85,7 @@ NASC Gene	N	http://arabidopsis.info/		ATMG00960-TAIR-G	gene	Arabidopsis thaliana
 NCBI Protein	Np	http://www.ncbi.nlm.nih.gov/protein	http://www.ncbi.nlm.nih.gov/protein/$id	CAA71118.1	protein		1	urn:miriam:ncbiprotein	^\w+\d+(\.\d+)?$	NCBI Protein		ncbiprotein	protein
 NCI Pathway Interaction Database	Pid	http://pid.nci.nih.gov/	http://pid.nci.nih.gov/search/pathway_landing.shtml?what=graphic&jpg=on&pathway_id=$id	pi3kcipathway	pathway		1	urn:miriam:pid.pathway	^\w+$	NCI Pathway Interaction Database		pid.pathway	pathway
 OMIM	Om	http://omim.org/	http://omim.org/entry/$id	603903	gene		0	urn:miriam:mim	^[*#+%^]?\d{6}$	OMIM	P492	omim	gene,disease
-OpenTargets	Opt	https://www.opentargets.org/	https://genetics.opentargets.org/gene/$id	ENSG00000169174	gene		1		^ENS[A-Z]*[FPTG]\d{11}$			ensembl	gene
+OpenTargets	Opt	https://www.opentargets.org/	https://genetics.opentargets.org/gene/$id	ENSG00000169174	gene		1		^ENS[A-Z]*[FPTG]\d{11}$				gene
 ORCID	orcid	https://orcid.org	https://orcid.org/$id	0000-0002-5355-2576	other	Homo sapiens	1	urn:miriam:orcid	^\d{4}-\d{4}-\d{4}-\d{3}(\d|X)$	ORCID	P496	orcid	other,author
 Orphanet	On	http://www.orpha.net/consor/	https://identifiers.org/orphanet:$id	85163	other	Homo sapiens	1	urn:miriam:orphanet	^\d+$	Bio2RDF		orphanet	other
 Oryzabase	Ob	http://www.shigen.nig.ac.jp/rice/oryzabase	http://www.shigen.nig.ac.jp/rice/oryzabase/gateway/gatewayAction.do?target=symbol&id=$id	468	gene	Oryza sativa	1	Ob		Oryzabase		oryzabase.gene	gene
@@ -110,7 +110,7 @@ Reactome	Re	http://www.reactome.org/	https://reactome.org/content/detail/$id	R-H
 RefSeq	Q	http://www.ncbi.nlm.nih.gov/projects/RefSeq/	https://www.ncbi.nlm.nih.gov/protein/$id	NP_012345	gene		1	urn:miriam:refseq	^(NC|AC|NG|NT|NW|NZ|NM|NR|XM|XR|NP|AP|XP|ZP)_\d+$	RefSeq	P656	refseq	gene
 RESID	Res	http://www.ebi.ac.uk/RESID/	http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+6JSUg1NA6u4+-e+[RESID:'$id']	AA0001	protein		1	urn:miriam:resid	^AA\d{4}$	RESID		resid	protein
 Rfam	Rf		https://rfam.org/family/$id	RF00066	gene		1	Rf	RF\d+	RFAM		rfam	gene
-RGD	R	http://rgd.mcw.edu/	http://rgd.mcw.edu/tools/genes/genes_view.cgi?id=$id	2018	gene	Rattus norvegicus	1	urn:miriam:rgd	^\d{4,7}$	Rat Genome Database	P3853	rgd	gene
+RGD	R	https://rgd.mcw.edu/	https://rgd.mcw.edu/rgdweb/report/gene/main.html?id=$id	2018	gene	Rattus norvegicus	1	urn:miriam:rgd	^\d{4,7}$	Rat Genome Database	P3853	rgd	gene
 Rhea	Rh	http://www.ebi.ac.uk/rhea/	http://www.ebi.ac.uk/rhea/reaction.xhtml?id=$id	12345	interaction		1	urn:miriam:rhea	^\d{5}$	Rhea		rhea	interaction
 Rice Ensembl Gene	Os	http://www.gramene.org/Oryza_sativa	http://www.gramene.org/Oryza_sativa/geneview?gene=$id	Os04g54800	gene	Oryza sativa	1	Os		Rice Ensembl Gene			gene
 SGD	D	http://www.yeastgenome.org/	http://www.yeastgenome.org/locus/$id	S000028457	gene	Saccharomyces cerevisiae	1	urn:miriam:sgd	^S\d+$	SGD	P3406	sgd	gene
@@ -125,7 +125,7 @@ SUPFAM	Sf	http://supfam.org/SUPERFAMILY/	http://supfam.org/SUPERFAMILY/cgi-bin/s
 SWISS-MODEL	Sw	http://swissmodel.expasy.org/	http://swissmodel.expasy.org/repository/smr.php?sptr_ac=$id	P23298	protein		1	urn:miriam:swiss-model	^\w+$	SWISS-MODEL		swiss-model	protein
 SwissLipids	Sl	http://www.swisslipids.org/	http://www.swisslipids.org/#/entity/$id/	SLM:000048885	metabolite		1		^SLM:\d+$	SwissLipids		slm	metabolite
 Systems Biology Ontology	Sbo	http://www.ebi.ac.uk/sbo/	http://www.ebi.ac.uk/sbo/main/$id	SBO:0000262	ontology		1	urn:miriam:sbo	^SBO:\d{7}$	Systems Biology Ontology		sbo	ontology
-TAIR	A	http://arabidopsis.org/index.jsp	http://arabidopsis.org/servlets/TairObject?type=locus&name=$id	AT1G01030	gene	Arabidopsis thaliana	1	urn:miriam:tair.locus	^AT[1-5]G\d{5}$	TAIR Locus		tair.locus	gene
+TAIR	A	https://www.arabidopsis.org/	https://www.arabidopsis.org/results?mainType=general&category=genes&searchText=$id	AT1G01030	gene	Arabidopsis thaliana	1	urn:miriam:tair.locus	^AT[1-5]G\d{5}$	TAIR Locus		tair.locus	gene
 TIGR	Ti	http://www.jcvi.org/		12012.t00308	gene		1	Ti		TIGR			gene
 TTD Drug	Td	http://bidd.nus.edu.sg/group/cjttd/TTD_HOME.asp	http://bidd.nus.edu.sg/group/cjttd/ZFTTDDRUG.asp?ID=$id	DAP000773	metabolite		1	urn:miriam:ttd.drug	^DAP\d+$	TTD Drug		ttd.drug	metabolite
 TTD Target	Tt	http://bidd.nus.edu.sg/group/cjttd/TTD_HOME.asp	http://bidd.nus.edu.sg/group/cjttd/ZFTTDDetail.asp?ID=$id	TTDS00056	protein		1	urn:miriam:ttd.target	^TTDS\d+$	TTD Target		ttd.target	protein
