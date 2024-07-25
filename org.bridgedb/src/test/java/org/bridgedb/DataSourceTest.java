@@ -375,7 +375,9 @@ public class DataSourceTest {
 				.alternative("MetaboLoci Alternative")
 				.asDataSource();
 		assertEquals("Ecogene",DataSource.getByMiriamBase("urn:miriam:ecogene").toString());
-		assertEquals("urn:miriam:ecogene:urn%3Amiriam%3Aecogene",source3.getMiriamURN("urn:miriam:ecogene").toString());
+		assertEquals("Ecogene",DataSource.getByIdentiferOrgBase("http://identifiers.org/ecogene/").toString());
+		assertEquals("Ecogene",DataSource.getByIdentiferOrgBase("https://identifiers.org/ecogene/").toString());
+		assertEquals("urn:miriam:ecogene:EG10173",source3.getMiriamURN("EG10173").toString());
 
 		DataSource source4 = DataSource.register("Ect", "EPA CompTox")
 					.urnBase("urn:miriam:Ect")
