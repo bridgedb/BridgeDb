@@ -94,7 +94,7 @@ LinkedChemistry ChEMBL target  linkedchemistry.chembl.target            http://l
 ChemDB	chemdb		http://cdb.ics.uci.edu/cgibin/ChemicalDetailWeb.py?chemical_id=$id	3966782	unknown		1	urn:miriam:chemdb	^\d+$	
 Chemical Component Dictionary	pdb-ccd		http://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/$id	AB0	unknown		1	urn:miriam:pdb-ccd	^\w{3}$	
 ChemIDplus	chemidplus	http://chem.sis.nlm.nih.gov/chemidplus/chemidheavy.jsp	http://chem.sis.nlm.nih.gov/chemidplus/direct.jsp?regno=$id	000057272	metabolite		1	urn:miriam:chemidplus	^\d+$	
-Chemspider	Cs	http://www.chemspider.com/	http://www.chemspider.com/Chemical-Structure.$id.html	56586	metabolite		1	urn:miriam:chemspider	^\d+$	ChemSpider
+Chemspider	Cs	https://www.chemspider.com/	https://www.chemspider.com/Chemical-Structure.$id.html	56586	metabolite		1	urn:miriam:chemspider	^\d+$	ChemSpider
 Cint	C				probe		0			
 CLDB	cldb		http://bioinformatics.istge.it/hypercldb/$id.html	cl3603	unknown		1	urn:miriam:cldb	^cl\d+$	
 ClinicalTrials.gov	clinicaltrials		http://clinicaltrials.gov/ct2/show/$id	NCT00222573	unknown		1	urn:miriam:clinicaltrials	^NCT\d{8}$	
@@ -266,7 +266,7 @@ Illumina	Il	http://www.illumina.com/		ILMN_5668	probe		0		ILMN_\d+	Illumina
 IMEx	imex		http://www.ebi.ac.uk/intact/imex/main.xhtml?query=$id	IM-12080-80	unknown		1	urn:miriam:imex	^IM-\d+(-?)(\d+?)$	
 IMGT HLA	imgt.hla		http://www.ebi.ac.uk/cgi-bin/imgt/hla/get_allele.cgi?$id	A*01:01:01:01	unknown		1	urn:miriam:imgt.hla	^[A-Z0-9*:]+$	
 IMGT LIGM	imgt.ligm		http://genius.embnet.dkfz-heidelberg.de/menu/cgi-bin/srs7.1.3.1/wgetz?-id+4ktAl1fNMTA+-e+%5BIMGT%3A%27$id%27%5D	M94112	unknown		1	urn:miriam:imgt.ligm	^M\d+$	
-InChI	inchi		http://www.chemspider.com/$id	InChI=1S/C2H6O/c1-2-3/h3H,2H2,1H3	unknown		1	urn:miriam:inchi	^InChI\=1S\/[A-Za-z0-9]+(\/[cnpqbtmsih][A-Za-z0-9\-\+\(\)\,]+)+$	
+InChI	inchi		https://www.chemspider.com/$id	InChI=1S/C2H6O/c1-2-3/h3H,2H2,1H3	unknown		1	urn:miriam:inchi	^InChI\=1S\/[A-Za-z0-9]+(\/[cnpqbtmsih][A-Za-z0-9\-\+\(\)\,]+)+$	
 InChIKey	inchikey		http://cactus.nci.nih.gov/chemical/structure/$id/names	RYYVLZVUVIJVGH-UHFFFAOYSA-N	unknown		1	urn:miriam:inchikey	^[A-Z]{14}\-[A-Z]{10}(\-[A-N])?	
 IntAct	Ia	http://www.ebi.ac.uk/intact/	http://www.ebi.ac.uk/intact/pages/details/details.xhtml?interactionAc=$id	EBI-2307691	interaction		1	urn:miriam:intact	^EBI\-[0-9]+$	IntAct
 IntAct Molecule	intact.molecule		http://www.ebi.ac.uk/intact/molecule/$id	EBI-366083	unknown		1	urn:miriam:intact.molecule	^EBI\-[0-9]+$	

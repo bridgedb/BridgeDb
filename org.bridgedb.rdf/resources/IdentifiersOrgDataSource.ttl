@@ -1055,16 +1055,16 @@ bridgeDB:DataSource_ChemIDplus a bridgeDB:DataSource ;
 bridgeDB:DataSource_Chemspider a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chemspider" ;
 	bridgeDB:systemCode "Cs" ;
-	bridgeDB:mainUrl "http://www.chemspider.com/" ;
+	bridgeDB:mainUrl "https://www.chemspider.com/" ;
 	bridgeDB:idExample "56586" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.chemspider.com/Chemical-Structure.$id.html> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.chemspider.com/Chemical-Structure.$id.html> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chemspider/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/chemspider/$id> ;
 	bridgeDB:hasRegexPattern "^\\d+$" ;
 	dcterms:alternative "ChemSpider" ;
-	bridgeDB:hasUriPattern <http://rdf.chemspider.com/$id> , <http://www.chemspider.com/$id> , <http://www.chemspider.com/Chemical-Structure.$id> , <http://www.chemspider.com/Chemical-Structure.$id.rdf> .
+	bridgeDB:hasUriPattern <http://rdf.chemspider.com/$id> , <https://www.chemspider.com/$id> , <https://www.chemspider.com/Chemical-Structure.$id> , <https://www.chemspider.com/Chemical-Structure.$id.rdf> .
 
 bridgeDB:DataSource_Cint a bridgeDB:DataSource ;
 	bridgeDB:fullName "Cint" ;
@@ -3029,11 +3029,11 @@ bridgeDB:DataSource_InChI a bridgeDB:DataSource ;
 	bridgeDB:idExample "InChI=1S/C2H6O/c1-2-3/h3H,2H2,1H3" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.chemspider.com/$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.chemspider.com/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/inchi/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/inchi/$id> ;
 	bridgeDB:hasRegexPattern "^InChI\\=1S\\/[A-Za-z0-9]+(\\/[cnpqbtmsih][A-Za-z0-9\\-\\+\\(\\)\\,]+)+$" ;
-	bridgeDB:hasUriPattern <http://rdf.openmolecules.net/?$id> , <http://webbook.nist.gov/cgi/cbook.cgi?$id> , <http://www.chemspider.com/$id> , <http://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=$id> .
+	bridgeDB:hasUriPattern <http://rdf.openmolecules.net/?$id> , <http://webbook.nist.gov/cgi/cbook.cgi?$id> , <https://www.chemspider.com/$id> , <http://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=$id> .
 
 bridgeDB:DataSource_InChIKey a bridgeDB:DataSource ;
 	bridgeDB:fullName "InChIKey" ;
@@ -3045,7 +3045,7 @@ bridgeDB:DataSource_InChIKey a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/inchikey/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/inchikey/$id> ;
 	bridgeDB:hasRegexPattern "^[A-Z]{14}\\-[A-Z]{10}(\\-[A-N])?" ;
-	bridgeDB:hasUriPattern <http://www.chemspider.com/inchi-resolver/Resolver.aspx?q=$id> .
+	bridgeDB:hasUriPattern <https://www.chemspider.com/inchi-resolver/Resolver.aspx?q=$id> .
 
 bridgeDB:DataSource_IntAct a bridgeDB:DataSource ;
 	bridgeDB:fullName "IntAct" ;
@@ -11292,22 +11292,22 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	bridgeDB:hasPrefix "http://www.cellsignal.com/reference/pathway/" ;
 	bridgeDB:hasPostfix ".html" .
 
-<http://www.chemspider.com/$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://www.chemspider.com/" .
+<https://www.chemspider.com/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://www.chemspider.com/" .
 
-<http://www.chemspider.com/Chemical-Structure.$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://www.chemspider.com/Chemical-Structure." .
+<https://www.chemspider.com/Chemical-Structure.$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://www.chemspider.com/Chemical-Structure." .
 
-<http://www.chemspider.com/Chemical-Structure.$id.html> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://www.chemspider.com/Chemical-Structure." ;
+<https://www.chemspider.com/Chemical-Structure.$id.html> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://www.chemspider.com/Chemical-Structure." ;
 	bridgeDB:hasPostfix ".html" .
 
-<http://www.chemspider.com/Chemical-Structure.$id.rdf> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://www.chemspider.com/Chemical-Structure." ;
+<https://www.chemspider.com/Chemical-Structure.$id.rdf> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://www.chemspider.com/Chemical-Structure." ;
 	bridgeDB:hasPostfix ".rdf" .
 
-<http://www.chemspider.com/inchi-resolver/Resolver.aspx?q=$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://www.chemspider.com/inchi-resolver/Resolver.aspx?q=" .
+<https://www.chemspider.com/inchi-resolver/Resolver.aspx?q=$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://www.chemspider.com/inchi-resolver/Resolver.aspx?q=" .
 
 <http://www.conceptwiki.org/concept/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.conceptwiki.org/concept/" .

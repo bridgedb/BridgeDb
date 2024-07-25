@@ -1313,7 +1313,7 @@ Each page contains information about a particular group, with pages linked one t
 
 <http://identifiers.org/miriam.resource/MIR:00100492#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.chemspider.com/$id> ;
+      dcat:accessURL <https://www.chemspider.com/$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100492> .
 
@@ -5126,7 +5126,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "UK"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Royal Society of Chemistry, Cambridge"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://www.chemspider.com/> .
+      dcat:landingPage <https://www.chemspider.com/> .
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000123>
       a       dcat:CatalogRecord ;
@@ -9518,7 +9518,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100501#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.chemspider.com/inchi-resolver/Resolver.aspx?q=$id> ;
+      dcat:accessURL <https://www.chemspider.com/inchi-resolver/Resolver.aspx?q=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100501> .
 
@@ -10534,7 +10534,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "UK"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Royal Society of Chemistry, Cambridge"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://www.chemspider.com/> .
+      dcat:landingPage <https://www.chemspider.com/> .
 
 <http://identifiers.org/miriam.resource/MIR:00100566>
       idot:reliability "98"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
@@ -12015,7 +12015,7 @@ Note: Currently, direct access to RNA products is restricted. This is expected t
               "UK"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Royal Society of Chemistry, Cambridge"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://www.chemspider.com/> .
+      dcat:landingPage <https://www.chemspider.com/> .
 
 <http://identifiers.org/miriam.resource/MIR:00100358#application/xhtml+xml>
       a       dcat:Distribution ;
@@ -14554,7 +14554,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
 
 <http://identifiers.org/miriam.resource/MIR:00100180#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.chemspider.com/Chemical-Structure.$id.html> ;
+      dcat:accessURL <https://www.chemspider.com/Chemical-Structure.$id.html> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100180> .
 

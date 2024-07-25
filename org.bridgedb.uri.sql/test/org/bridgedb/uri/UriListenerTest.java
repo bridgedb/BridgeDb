@@ -192,7 +192,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         DataSourcePatterns.registerPattern(DataSource2, Pattern.compile("^\\d+$"));
         uriPattern1 = UriPattern.register(uriSpace1, dataSource1Code, UriPatternType.dataSourceUriPattern);
         uriPattern2 = UriPattern.register(uriSpace2, dataSource2Code, UriPatternType.dataSourceUriPattern);
-        uriPattern2 = UriPattern.register("http://www.chemspider.com/Chemical-Structure.$id.html", dataSource2Code, UriPatternType.dataSourceUriPattern);
+        uriPattern2 = UriPattern.register("https://www.chemspider.com/Chemical-Structure.$id.html", dataSource2Code, UriPatternType.dataSourceUriPattern);
         UriPattern.register(uriSpace2a + "$id", dataSource2Code, UriPatternType.dataSourceUriPattern);
         uriPattern3 = UriPattern.register(uriSpace3, dataSource3Code, UriPatternType.dataSourceUriPattern);
         UriPattern.register(uriSpace3a + "$id", dataSource3Code, UriPatternType.dataSourceUriPattern);
