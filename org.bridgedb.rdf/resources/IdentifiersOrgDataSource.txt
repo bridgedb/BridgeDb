@@ -94,7 +94,7 @@ LinkedChemistry ChEMBL target  linkedchemistry.chembl.target            http://l
 ChemDB	chemdb		http://cdb.ics.uci.edu/cgibin/ChemicalDetailWeb.py?chemical_id=$id	3966782	unknown		1	urn:miriam:chemdb	^\d+$	
 Chemical Component Dictionary	pdb-ccd		http://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/$id	AB0	unknown		1	urn:miriam:pdb-ccd	^\w{3}$	
 ChemIDplus	chemidplus	http://chem.sis.nlm.nih.gov/chemidplus/chemidheavy.jsp	http://chem.sis.nlm.nih.gov/chemidplus/direct.jsp?regno=$id	000057272	metabolite		1	urn:miriam:chemidplus	^\d+$	
-Chemspider	Cs	https://www.chemspider.com/	https://www.chemspider.com/Chemical-Structure.$id.html	56586	metabolite		1	urn:miriam:chemspider	^\d+$	ChemSpider
+Chemspider	Cs	https://www.chemspider.com/	https://www.chemspider.com/$id	56586	metabolite		1	urn:miriam:chemspider	^\d+$	ChemSpider
 Cint	C				probe		0			
 CLDB	cldb		http://bioinformatics.istge.it/hypercldb/$id.html	cl3603	unknown		1	urn:miriam:cldb	^cl\d+$	
 ClinicalTrials.gov	clinicaltrials		http://clinicaltrials.gov/ct2/show/$id	NCT00222573	unknown		1	urn:miriam:clinicaltrials	^NCT\d{8}$	
