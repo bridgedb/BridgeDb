@@ -286,16 +286,16 @@ bridgeDB:DataSource_ChEMBL_target_component a bridgeDB:DataSource ;
 bridgeDB:DataSource_Chemspider a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chemspider" ;
 	bridgeDB:systemCode "Cs" ;
-	bridgeDB:mainUrl "http://www.chemspider.com/" ;
+	bridgeDB:mainUrl "https://www.chemspider.com/" ;
 	bridgeDB:idExample "56586" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.chemspider.com/Chemical-Structure.$id.html> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.chemspider.com/Chemical-Structure.$id.html> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chemspider/$id> ;
 	bridgeDB:hasUriPattern <http://rdf.chemspider.com/$id> ;
-    bridgeDB:hasUriPattern <http://www.chemspider.com/Chemical-Structure.$id.rdf> ;
-    bridgeDB:hasUriPattern <http://www.chemspider.com/Chemical-Structure.$id> ;
-	bridgeDB:hasUriPattern <http://www.chemspider.com/$id> .
+    bridgeDB:hasUriPattern <https://www.chemspider.com/Chemical-Structure.$id.rdf> ;
+    bridgeDB:hasUriPattern <https://www.chemspider.com/Chemical-Structure.$id> ;
+	bridgeDB:hasUriPattern <https://www.chemspider.com/$id> .
 
 bridgeDB:DataSource_Cint a bridgeDB:DataSource ;
 	bridgeDB:fullName "Cint" ;

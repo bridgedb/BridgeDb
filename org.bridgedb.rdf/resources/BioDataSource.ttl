@@ -115,7 +115,7 @@ bridgeDB:DataSource_ChEBI a bridgeDB:DataSource ;
 bridgeDB:DataSource_Chemspider a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chemspider" ;
 	bridgeDB:systemCode "Cs" ;
-	bridgeDB:mainUrl "http://www.chemspider.com/" ;
+	bridgeDB:mainUrl "https://www.chemspider.com/" ;
 	bridgeDB:idExample "56586" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;

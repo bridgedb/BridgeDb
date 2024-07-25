@@ -129,10 +129,10 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
         assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://ops.rsc.org/OPS8/rdf")));
         
         assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://rdf.chemspider.com/28509384")));
-        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/28509384")));
-        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384")));
-        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384.html")));
-        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384.rdf")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("https://www.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("https://www.chemspider.com/Chemical-Structure.28509384")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("https://www.chemspider.com/Chemical-Structure.28509384.html")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("https://www.chemspider.com/Chemical-Structure.28509384.rdf")));
         
     }
 
@@ -156,10 +156,10 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
         assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://ops.rsc.org/OPS8/rdf")));
         
         assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://rdf.chemspider.com/28509384")));
-        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/28509384")));
-        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384")));
-        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384.html")));
-        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384.rdf")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("https://www.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("https://www.chemspider.com/Chemical-Structure.28509384")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("https://www.chemspider.com/Chemical-Structure.28509384.html")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("https://www.chemspider.com/Chemical-Structure.28509384.rdf")));
         
         IRI mapSet1Override = SimpleValueFactory.getInstance().createIRI("http://example.com/testContextmappingSetRDF/1?predicate=http%3A%2F%2Fexample.com%2Foverride");
         IRI mapSet1_3Override = SimpleValueFactory.getInstance().createIRI("http://example.com/testContextmappingSetRDF/1_3?predicate=http%3A%2F%2Fexample.com%2Foverride");
@@ -196,10 +196,10 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
         assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://ops.rsc.org/OPS8/rdf")));
         
         assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://rdf.chemspider.com/28509384")));
-        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/28509384")));
-        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384")));
-        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384.html")));
-        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384.rdf")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("https://www.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("https://www.chemspider.com/Chemical-Structure.28509384")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("https://www.chemspider.com/Chemical-Structure.28509384.html")));
+        assertTrue(m.contains(concept, override, SimpleValueFactory.getInstance().createIRI("https://www.chemspider.com/Chemical-Structure.28509384.rdf")));
     }
     
     @Test 
@@ -220,10 +220,10 @@ public abstract class UriMapperRdfTest extends UriListenerTest{
         assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://ops.rsc.org/OPS8/rdf")));
         
         assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://rdf.chemspider.com/28509384")));
-        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/28509384")));
-        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384")));
-        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384.html")));
-        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("http://www.chemspider.com/Chemical-Structure.28509384.rdf")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("https://www.chemspider.com/28509384")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("https://www.chemspider.com/Chemical-Structure.28509384")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("https://www.chemspider.com/Chemical-Structure.28509384.html")));
+        assertTrue(m.contains(concept, exactMatch, SimpleValueFactory.getInstance().createIRI("https://www.chemspider.com/Chemical-Structure.28509384.rdf")));
     }
 }
  
