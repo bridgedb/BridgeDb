@@ -449,7 +449,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                         //Know dulicate prefixes of this type include
                         //http://www.kegg.jp/entry/
                         //http://www.ebi.ac.uk/ontology-lookup/?termId=
-                        //http://www.gramene.org/db/ontology/search?id=
+                        //https://www.gramene.org/db/ontology/search?id=
                         //http://stke.sciencemag.org/cgi/cm/stkecm;
                         //http://purl.uniprot.org/uniprot/
                         //http://antirrhinum.net/cgi-bin/ace/generic/tree/DragonDB?name=

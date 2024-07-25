@@ -28,7 +28,7 @@ import org.bridgedb.Xref;
  * This is required for xrefs like "ChEBI"
  * These refs contain "CHEBI:" as part of the id. Such as CHEBI:36927
  * Which is fine for URIs like:
- * http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:36927 or
+ * https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:36927 or
  * http://identifiers.org/obo.chebi/CHEBI:36927
  * but does not work for others like:
  * http://purl.org/obo/owl/CHEBI#CHEBI_36927 or
