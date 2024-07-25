@@ -7,7 +7,7 @@ bridgeDB:DataSource_Chemspider a bridgeDB:DataSource ;
 	bridgeDB:idExample "56586" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
-	bridgeDB:hasPrimaryUriPattern <https://www.chemspider.com/Chemical-Structure.$id.html> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.chemspider.com/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chemspider/$id>  .
 
 <http://identifiers.org/chemspider/$id> a bridgeDB:uriPattern ;
@@ -19,3 +19,7 @@ bridgeDB:DataSource_Chemspider a bridgeDB:DataSource ;
 	bridgeDB:hasPostfix ".html" ;
 	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chemspider .
 
+<https://www.chemspider.com/$id> a bridgeDB:uriPattern ;
+    bridgeDB:hasPrefix "https://www.chemspider.com/" ;
+    bridgeDB:hasPostfix "" ;
+    bridgeDB:isUriPatternOf bridgeDB:DataSource_Chemspider .
