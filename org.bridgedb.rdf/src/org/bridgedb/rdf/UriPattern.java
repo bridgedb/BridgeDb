@@ -95,7 +95,7 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         if (initialized){
             return;
         }
-        DataSourceTxt.init();
+        if (DataSource.getDataSources().size() == 0) DataSourceTxt.init();
         DataSourceMetaDataProvidor.assumeUnknownsAreBio();
         BridgeDBRdfHandler.init();
         IdentifersOrgReader.init();
