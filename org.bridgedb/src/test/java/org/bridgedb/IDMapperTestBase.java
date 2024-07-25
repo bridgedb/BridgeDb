@@ -87,16 +87,16 @@ public abstract class IDMapperTestBase {
     public static void setupXref() throws IDMapperException{
         //If the actual source to be tested does not contain these please overwrite with ones that do exist.
         dataSource1Code = "ConceptWiki";
-        DataSource1 = DataSource.register(dataSource1Code, "ConceptWiki"). urlPattern(uriSpace1)
+        DataSource1 = DataSource.mock(dataSource1Code, "ConceptWiki"). urlPattern(uriSpace1)
                 .idExample("33a28bb2-35ed-4d94-adfd-3c96053cbaaf").asDataSource();
         dataSource2Code = "Cs";
-        DataSource2 = DataSource.register(dataSource2Code, "Chemspider").urlPattern(uriSpace2)
+        DataSource2 = DataSource.mock(dataSource2Code, "Chemspider").urlPattern(uriSpace2)
                 .idExample("56586").asDataSource();
         dataSource3Code = "OPS-CRS";
-        DataSource3 = DataSource.register(dataSource3Code, "OPS Chemical Registry Service").urlPattern(uriSpace3)
+        DataSource3 = DataSource.mock(dataSource3Code, "OPS Chemical Registry Service").urlPattern(uriSpace3)
                 .idExample("8").asDataSource();
         //This DataSource MUST not be supported
-        DataSourceBad = DataSource.register("TestDSBad", "TestDSBad")
+        DataSourceBad = DataSource.mock("TestDSBad", "TestDSBad")
                 .urlPattern("http://www.NotInTheURlMapper.com#$id").asDataSource();
 
         //Set of Xrefs that are expected to map together.
