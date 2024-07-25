@@ -969,10 +969,10 @@ public final class DataSource
 	 * @return the DataSource for a given base, or null if the base is invalid or unknown.
 	 */
     public static DataSource getByIdentiferOrgBase(String base) {
-		if (base == null || !base.startsWith (IDENTIFIERS_ORG_PREFIX))
-		{
-			return null;
-		}
+        if (base == null) return null;
+        // support the HTTPS variant too
+        base = base.replace("https://identifiers.org", "http://identifiers.org");
+        if (!base.startsWith (IDENTIFIERS_ORG_PREFIX)) return null;
 		
         String key = base.substring(IDENTIFIERS_ORG_PREFIX.length());
         if (key.endsWith("/")){
