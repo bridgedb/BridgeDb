@@ -58,6 +58,8 @@ able to compile with a simple:
 mvn clean install -Dgpg.skip
 ```
 
+When compiling the Java8-compatible components, use the `pom-java8.xml` file instead, with `mvn -f pom-java8.xml`.
+
 You can find the libraries in the folder called "target", in each sublibrary folder (used to be called "dist" in ant).
 
 If you want to ignore failing tests, e.g. because you are not online,
