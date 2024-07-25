@@ -128,6 +128,15 @@ public class DataSourceTxtTest {
 	}
 
 	@org.junit.jupiter.api.Test
+	public void testEcoGene() throws Exception {
+		DataSource ecogene = DataSource.getExistingByFullName("EcoGene");
+		assertNotNull(ecogene);
+		assertEquals("urn:miriam:ecogene:EG10173", ecogene.getMiriamURN("EG10173"));
+		assertNotNull(DataSource.getByIdentiferOrgBase("http://identifiers.org/ecogene/"));
+		assertNotNull(DataSource.getByIdentiferOrgBase("https://identifiers.org/ecogene/"));
+	}
+
+	@org.junit.jupiter.api.Test
 	public void testPrefix() throws Exception {
 		DataSource ds = DataSource.getExistingBySystemCode("L");
 		String prefix = ds.getCompactIdentifierPrefix();
