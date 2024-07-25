@@ -134,7 +134,7 @@ public class IdentifersOrgReader extends RdfBase {
     public static void saveRegister() throws BridgeDBException {
         try {
             URL url = new URL(MIRAM_REGISTRY_URI);
-            Reporter.println("Readng " + url);
+            Reporter.println("Reading " + url);
             InputStream inputStream = url.openStream();
             InputStreamReader inputReader = new InputStreamReader(inputStream);
             BufferedReader inputBuffer = new BufferedReader(inputReader);
