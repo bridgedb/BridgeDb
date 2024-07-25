@@ -92,6 +92,7 @@ public enum Organism {
 	RattusNorvegicus("Rattus norvegicus", "Rn", "Rat", 10116),
 	SaccharomycesCerevisiae("Saccharomyces cerevisiae", "Sc", "Yeast", 4932),
 	SolanumLycopersicum("Solanum lycopersicum", "Sl", "Tomato", 4081),
+	SolanumTuberosum("Solanum tuberosum", "St", "Potato", 4113),
 	SkeletonemaMarinoi("Skeletonema marinoi", "Sm", 267567),
 
 	SorexAraneus ("Sorex araneus", "Sa", "Shrew", 42254),
