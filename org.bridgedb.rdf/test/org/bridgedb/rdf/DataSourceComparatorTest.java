@@ -100,7 +100,7 @@ public class DataSourceComparatorTest {
         BridgeDBRdfHandler.parseRdfInputStream(dataSourceStream);
         Set<UriPattern> result = UriPattern.byCodeAndType("Cs", UriPatternType.mainUrlPattern);
         assertFalse("Could not find main URL pattern for Cs", result.isEmpty());
-        UriPattern pattern = UriPattern.existingByPattern("http://www.chemspider.com/Chemical-Structure.$id.html");
+        UriPattern pattern = UriPattern.existingByPattern("https://www.chemspider.com/Chemical-Structure.$id.html");
         assertThat (result, hasItem(pattern));
 //        pattern = UriPattern.existingOrCreateByPattern("http://identifiers.org/chemspider/$id");
 //        assertThat (result, hasItem(pattern));
