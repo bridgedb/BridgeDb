@@ -22,6 +22,7 @@ jobs:
       run: mvn -f pom-java8.xml clean install -Dgpg.skip -Dmaven.javadoc.skip=true -Dmaven.test.failure.ignore=true -Dproject.build.sourceEncoding=UTF-8 -Djunit5.excludeGroups=webservice,mysql
 
   build:
+    needs: java8
     runs-on: ubuntu-latest
 
     steps:
