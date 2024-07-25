@@ -61,6 +61,14 @@ public class Test {
 	
 	@org.junit.jupiter.api.Test
 	public void testGdbProvider() throws ClassNotFoundException, IDMapperException, IOException{
+		// only for Java 11 and higher
+		String specVersion = System.getProperty("java.specification.version");
+		if (specVersion.contains(".")) specVersion = specVersion.substring(0, specVersion.indexOf('.'));
+		if (Integer.valueOf(specVersion) < 11) {
+			System.out.print("Only running testGdbProvider() for Java 11 or higher");
+			return;
+		}
+
 		Class.forName("org.bridgedb.file.IDMapperText");
 		ClassLoader classLoader = this.getClass().getClassLoader();
 
