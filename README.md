@@ -129,7 +129,7 @@ Making releases
 ---------------
 
 If it is time for a release, first, update `org.bridgedb/src/main/resources/version.props` (for BridgeDb),
-this `README.md` and `CITATION.cff` (for Zenodo).
+this `README.md` and `CITATION.cff` (for Zenodo), as well as the `pom-java8.xml`.
 
 To make the release, run the following commands. Mind you, this requires you
 to have an approved Sonatype (http://oss.sonatype.org/) account with push rights:
