@@ -4,7 +4,7 @@
   <groupId>org.bridgedb</groupId>
   <artifactId>bridgedb-bundle-pv</artifactId>
   <packaging>pom</packaging>
-  <version>3.0.22</version>	
+  <version>3.0.27-java8</version>	
   <name>BridgeDb 4 PathVisio bundle</name>
 	<description>
 		BridgeDb is a framework for finding and mapping equivalent database

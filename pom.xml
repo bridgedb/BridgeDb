@@ -4,7 +4,7 @@
   <groupId>org.bridgedb</groupId>
   <artifactId>bridgedb-bundle</artifactId>
   <packaging>pom</packaging>
-  <version>3.0.27</version>	
+  <version>3.0.27-java8</version>	
   <name>BridgeDb bundle</name>
 	<description>
 		BridgeDb is a framework for finding and mapping equivalent database
@@ -17,28 +17,9 @@
   	<module>org.bridgedb</module>
   	<module>org.bridgedb.bio</module>
   	<module>org.bridgedb.gui</module>
-  	<module>org.bridgedb.utils</module>
-  	<module>org.bridgedb.sql</module>
-  	<module>org.bridgedb.ws.core</module>
-  	<module>org.bridgedb.ws.server</module>
-  	<module>org.bridgedb.ws.client</module>
-        <module>org.bridgedb.rdf</module>
-        <module>org.bridgedb.uri.api</module>
-        <module>org.bridgedb.uri.sql</module>
-        <module>org.bridgedb.uri.loader</module>
-        <module>org.bridgedb.uri.ws.core</module>
-        <module>org.bridgedb.uri.ws.server</module>
-        <module>org.bridgedb.uri.ws.client</module>
         <module>org.bridgedb.rdb</module>
   	<module>org.bridgedb.rdb.construct</module>
   	<module>org.bridgedb.webservice.bridgerest</module>
-  	<module>org.bridgedb.webservice.biomart</module>
-  	<module>org.bridgedb.tools.batchmapper</module>
-        <module>org.bridgedb.tools.qc</module>
-        <module>org.bridgedb.tools.voidtool</module>
-        <module>org.bridgedb.tools.info</module>
-        <module>org.bridgedb.file.orthoxml</module>
-  	<module>examples</module>
   </modules>
   
     <properties>
@@ -55,7 +36,7 @@
         <rdf4j.version>4.3.8</rdf4j.version>
         <servlet.version>2.5</servlet.version>
         <slf4j.version>2.0.9</slf4j.version>
-        <derby.version>10.15.2.0</derby.version>
+        <derby.version>10.4.2.0</derby.version>
         <junit-platform-surefire-provider>1.3.2</junit-platform-surefire-provider>
         <junit5.jupiter.version>5.10.1</junit5.jupiter.version>
         <junit5.excludeGroups>mysql</junit5.excludeGroups>
@@ -316,5 +297,13 @@
     <system>GitHub</system>
     <url>https://github.com/bridgedb/BridgeDb/issues</url>
   </issueManagement>
+
+    <repositories>
+        <repository>
+            <id>mvnrepository</id>
+            <name>MVN Repository</name>
+            <url>https://mvnrepository.com/artifact/</url>
+        </repository>
+    </repositories>
 
 </project>
