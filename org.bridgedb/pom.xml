@@ -38,7 +38,7 @@
     <parent>
   	<artifactId>bridgedb-bundle</artifactId>
   	<groupId>org.bridgedb</groupId>
-  	<version>3.0.27-java8</version>
+  	<version>3.0.27-java8-1</version>
   </parent>
 
 	<build>
