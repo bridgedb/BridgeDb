@@ -71,8 +71,8 @@
                         <version>${project.parent.version}</version>
                         <exclusions>
                                 <exclusion>
-                                        <groupId>mysql</groupId>
-                                        <artifactId>mysql-connector-java</artifactId>
+                                        <groupId>com.mysql</groupId>
+                                        <artifactId>mysql-connector-j</artifactId>
                                 </exclusion>
                         </exclusions>
                 </dependency>
@@ -82,8 +82,8 @@
                         <version>${project.parent.version}</version>
                         <exclusions>
                                 <exclusion>
-                                        <groupId>mysql</groupId>
-                                        <artifactId>mysql-connector-java</artifactId>
+                                        <groupId>com.mysql</groupId>
+                                        <artifactId>mysql-connector-j</artifactId>
                                 </exclusion>
                         </exclusions>
                 </dependency>
