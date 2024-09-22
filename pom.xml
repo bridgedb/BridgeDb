@@ -44,7 +44,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <commons-cli.version>1.2</commons-cli.version>
-        <cxf.version>3.2.14</cxf.version>
+        <cxf.version>3.6.4</cxf.version>
         <hamcrest.version>2.2</hamcrest.version>
         <jersey.version>1.10</jersey.version>
         <log4j.version>2.22.0</log4j.version>
