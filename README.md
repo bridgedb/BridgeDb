@@ -7,15 +7,15 @@ BridgeDb
 [![codecov](https://codecov.io/gh/bridgedb/BridgeDb/branch/master/graph/badge.svg?token=F0kJdoEt0x)](https://codecov.io/gh/bridgedb/BridgeDb)
 [![NWO](https://img.shields.io/badge/NWO%20Open%20Science-203.001.121-orange)](https://www.nwo.nl/en/projects/203001121)
 
-BridgeDb is currently tested with Java 11 and higher (3.0.x releases and master branch).
+BridgeDb is currently tested with Java 17 and higher (4.0.x releases).
 
 Using BridgeDb dependencies
 ---------------------------
 
 The [BridgeDb releases](https://github.com/bridgedb/BridgeDb/releases) are published to 
-[Maven Central](http://central.maven.org/maven2/org/bridgedb/), which means you can use the BridgeDb JARs without needing to compile BridgeDb.
+[Maven Central](https://search.maven.org/artifact/org.bridgedb/bridgedb-bundle), which means you can use the BridgeDb JARs without needing to compile BridgeDb.
 
-Usage depends on which module you require. The examples below assumes artifact `org.bridgedb.bio` and version `3.1.0`:
+Usage depends on which module you require. The examples below assumes artifact `org.bridgedb.bio` and version `4.0.0`:
 
 For [Maven](https://maven.apache.org/):
 
@@ -24,7 +24,7 @@ For [Maven](https://maven.apache.org/):
     <dependency>
         <groupId>org.bridgedb</groupId>
         <artifactId>org.bridgedb.bio</artifactId>
-        <version>3.1.0</version>
+        <version>4.0.0</version>
     </dependency>
 </dependencies>
 ```
@@ -32,19 +32,19 @@ For [Maven](https://maven.apache.org/):
 For [Gradle](https://gradle.org/):
 
 ```gradle
-compile group: 'org.bridgedb', name: 'org.bridgedb.bio', version: '3.1.0'
+compile group: 'org.bridgedb', name: 'org.bridgedb.bio', version: '4.0.0'
 ```
 
 For [Ivy](http://ant.apache.org/ivy/):
 
 ```xml
-<dependency org="org.bridgedb" name="org.bridgedb.bio" rev="3.1.0"/>
+<dependency org="org.bridgedb" name="org.bridgedb.bio" rev="4.0.0"/>
 ```
 
 For [Buildr](https://buildr.apache.org/):
 
 ```buildr
-'org.bridgedb:org.bridgedb.bio:jar:3.1.0'
+'org.bridgedb:org.bridgedb.bio:jar:4.0.0'
 ```
 
 
@@ -133,7 +133,7 @@ To make the release, run the following commands. Mind you, this requires you
 to have an approved Sonatype (http://oss.sonatype.org/) account with push rights:
 
 ```shell
-mvn versions:set -DnewVersion=3.1.0
+mvn versions:set -DnewVersion=4.0.0
 mvn clean deploy
 ```
 

@@ -828,7 +828,7 @@ Each page contains information about a particular group, with pages linked one t
               "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Medical College of Wisconsin, Milwaukee, Wisconsin"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://rgd.mcw.edu/> .
+      dcat:landingPage <https://rgd.mcw.edu/> .
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000469>
       a       dcat:CatalogRecord ;
@@ -1003,7 +1003,7 @@ Each page contains information about a particular group, with pages linked one t
               "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Medical College of Wisconsin, Milwaukee, Wisconsin"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://rgd.mcw.edu/> .
+      dcat:landingPage <https://rgd.mcw.edu/> .
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000357>
       a       dcat:CatalogRecord ;
@@ -1313,7 +1313,7 @@ Each page contains information about a particular group, with pages linked one t
 
 <http://identifiers.org/miriam.resource/MIR:00100492#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.chemspider.com/$id> ;
+      dcat:accessURL <https://www.chemspider.com/$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100492> .
 
@@ -1329,7 +1329,7 @@ Each page contains information about a particular group, with pages linked one t
 
 <http://identifiers.org/miriam.resource/MIR:00100075#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://rgd.mcw.edu/rgdweb/report/gene/main.html?id=$id> ;
+      dcat:accessURL <https://rgd.mcw.edu/rgdweb/report/gene/main.html?id=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100075> .
 
@@ -2236,7 +2236,7 @@ The interactions include direct (physical) and indirect (functional) association
 
 <http://identifiers.org/miriam.resource/MIR:00100309#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://rgd.mcw.edu/rgdweb/ontology/annot.html?acc_id=$id> ;
+      dcat:accessURL <https://rgd.mcw.edu/rgdweb/ontology/annot.html?acc_id=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100309> .
 
@@ -3203,7 +3203,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Cold Spring Harbor Laboratory, New York"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://www.gramene.org/> .
+      dcat:landingPage <https://www.gramene.org/> .
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000394>
       a       dcat:CatalogRecord ;
@@ -3368,7 +3368,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Cold Spring Harbor Laboratory, New York"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://www.gramene.org/> .
+      dcat:landingPage <https://www.gramene.org/> .
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000455>
       a       dcat:CatalogRecord ;
@@ -3781,7 +3781,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Cold Spring Harbor Laboratory, New York"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://www.gramene.org/> .
+      dcat:landingPage <https://www.gramene.org/> .
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000397>
       a       dcat:CatalogRecord ;
@@ -3904,7 +3904,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Carnegie Institution of Washington Department of Plant Biology and National Center for Genome Resources (NCGR)"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://arabidopsis.org/index.jsp> .
+      dcat:landingPage <https://www.arabidopsis.org/> .
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000412>
       a       dcat:CatalogRecord ;
@@ -4134,7 +4134,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Carnegie Institution of Washington Department of Plant Biology and National Center for Genome Resources (NCGR)"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://arabidopsis.org/index.jsp> .
+      dcat:landingPage <https://www.arabidopsis.org/> .
 
 <http://identifiers.org/miriam.resource/MIR:00100157>
       idot:reliability "99"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
@@ -4274,7 +4274,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Carnegie Institution of Washington Department of Plant Biology and National Center for Genome Resources (NCGR)"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://arabidopsis.org/index.jsp> .
+      dcat:landingPage <https://www.arabidopsis.org/> .
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000044>
       a       dcat:CatalogRecord ;
@@ -4461,7 +4461,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "United Kingdom"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "European Bioinformatics Institute"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://www.ebi.ac.uk/biomodels/> .
+      dcat:landingPage <https://www.ebi.ac.uk/biomodels/> .
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000453>
       a       dcat:CatalogRecord ;
@@ -4551,7 +4551,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "United Kingdom"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "European Bioinformatics Institute"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://www.ebi.ac.uk/chebi/> .
+      dcat:landingPage <https://www.ebi.ac.uk/chebi/> .
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000042>
       a       dcat:CatalogRecord ;
@@ -4945,7 +4945,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Medical College of Wisconsin"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://rgd.mcw.edu/> .
+      dcat:landingPage <https://rgd.mcw.edu/> .
 
 <http://identifiers.org/miriam.resource/MIR:00100163#application/xhtml+xml>
       a       dcat:Distribution ;
@@ -5126,7 +5126,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "UK"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Royal Society of Chemistry, Cambridge"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://www.chemspider.com/> .
+      dcat:landingPage <https://www.chemspider.com/> .
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000123>
       a       dcat:CatalogRecord ;
@@ -5431,7 +5431,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Bioinformatics Research Group, SRI International, California"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://biocyc.org> .
+      dcat:landingPage <https://biocyc.org> .
 
 <http://identifiers.org/miriam.resource/MIR:00100489>
       idot:reliability "100"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
@@ -5451,7 +5451,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100229#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.gramene.org/db/ontology/search?id=$id> ;
+      dcat:accessURL <https://www.gramene.org/db/ontology/search?id=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100229> .
 
@@ -5510,7 +5510,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100251#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://biocyc.org/getid?id=$id> ;
+      dcat:accessURL <https://biocyc.org/getid?id=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100251> .
 
@@ -5875,7 +5875,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100086#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://thebiogrid.org/$id> ;
+      dcat:accessURL <https://thebiogrid.org/$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100086> .
 
@@ -6485,7 +6485,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100135#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$id> ;
+      dcat:accessURL <https://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100135> .
 
@@ -6555,7 +6555,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100586#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://rgd.mcw.edu/rgdweb/report/qtl/main.html?id=$id> ;
+      dcat:accessURL <https://rgd.mcw.edu/rgdweb/report/qtl/main.html?id=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100586> .
 
@@ -7041,7 +7041,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100009#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id> ;
+      dcat:accessURL <https://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100009> .
 
@@ -7093,7 +7093,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100078#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://arabidopsis.org/servlets/TairObject?type=locus&name=$id> ;
+      dcat:accessURL <https://www.arabidopsis.org/results?mainType=general&category=genes&searchText=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100078> .
 
@@ -7265,7 +7265,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100227#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.gramene.org/db/protein/protein_search?protein_id=$id> ;
+      dcat:accessURL <https://www.gramene.org/db/protein/protein_search?protein_id=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100227> .
 
@@ -8447,7 +8447,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "UK"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Faculty of Life Sciences, University of Manchester"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://www.mirbase.org/> .
+      dcat:landingPage <https://www.mirbase.org/> .
 
 <http://identifiers.org/miriam.resource/MIR:00100215>
       idot:reliability "99"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
@@ -8545,7 +8545,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100649#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.gramene.org/db/ontology/search?id=$id> ;
+      dcat:accessURL <https://www.gramene.org/db/ontology/search?id=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100649> .
 
@@ -9346,7 +9346,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "Canada"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Ontario Cancer Institute"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://thebiogrid.org/> .
+      dcat:landingPage <https://thebiogrid.org/> .
 
 <http://identifiers.org/miriam.resource/MIR:00100367>
       idot:reliability "99"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
@@ -9518,7 +9518,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100501#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.chemspider.com/inchi-resolver/Resolver.aspx?q=$id> ;
+      dcat:accessURL <https://www.chemspider.com/inchi-resolver/Resolver.aspx?q=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100501> .
 
@@ -9925,7 +9925,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100587#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://rgd.mcw.edu/rgdweb/report/strain/main.html?id=$id> ;
+      dcat:accessURL <https://rgd.mcw.edu/rgdweb/report/strain/main.html?id=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100587> .
 
@@ -10534,7 +10534,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "UK"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Royal Society of Chemistry, Cambridge"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://www.chemspider.com/> .
+      dcat:landingPage <https://www.chemspider.com/> .
 
 <http://identifiers.org/miriam.resource/MIR:00100566>
       idot:reliability "98"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
@@ -12015,7 +12015,7 @@ Note: Currently, direct access to RNA products is restricted. This is expected t
               "UK"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Royal Society of Chemistry, Cambridge"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://www.chemspider.com/> .
+      dcat:landingPage <https://www.chemspider.com/> .
 
 <http://identifiers.org/miriam.resource/MIR:00100358#application/xhtml+xml>
       a       dcat:Distribution ;
@@ -12342,7 +12342,7 @@ Note: Currently, direct access to RNA products is restricted. This is expected t
               "UK"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "European Bioinformatics Institute, Hinxton, Cambridge"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://www.ebi.ac.uk/chebi/> .
+      dcat:landingPage <https://www.ebi.ac.uk/chebi/> .
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000285>
       a       dcat:CatalogRecord ;
@@ -12408,7 +12408,7 @@ Note: Currently, direct access to RNA products is restricted. This is expected t
               "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Medical College of Wisconsin, Wisconsin"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://rgd.mcw.edu/rgdweb/ontology/search.html> .
+      dcat:landingPage <https://rgd.mcw.edu/rgdweb/ontology/search.html> .
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000209>
       a       dcat:CatalogRecord ;
@@ -13094,7 +13094,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
 
 <http://identifiers.org/miriam.resource/MIR:00100006#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.ebi.ac.uk/biomodels-main/$id> ;
+      dcat:accessURL <https://www.ebi.ac.uk/biomodels/$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100006> .
 
@@ -13327,7 +13327,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
 
 <http://identifiers.org/miriam.resource/MIR:00100228#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.gramene.org/db/genes/search_gene?acc=$id> ;
+      dcat:accessURL <https://archive.gramene.org/db/genes/search_gene?acc=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100228> .
 
@@ -14443,7 +14443,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
 
 <http://identifiers.org/miriam.resource/MIR:00100230#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.gramene.org/db/qtl/qtl_display?qtl_accession_id=$id> ;
+      dcat:accessURL <https://www.gramene.org/db/qtl/qtl_display?qtl_accession_id=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100230> .
 
@@ -14554,7 +14554,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
 
 <http://identifiers.org/miriam.resource/MIR:00100180#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.chemspider.com/Chemical-Structure.$id.html> ;
+      dcat:accessURL <https://www.chemspider.com/$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100180> .
 
@@ -14576,7 +14576,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
               "UK"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Faculty of Life Sciences, University of Manchester"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://www.mirbase.org/> .
+      dcat:landingPage <https://www.mirbase.org/> .
 
 <http://identifiers.org/miriam.resource/MIR:00100324#application/xhtml+xml>
       a       dcat:Distribution ;
@@ -14618,7 +14618,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
               "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Cold Spring Harbor Laboratory, New York"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://www.gramene.org/> .
+      dcat:landingPage <https://www.gramene.org/> .
 
 <http://identifiers.org/miriam.resource/MIR:00100648>
       idot:reliability "100"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
@@ -16492,7 +16492,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
 
 <http://identifiers.org/miriam.resource/MIR:00100494#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=$id> ;
+      dcat:accessURL <https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100494> .
 
@@ -17403,7 +17403,7 @@ All content is under the Creative Commons Attribution 3.0 Unported license."""^^
 
 <http://identifiers.org/miriam.resource/MIR:00100296#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <http://www.mirbase.org/cgi-bin/mature.pl?mature_acc=$id> ;
+      dcat:accessURL <https://mirbase.org/mature/$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100296> .
 
@@ -18125,7 +18125,7 @@ All content is under the Creative Commons Attribution 3.0 Unported license."""^^
               "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Cold Spring Harbor Laboratory, New York"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://www.gramene.org/> .
+      dcat:landingPage <https://www.gramene.org/> .
 
 <http://identifiers.org/miriam.resource/MIR:00100049#application/xhtml+xml>
       a       dcat:Distribution ;

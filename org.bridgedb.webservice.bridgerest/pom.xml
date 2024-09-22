@@ -16,24 +16,24 @@
 		<outputDirectory>target/classes</outputDirectory>
 		<finalName>${project.artifactId}-${project.version}</finalName>
 		<testOutputDirectory>target/test-classes</testOutputDirectory>
-		<sourceDirectory>src</sourceDirectory>
+		<sourceDirectory>src/main/java</sourceDirectory>
 		<scriptSourceDirectory>scripts</scriptSourceDirectory>
-		<testSourceDirectory>test</testSourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<resources>
 			<resource>
-				<directory>resources</directory>
+				<directory>src/main/resources</directory>
 			</resource>
 		</resources>
 		<testResources>
 			<testResource>
-				<directory>test-resources</directory>
+				<directory>src/test/resources</directory>
 			</testResource>
 		</testResources>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <version>5.1.1</version>
+                <version>${felix.version}</version>
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
@@ -57,7 +57,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.2</version>
+                <version>3.4.2</version>
                 <configuration>
                     <archive>
                         <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
@@ -80,5 +80,35 @@
 			<version>${project.parent.version}</version>
 			<scope>compile</scope>
 		</dependency>
+        <dependency>
+                <groupId>org.bridgedb</groupId>
+                <artifactId>org.bridgedb.bio</artifactId>
+                <version>${project.parent.version}</version>
+                <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-surefire-provider</artifactId>
+            <version>1.3.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit5.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>${junit5.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit5.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 </project>

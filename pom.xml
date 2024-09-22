@@ -44,11 +44,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <commons-cli.version>1.2</commons-cli.version>
-        <cxf.version>3.2.14</cxf.version>
+        <cxf.version>3.6.4</cxf.version>
+        <felix.version>5.1.9</felix.version>
         <hamcrest.version>2.2</hamcrest.version>
         <jersey.version>1.10</jersey.version>
         <log4j.version>2.22.0</log4j.version>
-        <mysql.version>8.0.33</mysql.version>
+        <mysql.version>9.0.0</mysql.version>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <owlapi-api.version>3.4</owlapi-api.version>
         <rdf4j.version>4.3.8</rdf4j.version>
@@ -149,7 +150,7 @@
 						<version>1.6.8</version>
 						<extensions>true</extensions>
 						<configuration>
-							<serverId>ossrh</serverId>
+							<serverId>sso</serverId>
 							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
 							<autoReleaseAfterClose>true</autoReleaseAfterClose>
 						</configuration>
@@ -188,7 +189,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.5.0</version>
                 <executions>
                     <execution>
                         <id>enforce-maven</id>
@@ -198,7 +199,7 @@
                         <configuration>
                             <rules>
                                 <requireMavenVersion>
-                                    <version>3.2.5</version>
+                                    <version>3.6.3</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
                                     <version>17</version>
@@ -215,11 +216,11 @@
                         <distributionManagement>
                                 <!-- Maven Central - see http://central.sonatype.org/pages/apache-maven.html -->
                                 <repository>
-                                        <id>ossrh</id>
+                                        <id>sso</id>
                                         <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
                                 </repository>
                                 <snapshotRepository>
-                                        <id>ossrh</id>
+                                        <id>sso</id>
                                         <url>https://oss.sonatype.org/content/repositories/snapshots</url>
                                 </snapshotRepository>
                         </distributionManagement>
@@ -339,5 +340,12 @@
     <system>GitHub</system>
     <url>https://github.com/bridgedb/BridgeDb/issues</url>
   </issueManagement>
+
+  <repositories>
+    <repository>
+      <id>mvnrepository</id>
+      <url>https://mvnrepository.com/artifact/</url>
+    </repository>
+  </repositories>
 
 </project>

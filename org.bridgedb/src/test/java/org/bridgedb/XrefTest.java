@@ -19,8 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -196,4 +194,5 @@ public class XrefTest {
 	public void testGetKnownUrl() {
 		System.out.println(new Xref("CHEBI:17855", CHEBI, true).getKnownUrl());
 	}
+
 }

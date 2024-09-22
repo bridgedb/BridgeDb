@@ -92,7 +92,7 @@ public class IdentifersOrgReader extends RdfBase {
 //            for (String multiple:multiples){
 //                checkMultiple(repositoryConnection, multiple);
 //            }
-            Reporter.println("Registry read in. Now loading DataSources");
+            Reporter.println("Registry read in. Now loading DataSources from the in memory store");
             loadData(repositoryConnection);
         } catch (Exception ex) {
             throw new BridgeDBException ("Error parsing RDF inputStream: " + ex.getMessage(), ex);
@@ -134,7 +134,7 @@ public class IdentifersOrgReader extends RdfBase {
     public static void saveRegister() throws BridgeDBException {
         try {
             URL url = new URL(MIRAM_REGISTRY_URI);
-            Reporter.println("Readng " + url);
+            Reporter.println("Reading " + url);
             InputStream inputStream = url.openStream();
             InputStreamReader inputReader = new InputStreamReader(inputStream);
             BufferedReader inputBuffer = new BufferedReader(inputReader);
@@ -204,7 +204,7 @@ public class IdentifersOrgReader extends RdfBase {
             UriPattern.register(identiferOrgBase + "$id", sysCode, UriPatternType.identifiersOrgPatternSimple);
         String identifersOrgInfoBase = identiferOrgBase.replace("identifiers.org","info.identifiers.org");
         UriPattern.register(identifersOrgInfoBase + "$id", sysCode, UriPatternType.identifiersOrgPatternInfo);
-             
+
         DataSource ds = DataSource.register(sysCode, fullName)
                 .identifiersOrgBase(identiferOrgBase)
                 .asDataSource();

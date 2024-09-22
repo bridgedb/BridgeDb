@@ -38,32 +38,32 @@ bridgeDB:DataSource_BIND a bridgeDB:DataSource ;
 bridgeDB:DataSource_BioCyc a bridgeDB:DataSource ;
 	bridgeDB:fullName "BioCyc" ;
 	bridgeDB:systemCode "Bc" ;
-	bridgeDB:mainUrl "http://biocyc.org" ;
+	bridgeDB:mainUrl "https://biocyc.org" ;
 	bridgeDB:idExample "ECOLI:CYT-D-UBIOX-CPLX" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://biocyc.org/getid?id=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://biocyc.org/getid?id=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/biocyc/$id> ;
 	bridgeDB:hasUriPattern <http://bio2rdf.org/biocyc:$id> .
 
 bridgeDB:DataSource_BioGrid a bridgeDB:DataSource ;
 	bridgeDB:fullName "BioGrid" ;
 	bridgeDB:systemCode "Bg" ;
-	bridgeDB:mainUrl "http://thebiogrid.org/" ;
+	bridgeDB:mainUrl "https://thebiogrid.org/" ;
 	bridgeDB:idExample "31623" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "interaction" ;
-	bridgeDB:hasPrimaryUriPattern <http://thebiogrid.org/$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://thebiogrid.org/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/biogrid/$id> .
 
 bridgeDB:DataSource_BioModels_Database a bridgeDB:DataSource ;
 	bridgeDB:fullName "BioModels Database" ;
     bridgeDB:systemCode "Bm" ;
-	bridgeDB:mainUrl "http://www.ebi.ac.uk/biomodels/" ;
+	bridgeDB:mainUrl "https://www.ebi.ac.uk/biomodels/" ;
 	bridgeDB:idExample "BIOMD0000000048" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "pathway" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.ebi.ac.uk/biomodels-main/$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.ebi.ac.uk/biomodels/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/biomodels.db/$id> ;
 	bridgeDB:hasUriPattern <http://bio2rdf.org/biomodels:$id> .
 
@@ -134,16 +134,16 @@ bridgeDB:DataSource_CCDS a bridgeDB:DataSource ;
 	bridgeDB:idExample "CCDS43989" ;
 	bridgeDB:primary "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=ALLFIELDS&DATA=$id> .
+	bridgeDB:hasPrimaryUriPattern <https://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=ALLFIELDS&DATA=$id> .
 
 bridgeDB:DataSource_ChEBI a bridgeDB:DataSource ;
 	bridgeDB:fullName "ChEBI" ;
 	bridgeDB:systemCode "Ce" ;
-	bridgeDB:mainUrl "http://www.ebi.ac.uk/chebi/" ;
+	bridgeDB:mainUrl "https://www.ebi.ac.uk/chebi/" ;
 	bridgeDB:idExample "CHEBI:36927" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
- 	bridgeDB:hasPrimaryUriPattern <http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id> ;
+ 	bridgeDB:hasPrimaryUriPattern <https://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id> ;
 	bridgeDB:hasUriPattern <http://identifiers.org/obo.chebi/$id> ; #Deprecated
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chebi/$id> .
 
@@ -286,16 +286,16 @@ bridgeDB:DataSource_ChEMBL_target_component a bridgeDB:DataSource ;
 bridgeDB:DataSource_Chemspider a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chemspider" ;
 	bridgeDB:systemCode "Cs" ;
-	bridgeDB:mainUrl "http://www.chemspider.com/" ;
+	bridgeDB:mainUrl "https://www.chemspider.com/" ;
 	bridgeDB:idExample "56586" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.chemspider.com/Chemical-Structure.$id.html> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.chemspider.com/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chemspider/$id> ;
 	bridgeDB:hasUriPattern <http://rdf.chemspider.com/$id> ;
-    bridgeDB:hasUriPattern <http://www.chemspider.com/Chemical-Structure.$id.rdf> ;
-    bridgeDB:hasUriPattern <http://www.chemspider.com/Chemical-Structure.$id> ;
-	bridgeDB:hasUriPattern <http://www.chemspider.com/$id> .
+    bridgeDB:hasUriPattern <https://www.chemspider.com/Chemical-Structure.$id.rdf> ;
+    bridgeDB:hasUriPattern <https://www.chemspider.com/Chemical-Structure.$id> ;
+	bridgeDB:hasUriPattern <https://www.chemspider.com/$id> .
 
 bridgeDB:DataSource_Cint a bridgeDB:DataSource ;
 	bridgeDB:fullName "Cint" ;
@@ -366,7 +366,7 @@ bridgeDB:DataSource_drugbankv4Target a bridgeDB:DataSource ;
 	bridgeDB:fullName "Drugbank Target v4" ;
 	bridgeDB:systemCode "drugbankv4.target" ;
 	bridgeDB:idExample "BE0000938" ;
-  bridgeDB:hasRegexPattern "^BE\\d{7}$" ;
+    bridgeDB:hasRegexPattern "^BE\\d{7}$" ;
 	bridgeDB:mainUrl "http://www.drugbank.ca/" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
@@ -379,6 +379,7 @@ bridgeDB:DataSource_drugbankDrugs a bridgeDB:DataSource ;
 	bridgeDB:systemCode "Dr" ;
 	bridgeDB:mainUrl "http://www.drugbank.ca/" ;
 	bridgeDB:idExample "DB00001" ;
+	bridgeDB:hasRegexPattern "^DB\\d{5,7}$" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
 	bridgeDB:hasPrimaryUriPattern <http://www.drugbank.ca/drugs/$id> ;
@@ -518,45 +519,45 @@ bridgeDB:DataSource_GOA a bridgeDB:DataSource ;
 bridgeDB:DataSource_Gramene_Arabidopsis a bridgeDB:DataSource ;
 	bridgeDB:fullName "Gramene Arabidopsis" ;
 	bridgeDB:systemCode "EnAt" ;
-	bridgeDB:mainUrl "http://www.gramene.org/" ;
+	bridgeDB:mainUrl "https://www.gramene.org/" ;
 	bridgeDB:idExample "ATMG01360-TAIR-G" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?g=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?g=$id> ;
 	bridgeDB:Organism bridgeDB:Organism_At .
 
 bridgeDB:DataSource_Gramene_Genes_DB a bridgeDB:DataSource ;
 	bridgeDB:fullName "Gramene Genes DB" ;
 	bridgeDB:systemCode "Gg" ;
-	bridgeDB:mainUrl "http://www.gramene.org/" ;
+	bridgeDB:mainUrl "https://www.gramene.org/" ;
 	bridgeDB:idExample "GR:0060184" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.gramene.org/db/genes/search_gene?acc=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://archive.gramene.org/db/genes/search_gene?acc=$id> ;
     bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/gramene.gene/$id> .
 
 bridgeDB:DataSource_Gramene_Literature a bridgeDB:DataSource ;
 	bridgeDB:fullName "Gramene Literature" ;
 	bridgeDB:systemCode "Gl" ;
-	bridgeDB:mainUrl "http://www.gramene.org/" ;
+	bridgeDB:mainUrl "https://www.gramene.org/" ;
 	bridgeDB:idExample "6200" ;
 	bridgeDB:primary "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.gramene.org/db/literature/pub_search?ref_id=$id> .
+	bridgeDB:hasPrimaryUriPattern <https://www.gramene.org/db/literature/pub_search?ref_id=$id> .
 
 bridgeDB:DataSource_Gramene_Maize a bridgeDB:DataSource ;
 	bridgeDB:fullName "Gramene Maize" ;
 	bridgeDB:systemCode "EnZm" ;
-	bridgeDB:mainUrl "http://www.ensembl.org" ;
+	bridgeDB:mainUrl "https://www.ensembl.org" ;
 	bridgeDB:idExample "GRMZM2G174107" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.maizesequence.org/Zea_mays/Gene/Summary?g=$id> .
+	bridgeDB:hasPrimaryUriPattern <https://ensembl.gramene.org/Zea_mays/Search/Results?q=$id> .
 
 bridgeDB:DataSource_Gramene_Pathway a bridgeDB:DataSource ;
 	bridgeDB:fullName "Gramene Pathway" ;
 	bridgeDB:systemCode "Gp" ;
-	bridgeDB:mainUrl "http://www.gramene.org/pathway" ;
+	bridgeDB:mainUrl "https://www.gramene.org/pathway" ;
 	bridgeDB:idExample "AAH72400" ;
 	bridgeDB:primary "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "pathway" .
@@ -564,7 +565,7 @@ bridgeDB:DataSource_Gramene_Pathway a bridgeDB:DataSource ;
 bridgeDB:DataSource_Gramene_Rice a bridgeDB:DataSource ;
 	bridgeDB:fullName "Gramene Rice" ;
 	bridgeDB:systemCode "EnOj" ;
-	bridgeDB:mainUrl "http://www.gramene.org/" ;
+	bridgeDB:mainUrl "https://www.gramene.org/" ;
 	bridgeDB:idExample "osa-MIR171a" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
@@ -806,11 +807,11 @@ bridgeDB:CodeMapper_MGI a bridgeDB:CodeMapper ;
 bridgeDB:DataSource_miRBase_mature_sequence a bridgeDB:DataSource ;
 	bridgeDB:fullName "miRBase mature sequence" ;
 	bridgeDB:systemCode "Mbm" ;
-	bridgeDB:mainUrl "http://www.mirbase.org/" ;
+	bridgeDB:mainUrl "https://www.mirbase.org/" ;
 	bridgeDB:idExample "MIMAT0000001" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.mirbase.org/cgi-bin/mature.pl?mature_acc=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://mirbase.org/mature/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/mirbase.mature/$id> .
 
 bridgeDB:DataSource_miRBase_Sequence a bridgeDB:DataSource ;
@@ -821,7 +822,7 @@ bridgeDB:DataSource_miRBase_Sequence a bridgeDB:DataSource ;
 	bridgeDB:idExample "MI0000001" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/mirbase/$id> .
 
 bridgeDB:DataSource_NASC_Gene a bridgeDB:DataSource ;
@@ -914,7 +915,7 @@ bridgeDB:DataSource_Pathway_Ontology a bridgeDB:DataSource ;
 bridgeDB:CodeMapper_Pathway_Ontology a bridgeDB:CodeMapper ;
 	bridgeDB:systemCode "PW" ;
     bridgeDB:xrefPrefix "PW:";
-	bridgeDB:hasUriPattern <http://rgd.mcw.edu/rgdweb/ontology/annot.html?acc_id=PW:$id> ;
+	bridgeDB:hasUriPattern <https://rgd.mcw.edu/rgdweb/ontology/annot.html?acc_id=PW:$id> ;
 	bridgeDB:hasUriPattern <http://purl.bioontology.org/ontology/PW/PW:$id> ;
     bridgeDB:hasUriPattern <http://www.ebi.ac.uk/ontology-lookup/?termId=PW:$id> ;
     bridgeDB:hasUriPattern <http://purl.obolibrary.org/obo/PW_$id> ;
@@ -1036,24 +1037,24 @@ bridgeDB:DataSource_Rfam a bridgeDB:DataSource ;
 bridgeDB:DataSource_RGD a bridgeDB:DataSource ;
 	bridgeDB:fullName "RGD" ;
 	bridgeDB:systemCode "R" ;
-	bridgeDB:mainUrl "http://rgd.mcw.edu/" ;
+	bridgeDB:mainUrl "https://rgd.mcw.edu/" ;
 	bridgeDB:idExample "2018" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://rgd.mcw.edu/tools/genes/genes_view.cgi?id=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://rgd.mcw.edu/rgdweb/report/gene/main.html?id=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/rgd/$id> ;
-    bridgeDB:hasUriPattern <http://rgd.mcw.edu/rgdweb/report/gene/main.html?id=$id> ;
+    bridgeDB:hasUriPattern <https://rgd.mcw.edu/rgdweb/report/gene/main.html?id=$id> ;
     bridgeDB:hasUriPattern <http://purl.uniprot.org/rgd/$id> ;
 	bridgeDB:Organism bridgeDB:Organism_Rn .
 
 bridgeDB:DataSource_Rice_Ensembl_Gene a bridgeDB:DataSource ;
 	bridgeDB:fullName "Rice Ensembl Gene" ;
 	bridgeDB:systemCode "Os" ;
-	bridgeDB:mainUrl "http://www.gramene.org/Oryza_sativa" ;
+	bridgeDB:mainUrl "https://www.gramene.org/Oryza_sativa" ;
 	bridgeDB:idExample "LOC_Os04g54800" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://www.gramene.org/Oryza_sativa/geneview?gene=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.gramene.org/Oryza_sativa/geneview?gene=$id> ;
 	bridgeDB:Organism bridgeDB:Organism_Os ;
 	bridgeDB:hasRegexUriPattern <http://bio2rdf.org/ensembl:$id> .
 
@@ -1071,11 +1072,11 @@ bridgeDB:DataSource_SGD a bridgeDB:DataSource ;
 bridgeDB:DataSource_TAIR a bridgeDB:DataSource ;
 	bridgeDB:fullName "TAIR" ;
 	bridgeDB:systemCode "A" ;
-	bridgeDB:mainUrl "http://arabidopsis.org/index.jsp" ;
+	bridgeDB:mainUrl "https://www.arabidopsis.org/" ;
 	bridgeDB:idExample "AT1G01030" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://arabidopsis.org/servlets/TairObject?type=locus&name=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.arabidopsis.org/results?mainType=general&category=genes&searchText=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/tair.locus/$id> .
 
 bridgeDB:DataSource_TIGR a bridgeDB:DataSource ;

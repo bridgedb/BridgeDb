@@ -47,9 +47,9 @@ BIND	Bi	http://www.bind.ca/	http://www.bind.ca/Action?identifier=bindid&idsearch
 BindingDB	bindingDB		http://www.bindingdb.org/bind/chemsearch/marvin/MolStructure.jsp?monomerid=$id	22360	unknown		1	urn:miriam:bindingDB	^\d+$	
 BioCarta Pathway	biocarta.pathway		http://www.biocarta.com/pathfiles/$id.asp	h_aktPathway	unknown		1	urn:miriam:biocarta.pathway	^([hm]\_)?\w+Pathway$	
 BioCatalogue	biocatalogue.service		https://www.biocatalogue.org/services/$id	614	unknown		1	urn:miriam:biocatalogue.service	^\d+$	
-BioCyc	Bc	http://biocyc.org	http://biocyc.org/getid?id=$id	ECOLI:CYT-D-UBIOX-CPLX	gene		1	urn:miriam:biocyc	^[A-Z-0-9]+(?<!CHEBI)(\:)?[A-Za-z0-9+_.%-]+$	BioCyc
-BioGrid	Bg	http://thebiogrid.org/	http://thebiogrid.org/$id	31623	interaction		1	urn:miriam:biogrid	^\d+$	BioGRID
-BioModels Database	Bm	http://www.ebi.ac.uk/biomodels/	http://www.ebi.ac.uk/biomodels-main/$id	BIOMD0000000048	pathway		1	urn:miriam:biomodels.db	^((BIOMD|MODEL)\d{10})|(BMID\d{12})$	BioModels Database
+BioCyc	Bc	https://biocyc.org	https://biocyc.org/getid?id=$id	ECOLI:CYT-D-UBIOX-CPLX	gene		1	urn:miriam:biocyc	^[A-Z-0-9]+(?<!CHEBI)(\:)?[A-Za-z0-9+_.%-]+$	BioCyc
+BioGrid	Bg	https://thebiogrid.org/	https://thebiogrid.org/$id	31623	interaction		1	urn:miriam:biogrid	^\d+$	BioGRID
+BioModels Database	Bm	https://www.ebi.ac.uk/biomodels/	https://www.ebi.ac.uk/biomodels/$id	BIOMD0000000048	pathway		1	urn:miriam:biomodels.db	^((BIOMD|MODEL)\d{10})|(BMID\d{12})$	BioModels Database
 BioNumbers	bionumbers		http://www.bionumbers.hms.harvard.edu/bionumber.aspx?s=y&id=$id&ver=1	104674	unknown		1	urn:miriam:bionumbers	^\d+$	
 Bioontology MESH	MSH	http://bioportal.bioontology.org/	http://purl.bioontology.org/ontology/MSH/$id	C536282	unknown		1	urn:miriam:mesh		
 Bioontology UMLS NCIM	NCIM		http://linkedlifedata.com/resource/umls/id/$id	C3203102	unknown		1			
@@ -75,7 +75,7 @@ CAS	Ca	https://commonchemistry.cas.org/	https://commonchemistry.cas.org/detail?c
 CATH domain	cath.domain		http://www.cathdb.info/domain/$id	1cukA01	unknown		1	urn:miriam:cath.domain	^\w+$	
 CATH superfamily	cath.superfamily		http://www.cathdb.info/cathnode/$id	1.10.10.200	unknown		1	urn:miriam:cath.superfamily	^\d+(\.\d+(\.\d+(\.\d+)?)?)?$	
 CAZy	cazy		http://www.cazy.org/$id.html	GT10	unknown		1	urn:miriam:cazy	^GT\d+$	
-CCDS	Cc	http://identifiers.org/ccds/	http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=ALLFIELDS&DATA=$id	CCDS43989	gene		0	urn:miriam:ccds	^CCDS\d+\.\d+$	Consensus CDS
+CCDS	Cc	http://identifiers.org/ccds/	https://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=ALLFIELDS&DATA=$id	CCDS43989	gene		0	urn:miriam:ccds	^CCDS\d+\.\d+$	Consensus CDS
 Cell Cycle Ontology	cco		http://bioportal.bioontology.org/ontologies/1507?p=terms&conceptid=$id	CCO:P0000023	unknown		1	urn:miriam:cco	^CCO\:\w+$	
 Cell Image Library	cellimage		http://cellimagelibrary.org/images/$id	24801	unknown		1	urn:miriam:cellimage	^\d+$	
 Cell Signaling Technology Antibody	cst.ab		http://www.cellsignal.com/products/$id.html	3305	unknown		1	urn:miriam:cst.ab	^\d+$	
@@ -83,7 +83,7 @@ Cell Signaling Technology Pathways	cst		http://www.cellsignal.com/reference/path
 Cell Type Ontology	cl		http://purl.bioontology.org/ontology/CL/$id	CL:0000232	unknown		1	urn:miriam:cl	^CL:\d{7}$	
 CGSC Strain	cgsc		http://cgsc.biology.yale.edu/Strain.php?ID=$id	11042	unknown		1	urn:miriam:cgsc	^\d+$	
 CharProt	charprot		http://www.jcvi.org/charprotdb/index.cgi/view/$id	CH_001923	unknown		1	urn:miriam:charprot	^CH_\d+$	
-ChEBI	Ce	http://www.ebi.ac.uk/chebi/	http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id	CHEBI:36927	metabolite		1	urn:miriam:chebi	^CHEBI:\d+$	ChEBI
+ChEBI	Ce	https://www.ebi.ac.uk/chebi/	https://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id	CHEBI:36927	metabolite		1	urn:miriam:chebi	^CHEBI:\d+$	ChEBI
 ChemBank	chembank		http://chembank.broadinstitute.org/chemistry/viewMolecule.htm?cbid=$id	1000000	unknown		1	urn:miriam:chembank	^\d+$	
 ChEMBL compound	Cl	https://www.ebi.ac.uk/chembldb/	https://www.ebi.ac.uk/chembl/compound/inspect/$id	CHEMBL308052	metabolite		1	urn:miriam:chembl.compound	^CHEMBL\d+$	
 ChEMBL target	chembl.target		https://www.ebi.ac.uk/chembl/target/inspect/$id	CHEMBL3467	unknown		1	urn:miriam:chembl.target	^CHEMBL\d+$				
@@ -94,7 +94,7 @@ LinkedChemistry ChEMBL target  linkedchemistry.chembl.target            http://l
 ChemDB	chemdb		http://cdb.ics.uci.edu/cgibin/ChemicalDetailWeb.py?chemical_id=$id	3966782	unknown		1	urn:miriam:chemdb	^\d+$	
 Chemical Component Dictionary	pdb-ccd		http://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/$id	AB0	unknown		1	urn:miriam:pdb-ccd	^\w{3}$	
 ChemIDplus	chemidplus	http://chem.sis.nlm.nih.gov/chemidplus/chemidheavy.jsp	http://chem.sis.nlm.nih.gov/chemidplus/direct.jsp?regno=$id	000057272	metabolite		1	urn:miriam:chemidplus	^\d+$	
-Chemspider	Cs	http://www.chemspider.com/	http://www.chemspider.com/Chemical-Structure.$id.html	56586	metabolite		1	urn:miriam:chemspider	^\d+$	ChemSpider
+Chemspider	Cs	https://www.chemspider.com/	https://www.chemspider.com/$id	56586	metabolite		1	urn:miriam:chemspider	^\d+$	ChemSpider
 Cint	C				probe		0			
 CLDB	cldb		http://bioinformatics.istge.it/hypercldb/$id.html	cl3603	unknown		1	urn:miriam:cldb	^cl\d+$	
 ClinicalTrials.gov	clinicaltrials		http://clinicaltrials.gov/ct2/show/$id	NCT00222573	unknown		1	urn:miriam:clinicaltrials	^NCT\d{8}$	
@@ -221,16 +221,16 @@ Golm Metabolome Database GC-MS spectra	gmd.gcms		http://gmd.mpimp-golm.mpg.de/Sp
 Golm Metabolome Database Profile	gmd.profile		http://gmd.mpimp-golm.mpg.de/profile/default.aspx?XemlId=$id	10b38aaf-b977-4950-85b8-f4775f66658d	unknown		1	urn:miriam:gmd.profile	^([0-9a-fA-F]){8}(-([0-9a-fA-F]){4}){3}-([0-9a-fA-F]){12}$	
 Golm Metabolome Database Reference Substance	gmd.ref		http://gmd.mpimp-golm.mpg.de/ReferenceSubstances/$id	8cf84adb-b4db-4807-ac98-0004247c35df	unknown		1	urn:miriam:gmd.ref	^([0-9a-fA-F]){8}(-([0-9a-fA-F]){4}){3}-([0-9a-fA-F]){12}$	
 GPCRDB	gpcrdb		http://www.gpcr.org/7tm/proteins/$id	RL3R1_HUMAN	unknown		1	urn:miriam:gpcrdb	^\w+$	
-Gramene Arabidopsis	EnAt	http://www.gramene.org/	http://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?g=$id	ATMG01360-TAIR-G	gene	Arabidopsis thaliana	1		AT[\dCM]G\d{5}\-TAIR\-G	Grameen Arabidopsis
-Gramene Genes DB	Gg	http://www.gramene.org/	http://www.gramene.org/db/genes/search_gene?acc=$id	GR:0060184	gene		1	urn:miriam:gramene.gene	^GR\:\d+$	Gramene Genes
-Gramene Growth Stage Ontology	gramene.growthstage		http://www.gramene.org/db/ontology/search?id=$id	GRO:0007133	unknown		1	urn:miriam:gramene.growthstage	^GRO\:\d+$	
-Gramene Literature	Gl	http://www.gramene.org/	http://www.gramene.org/db/literature/pub_search?ref_id=$id	6200	gene		0			Gramene Literature
-Gramene Maize	EnZm	http://www.ensembl.org	http://www.maizesequence.org/Zea_mays/Gene/Summary?g=$id	GRMZM2G174107	gene		1			Gramene Maize
-Gramene Pathway	Gp	http://www.gramene.org/pathway		AAH72400	pathway		0			Gramene Pathway
-Gramene protein	gramene.protein		http://www.gramene.org/db/protein/protein_search?protein_id=$id	78073	unknown		1	urn:miriam:gramene.protein	^\d+$	
-Gramene QTL	gramene.qtl		http://www.gramene.org/db/qtl/qtl_display?qtl_accession_id=$id	CQG5	unknown		1	urn:miriam:gramene.qtl	^\w+$	
-Gramene Rice	EnOj	http://www.gramene.org/	http://www.gramene.org/Oryza_sativa/Gene/Summary?db=core;g=$id	osa-MIR171a	gene		1			Gramene Rice
-Gramene Taxonomy	gramene.taxonomy		http://www.gramene.org/db/ontology/search?id=$id	GR_tax:013681	unknown		1	urn:miriam:gramene.taxonomy	^GR\_tax\:\d+$	
+Gramene Arabidopsis	EnAt	https://www.gramene.org/	https://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?g=$id	ATMG01360-TAIR-G	gene	Arabidopsis thaliana	1		AT[\dCM]G\d{5}\-TAIR\-G	Grameen Arabidopsis
+Gramene Genes DB	Gg	https://www.gramene.org/	https://archive.gramene.org/db/genes/search_gene?acc=$id	GR:0060184	gene		1	urn:miriam:gramene.gene	^GR\:\d+$	Gramene Genes
+Gramene Growth Stage Ontology	gramene.growthstage		https://www.gramene.org/db/ontology/search?id=$id	GRO:0007133	unknown		1	urn:miriam:gramene.growthstage	^GRO\:\d+$	
+Gramene Literature	Gl	https://www.gramene.org/	https://www.gramene.org/db/literature/pub_search?ref_id=$id	6200	gene		0			Gramene Literature
+Gramene Maize	EnZm	https://www.ensembl.org	https://ensembl.gramene.org/Zea_mays/Search/Results?q=$id	GRMZM2G174107	gene		1			Gramene Maize
+Gramene Pathway	Gp	https://www.gramene.org/pathway		AAH72400	pathway		0			Gramene Pathway
+Gramene protein	gramene.protein		https://www.gramene.org/db/protein/protein_search?protein_id=$id	78073	unknown		1	urn:miriam:gramene.protein	^\d+$	
+Gramene QTL	gramene.qtl		https://www.gramene.org/db/qtl/qtl_display?qtl_accession_id=$id	CQG5	unknown		1	urn:miriam:gramene.qtl	^\w+$	
+Gramene Rice	EnOj	https://www.gramene.org/	https://www.gramene.org/Oryza_sativa/Gene/Summary?db=core;g=$id	osa-MIR171a	gene		1			Gramene Rice
+Gramene Taxonomy	gramene.taxonomy		https://www.gramene.org/db/ontology/search?id=$id	GR_tax:013681	unknown		1	urn:miriam:gramene.taxonomy	^GR\_tax\:\d+$	
 GreenGenes	greengenes		http://greengenes.lbl.gov/cgi-bin/show_one_record_v2.pl?prokMSA_id=$id	100000	unknown		1	urn:miriam:greengenes	^\d+$	
 GRIN Plant Taxonomy	grin.taxonomy		http://www.ars-grin.gov/cgi-bin/npgs/html/taxon.pl?$id	19333	unknown		1	urn:miriam:grin.taxonomy	^\d+$	
 GRSDB	grsdb		http://bioinformatics.ramapo.edu/GRSDB2/geneview.php?geneID=$id	10142	unknown		1	urn:miriam:grsdb	^\d+$	
@@ -266,7 +266,7 @@ Illumina	Il	http://www.illumina.com/		ILMN_5668	probe		0		ILMN_\d+	Illumina
 IMEx	imex		http://www.ebi.ac.uk/intact/imex/main.xhtml?query=$id	IM-12080-80	unknown		1	urn:miriam:imex	^IM-\d+(-?)(\d+?)$	
 IMGT HLA	imgt.hla		http://www.ebi.ac.uk/cgi-bin/imgt/hla/get_allele.cgi?$id	A*01:01:01:01	unknown		1	urn:miriam:imgt.hla	^[A-Z0-9*:]+$	
 IMGT LIGM	imgt.ligm		http://genius.embnet.dkfz-heidelberg.de/menu/cgi-bin/srs7.1.3.1/wgetz?-id+4ktAl1fNMTA+-e+%5BIMGT%3A%27$id%27%5D	M94112	unknown		1	urn:miriam:imgt.ligm	^M\d+$	
-InChI	inchi		http://www.chemspider.com/$id	InChI=1S/C2H6O/c1-2-3/h3H,2H2,1H3	unknown		1	urn:miriam:inchi	^InChI\=1S\/[A-Za-z0-9]+(\/[cnpqbtmsih][A-Za-z0-9\-\+\(\)\,]+)+$	
+InChI	inchi		https://www.chemspider.com/$id	InChI=1S/C2H6O/c1-2-3/h3H,2H2,1H3	unknown		1	urn:miriam:inchi	^InChI\=1S\/[A-Za-z0-9]+(\/[cnpqbtmsih][A-Za-z0-9\-\+\(\)\,]+)+$	
 InChIKey	inchikey		http://cactus.nci.nih.gov/chemical/structure/$id/names	RYYVLZVUVIJVGH-UHFFFAOYSA-N	unknown		1	urn:miriam:inchikey	^[A-Z]{14}\-[A-Z]{10}(\-[A-N])?	
 IntAct	Ia	http://www.ebi.ac.uk/intact/	http://www.ebi.ac.uk/intact/pages/details/details.xhtml?interactionAc=$id	EBI-2307691	interaction		1	urn:miriam:intact	^EBI\-[0-9]+$	IntAct
 IntAct Molecule	intact.molecule		http://www.ebi.ac.uk/intact/molecule/$id	EBI-366083	unknown		1	urn:miriam:intact.molecule	^EBI\-[0-9]+$	
@@ -331,8 +331,8 @@ MicrosporidiaDB	microsporidia		http://microsporidiadb.org/micro/showRecord.do?na
 MimoDB	mimodb		http://immunet.cn/mimodb/browse.php?table=mimoset&ID=$id	1	unknown		1	urn:miriam:mimodb	^\d+$	
 MINT	Mi	http://mint.bio.uniroma2.it/mint/	http://mint.bio.uniroma2.it/mint/search/inFrameInteraction.do?interactionAc=$id	MINT-10000	interaction		1	urn:miriam:mint	^MINT\-\d{1,5}$	MINT
 MIPModDB	mipmod		http://bioinfo.iitk.ac.in/MIPModDB/result.php?code=$id	HOSAPI0399	unknown		1	urn:miriam:mipmod	^\w+$	
-miRBase mature sequence	Mbm	http://www.mirbase.org/	http://www.mirbase.org/cgi-bin/mature.pl?mature_acc=$id	MIMAT0000001	gene		1	urn:miriam:mirbase.mature	MIMAT\d{7}	miRBase mature sequence
-miRBase Sequence	Mb	http://microrna.sanger.ac.uk/	http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$id	MI0000001	gene		1	urn:miriam:mirbase	MI\d{7}	miRBase Sequence
+miRBase mature sequence	Mbm	https://www.mirbase.org/	https://mirbase.org/mature/$id	MIMAT0000001	gene		1	urn:miriam:mirbase.mature	MIMAT\d{7}	miRBase mature sequence
+miRBase Sequence	Mb	http://microrna.sanger.ac.uk/	https://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$id	MI0000001	gene		1	urn:miriam:mirbase	MI\d{7}	miRBase Sequence
 mirEX	mirex		http://comgen.pl/mirex/?page=results%2Frecord&name=$id&web_temp=1683440&exref=pp2a&limit=yes	165a	unknown		1	urn:miriam:mirex	^\d+(\w+)?$	
 MIRIAM Registry collection	miriam.collection		http://www.ebi.ac.uk/miriam/main/$id	MIR:00000008	unknown		1	urn:miriam:miriam.collection	^MIR:000\d{5}$	
 MIRIAM Registry resource	miriam.resource		http://www.ebi.ac.uk/miriam/main/resources/$id	MIR:00100005	unknown		1	urn:miriam:miriam.resource	^MIR:001\d{5}$	
@@ -404,7 +404,7 @@ PANTHER Pathway	panther.pathway		http://www.pantherdb.org/pathway/pathwayDiagram
 PANTHER Pathway Component	panther.pthcmp		http://www.pantherdb.org/pathway/pathCatDetail.do?clsAccession=$id	P00266	unknown		1	urn:miriam:panther.pthcmp	^G|P|U|C|S\d{5}$	
 PASS2	pass2		http://caps.ncbs.res.in/pass2/superfamily/superfamilydetail.php?superfamilyId=$id	46977	unknown		1	urn:miriam:pass2	^\d+$	
 Pathway Commons	Pc	http://www.pathwaycommons.org/pc/	http://www.pathwaycommons.org/pc/record2.do?id=$id	485991	pathway		1	urn:miriam:pathwaycommons	^\d+$	Pathway Commons
-Pathway Ontology	PW	http://rgd.mcw.edu/rgdweb/ontology/search.html	http://purl.bioontology.org/ontology/PW/$id	PW:0000208	pathway		1	urn:miriam:pw	^PW:\d{7}$	
+Pathway Ontology	PW	https://rgd.mcw.edu/rgdweb/ontology/search.html	http://purl.bioontology.org/ontology/PW/$id	PW:0000208	pathway		1	urn:miriam:pw	^PW:\d{7}$	
 PATO	pato		http://www.ebi.ac.uk/ontology-lookup/?termId=$id	PATO:0001998	unknown		1	urn:miriam:pato	^PATO:\d{7}$	
 PaxDb Organism	paxdb.organism		http://pax-db.org/#!species/$id	9606	unknown		1	urn:miriam:paxdb.organism	^\d+$	
 PaxDb Protein	paxdb.protein		http://pax-db.org/#!protein/$id	977869	unknown		1	urn:miriam:paxdb.protein	^\d+$	
@@ -454,17 +454,17 @@ PubChem-compound	Cpc	http://pubchem.ncbi.nlm.nih.gov/	http://pubchem.ncbi.nlm.ni
 PubChem-substance	Cps	http://pubchem.ncbi.nlm.nih.gov/	http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=$id	100101	metabolite		1	urn:miriam:pubchem.substance	^\d+$	PubChem-substance
 PubMed	pubmed	http://www.ncbi.nlm.nih.gov/PubMed/	http://www.ncbi.nlm.nih.gov/pubmed/$id	16333295	publication		1	urn:miriam:pubmed	^\d+$	
 PubMed Central	pmc		http://europepmc.org/articles/$id	PMC3084216	unknown		1	urn:miriam:pmc	PMC\d+	
-Rat Genome Database qTL	rgd.qtl		http://rgd.mcw.edu/rgdweb/report/qtl/main.html?id=$id	1354581	unknown		1	urn:miriam:rgd.qtl	^\d+$	
-Rat Genome Database strain	rgd.strain		http://rgd.mcw.edu/rgdweb/report/strain/main.html?id=$id	5688061	unknown		1	urn:miriam:rgd.strain	^\d+$	
+Rat Genome Database qTL	rgd.qtl		https://rgd.mcw.edu/rgdweb/report/qtl/main.html?id=$id	1354581	unknown		1	urn:miriam:rgd.qtl	^\d+$	
+Rat Genome Database strain	rgd.strain		https://rgd.mcw.edu/rgdweb/report/strain/main.html?id=$id	5688061	unknown		1	urn:miriam:rgd.strain	^\d+$	
 Reactome	Re	http://www.reactome.org/	http://www.reactome.org/cgi-bin/eventbrowser_st_id?FROM_REACTOME=1&ST_ID=$id	REACT_1590	pathway		1	urn:miriam:reactome	^REACT_\d+(\.\d+)?$	Reactome
 REBASE	rebase		http://rebase.neb.com/rebase/enz/$id.html	101	unknown		1	urn:miriam:rebase	^\d+$	
 RefSeq	Q	http://www.ncbi.nlm.nih.gov/projects/RefSeq/	http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=$id	NP_012345	gene		1	urn:miriam:refseq	^((AC|AP|NC|NG|NM|NP|NR|NT|NW|XM|XP|XR|YP|ZP)_\d+|(NZ\_[A-Z]{4}\d+))(\.\d+)?$	RefSeq
 Relation Ontology	ro		http://www.obofoundry.org/ro/#$id	OBO_REL:is_a	unknown		1	urn:miriam:ro	^OBO_REL:\w+$	
 RESID	Res	http://www.ebi.ac.uk/RESID/	http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+6JSUg1NA6u4+-e+[RESID:'$id']	AA0001	protein		1	urn:miriam:resid	^AA\d{4}$	RESID
 Rfam	Rf		http://www.sanger.ac.uk/cgi-bin/Rfam/getacc?$id	RF00066	gene		1	urn:miriam:rfam	^RF\d+$	RFAM
-RGD	R	http://rgd.mcw.edu/	http://rgd.mcw.edu/tools/genes/genes_view.cgi?id=$id	2018	gene	Rattus norvegicus	1	urn:miriam:rgd	^\d{4,7}$	Rat Genome Database
+RGD	R	https://rgd.mcw.edu/	https://rgd.mcw.edu/rgdweb/report/gene/main.html?id=$id	2018	gene	Rattus norvegicus	1	urn:miriam:rgd	^\d{4,7}$	Rat Genome Database
 Rhea	Rh	http://www.ebi.ac.uk/rhea/	http://www.ebi.ac.uk/rhea/reaction.xhtml?id=$id	12345	interaction		1	urn:miriam:rhea	^\d{5}$	Rhea
-Rice Ensembl Gene	Os	http://www.gramene.org/Oryza_sativa	http://www.gramene.org/Oryza_sativa/geneview?gene=$id	LOC_Os04g54800	gene	Oryza sativa	1			Rice Ensembl Gene
+Rice Ensembl Gene	Os	https://www.gramene.org/Oryza_sativa	https://www.gramene.org/Oryza_sativa/geneview?gene=$id	LOC_Os04g54800	gene	Oryza sativa	1			Rice Ensembl Gene
 Rice Genome Annotation Project	ricegap		http://rice.plantbiology.msu.edu/cgi-bin/ORF_infopage.cgi?orf=$id	LOC_Os02g13300	unknown		1	urn:miriam:ricegap	^LOC\_Os\d{1,2}g\d{5}$	
 RNA Modification Database	rnamods		http://mods.rna.albany.edu/mods/modifications/view/$id	101	unknown		1	urn:miriam:rnamods	^\d{3}$	
 Rouge	rouge		http://www.kazusa.or.jp/rouge/gfpage/$id/	mKIAA4200	unknown		1	urn:miriam:rouge	^m\w+$	
@@ -502,7 +502,7 @@ SUPFAM	Sf	http://supfam.org/SUPERFAMILY/	http://supfam.org/SUPERFAMILY/cgi-bin/s
 SWISS-MODEL	Sw	http://swissmodel.expasy.org/	http://swissmodel.expasy.org/repository/smr.php?sptr_ac=$id	P23298	protein		1	urn:miriam:swiss-model	^\w+$	SWISS-MODEL
 Systems Biology Ontology	Sbo	http://www.ebi.ac.uk/sbo/	http://www.ebi.ac.uk/sbo/main/$id	SBO:0000262	ontology		1	urn:miriam:biomodels.sbo	^SBO:\d{7}$	Systems Biology Ontology
 T3DB	t3db		http://www.t3db.org/toxins/$id	T3D0001	unknown		1	urn:miriam:t3db	^T3D\d+$	
-TAIR	A	http://arabidopsis.org/index.jsp	http://arabidopsis.org/servlets/TairObject?type=locus&name=$id	AT1G01030	gene		1	urn:miriam:tair.locus	^AT[1-5]G\d{5}$	TAIR Locus
+TAIR	A	https://www.arabidopsis.org/	https://www.arabidopsis.org/results?mainType=general&category=genes&searchText=$id	AT1G01030	gene		1	urn:miriam:tair.locus	^AT[1-5]G\d{5}$	TAIR Locus
 TAIR Gene	tair.gene		http://arabidopsis.org/servlets/TairObject?accession=$id	Gene:2200934	unknown		1	urn:miriam:tair.gene	^Gene:\d{7}$	
 TAIR Protein	tair.protein		http://arabidopsis.org/servlets/TairObject?accession=$id	AASequence:1009107926	unknown		1	urn:miriam:tair.protein	^AASequence:\d{10}$	
 TarBase	tarbase		http://diana.cslab.ece.ntua.gr/DianaToolsNew/index.php?r=tarbase%2Findex&mirnas=$id	hsa-let-7	unknown		1	urn:miriam:tarbase	^\w+\-\w+\-\w+	
