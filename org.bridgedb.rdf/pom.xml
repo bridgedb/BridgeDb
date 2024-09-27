@@ -6,7 +6,7 @@
   <parent>
   	<artifactId>bridgedb-bundle</artifactId>
   	<groupId>org.bridgedb</groupId>
-  	<version>3.0.28-SNAPSHOT</version>
+  	<version>3.0.28</version>
   </parent>
 
     <build>
