@@ -21,7 +21,7 @@ public class UniProtKBTest {
 
 	@BeforeAll
 	public static void setUpSources() {
-		DataSourceTxt.init();
+		if (DataSource.getDataSources().size() < 20) DataSourceTxt.init();
 	}
 
 	@Test
