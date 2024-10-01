@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.bridgedb.DataSource;
+import org.junit.jupiter.api.BeforeAll;
 
 
 /**
@@ -40,6 +41,11 @@ import org.bridgedb.DataSource;
  * @author Christian
  */
 public class DataSourceTxtTest {
+
+	@BeforeAll
+	public static void setUpSources() {
+		if (DataSource.getDataSources().size() < 20) DataSourceTxt.init();
+	}
 
 	@org.junit.jupiter.api.Test
 	public void testUniqueSystemCodes() {
