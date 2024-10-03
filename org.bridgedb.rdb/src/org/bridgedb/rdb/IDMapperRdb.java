@@ -89,8 +89,13 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper, XrefIter
 
 	            String host = args.containsKey("host") ? args.get("host") : "wikipathways.org";
 	            String port = args.containsKey("port") ? args.get("port") : "1527";
-	            
-				Class.forName("org.apache.derby.jdbc.ClientDriver");
+
+	            try {
+					Class.forName("org.apache.derby.jdbc.ClientDriver"); // Derby 10.4
+					System.out.println("Derby ClientDriver loaded");
+	            } catch (ClassNotFoundException e) {
+	            	// ignore, probably we're running this with Derby 10.14 or higher
+	            }
 				Properties sysprop = System.getProperties();
 				sysprop.setProperty("derby.storage.tempDirectory", System.getProperty("java.io.tmpdir"));
 				sysprop.setProperty("derby.stream.error.file", File.createTempFile("derby",".log").toString());
@@ -99,10 +104,6 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper, XrefIter
 				return SimpleGdbFactory.createInstance(location, url);
 			}
 			catch (IOException e)
-			{
-				throw new IDMapperException (e);
-			}
-			catch (ClassNotFoundException e)
 			{
 				throw new IDMapperException (e);
 			}
