@@ -151,7 +151,6 @@ public class Test {
 		Class.forName("org.bridgedb.file.IDMapperText");
 		Class.forName("org.bridgedb.rdb.IDMapperRdb");
 		Class.forName("com.mysql.jdbc.Driver");
-		// no longer needed?? Class.forName("org.apache.derby.jdbc.ClientDriver");
 
 		String fileName = "yeast_id_mapping";
 		String fullName = fileName + ".txt";
@@ -181,8 +180,13 @@ public class Test {
 		long start, end, delta;
 		start = System.currentTimeMillis();
 		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
-		Class.forName ("org.apache.derby.jdbc.ClientDriver");
-		
+        try {
+			Class.forName("org.apache.derby.jdbc.ClientDriver"); // Derby 10.4
+			System.out.println("Derby ClientDriver loaded");
+        } catch (ClassNotFoundException e) {
+        	// ignore, probably we're running this with Derby 10.14 or higher
+        }
+
 		IDMapper mapper = BridgeDb.connect ("idmapper-derbyclient:Homo sapiens?host=www.wikipathways.org");
 		end = System.currentTimeMillis();
 		delta = end - start;
