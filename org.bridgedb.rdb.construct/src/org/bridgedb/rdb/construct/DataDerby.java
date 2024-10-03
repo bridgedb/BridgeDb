@@ -123,11 +123,12 @@ public class DataDerby extends DBConnector
 		{
 			sysprop.setProperty("derby.storage.tempDirectory", System.getProperty("java.io.tmpdir"));
 			sysprop.setProperty("derby.stream.error.file", File.createTempFile("derby",".log").toString());
-			Class.forName("org.apache.derby.jdbc.ClientDriver");
-		}
-		catch (ClassNotFoundException e)
-		{
-			throw new IDMapperException (e);
+            try {
+				Class.forName("org.apache.derby.jdbc.ClientDriver"); // Derby 10.4
+				System.out.println("Derby ClientDriver loaded");
+            } catch (ClassNotFoundException e) {
+            	// ignore, probably we're running this with Derby 10.14 or higher
+            }
 		}
 		catch (IOException f)
 		{
