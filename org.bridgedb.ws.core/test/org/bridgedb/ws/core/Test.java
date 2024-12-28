@@ -172,12 +172,12 @@ public class Test {
 		assertEquals("class org.bridgedb.ws.bean.DataSourceBean",dsBean.getClass().toString());
 		assertEquals("S",dsBean.getIdExample());
 		assertEquals("S",dsBean.getSysCode());
-		assertEquals("Uniprot-TrEMBL",dsBean.getFullName());
+		assertEquals("UniProtKB",dsBean.getFullName());
 		assertEquals("http://www.uniprot.org/",dsBean.getMainUrl());
 		assertEquals("protein",dsBean.getType().toString());
 		assertEquals("http://www.uniprot.org/uniprot/$id", dsBean.getUrlPattern());
 		assertEquals("urn:miriam:uniprot", dsBean.getUrnBase());
-		assertEquals("S:Uniprot-TrEMBL", dsBean.toString());
+		assertEquals("S:UniProtKB", dsBean.toString());
 		assertEquals("sysCode = dsEnsembl", testdsBean.toString());
 		assertEquals("sysCode = Ensembl", testdsBean2.toString());
 
