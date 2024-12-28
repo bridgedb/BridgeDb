@@ -666,6 +666,10 @@ public final class DataSource
 	 * @return Builder that can be used for adding detailed information.
 	 */
 	public static Builder register(String sysCode, String fullName){
+		if ("Uniprot-TrEMBL".equals(fullName) || "Uniprot-SwissProt".equals(fullName)) {
+			fullName = "UniProtKB";
+		}
+
         if (!isSuitableKey(sysCode)) {
             throw new IllegalArgumentException ("Unsuitable sysCode " + sysCode + " with " + fullName);
         }
@@ -683,6 +687,10 @@ public final class DataSource
 	 * @return Builder that can be used for adding detailed information.
 	 */
 	public static Builder mock(String sysCode, String fullName){
+		if ("Uniprot-TrEMBL".equals(fullName) || "Uniprot-SwissProt".equals(fullName)) {
+			fullName = "UniProtKB";
+		}
+
 		return new Builder(new DataSource (sysCode, fullName));
     }
             
@@ -690,7 +698,11 @@ public final class DataSource
 	{
  		DataSource current = null;
 		if (fullName == null && sysCode == null) throw new NullPointerException();
-		
+
+		if ("Uniprot-TrEMBL".equals(fullName) || "Uniprot-SwissProt".equals(fullName)) {
+			fullName = "UniProtKB";
+		}
+
 		if (byFullName.containsKey(fullName))
 		{
 			current = byFullName.get(fullName);
