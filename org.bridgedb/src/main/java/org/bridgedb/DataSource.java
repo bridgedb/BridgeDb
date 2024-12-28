@@ -835,6 +835,9 @@ public final class DataSource
      * @since Version 2.0.0
      */
     public static boolean fullNameExists(String fullName){
+        if ("Uniprot-TrEMBL".equals(fullName) || "Uniprot-SwissProt".equals(fullName)) {
+			fullName = "UniProtKB";
+		}
         return byFullName.containsKey(fullName);
     }
     
