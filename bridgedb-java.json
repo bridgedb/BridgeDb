@@ -1,0 +1,19 @@
+{
+  "Title": "BridgeDb Java",
+  "Statement": "Standardised access to Identifier Mappings",
+  "Description": "BridgeDb is a framework to map identifiers between various biological databases and related resources. These mappings are provided for genes, proteins, metabolites, metabolic reactions, diseases, complexes and publications. BridgeDb includes a Java library that provides an API for programmatic access.",
+  "License": "Apache-2.0 license",
+  "Dependencies": "Apache Derby, Apache Commons CLI, RDF4J",
+  "Code language": "Java",
+  "Available platform": "Platform independent",
+  "Interface CLI": "no",
+  "Interface GUI": "no",
+  "Interface web platform": "mp",
+  "Input format": "text",
+  "Output format": "text",
+  "Source code": " {{Replace by link to the source code}} ",
+  "Documentation link": "https://www.bridgedb.org/pages/docs.html",
+  "Installation instructions": "https://www.bridgedb.org/pages/download.html",
+  "Zenodo link": "https://doi.org/10.5281/zenodo.593034",
+  "Citation instructions": "If you use this software in your work, please cite Van Iersel, M. P., Pico, A. R., Kelder, T., Gao, J., Isaac, H., Hanspers, K., Conklin, B. R., & Evelo, C. T. (2010). The BridgeDb framework: standardized access to gene, protein and metabolite identifier mapping services. BMC Bioinformatics, 11(5). https://doi.org/10.1186/1471-2105-11-5"
+}
