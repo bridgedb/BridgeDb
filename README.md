@@ -135,7 +135,8 @@ To make the release, run the following commands. Mind you, this requires you
 to have an approved Sonatype (http://oss.sonatype.org/) account with push rights:
 
 ```shell
-mvn versions:set -DnewVersion=3.1.4
+mvn versions:set -DnewVersion=3.1.5
+mvn -f pom-java8.xml versions:set -DnewVersion=3.1.5
 mvn clean deploy
 ```
 
@@ -145,7 +146,8 @@ and everything.
 To make a development (SNAPSHOT) release, use:
 
 ```shell
-mvn versions:set -DnewVersion=3.1.5-SNAPSHOT
+mvn versions:set -DnewVersion=3.1.6-SNAPSHOT
+mvn -f pom-java8.xml versions:set -DnewVersion=3.1.6-SNAPSHOT
 mvn clean deploy
 ```
 
