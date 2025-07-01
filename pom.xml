@@ -49,7 +49,7 @@
         <felix.version>5.1.9</felix.version>
         <hamcrest.version>3.0</hamcrest.version>
         <jersey.version>1.10</jersey.version>
-        <log4j.version>2.22.0</log4j.version>
+        <log4j.version>2.25.0</log4j.version>
         <mysql.version>9.0.0</mysql.version>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <owlapi-api.version>3.4</owlapi-api.version>
