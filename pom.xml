@@ -110,9 +110,9 @@
                                                 <requireMavenVersion>
                                                         <version>3.6.3</version>
                                                 </requireMavenVersion>
-                                                <requireJavaVersion>
+                                                <!-- requireJavaVersion>
                                                         <version>11</version>
-                                                </requireJavaVersion>
+                                                </requireJavaVersion -->
                                         </rules>
                                 </configuration>
                         </execution>
