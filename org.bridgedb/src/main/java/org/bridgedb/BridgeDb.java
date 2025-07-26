@@ -16,8 +16,11 @@
 //
 package org.bridgedb;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Central access point for connecting to IDMappers.
@@ -69,4 +72,23 @@ public final class BridgeDb
 	{
 		drivers.put(protocol, driver);
 	}
+
+    private static volatile String version;
+
+    /**
+     * Returns the version of BridgeDb.
+     */
+    public static String getVersion() {
+        if (version != null) return version;
+        try (InputStream stream = BridgeDb.class.getResourceAsStream("/version.props")) {
+            Properties props = new Properties();
+            props.load(stream);
+            version = props.getProperty("bridgedb.version");
+            return version;
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        return null;
+    }
+
 }
