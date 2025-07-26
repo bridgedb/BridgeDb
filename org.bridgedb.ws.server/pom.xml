@@ -16,6 +16,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar.version}</version>
                 <executions>
                     <execution>
                         <id>jar-services-provided</id>
