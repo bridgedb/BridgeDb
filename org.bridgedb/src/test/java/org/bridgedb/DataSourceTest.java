@@ -368,17 +368,6 @@ public class DataSourceTest {
 		assertEquals("Escherichia coli",source2.getOrganism());
 		assertNotNull(source2.getOrganism());
 			
-		DataSource source3 = DataSource.register("Ec", "Ecogene")
-				.urnBase("urn:miriam:ecogene")
-				.description(null)
-				.identifiersOrgBase("http://identifiers.org/ecogene/")
-				.alternative("MetaboLoci Alternative")
-				.asDataSource();
-		assertEquals("Ecogene",DataSource.getByMiriamBase("urn:miriam:ecogene").toString());
-		assertEquals("Ecogene",DataSource.getByIdentiferOrgBase("http://identifiers.org/ecogene/").toString());
-		assertEquals("Ecogene",DataSource.getByIdentiferOrgBase("https://identifiers.org/ecogene/").toString());
-		assertEquals("urn:miriam:ecogene:EG10173",source3.getMiriamURN("EG10173").toString());
-
 		DataSource source4 = DataSource.register("Ect", "EPA CompTox")
 					.urnBase("urn:miriam:Ect")
 					.description("")
@@ -456,12 +445,6 @@ public class DataSourceTest {
 			DataSource source5 = DataSource.register("Ect", "EPA CompTox")
 					.asDataSource();
 			source5 = DataSource.register(null, "EPA CompTox")
-					.asDataSource();
-		});
-		
-		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			DataSource source5 = DataSource.register("Ec", "Ecogene")
-					.identifiersOrgBase("test")
 					.asDataSource();
 		});
 	}

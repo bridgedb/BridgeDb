@@ -5379,22 +5379,6 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "European Bioinformatics Institute, Hinxton, Cambridge"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:landingPage <http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=SO> .
 
-<http://www.ebi.ac.uk/miriam/main/collections/MIR:00000163>
-      a       dcat:CatalogRecord ;
-      idot:idRegexPattern "^EG\\d+$"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      idot:namespace "ecogene"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      void:exampleResource
-              "EG10173"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      void:inDataset <http://identifiers.org/registry/> ;
-      void:uriSpace <http://identifiers.org/ecogene/> ;
-      dcat:description "The EcoGene database contains updated information about the E. coli K-12 genome and proteome sequences, including extensive gene bibliographies. A major EcoGene focus has been the re-evaluation of translation start sites."^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:distribution <http://identifiers.org/miriam.resource/MIR:00100208#application/xhtml+xml> , <http://identifiers.org/miriam.resource/MIR:00100209#application/xhtml+xml> ;
-      dcat:identifier "MIR:00000163"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:issued "2011-07-11T13:56:49+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
-      dcat:keyword "genome"^^<http://www.w3.org/2001/XMLSchema#string> , "microbial"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:modified "2012-09-25T13:07:55+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
-      dcat:title "EcoGene"^^<http://www.w3.org/2001/XMLSchema#string> .
-
 <http://identifiers.org/miriam.resource/MIR:00100106#application/xhtml+xml>
       a       dcat:Distribution ;
       dcat:accessURL <http://www.wikipathways.org/instance/$id> ;
@@ -6608,16 +6592,6 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "INRA UMR, Le Rheu"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:landingPage <http://www.aphidbase.com/aphidbase> .
 
-<http://identifiers.org/miriam.resource/MIR:00100208>
-      idot:reliability "99"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
-      idot:state "up"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcterms:title "EcoGene at University of Miami"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      <http://www.w3.org/2001/vcard-rdf/3.0#Country>
-              "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
-              "Miller School of Medicine, University of Miami"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://ecogene.org/> .
-
 <http://identifiers.org/miriam.resource/MIR:00100594>
       idot:reliability "100"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
       idot:state "up"^^<http://www.w3.org/2001/XMLSchema#string> ;
@@ -6745,16 +6719,6 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
       dcat:accessURL <http://us-east.omim.org/entry/$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100480> .
-
-<http://identifiers.org/miriam.resource/MIR:00100209>
-      idot:reliability "99"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
-      idot:state "up"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcterms:title "EcoGene at Purdue University"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      <http://www.w3.org/2001/vcard-rdf/3.0#Country>
-              "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
-              "Purdue University"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:landingPage <http://maxd.cs.purdue.edu:9455> .
 
 <http://identifiers.org/miriam.resource/MIR:00100276#application/xhtml+xml>
       a       dcat:Distribution ;
@@ -13961,12 +13925,6 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
       dcat:accessURL <http://2dbase.techfak.uni-bielefeld.de/cgi-bin/2d/2d.cgi?ac=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100248> .
-
-<http://identifiers.org/miriam.resource/MIR:00100208#application/xhtml+xml>
-      a       dcat:Distribution ;
-      dcat:accessURL <http://ecogene.org/?q=gene%2F$id> ;
-      dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100208> .
 
 <http://identifiers.org/miriam.resource/MIR:00100203>
       idot:reliability "98"^^<http://www.w3.org/2001/XMLSchema#decimal> ;

@@ -397,13 +397,6 @@ bridgeDB:DataSource_drugbankEnzyme a bridgeDB:DataSource ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasPrimaryUriPattern <http://www4.wiwiss.fu-berlin.de/drugbank/resource/enzymes/$id> .
 
-bridgeDB:DataSource_EcoGene a bridgeDB:DataSource ;
-	bridgeDB:fullName "EcoGene" ;
-	bridgeDB:systemCode "Ec" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "gene" ;
-	bridgeDB:Organism bridgeDB:Organism_Ec .
-
 bridgeDB:DataSource_EMBL a bridgeDB:DataSource ;
 	bridgeDB:fullName "EMBL" ;
 	bridgeDB:systemCode "Em" ;
@@ -523,7 +516,7 @@ bridgeDB:DataSource_Gramene_Arabidopsis a bridgeDB:DataSource ;
 	bridgeDB:idExample "ATMG01360-TAIR-G" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <https://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?g=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://plants.ensembl.org/id/$id> ;
 	bridgeDB:Organism bridgeDB:Organism_At .
 
 bridgeDB:DataSource_Gramene_Genes_DB a bridgeDB:DataSource ;
@@ -552,7 +545,7 @@ bridgeDB:DataSource_Gramene_Maize a bridgeDB:DataSource ;
 	bridgeDB:idExample "GRMZM2G174107" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <https://ensembl.gramene.org/Zea_mays/Search/Results?q=$id> .
+	bridgeDB:hasPrimaryUriPattern <https://plants.ensembl.org/id/$id> .
 
 bridgeDB:DataSource_Gramene_Pathway a bridgeDB:DataSource ;
 	bridgeDB:fullName "Gramene Pathway" ;
@@ -569,7 +562,7 @@ bridgeDB:DataSource_Gramene_Rice a bridgeDB:DataSource ;
 	bridgeDB:idExample "osa-MIR171a" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://plants.ensembl.org/Oryza_sativa/Gene/Summary?db=otherfeatures;g=$id> .
+	bridgeDB:hasPrimaryUriPattern <https://plants.ensembl.org/id/$id> .
 
 bridgeDB:DataSource_HGNC a bridgeDB:DataSource ;
 	bridgeDB:fullName "HGNC" ;
@@ -1054,7 +1047,7 @@ bridgeDB:DataSource_Rice_Ensembl_Gene a bridgeDB:DataSource ;
 	bridgeDB:idExample "LOC_Os04g54800" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <https://www.gramene.org/Oryza_sativa/geneview?gene=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://plants.ensembl.org/id/$id> ;
 	bridgeDB:Organism bridgeDB:Organism_Os ;
 	bridgeDB:hasRegexUriPattern <http://bio2rdf.org/ensembl:$id> .
 
