@@ -148,7 +148,6 @@ Drugbank Enzymes	drugbankEnzymes	http://www.drugbank.ca/	http://www4.wiwiss.fu-b
 Drugbank Target	drugbankTarget	http://www.drugbank.ca/	http://www.drugbank.ca/molecules/$id	6511	unknown		1	urn:miriam:drugbank.target	^\d+$	
 EchoBASE	echobase		http://www.york.ac.uk/res/thomas/Gene.cfm?recordID=$id	EB0170	unknown		1	urn:miriam:echobase	^EB\d+$	
 EcoCyc	Eco	http://ecocyc.org/	http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=$id	325-BISPHOSPHATE-NUCLEOTIDASE-RXN	interaction	Escherichia coli	1			EcoCyc
-EcoGene	Ec	http://ecogene.org/	http://ecogene.org/geneInfo.php?eg_id=$id	EG10173	gene	Escherichia coli	1	urn:miriam:ecogene	^EG\d+$	EcoGene
 EcoliWiki	ecoliwiki		http://ecoliwiki.net/colipedia/index.php/$id:Gene	aaeA	unknown		1	urn:miriam:ecoliwiki	^[A-Za-z0-9-]+$	
 EDAM Ontology	edam		http://purl.bioontology.org/ontology/EDAM/$id	1664	unknown		1	urn:miriam:edam	^(data|topic|operation|format)\_\d{4}$	
 eggNOG	eggnog		http://eggnog.embl.de/version_3.0/cgi/search.py?search_term_0=$id	veNOG12876	unknown		1	urn:miriam:eggnog	^\w+$	
@@ -221,11 +220,11 @@ Golm Metabolome Database GC-MS spectra	gmd.gcms		http://gmd.mpimp-golm.mpg.de/Sp
 Golm Metabolome Database Profile	gmd.profile		http://gmd.mpimp-golm.mpg.de/profile/default.aspx?XemlId=$id	10b38aaf-b977-4950-85b8-f4775f66658d	unknown		1	urn:miriam:gmd.profile	^([0-9a-fA-F]){8}(-([0-9a-fA-F]){4}){3}-([0-9a-fA-F]){12}$	
 Golm Metabolome Database Reference Substance	gmd.ref		http://gmd.mpimp-golm.mpg.de/ReferenceSubstances/$id	8cf84adb-b4db-4807-ac98-0004247c35df	unknown		1	urn:miriam:gmd.ref	^([0-9a-fA-F]){8}(-([0-9a-fA-F]){4}){3}-([0-9a-fA-F]){12}$	
 GPCRDB	gpcrdb		http://www.gpcr.org/7tm/proteins/$id	RL3R1_HUMAN	unknown		1	urn:miriam:gpcrdb	^\w+$	
-Gramene Arabidopsis	EnAt	https://www.gramene.org/	https://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?g=$id	ATMG01360-TAIR-G	gene	Arabidopsis thaliana	1		AT[\dCM]G\d{5}\-TAIR\-G	Grameen Arabidopsis
+Gramene Arabidopsis	EnAt	https://www.gramene.org/	https://plants.ensembl.org/id/$id	ATMG01360-TAIR-G	gene	Arabidopsis thaliana	1		AT[\dCM]G\d{5}\-TAIR\-G	Grameen Arabidopsis
 Gramene Genes DB	Gg	https://www.gramene.org/	https://archive.gramene.org/db/genes/search_gene?acc=$id	GR:0060184	gene		1	urn:miriam:gramene.gene	^GR\:\d+$	Gramene Genes
 Gramene Growth Stage Ontology	gramene.growthstage		https://www.gramene.org/db/ontology/search?id=$id	GRO:0007133	unknown		1	urn:miriam:gramene.growthstage	^GRO\:\d+$	
 Gramene Literature	Gl	https://www.gramene.org/	https://www.gramene.org/db/literature/pub_search?ref_id=$id	6200	gene		0			Gramene Literature
-Gramene Maize	EnZm	https://www.ensembl.org	https://ensembl.gramene.org/Zea_mays/Search/Results?q=$id	GRMZM2G174107	gene		1			Gramene Maize
+Gramene Maize	EnZm	https://www.ensembl.org	https://plants.ensembl.org/id/$id	GRMZM2G174107	gene		1			Gramene Maize
 Gramene Pathway	Gp	https://www.gramene.org/pathway		AAH72400	pathway		0			Gramene Pathway
 Gramene protein	gramene.protein		https://www.gramene.org/db/protein/protein_search?protein_id=$id	78073	unknown		1	urn:miriam:gramene.protein	^\d+$	
 Gramene QTL	gramene.qtl		https://www.gramene.org/db/qtl/qtl_display?qtl_accession_id=$id	CQG5	unknown		1	urn:miriam:gramene.qtl	^\w+$	
@@ -464,7 +463,7 @@ RESID	Res	http://www.ebi.ac.uk/RESID/	http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?
 Rfam	Rf		http://www.sanger.ac.uk/cgi-bin/Rfam/getacc?$id	RF00066	gene		1	urn:miriam:rfam	^RF\d+$	RFAM
 RGD	R	https://rgd.mcw.edu/	https://rgd.mcw.edu/rgdweb/report/gene/main.html?id=$id	2018	gene	Rattus norvegicus	1	urn:miriam:rgd	^\d{4,7}$	Rat Genome Database
 Rhea	Rh	http://www.ebi.ac.uk/rhea/	http://www.ebi.ac.uk/rhea/reaction.xhtml?id=$id	12345	interaction		1	urn:miriam:rhea	^\d{5}$	Rhea
-Rice Ensembl Gene	Os	https://www.gramene.org/Oryza_sativa	https://www.gramene.org/Oryza_sativa/geneview?gene=$id	LOC_Os04g54800	gene	Oryza sativa	1			Rice Ensembl Gene
+Rice Ensembl Gene	Os	https://www.gramene.org/Oryza_sativa	https://plants.ensembl.org/id/$id	LOC_Os04g54800	gene	Oryza sativa	1			Rice Ensembl Gene
 Rice Genome Annotation Project	ricegap		http://rice.plantbiology.msu.edu/cgi-bin/ORF_infopage.cgi?orf=$id	LOC_Os02g13300	unknown		1	urn:miriam:ricegap	^LOC\_Os\d{1,2}g\d{5}$	
 RNA Modification Database	rnamods		http://mods.rna.albany.edu/mods/modifications/view/$id	101	unknown		1	urn:miriam:rnamods	^\d{3}$	
 Rouge	rouge		http://www.kazusa.or.jp/rouge/gfpage/$id/	mKIAA4200	unknown		1	urn:miriam:rouge	^m\w+$	

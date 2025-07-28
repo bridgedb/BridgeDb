@@ -1650,21 +1650,6 @@ bridgeDB:DataSource_EcoCyc a bridgeDB:DataSource ;
 	bridgeDB:Organism bridgeDB:Organism_Ec ;
 	dcterms:alternative "EcoCyc" .
 
-bridgeDB:DataSource_EcoGene a bridgeDB:DataSource ;
-	bridgeDB:fullName "EcoGene" ;
-	bridgeDB:systemCode "Ec" ;
-	bridgeDB:mainUrl "http://ecogene.org/" ;
-	bridgeDB:idExample "EG10173" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <http://ecogene.org/geneInfo.php?eg_id=$id> ;
-	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/ecogene/$id> ;
-	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/ecogene/$id> ;
-	bridgeDB:Organism bridgeDB:Organism_Ec ;
-	bridgeDB:hasRegexPattern "^EG\\d+$" ;
-	dcterms:alternative "EcoGene" ;
-	bridgeDB:hasUriPattern <http://ecogene.org/?q=gene%2F$id> , <http://maxd.cs.purdue.edu:9455/geneInfo.php?eg_id=$id> .
-
 bridgeDB:DataSource_EcoliWiki a bridgeDB:DataSource ;
 	bridgeDB:fullName "EcoliWiki" ;
 	bridgeDB:systemCode "ecoliwiki" ;
@@ -2519,7 +2504,7 @@ bridgeDB:DataSource_Gramene_Arabidopsis a bridgeDB:DataSource ;
 	bridgeDB:idExample "ATMG01360-TAIR-G" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <https://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?g=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://plants.ensembl.org/id/$id> ;
 	bridgeDB:Organism bridgeDB:Organism_At ;
 	bridgeDB:hasRegexPattern "AT[\\dCM]G\\d{5}\\-TAIR\\-G" ;
 	dcterms:alternative "Grameen Arabidopsis" .
@@ -2566,7 +2551,7 @@ bridgeDB:DataSource_Gramene_Maize a bridgeDB:DataSource ;
 	bridgeDB:idExample "GRMZM2G174107" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <https://ensembl.gramene.org/Zea_mays/Search/Results?q=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://plants.ensembl.org/id/$id> ;
 	dcterms:alternative "Gramene Maize" .
 
 bridgeDB:DataSource_Gramene_Pathway a bridgeDB:DataSource ;
@@ -5322,9 +5307,11 @@ bridgeDB:DataSource_Rice_Ensembl_Gene a bridgeDB:DataSource ;
 	bridgeDB:idExample "LOC_Os04g54800" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <https://www.gramene.org/Oryza_sativa/geneview?gene=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://plants.ensembl.org/id/$id> ;
 	bridgeDB:Organism bridgeDB:Organism_Os ;
-	dcterms:alternative "Rice Ensembl Gene" .
+	dcterms:alternative "Rice Ensembl Gene" ;
+	bridgeDB:hasRegexPattern "^LOC\\_Os\\d{1,2}g\\d{5}$" ;
+	bridgeDB:hasUriPattern <https://plants.ensembl.org/id/$id> .
 
 bridgeDB:DataSource_Rice_Genome_Annotation_Project a bridgeDB:DataSource ;
 	bridgeDB:fullName "Rice Genome Annotation Project" ;
@@ -7223,12 +7210,6 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=" .
 
-<http://ecogene.org/?q=gene%2F$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://ecogene.org/?q=gene%2F" .
-
-<http://ecogene.org/geneInfo.php?eg_id=$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://ecogene.org/geneInfo.php?eg_id=" .
-
 <http://ecoliwiki.net/colipedia/index.php/$id:Gene> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://ecoliwiki.net/colipedia/index.php/" ;
 	bridgeDB:hasPostfix ":Gene" .
@@ -7777,9 +7758,6 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://identifiers.org/eco/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://identifiers.org/eco/" .
-
-<http://identifiers.org/ecogene/$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://identifiers.org/ecogene/" .
 
 <http://identifiers.org/ecoliwiki/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://identifiers.org/ecoliwiki/" .
@@ -9335,9 +9313,6 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://info.identifiers.org/eco/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://info.identifiers.org/eco/" .
-
-<http://info.identifiers.org/ecogene/$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://info.identifiers.org/ecogene/" .
 
 <http://info.identifiers.org/ecoliwiki/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://info.identifiers.org/ecoliwiki/" .
@@ -11610,9 +11585,6 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://www.gpcr.org/7tm/proteins/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.gpcr.org/7tm/proteins/" .
 
-<https://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?g=$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "https://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?g=" .
-
 <https://archive.gramene.org/db/genes/search_gene?acc=$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "https://www.gramene.org/db/genes/search_gene?acc=" .
 
@@ -11631,8 +11603,8 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <https://www.gramene.org/Oryza_sativa/Gene/Summary?db=core;g=$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "https://www.gramene.org/Oryza_sativa/Gene/Summary?db=core;g=" .
 
-<https://www.gramene.org/Oryza_sativa/geneview?gene=$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "https://www.gramene.org/Oryza_sativa/geneview?gene=" .
+<https://plants.ensembl.org/id/$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://plants.ensembl.org/id/" .
 
 <http://www.grenoble.prabi.fr/obiwarehouse/unipathway/upa?upid=$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.grenoble.prabi.fr/obiwarehouse/unipathway/upa?upid=" .
@@ -11722,9 +11694,6 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <https://maizegdb.org/gene_center/gene/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.maizegdb.org/cgi-bin/displaylocusresults.cgi?term=" .
 
-<https://ensembl.gramene.org/Zea_mays/Search/Results?q=$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "http://www.maizesequence.org/Zea_mays/Gene/Summary?g=" .
-
 <http://www.metacyc.org/META/NEW-IMAGE?type=NIL&object=$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.metacyc.org/META/NEW-IMAGE?type=NIL&object=" .
 
@@ -11736,9 +11705,6 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <https://mirbase.org/mature/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "https://mirbase.org/mature/" .
-
-<https://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "https://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=" .
 
 <http://www.mmmp.org/MMMP/public/biomap/viewBiomap.mmmp?id=$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://www.mmmp.org/MMMP/public/biomap/viewBiomap.mmmp?id=" .
