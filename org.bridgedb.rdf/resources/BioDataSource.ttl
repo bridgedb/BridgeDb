@@ -171,17 +171,6 @@ bridgeDB:DataSource_EcoCyc a bridgeDB:DataSource ;
 	bridgeDB:Organism bridgeDB:Organism_Ec ;
 	dcterms:alternative "EcoCyc" .
 
-bridgeDB:DataSource_EcoGene a bridgeDB:DataSource ;
-	bridgeDB:fullName "EcoGene" ;
-	bridgeDB:systemCode "Ec" ;
-	bridgeDB:mainUrl "http://ecogene.org/" ;
-	bridgeDB:idExample "EG10173" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "gene" ;
-	bridgeDB:Organism bridgeDB:Organism_Ec ;
-	bridgeDB:hasRegexPattern "^EG\\d+$" ;
-	dcterms:alternative "EcoGene" .
-
 bridgeDB:DataSource_EMBL a bridgeDB:DataSource ;
 	bridgeDB:fullName "EMBL" ;
 	bridgeDB:systemCode "Em" ;
