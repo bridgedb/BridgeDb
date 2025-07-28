@@ -77,6 +77,8 @@ public final class BridgeDb
 
     /**
      * Returns the version of BridgeDb.
+     *
+     * @return a String representing the version of this BridgeDb release.
      */
     public static String getVersion() {
         if (version != null) return version;
