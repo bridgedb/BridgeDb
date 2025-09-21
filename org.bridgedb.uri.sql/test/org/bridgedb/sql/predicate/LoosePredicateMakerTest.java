@@ -27,7 +27,7 @@ import org.bridgedb.rdf.constants.OboConstants;
 import org.bridgedb.rdf.constants.SkosConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

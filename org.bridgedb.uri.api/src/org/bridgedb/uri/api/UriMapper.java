@@ -25,7 +25,6 @@ import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.statistics.MappingSetInfo;

@@ -20,7 +20,6 @@
 package org.bridgedb.uri.loader;
 
 import java.io.File;
-import java.net.URI;
 
 import org.apache.log4j.Logger;
 import org.bridgedb.uri.tools.UriListener;

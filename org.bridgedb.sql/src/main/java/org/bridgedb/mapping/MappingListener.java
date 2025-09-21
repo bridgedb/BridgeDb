@@ -19,7 +19,6 @@
 //
 package org.bridgedb.mapping;
 
-import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.utils.BridgeDBException;
 

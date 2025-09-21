@@ -10,8 +10,10 @@ import java.util.Set;
 import org.bridgedb.uri.api.MappingsBySysCodeId;
 import org.hamcrest.Matcher;
 import static org.hamcrest.MatcherAssert.assertThat;
-import org.junit.jupiter.api.*;
-import static org.hamcrest.Matchers.*;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.not;
 
 
 /**

@@ -32,15 +32,12 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.bean.CapabilitiesBean;
-import org.bridgedb.ws.bean.DataSourceBean;
 import org.bridgedb.ws.bean.DataSourcesBean;
 import org.bridgedb.ws.bean.FreeSearchSupportedBean;
 import org.bridgedb.ws.bean.MappingSupportedBean;
 import org.bridgedb.ws.bean.PropertiesBean;
 import org.bridgedb.ws.bean.PropertyBean;
-import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefExistsBean;
-import org.bridgedb.ws.bean.XrefMapBean;
 import org.bridgedb.ws.bean.XrefMapsBean;
 import org.bridgedb.ws.bean.XrefsBean;
 

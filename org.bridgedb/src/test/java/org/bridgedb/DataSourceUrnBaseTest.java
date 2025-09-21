@@ -17,7 +17,7 @@ package org.bridgedb;
 
 import org.junit.jupiter.api.Assertions;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the DataSource class

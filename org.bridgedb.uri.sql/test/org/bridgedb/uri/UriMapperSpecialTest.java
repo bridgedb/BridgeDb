@@ -37,10 +37,13 @@ import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.utils.BridgeDBException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.hasItem;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 
 /**

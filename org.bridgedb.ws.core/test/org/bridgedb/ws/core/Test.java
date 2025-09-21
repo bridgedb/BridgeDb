@@ -35,7 +35,6 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.ws.WsConstants;
 import org.bridgedb.ws.bean.CapabilitiesBean;
 import org.bridgedb.ws.bean.DataSourceBean;
 import org.bridgedb.ws.bean.DataSourceMapBean;
@@ -49,8 +48,6 @@ import org.bridgedb.ws.bean.XrefExistsBean;
 import org.bridgedb.ws.bean.XrefMapBean;
 import org.bridgedb.ws.bean.XrefMapsBean;
 import org.bridgedb.ws.bean.XrefsBean;
-
-import org.junit.Before;
 
 public class Test {
 	

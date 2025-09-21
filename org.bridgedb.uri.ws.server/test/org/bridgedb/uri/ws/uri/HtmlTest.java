@@ -12,7 +12,10 @@ import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.ws.uri.WSUriServer;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 /**
  *

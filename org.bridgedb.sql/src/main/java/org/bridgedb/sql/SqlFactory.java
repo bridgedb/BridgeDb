@@ -19,7 +19,6 @@
 //
 package org.bridgedb.sql;
 
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.bridgedb.mysql.MySQLAccess;
 import org.bridgedb.utils.BridgeDBException;

@@ -20,7 +20,8 @@ import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.number.OrderingComparison.*;
+import static org.hamcrest.number.OrderingComparison.greaterThan;
+import static org.hamcrest.number.OrderingComparison.lessThan;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 

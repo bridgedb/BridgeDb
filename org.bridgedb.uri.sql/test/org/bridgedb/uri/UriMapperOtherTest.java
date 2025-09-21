@@ -8,11 +8,12 @@ import java.util.List;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.lens.LensTools;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 /**
  *

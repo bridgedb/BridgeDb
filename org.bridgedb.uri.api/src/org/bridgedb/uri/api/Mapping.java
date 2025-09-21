@@ -25,9 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.bridgedb.Xref;
-import org.bridgedb.pairs.CodeMapper;
 import org.bridgedb.pairs.IdSysCodePair;
-import org.bridgedb.utils.BridgeDBException;
 
 /**
  * Contains the information held for a particular mapping.

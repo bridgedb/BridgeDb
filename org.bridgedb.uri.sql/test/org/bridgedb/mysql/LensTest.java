@@ -29,7 +29,8 @@ import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 
 import org.junit.jupiter.api.BeforeAll;

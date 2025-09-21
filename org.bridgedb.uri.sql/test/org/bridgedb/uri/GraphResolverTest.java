@@ -14,7 +14,7 @@ import org.bridgedb.utils.Reporter;
 
 import org.junit.jupiter.api.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  *

@@ -20,7 +20,6 @@
 package org.bridgedb.uri.loader;
 
 import org.apache.log4j.Logger;
-import org.bridgedb.utils.Reporter;
 import org.eclipse.rdf4j.rio.ParseErrorListener;
 
 /**

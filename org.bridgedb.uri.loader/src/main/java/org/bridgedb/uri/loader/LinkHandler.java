@@ -19,8 +19,6 @@
 //
 package org.bridgedb.uri.loader;
 
-import java.net.URI;
-
 import org.apache.log4j.Logger;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;

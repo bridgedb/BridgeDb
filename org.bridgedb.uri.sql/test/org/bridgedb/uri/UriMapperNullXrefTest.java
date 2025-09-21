@@ -12,7 +12,8 @@ import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.lens.Lens;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

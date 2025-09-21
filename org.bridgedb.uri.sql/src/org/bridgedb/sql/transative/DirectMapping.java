@@ -21,9 +21,7 @@ package org.bridgedb.sql.transative;
 
 import java.util.HashSet;
 import java.util.Set;
-import org.bridgedb.pairs.CodeMapper;
 import org.bridgedb.pairs.IdSysCodePair;
-import org.bridgedb.utils.BridgeDBException;
 
 /**
  *

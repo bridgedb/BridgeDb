@@ -19,16 +19,12 @@
 //
 package org.bridgedb.uri.api;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
-import org.bridgedb.Xref;
-import org.bridgedb.pairs.IdSysCodePair;
-import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.utils.BridgeDBException;
 
 /**

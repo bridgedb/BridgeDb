@@ -23,7 +23,6 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.log4j.Logger;
-import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 
 @XmlRootElement(name="Xrefs")
