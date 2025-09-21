@@ -76,6 +76,7 @@ public enum Organism {
 	MonodelphisDomestica  ("Monodelphis domestica", "Md", "Opossum", 13616),
 	MusMusculus("Mus musculus", "Mm", "Mouse", 10090),
 	MycobacteriumTuberculosis ("Mycobacterium tuberculosis", "Mx", "Tuberculosis", 1773),
+	NicotianaTabacum("Nicotiana tabacum", "Nt", "Tabacco", 4097),
 	OrnithorhynchusAnatinus	("Ornithorhynchus anatinus", "Oa", "Platypus", 9258),
 	OryctolagusCuniculus  ("Oryctolagus cuniculus", "Oc", "Rabbit", 9986),
 	OryzaSativa("Oryza sativa", "Os", "Rice", 4530),
