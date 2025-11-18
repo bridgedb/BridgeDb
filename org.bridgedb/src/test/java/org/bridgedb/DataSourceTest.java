@@ -505,4 +505,13 @@ public class DataSourceTest {
 		assertFalse(DataSource.bioregistryPrefixExists("unifrot"));
 	}
 	
+	@Test
+	public void testFullNameExists() {
+		DataSource.register("S", "UniProtKB")
+	    	.bioregistryPrefix("uniprot")
+	    	.asDataSource();
+	    assertTrue(DataSource.fullNameExists("Uniprot-TrEMBL"));;
+	    assertTrue(DataSource.fullNameExists("Uniprot-SwissProt"));;
+	    assertTrue(DataSource.fullNameExists("UniProtKB"));;
+	}
 }
