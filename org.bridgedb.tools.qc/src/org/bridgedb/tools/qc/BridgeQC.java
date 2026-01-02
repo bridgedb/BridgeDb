@@ -76,6 +76,19 @@ public class BridgeQC
 
 	public void initDatabases() throws IDMapperException
 	{
+        try {
+			Class.forName("org.apache.derby.jdbc.ClientDriver"); // Derby 10.4
+			System.out.println("Derby ClientDriver loaded (for Derby 10.4)");
+        } catch (ClassNotFoundException e) {
+        	// ignore, probably we're running this with Derby 10.14 or higher
+        }
+        try {
+        	Class.forName("org.apache.derby.jdbc.EmbeddedDriver"); // Derby 10.14 or higher
+        	System.out.println("Derby ClientDriver loaded (for Derby 10.14+)");
+        } catch (ClassNotFoundException e) {
+        	// ignore, probably we're running this with Derby lower than 10.14
+        }
+		
 		String url1 = "jdbc:derby:jar:(" + oldDb + ")database";
 		oldGdb = SimpleGdbFactory.createInstance("old", url1);
 		this.out.printf("INFO: old database is %s %s (build: %s)\n",
