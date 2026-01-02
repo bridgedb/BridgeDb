@@ -91,12 +91,19 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper, XrefIter
 	            String port = args.containsKey("port") ? args.get("port") : "1527";
 
 	            try {
-					Class.forName("org.apache.derby.jdbc.ClientDriver"); // Derby 10.4
-					System.out.println("Derby ClientDriver loaded");
+	    			Class.forName("org.apache.derby.jdbc.ClientDriver"); // Derby 10.4
+	    			System.out.println("Derby ClientDriver loaded (for Derby 10.4)");
 	            } catch (ClassNotFoundException e) {
 	            	// ignore, probably we're running this with Derby 10.14 or higher
 	            }
-				Properties sysprop = System.getProperties();
+	            try {
+	            	Class.forName("org.apache.derby.jdbc.EmbeddedDriver"); // Derby 10.14 or higher
+	            	System.out.println("Derby ClientDriver loaded (for Derby 10.14+)");
+	            } catch (ClassNotFoundException e) {
+	            	// ignore, probably we're running this with Derby lower than 10.14
+	            }
+
+	            Properties sysprop = System.getProperties();
 				sysprop.setProperty("derby.storage.tempDirectory", System.getProperty("java.io.tmpdir"));
 				sysprop.setProperty("derby.stream.error.file", File.createTempFile("derby",".log").toString());
 				
