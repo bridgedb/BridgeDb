@@ -239,7 +239,7 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 	 * @return a list of data sources present in this database. 
 	   @throws IDMapperException when the database is unavailable
 	 */
-	private Set<DataSource> getDataSources() throws IDMapperException
+	public Set<DataSource> getDataSources() throws IDMapperException
 	{
 		Set<DataSource> result = new HashSet<DataSource>();
 		final QueryLifeCycle pst = qDatasources;
