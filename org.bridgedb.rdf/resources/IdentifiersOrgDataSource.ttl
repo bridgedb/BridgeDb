@@ -5761,7 +5761,7 @@ bridgeDB:DataSource_TAIR a bridgeDB:DataSource ;
 	bridgeDB:idExample "AT1G01030" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <https://www.arabidopsis.org/results?mainType=general&category=genes&searchText=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.arabidopsis.org/locus?accession=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/tair.locus/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/tair.locus/$id> ;
 	bridgeDB:hasRegexPattern "^AT[1-5]G\\d{5}$" ;
@@ -6862,8 +6862,8 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://arabidopsis.org/servlets/TairObject?accession=$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://arabidopsis.org/servlets/TairObject?accession=" .
 
-<https://www.arabidopsis.org/results?mainType=general&category=genes&searchText=$id> a bridgeDB:UriPattern ;
-	bridgeDB:hasPrefix "https://www.arabidopsis.org/results?mainType=general&category=genes&searchText=" .
+<https://www.arabidopsis.org/locus?accession=$id> a bridgeDB:UriPattern ;
+	bridgeDB:hasPrefix "https://www.arabidopsis.org/locus?accession=" .
 
 <http://arxiv.org/abs/$id> a bridgeDB:UriPattern ;
 	bridgeDB:hasPrefix "http://arxiv.org/abs/" .
