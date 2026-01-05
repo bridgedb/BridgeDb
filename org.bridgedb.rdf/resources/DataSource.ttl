@@ -1069,7 +1069,7 @@ bridgeDB:DataSource_TAIR a bridgeDB:DataSource ;
 	bridgeDB:idExample "AT1G01030" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
-	bridgeDB:hasPrimaryUriPattern <https://www.arabidopsis.org/results?mainType=general&category=genes&searchText=$id> ;
+	bridgeDB:hasPrimaryUriPattern <https://www.arabidopsis.org/locus?accession=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/tair.locus/$id> .
 
 bridgeDB:DataSource_TIGR a bridgeDB:DataSource ;

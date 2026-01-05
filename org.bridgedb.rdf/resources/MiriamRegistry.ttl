@@ -7057,7 +7057,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100078#application/xhtml+xml>
       a       dcat:Distribution ;
-      dcat:accessURL <https://www.arabidopsis.org/results?mainType=general&category=genes&searchText=$id> ;
+      dcat:accessURL <https://www.arabidopsis.org/locus?accession=$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100078> .
 
