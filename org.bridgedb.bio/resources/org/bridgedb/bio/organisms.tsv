@@ -1,54 +1,549 @@
 genus	species	short name	symbol	ncbi
+Abies	grandis	Grand fir	Abg	46611
+Acer	pseudoplatanus		Ap	4026
 Acetobacterium	woodii		Aw	33952
+Acetobacter	subgen. Acetobacter		As	151157
+Acinetobacter	baylyi		Ab	202950
+Actinidia	chinensis		Acc	3625
+Actinidia	deliciosa		Ad	3627
+Actinidia	eriantha		Ae	165200
+Adiantum	capillus-veneris		Ac	13818
+Adonis	aestivalis		Ada	113211
+Adonis	annua		Aan	212759
+Aegilops	tauschii		Ata	37682
+Agapanthus	africanus	African lily	Al	51501
+Albizia	julibrissin		Aj	3813
+Allium	aflatunense		Aaf	70752
+Allium	altaicum		Aal	48666
+Allium	altyncolicum		Ala	165602
+Allium	ampeloprasum		Aam	4681
+Allium	ascalonicum		Aas	1476995
+Allium	cepa		Ace	4679
+Allium	chinense		Ach	130426
+Allium	fistulosum		Af	35875
+Allium	nutans		Anu	138328
+Allium	ochotense		Ao	669879
+Allium	sativum		Asa	4682
+Allium	schoenoprasum		Asc	74900
+Allium	tuberosum		Atu	4683
+Allium	ursinum		Au	4684
+Allium	victorialis		Av	88845
+Aloe	arborescens		Aar	45385
+Aloe	ferox		Afe	117798
+Amaranthus	cruentus		Acr	117272
+Amaranthus	hypochondriacus		Ah	28502
+Amorpha	fruticosa		Afr	48131
+Anaerotignum	propionicum		Apr	28446
+Anchusa	officinalis		Ano	89630
+Anethum	foeniculum		Afo	2849586
+Anigozanthos	preissii		Anp	95948
+Anisodus	acutangulus		Aac	402998
 Anopheles	gambiae	Mosquito	Ag	7165
+Anthriscus	sylvestris		Asy	48027
+Antirrhinum	majus		Am	4151
+Aphelandra	squarrosa		Asq	103766
+Apium	graveolens		Agr	4045
+Aquifex	aeolicus		Aae	63363
+Aquilaria	crassna		Aqc	223751
+Aquilegia	vulgaris		Avu	3451
+Arabidopsis	lyrata		Aly	59689
 Arabidopsis	thaliana	Arabidopsis	At	3702
+Arachis	hypogaea		Ahy	3818
+Archaeoglobus	fulgidus		Afu	2234
+Artemisia	annua		Aa	35608
+Asclepias	syriaca		Ass	48545
+Asparagus	officinalis		Aof	4686
 Aspergillus 	niger	Black mold	An	5061
+Aspergillus	terricola		Ate	36642
+Astragalus	bisulcatus		Abi	20406
+Atractylodes	lancea		Atl	41486
+Atropa	belladonna		Abe	33113
+Auxenochlorella	pyrenoidosa		Apy	3078
+Avena	clauda		Acl	83523
+Avena	longiglumis		Alo	4500
+Avena	prostrata		Avp	279683
+Avena	sativa		Avs	4498
+Avena	strigosa		Ast	38783
+Avena	ventricosa		Ave	146535
+Bacillus	anthracis		Ba	1392
 Bacillus	subtilis	Bsubtilis	Bs	1423
+Barnadesia	spinosa		Bsp	171760
+Batis	maritima		Bm	4436
+Berberis	stolonifera		Bst	33814
 Beta 	vulgaris 	Sugar Beet 	Bv	3555
+Betula	pubescens		Bp	38787
+Bifidobacterium	longum		Bl	206672
+Bixa	orellana		Bor	66672
 Bos	taurus	Cow	Bt	9913
-Brassica 	napus 	Rapeseed 	Bn	3708
+Botryococcus	braunii		Bb	1202541
+Brassica	juncea		Bj	3707
+Brassica	napus 	Rapeseed 	Bn	3708
+Brassica	nigra		Bni	3710
+Brassica	oleracea	Wild cabbage	Bo	3712
+Brassica	rapa		Br	3711
+Bromus	inermis		Bi	15371
+Bruguiera	gymnorhiza		Bg	39984
 Caenorhabditis	elegans	Celegans	Ce	6239
+Camellia	irrawadiensis		Cir	153142
+Camellia	ptilophylla		Cpt	319931
+Camellia	sinensis		Cas	4442
+Camellia	taliensis		Cta	182317
+Camptotheca	acuminata		Cac	16922
+Canavalia	ensiformis		Cen	3823
+Canavalia	lineata		Cli	28957
 Canis	familiaris	Dog	Cf	9615
-Ciona	intestinalis	Sea Squirt	Ci	7719
-Clostridium	thermocellum	Cthe	Ct	1515
+Cannabis	sativa		Csa	3483
+Capsicum	annuum		Caa	4072
+Capsicum	baccatum		Cb	33114
+Capsicum	chinense		Cch	80379
+Capsicum	frutescens		Cfr	4073
+Carapichea	ipecacuanha		Cip	77880
+Carica	papaya		Cp	3649
+Carpobrotus	acinaciformis		Caa	1053334
+Carthamus	tinctorius		Cti	4222
+Carum	carvi		Cc	48032
+Catharanthus	roseus	Madagascar periwinkle	Car	4058
 Caulobacter	vibrioides		Cv	155892
+Celosia	cristata		Ccr	124768
+Centaurium	erythraea		Cer	172057
+Cephalocereus	senilis		Cse	223054
+Cerastium	arvense		Cea	271558
+Ceratodon	purpureus		Cpu	3225
+Cereibacter	sphaeroides		Csp	1063
+Cestrum	elegans		Cel	103475
+Chelidonium	majus		Cm	71251
+Chlamydia	trachomatis		Ctr	759363
+Chlamydomonas	reinhardtii		Cr	3055
+Chrysanthemum	× morifolium		C×	41568
+Chrysosplenium	americanum		Cam	36749
+Cicer	arietinum	Chickpea	Cia	3827
+Cichorium	intybus		Cin	13427
+Cinchona	calisaya		Cca	153742
+Cinchona	macrocalyx		Cma	273779
+Cinchona	mutisii		Cmu	273780
+Cinchona	officinalis		Co	273781
+Cinchona	pitayensis		Cpi	128294
+Cinchona	pubescens		Cpb	50278
+Cinnamomum	tenuipile		Cte	192326
+Ciona	intestinalis	Sea Squirt	Ci	7719
+Citrullus	lanatus		Cl	3654
+Citrus	× aurantium		Cxa	43166
+Citrus	× clementina		Cxc 	85681
+Citrus	hanaju		Ch	481547
+Citrus	japonica		Cj	76966
+Citrus	junos		Cju	135197
+Citrus	maxima		Cim	37334
+Citrus	× microcarpa		Cmi	164113
+Citrus	× paradisi		Cxp	37656
+Citrus	sinensis	Sweet orange	Cs	2711
+Citrus	trifoliata		Cit	37690
+Citrus	unshiu		Cun	55188
+Clarkia	breweri		Cbr	36903
+Cleretum	bellidiforme		Cbe	90527
+Clitoria	ternatea		Clt	43366
+Clostridium	acetobutylicum		Cla	1488
+Clostridium	botulinum		Cbo	1491
+Clostridium	kluyveri		Ck	1534
+Clostridium	thermocellum	Cthe	Ct	1515
+Coffea	abeokutae		Cab	213304
+Coffea	arabica	Coffee	Ca	13443
+Coffea	canephora		Coc	49390
+Coffea	eugenioides		Ceu	49369
+Coffea	liberica		Col	49373
+Coleus	scutellarioides		Csc	4142
+Consolida	orientalis		Cor	565971
+Coptis	japonica		Coj	3442
+Coptis	teeta		Cot	261448
+Corallococcus	coralloides		Cco	184914
+Coreopsis	grandiflora		Cg	13449
+Corydalis	vaginans		Cva	3044017
+Crambe	hispanica		Chi	70124
+Crepis	palaestina		Cpa	72611
+Crocus	sativus		Crs	82528
+Croton	stellatopilosus		Cst	431156
+Croton	sublyratus		Csu	107238
+Cryptomeria	japonica		Cja	3369
+Cucumis	melo	Muskmelon	Cme	3656
+Cucumis	sativus	Cucumber	Cu	3659
+Cucurbita	maxima		Cum	3661
+Cucurbita	pepo		Cpe	3663
+Curcuma	longa		Clo	136217
+Cyanidioschyzon	merolae		Cym	45157
+Cystobacter	fuscus		Cfu	43
+Cytophaga	hutchinsonii		Chu	985
+Dahlia	pinnata		Dpi	101596
 Danio	rerio	Zebrafish	Dr	7955
+Daphne	odora		Do	329675
 Daphnia	magna		Da	35525
 Daphnia	pulex		Dp	6669
 Dasypus	novemcinctus	Armadillo	Dn	9361
+Datura	inoxia		Di	4075
+Datura	stramonium		Dst	4076
+Daucus	carota		Dca	4039
+Davallia	trichomanoides		Dt	328206
+Delftia	acidovorans		Dac	80866
+Delphinium	grandiflorum		Dg	85439
+Derris	elliptica		De	56063
+Desmodium	uncinatum		Dun	225101
+Dianthus	caryophyllus		Dc	3570
+Dicranum	scoparium		Ds	3222
+Dictyostelium	discoideum		Dd	44689
+Digitalis	lanata		Dl	49450
+Digitalis	purpurea		Dpu	4164
+Diospyros	kaki		Dk	35925
+Dolichandra	unguis-cati		Du	73871
 Drosophila	melanogaster	Fruitfly	Dm	7227
 Echinops	telfairi	Hedgehog	Et	9371
+Enterococcus	faecalis		Ef	1351
+Equisetum	arvense		Ea	3258
 Equus	caballus	Horse	Qc	9796
+Erwinia	amylovora		Eam	552
+Erythroxylum	coca		Erc	289672
 Escherichia	coli	Ecoli	Ec	562
+Eschscholzia	californica		Eca	3467
+Eucalyptus	piperita		Ep	87677
+Euglena	gracilis		Eg	3039
+Euonymus	alatus		Eal	4307
+Euphorbia	lagascae		El	54672
+Eustoma	grandiflorum		Egr	52518
+Fagopyrum	esculentum		Fe	3617
+Fagopyrum	tataricum		Ft	62330
+Fagus	crenata		Fc	28929
+Felis	catus		Fca	9685
+Flaveria	bidentis		Fb	4224
+Flaveria	chlorifolia		Fch	4228
+Fluviicola	taffensis		Fta	191579
+Forsythia	× intermedia		F×	55183
+Forsythia	koreana		Fk	205692
+Fragaria	× ananassa		F× 	3747
+Galanthus	elwesii		Ge	82232
+Galium	mollugo		Gmo	254777
 Gallus	gallus	Chicken	Gg	9031
-Glycine	max	Soybean	Gm	3847
+Gardenia	jasminoides		Gj	114476
+Gemmata	obscuriglobus		Go	114
+Gentiana	straminea		Gs	50768
+Gentiana	triflora		Gt	55190
+Gerbera	hybrid		Ghy	18101
 Gibberella	zeae	Fusarium graminearum	Gz	5518
+Ginkgo	biloba		Gb	3311
+Glandularia	× hybrida		G×	76714
+Glebionis	segetum		Gse	118509
+Glycine	max	Soybean	Gm	3847
+Glycyrrhiza	echinata		Gec	46348
+Glycyrrhiza	glabra	Liquorice	Gl	49827
+Gossypium	arboreum		Ga	29729
+Gossypium	barbadense		Gba	3634
+Gossypium	hirsutum		Ghi	3635
+Guatteria	blepharophylla		Gbl	402568
+Guatteria	friesiana		Gf	402569
+Guatteria	hispida		Gh	402570
+Haematococcus	lacustris		Hl	44745
+Halobacterium	salinarum		Hsa	2242
+Haloferax	volcanii		Hvo	2246
+Helianthus	annuus		Ha	4232
+Helianthus	tuberosus		Ht	4233
+Helicobacter	pylori		Hp	210
+Hevea	brasiliensis		Hb	3981
 Homo	sapiens	Human	Hs	9606
+Hordeum	lechleri		Hle	38856
 Hordeum 	vulgare 	Barley 	Hv	4513
+Hydrangea	macrophylla		Hm	23110
+Hyoscyamus	albus		Hal	310458
+Hyoscyamus	muticus		Hmu	35626
+Hyoscyamus	niger		Hn	4079
+Hypericum	androsaemum		Han	140968
+Hypericum	calycinum		Hc	55963
+Hypericum	perforatum		Hpe	65561
+Hyphomicrobium	zavarzinii		Hz	48292
+Ilex	paraguariensis	Yerba mate	Ip	185542
+Impatiens	balsamina		Ib	63779
+Ipomoea	batatas		Iba	4120
+Ipomoea	nil		In	35883
+Ipomoea	purpurea		Ipu	4121
+Juglans	regia		Jr	51240
+Kandelia	candel		Kc	61147
+Klebsiella	oxytoca		Ko	571
+Klebsiella	pneumoniae		Kp	1284798
+Lacticaseibacillus	casei		Lc	1312920
+Lactococcus	lactis		Ll	1358
+Lactuca	sativa		Ls	4236
+Lamium	galeobdolon		Lg	53161
+Lathyrus	odoratus		Lo	3859
+Lathyrus	oleraceus	Garden Pea	Ps	3888
+Lavandula	angustifolia		Laa	39329
+Lawsonia	inermis		Li	141191
+Lemna	aequinoctialis		Lae	89585
+Lemna	minor		Lm	4472
+Lens	culinaris		Lcu	3864
+Leucaena	leucocephala		Lle	3866
+Lilium	longiflorum		Llo	4690
+Limnanthes	alba		Lal	42439
+Limnanthes	douglasii		Ld	28973
+Limonium	latifolium		Lla	227291
+Linum	flavum		Lf	407263
+Linum	nodiflorum		Ln	407264
+Linum	perenne		Lp	35941
+Linum	usitatissimum		Lu	4006
+Lithospermum	erythrorhizon		Le	34254
+Lotus	corniculatus		Lco	47247
+Lotus	japonicus		Lj	34305
 Loxodonta	africana	Elephant	La	9785
+Lunaria	annua		Lan	153659
+Lupinus	albus		Lua	3870
+Lupinus	luteus	Yellow lupine	Llu	3873
+Lupinus	polyphyllus		Lpo	3874
+Lygodium	circinatum		Lci	84615
 Macaca	mulatta	Rhesus Monkey	Ml	9544
+Magnolia	grandiflora		Mg	3406
+Magnolia	obovata		Mo	349509
+Malus	domestica	Apple	Mad	3750
+Malus	hupehensis		Mh	106556
+Malus	pumila		Mp	283210
+Manihot	esculenta	Cassava	Me	3983
+Matthiola	incana		Mi	3724
+Medicago	sativa	Alfalfa	Ma	3879
+Megathyrsus	maximus		Mma	59788
+Melilotus	albus		Mal	47082
+Mentha	aquatica		Maq	190902
+Mentha	× gracilis		M×	241069
+Mentha	× piperita		M× 	34256
+Mentha	spicata		Ms	29719
+Methanocaldococcus	jannaschii		Mj	2190
+Methanosarcina	mazei		Mem	1434114
+Methanosarcina	thermophila		Mt	2210
+Methanothermobacter	marburgensis		Mmb	145263
+Methyloceanibacter	caenitepidi		Mc	1384459
+Methylococcus	capsulatus		Mca	414
+Methylorubrum	extorquens		Mex	408
+Methylosphaera	hansonii		Mha	51353
+Micrococcus	luteus		Mlu	1270
+Mirabilis	jalapa		Mja	3538
+Momordica	charantia		Mch	3673
 Monodelphis	domestica	Opossum	Md	13616
+Musa	acuminata		Mac	4641
 Mus	musculus	Mouse	Mm	10090
+Mycobacterium	avium		Mav	1764
+Mycobacterium	kansasii		Mk	1768
 Mycobacterium	tuberculosis	Mtuberculosis	Mx	1773
+Mycolicibacterium	fortuitum		Mf	1766
+Mycolicibacterium	phlei		Mph	1771
+Mycoplasmoides	pneumoniae		Mpn	1263835
+Nannocystis	exedens		Ne	54
+Narcissus	pseudonarcissus		Nps	39639
+Nepenthes	alata		Na	4376
+Nepenthes	gracilis		Ng	150966
+Nepenthes	mirabilis		Nm	150983
+Nepenthes	rafflesiana		Nra	150990
+Nerine	bowdenii		Nb	59042
+Neurospora	crassa		Nc	5141
+Nicotiana	attenuata		Nat	49451
+Nicotiana	benthamiana		Nbe	4100
+Nicotiana	glutinosa		Ngl	35889
+Nicotiana	plumbaginifolia		Np	4092
+Nicotiana	rustica		Nr	4093
+Nicotiana	sylvestris		Ns	4096
+Nicotiana	tabacum	Tabacco	Nt	4097
+Nitrosopumilus	maritimus		Nma	338192
+Nothapodytes	nimmoniana		Nn	159386
+Ocimum	basilicum	Basil	Ob	39350
+Olea	europaea		Oe	4146
+Ophiorrhiza	japonica		Opj	367363
+Ophiorrhiza	pumila		Op	157934
 Ornithorhynchus	anatinus	Platypus	Oa	9258
 Oryctolagus	cuniculus	Rabbit	Oc	9986
 Oryza	sativa	Japanese Rice	Os	4530
 Oryzias	latipes	Medaka Fish	Ol	8090
 Ovis	aries	sheep	Ova	9940
+Oxybasis	rubra		Or	3560
+Panax	ginseng		Pgi	4054
+Panax	notoginseng		Pno	44586
+Panicum	miliaceum		Pm	4540
+Panicum	virgatum		Pvi	38727
+Pantoea	agglomerans		Pag	549
+Pantoea	ananatis		Paa	553
 Pan 	troglodytes	Chimp	Pt	9598
+Papaver	somniferum	Opium poppy	Pas	3469
+Passiflora	edulis		Ped	78168
+Paullinia	cupana	Guarana	Pc	392747
+Pelargonium	crispum		Pcr	1417776
+Pericallis	cruenta		Pec	98709
+Perilla	frutescens	Beefsteak plant	Pe	48386
+Persea	americana		Pa	3435
+Persicaria	tinctoria		Pti	96455
+Petiveria	alliacea		Pal	46142
+Petroselinum	crispum		Pcs	4043
+Petunia	x hybrida		Pxh	4102
+Phaseolus	coccineus		Pco	3886
+Phaseolus	lunatus		Plu	3884
+Phaseolus	vulgaris	Common bean	Pv	3885
+Phlebodium	aureum		Pau	218620
+Phleum	pratense		Ppr	15957
+Phragmites	australis		Phu	29695
+Physaria	fendleri		Pfe	63442
+Physaria	lindheimeri		Pl	439687
+Physcomitrium	patens		Pha	3218
+Picea	abies	Norway spruce	Pia	3329
+Picea	glauca		Pg	3330
+Pimpinella	anisum		Pan	271192
+Pinus	banksiana		Pb	3353
+Pinus	contorta		Pic	3339
+Pinus	densiflora		Pde	77912
+Pinus	ponderosa		Ppo	55062
+Pinus	sabiniana		Psa	268869
+Pinus	strobus		Pst	3348
+Pinus	sylvestris		Psy	3349
+Pinus	taeda	Loblolly pine	Pit	3352
+Plantago	major		Pma	29818
 Plasmodium	falciparum	Malaria parasite	Pf	5833
-Prymnesium	parvum		Pp	97485
+Plectranthus	barbatus		Pba	41228
+Plumbago	europaea		Peu	114226
+Plumbago	indica		Pin	122308
+Podophyllum	peltatum		Ppe	35933
+Pogostemon	cablin		Pca	28511
+Polaribacter	filamentus		Pfi	53483
+Populus	alba		Poa	43335
+Populus	deltoides		Pod	3696
+Populus	nigra		Pni	3691
 Populus	trichocarpa	Western Balsam Poplar	Pi	3694
+Portulaca	grandiflora		Pog	3583
+Prunus	dulcis		Pd	3755
+Prunus	mume		Pmu	102107
+Prymnesium	parvum		Pp	97485
+Pseudomonas	aeruginosa		Pae	1009714
+Pseudomonas	fluorescens		Pfl	294
+Psilotum	nudum		Pn	3240
+Pteris	vittata		Ptv	13821
+Pueraria	montana		Pmo	132459
+Punica	granatum		Pgr	22663
+Pyrus	pyrifolia		Ppy	3767
+Quercus	robur		Qro	38942
+Quercus	rubra		Qr	3512
+Raphanus	sativus		Rsa	3726
 Rattus	norvegicus	Rat	Rn	10116
+Rheum	palmatum		Rp	137221
+Rheum	tataricum		Rt	205071
+Rhizophora	apiculata		Ra	106626
+Rhizophora	mangle		Rm	40031
+Rhizophora	stylosa		Rst	98588
+Rhodiola	rosea		Rr	203015
+Rhodiola	sachalinensis		Rs	265354
+Rhodobacter	capsulatus		Rca	1061
+Rhodotorula	glutinis		Rgl	5535
+Rhus	typhina		Rty	255348
+Ricinus	communis	Castor bean	Ri	3988
+Robinia	pseudoacacia		Rps	35938
+Rosa	chinensis		Rc	74649
+Rosa	hybrid		Rhy	128735
 Rosmarinus	officinalis	Rosemary	Ro	39367
+Rubia	tinctorum		Rti	29802
+Rubus	idaeus		Rid	32247
+Rudbeckia	hirta		Rh	52299
+Ruta	graveolens		Rg	37565
 Saccharomyces	cerevisiae	Yeast	Sc	4932
+Saccharopolyspora	spinosa		Ssp	60894
+Saccharum	officinarum		Sof	4547
+Salmonella	enterica		Se	28901
+Salvia	fruticosa	Greek sage	Sf	268906
+Salvia	fruticosa		Sfr	268906
+Salvia	officinalis		Sao	38868
+Salvia	rosmarinus		Sr	39367
+Salvia	splendens		Spl	180675
+Sanguinaria	canadensis		Sca	3472
+Santalum	album		Saa	35974
+Santalum	austrocaledonicum		Sau	293154
+Santalum	spicatum		Sas	453088
+Sarcina	ventriculi		Sv	1267
+Saussurea	medusa		Sme	137893
+Saxifraga	stolonifera		Sst	182070
+Schizonepeta	tenuifolia		Ste	2849020
+Schizosaccharomyces	pombe		Sp	4896
+Scutellaria	baicalensis		Sba	65409
+Scutellaria	viscidula		Svi	512023
+Secale	cereale		Sce	4550
+Selaginella	lepidophylla		Sle	59777
+Senecio	vernalis		Sve	93496
+Senecio	vulgaris		Svu	76276
+Serratia	marcescens		Sma	1401254
+Sesamum	alatum		Sal	300844
+Sesamum	indicum		Si	4182
+Sesamum	radiatum		Sra	300843
+Sesbania	rostrata		Sro	3895
+Setaria	italica		Sit	4555
+Silene	dioica		Sd	39879
+Silene	latifolia		Sla	37657
+Simmondsia	chinensis		Sch	3999
+Sinningia	cardinalis		Sic	189007
+Sinopodophyllum	hexandrum		She	93608
 Skeletonema	marinoi		Sm	267567
+Solanum	aculeatissimum		Scl	267265
+Solanum	habrochaites		Sh	62890
 Solanum	lycopersicum	Tomato	Sl	4081
-Solanum	tuberosum		St	4113
+Solanum	melongena		Som	4111
+Solanum	pennellii		Spe	28526
+Solanum	tuberosum	Potato	St	4113
+Solidago	canadensis		Soc	59297
+Sorbus	aucuparia		Soa	36599
 Sorex	araneus	Shrew	Sa	42254
 Sorghum	bicolor	Sorghum	Sb	4558
+Spinacia	oleracea	Spinach	So	3562
+Spirodela	polyrhiza		Spo	29656
+Sporobolus	alterniflorus		Spa	29706
+Stellaria	media		Stm	13274
+Stigmatella	aurantiaca		Sta	41
+Streptococcus	mutans		Smu	1309
+Streptococcus	pneumoniae		Spn	1001746
+Streptomyces	antibioticus		San	1890
+Streptomyces	griseus		Sg	1911
+Strobilanthes	cusia		Scu	222567
 Sus	scrofa	Pig	Ss	9823
+Syntrophotalea	acetylenica		Sac	29542
+Syzygium	aromaticum		Sar	219868
+Tagetes	erecta		Te	13708
+Tagetes	patula		Tp	55843
+Tanacetum	balsamita		Tb	301877
+Tanacetum	vulgare		Tv	128002
+Taxus	baccata		Tba	25629
+Taxus	brevifolia		Tbr	46220
+Taxus	chinensis		Tch	29808
+Taxus	cuspidata		Tcu	99806
+Tellima	grandiflora		Tg	29775
+Tetradesmus	obliquus		To	3088
 Tetraodon	nigroviridis	Pufferfish	Tn	99883
+Thalassiosira	pseudonana		Tps	35128
+Thalictrum	flavum		Tf	150094
+Thalictrum	tuberosum		Tt	79802
+Theobroma	cacao	Cocoa	Tc	3641
+Thermococcus	kodakarensis		Tk	311400
+Thermotoga	maritima		Tma	2336
+Thuja	plicata		Tpl	3316
+Trichosanthes	kirilowii		Tki	3677
+Trifolium	pratense		Tpr	57577
+Trifolium	repens		Tr	3899
+Triglochin	maritima		Tm	55501
+Triticum	spelta		Ts	58933
+Triticum	urartu		Tu	4572
+Ulva	curvata	Green algea	Uc	135247
+Ulva	intestinalis		Ui	3116
+Ulva	lactuca		Ul	63410
+Urochloa	panicoides		Up	37563
+Vaccinium	myrtillus		Vm	180763
+Vanilla	planifolia		Vp	51239
+Vernicia	fordii		Vf	73154
+Vibrio	cholerae		Vc	1225783
+Vibrio	furnissii		Vfu	29494
+Vicia	faba		Vfa	3906
+Vicia	sativa		Vs	3908
+Vigna	aconitifolia		Va	3918
+Vigna	angularis		Van	3914
+Vigna	radiata		Vr	157791
+Vigna	unguiculata		Vu	3917
 Vitis	vinifera	Wine Grape	Vv	29760
+Wachendorfia	thyrsiflora		Wt	95970
+Xanthomonas	arboricola		Xa	56448
+Xanthomonas	axonopodis		Xax	53413
 Xenopus	tropicalis	Xenopus	Xt	8364
+Zea	luxurians		Zl	15945
 Zea	mays	Maize	Zm	4577
+Zingiber	officinale		Zo	94328
+Zingiber	zerumbet		Zz	311405
+Zymomonas	mobilis		Zmo	542

@@ -85,7 +85,7 @@ NCI Pathway Interaction Database	Pid	http://pid.nci.nih.gov/	http://pid.nci.nih.
 OMIM	Om	http://omim.org/	http://omim.org/entry/$id	603903	gene		0	urn:miriam:mim	^[*#+%^]?\d{6}$	OMIM	P492	omim	gene,disease
 OpenTargets	Opt	https://www.opentargets.org/	https://genetics.opentargets.org/gene/$id	ENSG00000169174	gene		1		^ENS[A-Z]*[FPTG]\d{11}$				gene
 ORCID	orcid	https://orcid.org	https://orcid.org/$id	0000-0002-5355-2576	other	Homo sapiens	1	urn:miriam:orcid	^\d{4}-\d{4}-\d{4}-\d{3}(\d|X)$	ORCID	P496	orcid	other,author
-Orphanet	On	http://www.orpha.net/consor/	https://identifiers.org/orphanet:$id	85163	other	Homo sapiens	1	urn:miriam:orphanet	^\d+$	Bio2RDF		orphanet	other
+Orphanet	On	http://www.orpha.net/consor/	https://identifiers.org/orphanet:$id	85163	other	Homo sapiens	1	urn:miriam:orphanet	^\d+$	Bio2RDF		orpha	other
 Oryzabase	Ob	http://www.shigen.nig.ac.jp/rice/oryzabase	http://www.shigen.nig.ac.jp/rice/oryzabase/gateway/gatewayAction.do?target=symbol&id=$id	468	gene	Oryza sativa	1	Ob		Oryzabase		oryzabase.gene	gene
 Other	O				gene		1	O		Other			other
 Pathway Commons	Pc	http://www.pathwaycommons.org/pc/	http://www.pathwaycommons.org/pc/record2.do?id=$id	485991	pathway		1	urn:miriam:pathwaycommons	^\d+$	Pathway Commons		pathwaycommons	pathway
@@ -123,7 +123,8 @@ SUPFAM	Sf	http://supfam.org/SUPERFAMILY/	http://supfam.org/SUPERFAMILY/cgi-bin/s
 SWISS-MODEL	Sw	http://swissmodel.expasy.org/	http://swissmodel.expasy.org/repository/smr.php?sptr_ac=$id	P23298	protein		1	urn:miriam:swiss-model	^\w+$	SWISS-MODEL		swiss-model	protein
 SwissLipids	Sl	http://www.swisslipids.org/	http://www.swisslipids.org/#/entity/$id/	SLM:000048885	metabolite		1		^SLM:\d+$	SwissLipids		slm	metabolite
 Systems Biology Ontology	Sbo	http://www.ebi.ac.uk/sbo/	http://www.ebi.ac.uk/sbo/main/$id	SBO:0000262	ontology		1	urn:miriam:sbo	^SBO:\d{7}$	Systems Biology Ontology		sbo	ontology
-TAIR	A	https://www.arabidopsis.org/	https://www.arabidopsis.org/results?mainType=general&category=genes&searchText=$id	AT1G01030	gene	Arabidopsis thaliana	1	urn:miriam:tair.locus	^AT[1-5]G\d{5}$	TAIR Locus		tair.locus	gene
+TAIR	A	https://www.arabidopsis.org/	https://www.arabidopsis.org/locus?accession=$id	2200950	gene	Arabidopsis thaliana	1	urn:miriam:tair.locus	^\d+$	TAIR Locus		tair.locus	gene
+TAIR gene name	Agn	https://www.arabidopsis.org/	https://www.arabidopsis.org/locus?name=$id	AT1G01030	gene	Arabidopsis thaliana	1	urn:miriam:tair.name	^AT[1-5]G\d{5}$	TAIR gene name		araport	gene
 TIGR	Ti	http://www.jcvi.org/		12012.t00308	gene		1	Ti		TIGR			gene
 TTD Drug	Td	http://bidd.nus.edu.sg/group/cjttd/TTD_HOME.asp	http://bidd.nus.edu.sg/group/cjttd/ZFTTDDRUG.asp?ID=$id	DAP000773	metabolite		1	urn:miriam:ttd.drug	^DAP\d+$	TTD Drug		ttd.drug	metabolite
 TTD Target	Tt	http://bidd.nus.edu.sg/group/cjttd/TTD_HOME.asp	http://bidd.nus.edu.sg/group/cjttd/ZFTTDDetail.asp?ID=$id	TTDS00056	protein		1	urn:miriam:ttd.target	^TTDS\d+$	TTD Target		ttd.target	protein
