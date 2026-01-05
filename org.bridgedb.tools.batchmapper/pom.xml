@@ -6,7 +6,7 @@
   <parent>
   	<artifactId>bridgedb-bundle</artifactId>
   	<groupId>org.bridgedb</groupId>
-  	<version>3.0.30-SNAPSHOT</version>
+  	<version>3.0.30</version>
   </parent>
 
 	<build>
@@ -33,19 +33,19 @@
                 <dependency>
                         <groupId>org.bridgedb</groupId>
                         <artifactId>org.bridgedb</artifactId>
-                        <version>3.0.30-SNAPSHOT</version>
+                        <version>3.0.30</version>
                         <scope>compile</scope>
                 </dependency>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.bio</artifactId>
-			<version>3.0.30-SNAPSHOT</version>
+			<version>3.0.30</version>
 			<scope>compile</scope>
 		</dependency>
                 <dependency>
                         <groupId>org.bridgedb</groupId>
                         <artifactId>org.bridgedb.rdb</artifactId>
-                        <version>3.0.30-SNAPSHOT</version>
+                        <version>3.0.30</version>
                         <scope>compile</scope>
                 </dependency>
 	</dependencies>

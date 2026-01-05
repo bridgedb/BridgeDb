@@ -15,7 +15,7 @@ Using BridgeDb dependencies
 The [BridgeDb releases](https://github.com/bridgedb/BridgeDb/releases) are published to 
 [Maven Central](https://search.maven.org/artifact/org.bridgedb/bridgedb-bundle), which means you can use the BridgeDb JARs without needing to compile BridgeDb.
 
-Usage depends on which module you require. The examples below assumes artifact `org.bridgedb.bio` and version `3.0.29`:
+Usage depends on which module you require. The examples below assumes artifact `org.bridgedb.bio` and version `3.0.30`:
 
 For [Maven](https://maven.apache.org/):
 
@@ -24,7 +24,7 @@ For [Maven](https://maven.apache.org/):
     <dependency>
         <groupId>org.bridgedb</groupId>
         <artifactId>org.bridgedb.bio</artifactId>
-        <version>3.0.29</version>
+        <version>3.0.30</version>
     </dependency>
 </dependencies>
 ```
@@ -32,19 +32,19 @@ For [Maven](https://maven.apache.org/):
 For [Gradle](https://gradle.org/):
 
 ```gradle
-compile group: 'org.bridgedb', name: 'org.bridgedb.bio', version: '3.0.29'
+compile group: 'org.bridgedb', name: 'org.bridgedb.bio', version: '3.0.30'
 ```
 
 For [Ivy](http://ant.apache.org/ivy/):
 
 ```xml
-<dependency org="org.bridgedb" name="org.bridgedb.bio" rev="3.0.29"/>
+<dependency org="org.bridgedb" name="org.bridgedb.bio" rev="3.0.30"/>
 ```
 
 For [Buildr](https://buildr.apache.org/):
 
 ```buildr
-'org.bridgedb:org.bridgedb.bio:jar:3.0.29'
+'org.bridgedb:org.bridgedb.bio:jar:3.0.30'
 ```
 
 
@@ -135,7 +135,7 @@ To make the release, run the following commands. Mind you, this requires you
 to have an approved Sonatype (http://oss.sonatype.org/) account with push rights:
 
 ```shell
-mvn versions:set -DnewVersion=3.0.29
+mvn versions:set -DnewVersion=3.0.30
 mvn clean deploy
 ```
 
@@ -145,7 +145,7 @@ and everything.
 To make a development (SNAPSHOT) release, use:
 
 ```shell
-mvn versions:set -DnewVersion=3.0.30-SNAPSHOT
+mvn versions:set -DnewVersion=3.0.31-SNAPSHOT
 mvn clean deploy
 ```
 
