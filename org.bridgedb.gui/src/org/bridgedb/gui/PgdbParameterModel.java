@@ -43,7 +43,7 @@ public class PgdbParameterModel extends SimpleParameterModel implements BridgeDb
 	public String getHelpHtml()
 	{
 		return 
-			"<html><h1>BridgeDerby database" 
+			"<html><h1>BridgeDerby database" +
 			"<p>BridgeDerby are databases that consist of a single file which you can download " +
 			"to your computer for fast access. Once downloaded, BridgeDerby databases are much" +
 			"faster than a webservice." +
