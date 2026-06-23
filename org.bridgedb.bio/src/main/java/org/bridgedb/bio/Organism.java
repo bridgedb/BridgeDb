@@ -246,6 +246,7 @@ public enum Organism {
 	ForsythiaxIntermedia("Forsythia × intermedia","Fxi",55183),
 	ForsythiaKoreana("Forsythia koreana","Fk",205692),
 	FragariaxAnanassa("Fragaria × ananassa","Fxa",3747),
+	Gadusmorhua("Gadus morhua", "Cod", 8049),
 	GalanthusElwesii("Galanthus elwesii","Ge",82232),
 	GaliumMollugo("Galium mollugo","Gmo",254777),
 	GallusGallus("Gallus gallus", "Gg", "Chicken", 9031),
