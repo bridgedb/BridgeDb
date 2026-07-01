@@ -37,7 +37,6 @@
         <module>org.bridgedb.tools.qc</module>
         <module>org.bridgedb.tools.voidtool</module>
         <module>org.bridgedb.tools.info</module>
-        <module>org.bridgedb.file.orthoxml</module>
   	<module>examples</module>
   </modules>
   
