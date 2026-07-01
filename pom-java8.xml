@@ -20,6 +20,7 @@
         <module>org.bridgedb.rdb</module>
   	<module>org.bridgedb.rdb.construct</module>
   	<module>org.bridgedb.webservice.bridgerest</module>
+        <module>org.bridgedb.tools.qc</module>
   </modules>
   
     <properties>
