@@ -41,7 +41,7 @@
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Import-Package>javax.naming</Import-Package>
                         <Export-Package>org.bridgedb.rdb.construct</Export-Package>
-                        <Require-Bundle>org.bridgedb,org.bridgedb.bio,org.bridgedb.rdb,derby</Require-Bundle>
+                        <Require-Bundle>org.bridgedb,org.bridgedb.bio,org.bridgedb.rdb,derby,duckdb_jdbc</Require-Bundle>
                     </instructions>
             </configuration>
                 <executions>
@@ -105,6 +105,11 @@
             <groupId>org.apache.derby</groupId>
             <artifactId>derbyclient</artifactId>
             <version>${derby.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.duckdb</groupId>
+            <artifactId>duckdb_jdbc</artifactId>
+            <version>${duckdb.version}</version>
         </dependency>
 	</dependencies>
 </project>
