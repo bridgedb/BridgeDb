@@ -15,12 +15,11 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bridgedb.DataSource;
+import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.bio.DataSourceTxt;
 import org.bridgedb.bio.Organism;
-import org.bridgedb.rdb.SimpleGdb;
-import org.bridgedb.rdb.SimpleGdbFactory;
 
 /**
  * Utility to do simple quality control on a BridgeDerby database.
@@ -37,8 +36,8 @@ public class BridgeQC
 {
 	private final File oldDb;
 	private final File newDb;
-	private SimpleGdb oldGdb;
-	private SimpleGdb newGdb;
+	private GdbHandle oldGdb;
+	private GdbHandle newGdb;
 	private PrintStream out;
 
 	/**
@@ -76,6 +75,45 @@ public class BridgeQC
 
 	public void initDatabases() throws IDMapperException
 	{
+		oldGdb = openDatabase(oldDb, "old");
+		this.out.printf("INFO: old database is %s %s (build: %s)\n",
+			oldGdb.getCapabilities().getProperty("DATASOURCENAME"),
+			oldGdb.getCapabilities().getProperty("DATASOURCEVERSION"),
+			oldGdb.getCapabilities().getProperty("BUILDDATE")
+		);
+		newGdb = openDatabase(newDb, "new");
+		this.out.printf("INFO: new database is %s %s (build: %s)\n",
+			newGdb.getCapabilities().getProperty("DATASOURCENAME"),
+			newGdb.getCapabilities().getProperty("DATASOURCEVERSION"),
+			newGdb.getCapabilities().getProperty("BUILDDATE")
+		);
+	}
+
+	/**
+	 * Detects the format of the given database file and opens it with the matching driver.
+	 * @param f the database file (either a Derby or a DuckDB BridgeDb database)
+	 * @param label short label ("old" or "new") used both as the SimpleGdb name and in log output
+	 * @return a format-agnostic handle on the opened database
+	 * @throws IDMapperException if the format could not be detected, or the database could not be opened
+	 */
+	private GdbHandle openDatabase(File f, String label) throws IDMapperException
+	{
+		DbFormatDetector.Format format = DbFormatDetector.detect(f);
+		switch (format)
+		{
+		case DERBY:
+			this.out.printf("INFO: %s database '%s' detected as a Derby database\n", label, f);
+			return openDerby(f, label);
+		case DUCKDB:
+			this.out.printf("INFO: %s database '%s' detected as a DuckDB database\n", label, f);
+			return openDuckDb(f, label);
+		default:
+			throw new IDMapperException("Unrecognized database format for '" + f + "'");
+		}
+	}
+
+	private GdbHandle openDerby(File f, String label) throws IDMapperException
+	{
         try {
 			Class.forName("org.apache.derby.jdbc.ClientDriver"); // Derby 10.4
 			System.out.println("Derby ClientDriver loaded (for Derby 10.4)");
@@ -88,23 +126,91 @@ public class BridgeQC
         } catch (ClassNotFoundException e) {
         	// ignore, probably we're running this with Derby lower than 10.14
         }
-		
-		String url1 = "jdbc:derby:jar:(" + oldDb + ")database";
-		oldGdb = SimpleGdbFactory.createInstance("old", url1);
-		this.out.printf("INFO: old database is %s %s (build: %s)\n",
-			oldGdb.getCapabilities().getProperty("DATASOURCENAME"),
-			oldGdb.getCapabilities().getProperty("DATASOURCEVERSION"),
-			oldGdb.getCapabilities().getProperty("BUILDDATE")
-		);
-		String url2 = "jdbc:derby:jar:(" + newDb + ")database";
-		newGdb = SimpleGdbFactory.createInstance("new", url2);
-		this.out.printf("INFO: new database is %s %s (build: %s)\n",
-			newGdb.getCapabilities().getProperty("DATASOURCENAME"),
-			newGdb.getCapabilities().getProperty("DATASOURCEVERSION"),
-			newGdb.getCapabilities().getProperty("BUILDDATE")
-		);
+
+		String url = "jdbc:derby:jar:(" + f + ")database";
+		return new DerbyGdbHandle(org.bridgedb.rdb.SimpleGdbFactory.createInstance(label, url));
 	}
-	
+
+	private GdbHandle openDuckDb(File f, String label) throws IDMapperException
+	{
+		try {
+			Class.forName("org.duckdb.DuckDBDriver");
+		} catch (ClassNotFoundException e) {
+			throw new IDMapperException(
+				"Could not find the DuckDB JDBC driver (org.duckdb.DuckDBDriver) on the classpath", e);
+		}
+
+		String url = "jdbc:duckdb:" + f;
+		return new DuckDbGdbHandle(org.bridgedb.rdb.duckdb.SimpleGdbFactory.createInstance(label, url));
+	}
+
+	/**
+	 * The subset of SimpleGdb's API that BridgeQC needs, common to both the Derby-backed
+	 * (org.bridgedb.rdb.SimpleGdb) and DuckDB-backed (org.bridgedb.rdb.duckdb.SimpleGdb) database
+	 * readers. Those two classes live in separate modules and share no common supertype beyond
+	 * org.bridgedb.IDMapper / AttributeMapper / XrefIterator, which don't cover getConnection(),
+	 * getGeneCount(), getLinkCount() or getPrimaryIDCount() -- hence this adapter.
+	 */
+	private interface GdbHandle
+	{
+		IDMapperCapabilities getCapabilities();
+		int getGeneCount() throws IDMapperException;
+		int getGeneCount(DataSource ds) throws IDMapperException;
+		int getLinkCount() throws IDMapperException;
+		int getPrimaryIDCount(DataSource ds) throws IDMapperException;
+		Iterable<Xref> getIterator(DataSource ds) throws IDMapperException;
+		Connection getConnection() throws SQLException;
+		Set<String> getAttributeSet() throws IDMapperException;
+
+		/**
+		 * Closes the underlying JDBC connection. SimpleGdb.close() (from the IDMapper
+		 * interface) is a no-op stub, so this closes the connection returned by
+		 * getConnection() directly instead. Needed because e.g. DuckDB refuses to open a
+		 * second, differently-configured connection to the same file while an earlier one
+		 * (such as the read-only one SimpleGdb keeps open) is still around.
+		 */
+		void closeConnection() throws SQLException;
+	}
+
+	private static final class DerbyGdbHandle implements GdbHandle
+	{
+		private final org.bridgedb.rdb.SimpleGdb gdb;
+		DerbyGdbHandle(org.bridgedb.rdb.SimpleGdb gdb) { this.gdb = gdb; }
+		public IDMapperCapabilities getCapabilities() { return gdb.getCapabilities(); }
+		public int getGeneCount() throws IDMapperException { return gdb.getGeneCount(); }
+		public int getGeneCount(DataSource ds) throws IDMapperException { return gdb.getGeneCount(ds); }
+		public int getLinkCount() throws IDMapperException { return gdb.getLinkCount(); }
+		public int getPrimaryIDCount(DataSource ds) throws IDMapperException { return gdb.getPrimaryIDCount(ds); }
+		public Iterable<Xref> getIterator(DataSource ds) throws IDMapperException { return gdb.getIterator(ds); }
+		public Connection getConnection() throws SQLException { return gdb.getConnection(); }
+		public Set<String> getAttributeSet() throws IDMapperException { return gdb.getAttributeSet(); }
+		public void closeConnection() throws SQLException
+		{
+			// Derby refuses to close a connection while a transaction is still active
+			// (e.g. summarizeOverallStats() leaves one open via setAutoCommit(false)), so
+			// commit whatever is pending first.
+			Connection con = gdb.getConnection();
+			con.commit();
+			con.close();
+		}
+	}
+
+	private static final class DuckDbGdbHandle implements GdbHandle
+	{
+		private final org.bridgedb.rdb.duckdb.SimpleGdb gdb;
+		DuckDbGdbHandle(org.bridgedb.rdb.duckdb.SimpleGdb gdb) { this.gdb = gdb; }
+		public IDMapperCapabilities getCapabilities() { return gdb.getCapabilities(); }
+		public int getGeneCount() throws IDMapperException { return gdb.getGeneCount(); }
+		public int getGeneCount(DataSource ds) throws IDMapperException { return gdb.getGeneCount(ds); }
+		public int getLinkCount() throws IDMapperException { return gdb.getLinkCount(); }
+		public int getPrimaryIDCount(DataSource ds) throws IDMapperException { return gdb.getPrimaryIDCount(ds); }
+		public Iterable<Xref> getIterator(DataSource ds) throws IDMapperException { return gdb.getIterator(ds); }
+		public Connection getConnection() throws SQLException { return gdb.getConnection(); }
+		public Set<String> getAttributeSet() throws IDMapperException { return gdb.getAttributeSet(); }
+		public void closeConnection() throws SQLException { gdb.getConnection().close(); }
+	}
+
+
 	public void compareDataSources() throws IDMapperException
 	{
 		for (DataSource ds : oldGdb.getCapabilities().getSupportedSrcDataSources())
@@ -382,7 +488,7 @@ public class BridgeQC
 		summarizeOverallStats(newGdb, "NEW");
 	}
 
-	private void summarizeOverallStats(SimpleGdb gdb, String oldNew) throws IDMapperException, SQLException
+	private void summarizeOverallStats(GdbHandle gdb, String oldNew) throws IDMapperException, SQLException
 	{
 		this.out.println("INFO: " + oldNew + " database has a total number of identifiers of " + gdb.getGeneCount());
 		this.out.println("INFO: " + oldNew + " database has a total number of mappings of " + gdb.getLinkCount());
@@ -402,6 +508,20 @@ public class BridgeQC
 		}
 	}
 
+	/**
+	 * Closes the connections opened by initDatabases(). SimpleGdb otherwise keeps its
+	 * connection open for the lifetime of the JVM (its own close() is a no-op), which is
+	 * harmless for Derby but leaves DuckDB unable to open another, differently-configured
+	 * connection to the same file afterwards -- e.g. the one PatternChecker opens when
+	 * BridgeQC.main() runs it on the same database file right after run().
+	 * @throws SQLException if a connection could not be closed
+	 */
+	public void close() throws SQLException
+	{
+		if (oldGdb != null) oldGdb.closeConnection();
+		if (newGdb != null) newGdb.closeConnection();
+	}
+
 	public static void printUsage()
 	{
 		System.out.println ("Expected 2 arguments: <old database> <new database>");
@@ -418,6 +538,7 @@ public class BridgeQC
 		BridgeQC main = new BridgeQC (new File(args[0]), new File(args[1]));
 		DataSourceTxt.init();
 		main.run();
+		main.close();
 
 		PatternChecker checker = new PatternChecker();
 		checker.run(new File(args[0]));
