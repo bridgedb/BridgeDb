@@ -31,6 +31,18 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<!-- BridgeQC references org.bridgedb.rdb.duckdb classes directly, and that
+					     module's classes are built for Java 11+ (see its pom.xml), so this module
+					     needs to be built with a Java 11+ JDK too, even though its own bytecode
+					     target is left at the bundle-wide baseline below. -->
+					<source>11</source>
+					<target>11</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>${maven-assembly.version}</version>
 				<executions>
@@ -80,6 +92,17 @@
                 <dependency>
                         <groupId>org.bridgedb</groupId>
                         <artifactId>org.bridgedb.rdb.construct</artifactId>
+                        <version>${project.parent.version}</version>
+                        <exclusions>
+                                <exclusion>
+                                        <groupId>com.mysql</groupId>
+                                        <artifactId>mysql-connector-j</artifactId>
+                                </exclusion>
+                        </exclusions>
+                </dependency>
+                <dependency>
+                        <groupId>org.bridgedb</groupId>
+                        <artifactId>org.bridgedb.rdb.duckdb</artifactId>
                         <version>${project.parent.version}</version>
                         <exclusions>
                                 <exclusion>

@@ -31,6 +31,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.bio.DataSourceTxt;
 import org.bridgedb.rdb.construct.DBConnector;
 import org.bridgedb.rdb.construct.DataDerby;
+import org.bridgedb.rdb.construct.DataDuckDB;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.HashMultiset;
@@ -49,15 +50,33 @@ public class PatternChecker
 {
 	private Multiset<DataSource> allMisses = HashMultiset.create();
 	private Multiset<DataSource> allTotals = HashMultiset.create();
-	
+
+	/**
+	 * Detects whether f is a Derby or a DuckDB BridgeDb database (both commonly use the
+	 * ".bridge" extension, so this can't be told from the file name) and returns a
+	 * DBConnector of the matching type, ready to be used with DBConnector.createConnection().
+	 */
+	private DBConnector newConnector(File f) throws IDMapperException
+	{
+		switch (DbFormatDetector.detect(f))
+		{
+		case DERBY:
+			return new DataDerby();
+		case DUCKDB:
+			return new DataDuckDB();
+		default:
+			throw new IDMapperException("Unrecognized database format for '" + f + "'");
+		}
+	}
+
 	public void run (File f) throws SQLException, IDMapperException
 	{
 		String database = "" + f;
 		//TODO: we can use the new Iterator interface here...
-		DBConnector con = new DataDerby();
+		DBConnector con = newConnector(f);
 		Connection sqlcon = null;
-		sqlcon = con.createConnection(database, 0); 
-		
+		sqlcon = con.createConnection(database, 0);
+
 		Multimap<DataSource, String> missExamples = HashMultimap.create();
 		Multiset<DataSource> misses = HashMultiset.create();
 		Multiset<DataSource> totals = HashMultiset.create();
