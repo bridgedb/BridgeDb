@@ -30,6 +30,7 @@
         <module>org.bridgedb.uri.ws.server</module>
         <module>org.bridgedb.uri.ws.client</module>
         <module>org.bridgedb.rdb</module>
+        <module>org.bridgedb.rdb.duckdb</module>
   	<module>org.bridgedb.rdb.construct</module>
   	<module>org.bridgedb.webservice.bridgerest</module>
   	<module>org.bridgedb.webservice.biomart</module>
@@ -56,6 +57,7 @@
         <servlet.version>2.5</servlet.version>
         <slf4j.version>2.0.9</slf4j.version>
         <derby.version>10.15.2.0</derby.version>
+        <duckdb.version>1.4.4.0</duckdb.version>
         <guava.version>33.5.0-jre</guava.version>
 
         <maven-jar.version>3.5.0</maven-jar.version>
