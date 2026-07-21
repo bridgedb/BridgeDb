@@ -30,6 +30,7 @@
         <module>org.bridgedb.uri.ws.server</module>
         <module>org.bridgedb.uri.ws.client</module>
         <module>org.bridgedb.rdb</module>
+        <module>org.bridgedb.rdb.duckdb</module>
   	<module>org.bridgedb.rdb.construct</module>
   	<module>org.bridgedb.webservice.bridgerest</module>
   	<module>org.bridgedb.webservice.biomart</module>
@@ -48,13 +49,14 @@
         <hamcrest.version>3.0</hamcrest.version>
         <jersey.version>1.10</jersey.version>
         <log4j.version>2.26.1</log4j.version>
-        <mysql.version>9.0.0</mysql.version>
+        <mysql.version>9.5.0</mysql.version>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <owlapi-api.version>3.4</owlapi-api.version>
         <rdf4j.version>4.3.8</rdf4j.version>
         <servlet.version>2.5</servlet.version>
         <slf4j.version>2.0.20</slf4j.version>
         <derby.version>10.17.1.0</derby.version>
+        <duckdb.version>1.4.4.0</duckdb.version>
         <guava.version>33.8.0-jre</guava.version>
 
         <maven-jar.version>3.5.1</maven-jar.version>
@@ -226,9 +228,8 @@
                     </execution>
                 </executions>
             </plugin>
-
-				</plugins>
-                        </build>
+      </plugins>
+  </build>
 
   <distributionManagement>
     <snapshotRepository>
