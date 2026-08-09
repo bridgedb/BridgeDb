@@ -30,7 +30,7 @@ public class PgdbParameterModel extends SimpleParameterModel implements BridgeDb
 	@Override
 	public String getConnectionString()
 	{
-		return "idmapper-pgdb:" + getFile(0).getAbsolutePath();
+		return "idmapper-pgdb:" + getFile(0).toURI().toString();
 	}
 
 	@Override
