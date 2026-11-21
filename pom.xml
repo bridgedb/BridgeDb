@@ -4,7 +4,7 @@
   <groupId>org.bridgedb</groupId>
   <artifactId>bridgedb-bundle</artifactId>
   <packaging>pom</packaging>
-  <version>3.0.31</version>	
+  <version>3.0.32-SNAPSHOT</version>	
   <name>BridgeDb bundle</name>
 	<description>
 		BridgeDb is a framework for finding and mapping equivalent database
@@ -48,7 +48,7 @@
         <felix.version>5.1.9</felix.version>
         <hamcrest.version>3.0</hamcrest.version>
         <jersey.version>1.10</jersey.version>
-        <log4j.version>2.25.3</log4j.version>
+        <log4j.version>2.26.1</log4j.version>
         <mysql.version>9.5.0</mysql.version>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <owlapi-api.version>3.4</owlapi-api.version>
@@ -56,9 +56,9 @@
         <servlet.version>2.5</servlet.version>
         <slf4j.version>2.0.9</slf4j.version>
         <derby.version>10.15.2.0</derby.version>
-        <guava.version>33.6.0-jre</guava.version>
+        <guava.version>33.8.0-jre</guava.version>
 
-        <maven-jar.version>3.5.0</maven-jar.version>
+        <maven-jar.version>3.5.1</maven-jar.version>
         <maven-assembly.version>3.8.0</maven-assembly.version>
         <junit-platform-surefire-provider>1.3.2</junit-platform-surefire-provider>
         <junit5.platform.launcher.version>1.14.1</junit5.platform.launcher.version>
