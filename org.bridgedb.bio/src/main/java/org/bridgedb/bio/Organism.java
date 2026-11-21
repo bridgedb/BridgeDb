@@ -246,6 +246,7 @@ public enum Organism {
 	ForsythiaxIntermedia("Forsythia × intermedia","Fxi",55183),
 	ForsythiaKoreana("Forsythia koreana","Fk",205692),
 	FragariaxAnanassa("Fragaria × ananassa","Fxa",3747),
+	FusariumGraminearum("Fusarium graminearum", "Fg", "Gibberella zeae", 5518),
 	Gadusmorhua("Gadus morhua", "Cod", 8049),
 	GalanthusElwesii("Galanthus elwesii","Ge",82232),
 	GaliumMollugo("Galium mollugo","Gmo",254777),
@@ -255,7 +256,7 @@ public enum Organism {
 	GentianaStraminea("Gentiana straminea","Gs",50768),
 	GentianaTriflora("Gentiana triflora","Gt",55190),
 	GerberaHybrid("Gerbera hybrid","Ghy",18101),
-	GibberellaZeae("Gibberella zeae", "Gz", "Fusarium graminearum", 5518),
+	GibberellaZeae("Gibberella zeae", "Gz", "Fusarium graminearum", 5518), // deprecated, see FusariumGraminearum
 	GinkgoBiloba("Ginkgo biloba","Gb",3311),
 	GlandulariaxHybrida("Glandularia × hybrida","Gxh",76714),
 	GlebionisSegetum("Glebionis segetum","Gse",118509),
