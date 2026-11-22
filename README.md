@@ -7,7 +7,7 @@ BridgeDb
 [![codecov](https://codecov.io/gh/bridgedb/BridgeDb/branch/master/graph/badge.svg?token=F0kJdoEt0x)](https://codecov.io/gh/bridgedb/BridgeDb)
 [![NWO](https://img.shields.io/badge/NWO%20Open%20Science-203.001.121-orange)](https://www.nwo.nl/en/projects/203001121)
 
-BridgeDb is currently tested with Java 17 and higher (4.0.x releases).
+BridgeDb is currently tested with Java 21 and higher (4.0.x releases).
 
 Using BridgeDb dependencies
 ---------------------------

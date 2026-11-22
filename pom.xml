@@ -194,7 +194,7 @@
 						<version>3.12.0</version>
 						<configuration>
 							<additionalparam>-Xdoclint:none</additionalparam>
-							<source>8</source>
+							<source>21</source>
 						</configuration>
 						<executions>
 							<execution>
