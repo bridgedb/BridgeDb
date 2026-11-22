@@ -32,6 +32,7 @@ import java.util.Set;
 import org.bridgedb.BridgeDb;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
+import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.bio.DataSourceTxt;
@@ -59,8 +60,8 @@ public class DuckDBPluginTest {
 		db = new File(dir, "test.bridge");
 		try (Connection con = DriverManager.getConnection("jdbc:duckdb:" + db);
 				Statement st = con.createStatement()) {
-			st.execute("CREATE TABLE info (schemaversion INTEGER)");
-			st.execute("INSERT INTO info VALUES (4)");
+			st.execute("CREATE TABLE info (schemaversion INTEGER, BuildDate VARCHAR)");
+			st.execute("INSERT INTO info VALUES (4, '20261122')");
 			st.execute("CREATE TABLE datanode (id VARCHAR, code VARCHAR, isPrimary SMALLINT)");
 			st.execute("INSERT INTO datanode VALUES ('3643', 'L', 1), ('ENSG00000171105', 'En', 1)");
 			st.execute("CREATE TABLE link (idLeft VARCHAR, codeLeft VARCHAR, idRight VARCHAR, codeRight VARCHAR)");
@@ -79,6 +80,16 @@ public class DuckDBPluginTest {
 	@Test
 	public void testDuckDBProtocol() throws IDMapperException {
 		assertMaps(BridgeDb.connect("idmapper-duckdb:" + db));
+	}
+
+	@Test
+	public void testPropertyKeysAreUpperCase() throws IDMapperException {
+		for (String protocol : new String[] {"idmapper-duckdb:", "idmapper-jdbc:duckdb:"}) {
+			IDMapperCapabilities caps = BridgeDb.connect(protocol + db).getCapabilities();
+			assertEquals(Set.of("SCHEMAVERSION", "BUILDDATE"), caps.getKeys());
+			assertEquals("4", caps.getProperty("SCHEMAVERSION"));
+			assertEquals("20261122", caps.getProperty("BUILDDATE"));
+		}
 	}
 
 	@Test

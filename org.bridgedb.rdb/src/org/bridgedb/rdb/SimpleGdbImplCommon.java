@@ -131,7 +131,7 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 					ResultSetMetaData rsmd = rs.getMetaData();
 					for (int i = 1; i <= rsmd.getColumnCount(); ++i)
 					{
-						String key = rsmd.getColumnName(i);
+						String key = getPropertyKey(rsmd.getColumnName(i));
 						String val = rs.getString(i);
 						result.put (key, val);
 					}

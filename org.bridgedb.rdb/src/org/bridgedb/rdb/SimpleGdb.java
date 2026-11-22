@@ -20,6 +20,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Locale;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
@@ -60,6 +61,16 @@ public abstract class SimpleGdb extends IDMapperRdb
 	{
 		this.connectionString = connectionString;
 		this.dbName = dbName;
+	}
+
+	/**
+	 * @param column The name of a column of the info table
+	 * @return The key of the property in that column
+	 */
+	final String getPropertyKey(String column)
+	{
+		// Derby has column names in upper case, but DuckDB keeps them as they were written
+		return SimpleGdbFactory.isDuckDB(connectionString) ? column.toUpperCase(Locale.ROOT) : column;
 	}
 
 	private boolean singleConnection = true;

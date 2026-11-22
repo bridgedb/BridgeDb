@@ -41,8 +41,13 @@ public final class SimpleGdbFactory
 		Properties props = new Properties();
 		// DuckDB cannot be made read-only after connecting. When opened read-write, it creates
 		// missing files and locks out all other connections that are read-only or in other processes.
-		if (connectionString.startsWith("jdbc:duckdb:")) props.setProperty("duckdb.read_only", "true");
+		if (isDuckDB(connectionString)) props.setProperty("duckdb.read_only", "true");
 		return DriverManager.getConnection(connectionString, props);
+	}
+
+	static boolean isDuckDB(String connectionString)
+	{
+		return connectionString.startsWith("jdbc:duckdb:");
 	}
 
 	/**
