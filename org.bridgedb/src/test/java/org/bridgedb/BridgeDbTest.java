@@ -21,6 +21,6 @@ public class BridgeDbTest {
 	public void testVersion() {
 		String version = BridgeDb.getVersion();
 		assertNotNull(version);
-		assertTrue(version.startsWith("3."));
+		assertTrue(version.startsWith("4."));
 	}
 }
