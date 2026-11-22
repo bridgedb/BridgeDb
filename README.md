@@ -104,7 +104,7 @@ The JUnit tagging also allows to specifically test the MySQL-backend tests,
 for example with:
 
 ```shell
-mvn clean test -Djunit.groups=mysql
+mvn clean test -Djunit.groups=mysql -Djunit.excludeGroups=none
 ```
 
 Updating the datasources
