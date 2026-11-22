@@ -143,7 +143,7 @@ and everything.
 To make a development (SNAPSHOT) release, use:
 
 ```shell
-mvn versions:set -DnewVersion=3.1.1-SNAPSHOT
+mvn versions:set -DnewVersion=4.0.1-SNAPSHOT
 mvn clean deploy
 ```
 
