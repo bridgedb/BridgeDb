@@ -158,7 +158,7 @@ public class RdfParser {
                 address = "try.ttl";
             }
             Optional<RDFFormat> fileFormat = reg.getFileFormatForFileName(address);
-            if (fileFormat.isEmpty()){
+            if (!fileFormat.isPresent()){
                 //added bridgeDB/OPS specific extension here if required.           
                 logger.warn("OpenRDF does not know the RDF Format for " + address);
                 logger.warn("Using the default format " + DEFAULT_PARSER);
