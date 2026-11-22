@@ -104,7 +104,7 @@ The JUnit5 tagging also allows to specifically test the MySQL-backend tests,
 for example with:
 
 ```shell
-mvn clean test junit5.groups=mysql
+mvn clean test -Djunit5.groups=mysql
 ```
 
 Updating the datasources
