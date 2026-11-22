@@ -56,6 +56,14 @@ public class DataSourceTest {
 	}
 
 	@Test
+	public void testRepeatingCategories() {
+		DataSource.Builder builder = DataSource.register("DataSourceTest_Categories", "DataSourceTest_testRepeatingCategories")
+		    .categories(new String[] {"gene", "protein"});
+		Assertions.assertDoesNotThrow(() -> builder.categories(new String[] {"gene", "protein"}));
+		Assertions.assertThrows(IllegalArgumentException.class, () -> builder.categories(new String[] {"gene"}));
+	}
+
+	@Test
 	public void testBuilding() {
 		DataSource source = DataSource.register("X", "Affymetrix").asDataSource();
 		assertEquals("X", source.getSystemCode());

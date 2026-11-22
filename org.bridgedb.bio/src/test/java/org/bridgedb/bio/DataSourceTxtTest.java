@@ -121,6 +121,12 @@ public class DataSourceTxtTest {
     }
 
 	@org.junit.jupiter.api.Test
+	public void testRepeatedInit() {
+		DataSourceTxt.init();
+		assertDoesNotThrow(DataSourceTxt::init);
+	}
+
+	@org.junit.jupiter.api.Test
 	public void testMIRIAMFeatures() throws Exception {
 		DataSource chebi = DataSource.getExistingByFullName("ChEBI");
 		assertNotNull(chebi);
