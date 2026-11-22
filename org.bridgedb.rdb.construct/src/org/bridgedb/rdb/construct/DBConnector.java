@@ -17,6 +17,7 @@
 package org.bridgedb.rdb.construct;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import org.bridgedb.IDMapperException;
@@ -79,6 +80,29 @@ public abstract class DBConnector
 		}
 	}
 	
+	/**
+	 * Add a column with the given value to the info table.
+	 * @param con A connection to the database
+	 * @param key The name of the column, already validated
+	 * @param value The value for the column
+	 * @param schemaVersion The schema version of the row to set the value for
+	 * @throws SQLException when there was a database error
+	 */
+	void addInfo(Connection con, String key, String value, int schemaVersion) throws SQLException
+	{
+		try (PreparedStatement alter = con.prepareStatement(
+				"ALTER TABLE info ADD COLUMN " + key + " VARCHAR (50)"))
+		{
+			alter.execute();
+		}
+		try (PreparedStatement update = con.prepareStatement(
+				"UPDATE info SET " + key + " = ? WHERE schemaversion = " + schemaVersion))
+		{
+			update.setString(1, value);
+			update.execute();
+		}
+	}
+
 	private int dbType;
 
 	/**

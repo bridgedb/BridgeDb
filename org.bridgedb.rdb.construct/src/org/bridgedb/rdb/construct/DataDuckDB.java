@@ -154,6 +154,23 @@ public class DataDuckDB extends DBConnector
 		return finalDbName;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * DuckDB cannot commit a transaction that alters a table after updating it, as happens when
+	 * setting a second value. So the value is set as the column default, which also fills the
+	 * existing row, the only one in this table. DDL has no parameters, hence the quoting.
+	 */
+	@Override
+	void addInfo(Connection con, String key, String value, int schemaVersion) throws SQLException
+	{
+		String literal = value == null ? "NULL" : "'" + value.replace("'", "''") + "'";
+		try (Statement st = con.createStatement())
+		{
+			st.execute("ALTER TABLE info ADD COLUMN " + key + " VARCHAR (50) DEFAULT " + literal);
+		}
+	}
+
 	public void closeConnection(Connection con) throws IDMapperException
 	{
 		closeConnection(con, PROP_NONE);
