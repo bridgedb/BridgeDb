@@ -171,6 +171,33 @@ public class DataDuckDB extends DBConnector
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * A constraint violation aborts the whole transaction in DuckDB, so must be prevented.
+	 */
+	@Override
+	UniqueKeys getUniqueKeys(Connection con, String table, String... columns) throws SQLException
+	{
+		return new DuckDBUniqueKeys(con, table, columns);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * DuckDB silently rolls back when asked to commit an aborted transaction. Any query fails in
+	 * such a transaction, so run one first.
+	 */
+	@Override
+	void commit(Connection con) throws SQLException
+	{
+		try (Statement st = con.createStatement())
+		{
+			st.execute("SELECT 1");
+		}
+		con.commit();
+	}
+
 	public void closeConnection(Connection con) throws IDMapperException
 	{
 		closeConnection(con, PROP_NONE);
@@ -198,7 +225,7 @@ public class DataDuckDB extends DBConnector
 					// restored), so make sure nothing is left pending first.
 					if (!con.getAutoCommit())
 					{
-						con.commit();
+						commit(con);
 					}
 					Statement sh = con.createStatement();
 					sh.execute("CHECKPOINT");

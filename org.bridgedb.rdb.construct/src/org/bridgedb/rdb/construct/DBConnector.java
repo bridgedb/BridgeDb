@@ -103,6 +103,45 @@ public abstract class DBConnector
 		}
 	}
 
+	/**
+	 * Inserts rows into a table with a primary key. A refused row must not affect the others.
+	 * By default, it is left to the database to refuse rows.
+	 */
+	static class UniqueKeys
+	{
+		/**
+		 * @param pst The INSERT statement, with all parameters set
+		 * @param key The values of the primary key
+		 * @throws SQLException when the row was not inserted, for example as it is a duplicate
+		 */
+		void insert(PreparedStatement pst, String... key) throws SQLException
+		{
+			pst.executeUpdate();
+		}
+	}
+
+	/**
+	 * @param con A connection to the database
+	 * @param table The table to insert into
+	 * @param columns The columns of the primary key
+	 * @return The object to insert rows into the table with
+	 * @throws SQLException when there was a database error
+	 */
+	UniqueKeys getUniqueKeys(Connection con, String table, String... columns) throws SQLException
+	{
+		return new UniqueKeys();
+	}
+
+	/**
+	 * Commit the current transaction.
+	 * @param con A connection to the database
+	 * @throws SQLException when the data was not committed
+	 */
+	void commit(Connection con) throws SQLException
+	{
+		con.commit();
+	}
+
 	private int dbType;
 
 	/**

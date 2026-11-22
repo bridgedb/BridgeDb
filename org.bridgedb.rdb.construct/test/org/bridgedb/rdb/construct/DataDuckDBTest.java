@@ -17,13 +17,21 @@
 package org.bridgedb.rdb.construct;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.bridgedb.DataSource;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.bio.DataSourceTxt;
 import org.junit.jupiter.api.BeforeAll;
@@ -106,5 +114,98 @@ public class DataDuckDBTest {
 		gdb.commit();
 		gdb.finalize();
 		assertDatabase("SERIES", value, "EMPTY", "", "MISSING", null);
+	}
+
+	private void checkDuplicates(GdbConstruct gdb) throws Exception {
+		gdb.createGdbTables();
+		gdb.preInsert();
+		assertEquals(0, gdb.addGene(xref));
+		assertEquals(1, gdb.addGene(xref));
+		assertNotNull(gdb.recentException());
+		assertEquals(0, gdb.addLink(xref, xref));
+		assertNull(gdb.recentException());
+		assertEquals(1, gdb.addLink(xref, xref));
+		assertNotNull(gdb.recentException());
+		gdb.commit();
+		// also a duplicate of committed data
+		assertEquals(1, gdb.addGene(xref));
+		gdb.commit();
+		gdb.finalize();
+		assertDatabase();
+	}
+
+	@Test
+	public void testDuplicates() throws Exception {
+		checkDuplicates(GdbConstructImpl4.createInstance(name(), new DataDuckDB(), DBConnector.PROP_RECREATE));
+	}
+
+	@Test
+	public void testDuplicatesSchema3() throws Exception {
+		checkDuplicates(GdbConstructImpl3.createInstance(name(), new DataDuckDB(), DBConnector.PROP_RECREATE));
+	}
+
+	@Test
+	public void testNullId() throws Exception {
+		GdbConstruct gdb = GdbConstructImpl4.createInstance(name(), new DataDuckDB(), DBConnector.PROP_RECREATE);
+		gdb.createGdbTables();
+		gdb.preInsert();
+		assertEquals(0, gdb.addGene(xref));
+		Xref noId = new Xref(null, xref.getDataSource());
+		assertEquals(1, gdb.addGene(noId));
+		assertEquals(1, gdb.addLink(xref, noId));
+		assertEquals(0, gdb.addLink(xref, xref));
+		gdb.commit();
+		gdb.finalize();
+		assertDatabase();
+	}
+
+	@Test
+	public void testDuplicateOfExistingDatabase() throws Exception {
+		GdbConstruct gdb = GdbConstructImpl4.createInstance(name(), new DataDuckDB(), DBConnector.PROP_RECREATE);
+		gdb.createGdbTables();
+		gdb.preInsert();
+		gdb.addGene(xref);
+		gdb.addLink(xref, xref);
+		gdb.commit();
+		gdb.finalize();
+
+		DataDuckDB connector = new DataDuckDB();
+		try (Connection con = connector.createConnection(name() + ".bridge", DBConnector.PROP_NONE)) {
+			DBConnector.UniqueKeys keys = connector.getUniqueKeys(con, "datanode", "id", "code");
+			try (PreparedStatement pst = con.prepareStatement("INSERT INTO datanode (id, code) VALUES (?, ?)")) {
+				assertThrows(SQLException.class,
+					() -> keys.insert(pst, xref.getId(), xref.getDataSource().getSystemCode()));
+			}
+		}
+		assertDatabase();
+	}
+
+	private static void abortTransaction(Connection con) throws SQLException {
+		try (Statement st = con.createStatement()) {
+			st.execute("CREATE TABLE number (i INTEGER)");
+		}
+		con.setAutoCommit(false);
+		try (Statement st = con.createStatement()) {
+			assertThrows(SQLException.class, () -> st.execute("INSERT INTO number VALUES ('none')"));
+		}
+	}
+
+	@Test
+	public void testCommitOfAbortedTransactionFails() throws Exception {
+		try (Connection con = DriverManager.getConnection("jdbc:duckdb:")) {
+			abortTransaction(con);
+			assertThrows(SQLException.class, () -> new DataDuckDB().commit(con));
+		}
+	}
+
+	@Test
+	public void testFinalizingAbortedTransactionFails() throws Exception {
+		DataDuckDB connector = new DataDuckDB();
+		try (Connection con = connector.createConnection(name(), DBConnector.PROP_RECREATE)) {
+			abortTransaction(con);
+			assertThrows(IDMapperException.class,
+				() -> connector.closeConnection(con, DBConnector.PROP_FINALIZE));
+			assertFalse(new File(name() + ".bridge").exists());
+		}
 	}
 }

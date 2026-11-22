@@ -47,6 +47,8 @@ public class GdbConstructImpl4 implements GdbConstruct
     private PreparedStatement pstGene = null;
     private PreparedStatement pstLink = null;
     private PreparedStatement pstAttr = null;
+    private DBConnector.UniqueKeys geneKeys = null;
+    private DBConnector.UniqueKeys linkKeys = null;
 
     /** {@inheritDoc} */
     public int addGene(Xref ref)
@@ -59,7 +61,7 @@ public class GdbConstructImpl4 implements GdbConstruct
             pstGene.setString(1, ref.getId());
             pstGene.setString(2, ref.getDataSource().getSystemCode());
             pstGene.setBoolean(3, ref.isPrimary());
-            pstGene.executeUpdate();
+            geneKeys.insert(pstGene, ref.getId(), ref.getDataSource().getSystemCode());
         }
         catch (SQLException e)
         {
@@ -99,7 +101,8 @@ public class GdbConstructImpl4 implements GdbConstruct
             pstLink.setString(2, left.getDataSource().getSystemCode());
             pstLink.setString(3, right.getId());
             pstLink.setString(4, right.getDataSource().getSystemCode());
-            pstLink.executeUpdate();
+            linkKeys.insert(pstLink, left.getId(), left.getDataSource().getSystemCode(),
+                    right.getId(), right.getDataSource().getSystemCode());
         }
         catch (SQLException e)
         {
@@ -134,6 +137,8 @@ public class GdbConstructImpl4 implements GdbConstruct
                             "	( id, code, isPrimary, attrname, attrvalue)" +
                             "VALUES (?, ?, ?, ?, ?)"
             );
+            geneKeys = dbConnector.getUniqueKeys(con, "datanode", "id", "code");
+            linkKeys = dbConnector.getUniqueKeys(con, "link", "idLeft", "codeLeft", "idRight", "codeRight");
         }
         catch (SQLException e)
         {
@@ -293,7 +298,7 @@ public class GdbConstructImpl4 implements GdbConstruct
     {
         try
         {
-            con.commit();
+            dbConnector.commit(con);
         }
         catch (SQLException e)
         {
