@@ -51,7 +51,7 @@ public abstract class TestSqlFactory {
             }
             System.err.println("Configuration read from: " + ConfigReader.CONFIG_FILE_NAME + "  " + SqlFactory.configs());
             logger.fatal("Configuration read from: " + ConfigReader.CONFIG_FILE_NAME + "  " + SqlFactory.configs());
-           org.junit.Assume.assumeTrue(false);        
+           org.junit.jupiter.api.Assumptions.assumeTrue(false);
          }
     } 
 

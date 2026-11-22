@@ -45,7 +45,7 @@ public class WSCoreClientFactory extends org.bridgedb.utils.IDMapperTestBase{
             System.err.println("***** SKIPPING BridgeDb WSClientTest ******");
             System.err.println("These test are repeated in the OPS client so normally not needed here.");
             System.err.println("Please make sure the specicifc bridgeDB.war based server is running");
-            org.junit.Assume.assumeTrue(false);        
+            org.junit.jupiter.api.Assumptions.assumeTrue(false);
         }
         //ystem.out.println("in WSCoreInterface 4");
         boolean ok;
@@ -62,7 +62,7 @@ public class WSCoreClientFactory extends org.bridgedb.utils.IDMapperTestBase{
             System.err.println("***** SKIPPING WSClientTest ******");
             System.err.println("It appears the Test data is not loaded");
             System.err.println("remove ignore in TestDataToMainServerTest (org.bridgedb.ws.sqlserver) ");            
-            org.junit.Assume.assumeTrue(false);        
+            org.junit.jupiter.api.Assumptions.assumeTrue(false);
         }
         //ystem.out.println("in WSCoreInterface 5b");
         return webService;

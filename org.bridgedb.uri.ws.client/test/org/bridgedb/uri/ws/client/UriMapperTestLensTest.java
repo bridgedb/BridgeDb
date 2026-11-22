@@ -36,7 +36,7 @@ public class UriMapperTestLensTest extends org.bridgedb.uri.UriMapperTestLensTes
     public static void setupIDMapper() throws BridgeDBException{
         WSUriInterface webService = WsUriClientFactory.createTestWSClient();
         uriMapper = new WSUriMapper(webService);
-        org.junit.Assume.assumeTrue(WsUriClientFactory.LENS_DATA_LOADED);
+        org.junit.jupiter.api.Assumptions.assumeTrue(WsUriClientFactory.LENS_DATA_LOADED);
     }
       
 }

@@ -127,8 +127,8 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
 
     @Test
     public void testFreeSearchBad() throws BridgeDBException{
-        org.junit.Assume.assumeTrue(uriMapper.getCapabilities().isFreeSearchSupported());       
-        org.junit.Assume.assumeTrue(badID != null);
+        org.junit.jupiter.api.Assumptions.assumeTrue(uriMapper.getCapabilities().isFreeSearchSupported());
+        org.junit.jupiter.api.Assumptions.assumeTrue(badID != null);
         report("FreeSearchBad");
         Set<String> results = uriMapper.uriSearch(badID, 10);
         assertTrue (results == null || results.isEmpty());
@@ -136,7 +136,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     
     @Test
     public void testFreeSearchGood() throws BridgeDBException{
-        org.junit.Assume.assumeTrue(uriMapper.getCapabilities().isFreeSearchSupported());       
+        org.junit.jupiter.api.Assumptions.assumeTrue(uriMapper.getCapabilities().isFreeSearchSupported());
         report("FreeSearchGood");
         Set<String> results = uriMapper.uriSearch(ds2Id3, 10);
         //Skip these if there are 10 or more possible ones. No Gurantee whiuch come back
@@ -150,7 +150,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     
     @Test
     public void testFreeSearchGoodJust2() throws BridgeDBException{
-        org.junit.Assume.assumeTrue(uriMapper.getCapabilities().isFreeSearchSupported());       
+        org.junit.jupiter.api.Assumptions.assumeTrue(uriMapper.getCapabilities().isFreeSearchSupported());
         report("FreeSearchGoodJust2");
         Set<String> results = uriMapper.uriSearch(ds2Id2, 2);
         assertEquals (2, results.size());

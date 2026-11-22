@@ -634,7 +634,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     @Test
     public void testMapFull_sourceXref_lensId_tgtUriPattern() throws Exception {
         //No way to pass an empty set via webservices
-        org.junit.Assume.assumeTrue(uriMapper instanceof SQLUriMapper); 
+        org.junit.jupiter.api.Assumptions.assumeTrue(uriMapper instanceof SQLUriMapper);
         report("MapFull_sourceXref_lensId_tgtUriPattern");
         Xref sourceXref = map3xref2;
         String lensId = Lens.DEFAULT_LENS_NAME;
@@ -948,7 +948,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     @Test
     public void testMapFull_sourceUri_lensId_tgtUriPattern() throws Exception {
         //No way to pass an empty set via webservices
-        org.junit.Assume.assumeTrue(uriMapper instanceof SQLUriMapper); 
+        org.junit.jupiter.api.Assumptions.assumeTrue(uriMapper instanceof SQLUriMapper);
         report("MapFull_sourceUri_lensId_tgtUriPattern");
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
