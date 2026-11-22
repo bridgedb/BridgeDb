@@ -19,7 +19,7 @@
  */
 package org.bridgedb.ws.server;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -42,7 +42,7 @@ public class IDMapperCapabilitiesTest extends org.bridgedb.utils.IDMapperCapabil
     @BeforeAll
     public static void setupIDMapper() throws IDMapperException, MalformedURLException{
         URL INTERFACE_TEST_FILE = IDMapperCapabilitiesTest.class.getResource("/interfaceTest.txt");
-        assertNotNull("Can't find test-data/interfaceTest.txt", INTERFACE_TEST_FILE);
+        assertNotNull(INTERFACE_TEST_FILE, "Can't find test-data/interfaceTest.txt");
         IDMapper inner = new IDMapperText(INTERFACE_TEST_FILE);
         WSCoreInterface  webService = new WSCoreService(inner);
         capabilities = new WSCoreMapper(webService);

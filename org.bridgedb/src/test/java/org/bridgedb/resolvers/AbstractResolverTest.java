@@ -19,8 +19,8 @@ import java.net.URL;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 abstract class AbstractResolverTest {
 
@@ -30,10 +30,10 @@ abstract class AbstractResolverTest {
 	public void getURL() throws MalformedURLException {
 		Xref xref = new Xref("138488", DataSource.register("Ce", "ChEBI").compactIdentifierPrefix("chebi").asDataSource());
 		String urlStr = resolver.getURL(xref);
-		Assert.assertNotNull(urlStr);
-		Assert.assertTrue(urlStr.contains("chebi:138488"));
+		Assertions.assertNotNull(urlStr);
+		Assertions.assertTrue(urlStr.contains("chebi:138488"));
 		URL url = new URL(urlStr);
-		Assert.assertNotNull(url);
+		Assertions.assertNotNull(url);
 	}
 	
 }

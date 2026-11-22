@@ -22,7 +22,7 @@ package org.bridgedb.rdf.identifiers.org;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  *

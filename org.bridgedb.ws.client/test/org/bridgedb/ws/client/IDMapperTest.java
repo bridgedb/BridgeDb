@@ -24,7 +24,7 @@ import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WSCoreClientFactory;
 import org.bridgedb.ws.WSCoreInterface;
 import org.bridgedb.ws.WSCoreMapper;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 
@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Tag;
 @Tag("mysql")
 public class IDMapperTest  extends org.bridgedb.utils.IDMapperTest{
     
-    @BeforeClass
+    @BeforeAll
     public static void setupIDMapper() throws BridgeDBException, IDMapperException {
         connectionOk = false;
         WSCoreInterface webService = WSCoreClientFactory.createTestWSClient();

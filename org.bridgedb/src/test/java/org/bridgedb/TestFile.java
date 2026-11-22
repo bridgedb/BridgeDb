@@ -26,8 +26,8 @@ import java.util.Set;
 
 import org.bridgedb.file.IDMapperFile;
 import org.bridgedb.file.IDMapperText;
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -97,7 +97,7 @@ public class TestFile {
 
 	}
 
-	@Ignore
+	@Disabled
 	public void testTransitive() throws MalformedURLException, IDMapperException
 	{
 		IDMapperFile idMapper = new IDMapperText(YEAST_IDS,

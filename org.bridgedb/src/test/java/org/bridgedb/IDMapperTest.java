@@ -23,7 +23,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Disabled;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests to be run on any class that implements IDMapper interface.
@@ -167,8 +167,8 @@ public abstract class IDMapperTest extends IDMapperCapabilitiesTest{
         
     @Test
     public void testFreeSearchBad() throws IDMapperException{
-        org.junit.Assume.assumeTrue(idMapper.getCapabilities().isFreeSearchSupported());       
-        org.junit.Assume.assumeTrue(badID != null);
+        org.junit.jupiter.api.Assumptions.assumeTrue(idMapper.getCapabilities().isFreeSearchSupported());       
+        org.junit.jupiter.api.Assumptions.assumeTrue(badID != null);
         report("FreeSearchBad");
         Set<Xref> results = idMapper.freeSearch(badID, 10);
         assertTrue (results == null || results.isEmpty());
@@ -177,7 +177,7 @@ public abstract class IDMapperTest extends IDMapperCapabilitiesTest{
     @Test
     public void testFreeSearchGood() throws IDMapperException{
         report("FreeSearchGood");
-        org.junit.Assume.assumeTrue(idMapper.getCapabilities().isFreeSearchSupported());       
+        org.junit.jupiter.api.Assumptions.assumeTrue(idMapper.getCapabilities().isFreeSearchSupported());       
         report("FreeSearchGood");
         Set<Xref> results = idMapper.freeSearch(ds1Id1, 10);
         //there many be many othe results in which case skip testing for specific ones.
@@ -190,7 +190,7 @@ public abstract class IDMapperTest extends IDMapperCapabilitiesTest{
     @Test
     @Disabled // There is no longer an id in the test data used more than once.
     public void testFreeSearchGoodJust2() throws IDMapperException{
-        org.junit.Assume.assumeTrue(idMapper.getCapabilities().isFreeSearchSupported());       
+        org.junit.jupiter.api.Assumptions.assumeTrue(idMapper.getCapabilities().isFreeSearchSupported());       
         report("FreeSearchGoodJust2");
         Set<Xref> results = idMapper.freeSearch("An id used more than twice here", 2);
         assertEquals (2, results.size());

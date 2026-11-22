@@ -14,11 +14,11 @@
 //
 package org.bridgedb.resolvers;
 
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
 
 public class BioregistryResolverTest extends AbstractResolverTest {
 
-	@BeforeClass
+	@BeforeAll
 	public static void setResolver() {
 		resolver = BioregistryResolver.getInstance();
 	}

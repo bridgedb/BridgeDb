@@ -16,13 +16,13 @@
 
 package org.bridgedb.rdf;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.lessThan;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.InputStream;
 import java.util.Set;
@@ -99,7 +99,7 @@ public class DataSourceComparatorTest {
         
         BridgeDBRdfHandler.parseRdfInputStream(dataSourceStream);
         Set<UriPattern> result = UriPattern.byCodeAndType("Cs", UriPatternType.mainUrlPattern);
-        assertFalse("Could not find main URL pattern for Cs", result.isEmpty());
+        assertFalse(result.isEmpty(), "Could not find main URL pattern for Cs");
         UriPattern pattern = UriPattern.existingByPattern("https://www.chemspider.com/$id");
         assertThat (result, hasItem(pattern));
 //        pattern = UriPattern.existingOrCreateByPattern("http://identifiers.org/chemspider/$id");
