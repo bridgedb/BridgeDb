@@ -19,6 +19,7 @@ package org.bridgedb;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -454,7 +455,7 @@ public final class DataSource
                 current.categories = categories;
                 return this;
             }
-            if (current.categories.equals(categories)){
+            if (Arrays.equals(current.categories, categories)){
                 return this;
             }
             throw new IllegalArgumentException("Illegal attempt to change the categories of DataSource " + current + " from "
@@ -474,7 +475,7 @@ public final class DataSource
                 current.categories = categoriesArray;
                 return this;
             }
-            if (current.categories.equals(categoriesArray)){
+            if (Arrays.equals(current.categories, categoriesArray)){
                 return this;
             }
             throw new IllegalArgumentException("Illegal attempt to change the categories of DataSource " + current + " from "
