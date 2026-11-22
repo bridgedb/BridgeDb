@@ -46,6 +46,7 @@ public class Test2 {
 		"/PathVisio-Data/gene databases/Ce_Derby_20090720.bridge";
 	
 	@Disabled
+	@Test
 	public void testGdbConnect() throws IDMapperException
 	{
 		assertTrue (new File (GDB_HUMAN).exists()); // if gdb can't be found, rest of test doesn't make sense.
@@ -67,6 +68,7 @@ public class Test2 {
 	 * @throws IDMapperException should be considered a failed test
 	 */
 	@Disabled
+	@Test
 	public void testGdbAttributes() throws IDMapperException {
 		// test special attributes that are grabbed from backpage
 		// since this is a Schema v2 database
@@ -87,6 +89,7 @@ public class Test2 {
 	 * @throws IDMapperException should be considered a failed test
 	 */
 	@Disabled
+	@Test
 	public void testGdbProperties() throws IDMapperException {
 		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + GDB_CE_V3);		
 		for (String key : gdb.getCapabilities().getKeys())
@@ -108,6 +111,7 @@ public class Test2 {
 	}
 
 	@Disabled
+	@Test
 	public void testSimpleGdbImpl4() throws IDMapperException {
 		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + System.getProperty ("user.home") + File.separator +
 				"/tmp/secID/hgncSymbol.bridge");

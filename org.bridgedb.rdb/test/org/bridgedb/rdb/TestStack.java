@@ -33,6 +33,7 @@ import org.bridgedb.Xref;
 import org.bridgedb.bio.DataSourceTxt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 @Disabled
 public class TestStack {
@@ -57,11 +58,13 @@ public class TestStack {
 		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
 	}
 	
+	@Test
 	public void testNeededFiles() {
 		assertTrue (YEAST_ID_MAPPING.exists());
 		assertTrue (new File(GDB_HUMAN).exists());
 	}
 	
+	@Test
 	public void testFile() throws IDMapperException, MalformedURLException {
 		IDMapper mapper = BridgeDb.connect ("idmapper-text:" + YEAST_ID_MAPPING.toURL());
 		src.add (RAD51);
@@ -73,6 +76,7 @@ public class TestStack {
 		System.out.println (mapper.getCapabilities().getSupportedTgtDataSources());
 	}
 	
+	@Test
 	public void testPgdb() throws IDMapperException {
 		IDMapper mapper = BridgeDb.connect("idmapper-pgdb:" + GDB_HUMAN);
 		src.add (INSR);
@@ -82,6 +86,7 @@ public class TestStack {
 		assertEquals (expected, refmap.get(INSR));
 	}
 
+	@Test
 	public void testStack() throws IDMapperException, MalformedURLException {
 		IDMapperStack stack = new IDMapperStack();
 		stack.addIDMapper("idmapper-pgdb:" + GDB_HUMAN);
@@ -97,6 +102,7 @@ public class TestStack {
 		assertEquals (expected, refmap.get(RAD51));
 	}
 
+	@Test
 	public void testTransitive() throws IDMapperException, ClassNotFoundException, MalformedURLException {
 		IDMapper textMapper = BridgeDb.connect ("idmapper-text:" + NUGO_CUSTOM_MAPPINGS.toURL());
 		IDMapper derbyMapper = BridgeDb.connect ("idmapper-pgdb:" + GDB_HUMAN);

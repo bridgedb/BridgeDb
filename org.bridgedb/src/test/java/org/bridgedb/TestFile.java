@@ -98,6 +98,7 @@ public class TestFile {
 	}
 
 	@Disabled
+	@Test
 	public void testTransitive() throws MalformedURLException, IDMapperException
 	{
 		IDMapperFile idMapper = new IDMapperText(YEAST_IDS,

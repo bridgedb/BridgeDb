@@ -52,6 +52,7 @@ public class UriPatternTest {
     }
 
     @Disabled("Cannot make sense of this fail: the $id gets added, but the map is empty")
+    @Test
     public void testByPatternNoId() throws BridgeDBException{
         Reporter.println("ByPatternNoId");
         UriPattern result = UriPattern.byPattern("http://rdf.ebi.ac.uk/resource/chembl/molecule/");

@@ -151,6 +151,7 @@ public class LoosePredicateMakerTest {
         });
 	}
 	
+	@org.junit.jupiter.api.Test
 	public void testCombine_related_related() throws BridgeDBException {
 		assertEquals(SkosConstants.RELATED_MATCH, predicateMaker.combine(SkosConstants.RELATED_MATCH, SkosConstants.RELATED_MATCH));
 	}
