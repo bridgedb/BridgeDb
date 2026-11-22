@@ -25,7 +25,6 @@ import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.sql.justification.JustificationMaker;
 import org.bridgedb.sql.predicate.PredicateMaker;
-import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.utils.BridgeDBException;
 
 /**

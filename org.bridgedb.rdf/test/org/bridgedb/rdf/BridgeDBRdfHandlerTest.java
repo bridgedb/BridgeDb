@@ -27,7 +27,6 @@ import java.util.SortedSet;
 import org.bridgedb.bio.DataSourceTxt;
 import org.bridgedb.utils.Reporter;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.Disabled;
 
 /**
  *

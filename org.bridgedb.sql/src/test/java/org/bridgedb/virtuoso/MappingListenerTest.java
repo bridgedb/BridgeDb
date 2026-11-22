@@ -20,7 +20,6 @@ package org.bridgedb.virtuoso;
 
 import org.apache.log4j.Logger;
 import org.bridgedb.pairs.SyscodeBasedCodeMapper;
-import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLIdMapper;
 import org.bridgedb.sql.SQLListener;
 import org.bridgedb.sql.SqlFactory;

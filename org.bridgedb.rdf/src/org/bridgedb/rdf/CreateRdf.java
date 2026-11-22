@@ -27,7 +27,6 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.bio.DataSourceTxt;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
-import org.bridgedb.utils.Reporter;
 
 /**
  *

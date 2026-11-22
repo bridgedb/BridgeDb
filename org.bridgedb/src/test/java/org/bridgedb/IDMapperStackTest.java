@@ -16,29 +16,13 @@
 package org.bridgedb;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
-import org.bridgedb.BridgeDb;
-import org.bridgedb.DataSource;
-import org.bridgedb.IDMapper;
-import org.bridgedb.IDMapperException;
-import org.bridgedb.Xref;
-import org.bridgedb.impl.InternalUtils;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class IDMapperStackTest

@@ -26,7 +26,6 @@ import org.bridgedb.uri.ws.WSUriMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.ws.uri.WSUriInterfaceService;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 

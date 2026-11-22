@@ -19,7 +19,6 @@
 //
 package org.bridgedb.uri.tools;
 
-import java.util.Set;
 import org.bridgedb.utils.BridgeDBException;
 import org.eclipse.rdf4j.model.Resource;
 
