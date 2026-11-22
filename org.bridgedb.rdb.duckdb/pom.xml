@@ -39,8 +39,11 @@
                         <Bundle-Name>org.bridgedb.rdb.duckdb</Bundle-Name>
                         <Bundle-SymbolicName>org.bridgedb.rdb.duckdb</Bundle-SymbolicName>
                         <Bundle-Version>${project.version}</Bundle-Version>
-                        <Export-Package>org.bridgedb.rdb.duckdb,org.bridgedb.rdb.duckdb.impl</Export-Package>
-                        <Require-Bundle>org.bridgedb,org.bridgedb.bio,duckdb_jdbc</Require-Bundle>
+                        <!-- a fragment, so that the class loader of org.bridgedb.rdb can find the plugin -->
+                        <Fragment-Host>org.bridgedb.rdb</Fragment-Host>
+                        <Export-Package>org.bridgedb.rdb.duckdb</Export-Package>
+                        <Import-Package>!org.bridgedb.rdb,!org.bridgedb.rdb.*,*</Import-Package>
+                        <Require-Bundle>org.duckdb.duckdb_jdbc</Require-Bundle>
                     </instructions>
             </configuration>
                 <executions>
@@ -78,6 +81,18 @@
 			<version>${project.parent.version}</version>
 			<scope>compile</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.bridgedb</groupId>
+            <artifactId>org.bridgedb.rdb</artifactId>
+            <version>${project.parent.version}</version>
+            <exclusions>
+                <!-- not needed for DuckDB -->
+                <exclusion>
+                    <groupId>com.mysql</groupId>
+                    <artifactId>mysql-connector-j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>org.duckdb</groupId>
             <artifactId>duckdb_jdbc</artifactId>

@@ -21,6 +21,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 import org.bridgedb.IDMapperException;
 
@@ -35,6 +36,15 @@ public final class SimpleGdbFactory
 	/** private constructor prevents instantiation. */
 	private SimpleGdbFactory() {};
 	
+	static Connection openConnection(String connectionString) throws SQLException
+	{
+		Properties props = new Properties();
+		// DuckDB cannot be made read-only after connecting. When opened read-write, it creates
+		// missing files and locks out all other connections that are read-only or in other processes.
+		if (connectionString.startsWith("jdbc:duckdb:")) props.setProperty("duckdb.read_only", "true");
+		return DriverManager.getConnection(connectionString, props);
+	}
+
 	/**
 	 * Opens a connection to the Gene Database located in the given file.
 	 * <p>
@@ -56,7 +66,7 @@ public final class SimpleGdbFactory
 		{
 			try 
 			{
-				con = DriverManager.getConnection(connectionString);
+				con = openConnection(connectionString);
 				stmt = con.createStatement();
 			} 
 			catch (SQLException e) 

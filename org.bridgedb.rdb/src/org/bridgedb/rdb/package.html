@@ -2,11 +2,13 @@
 <body>
 Driver and helper classes for using relational databases as identifier mapping services.
 <p>
-For example, to use a downloadable derby database (pgdb file) as a mapping resource, 
-you can use the following piece of code:  
+This package does not depend on a particular database. For example, to use any database
+for which a JDBC driver is available as a mapping resource, you can use the following piece of code:
 <pre>
-	class.forName("org.bridgedb.file.IDMapperRdb");
-	mapper = BridgeDb.connect ("idmapper-pgdb:path/to/file.pgdb");
+	Class.forName("org.bridgedb.rdb.IDMapperRdb");
+	mapper = BridgeDb.connect ("idmapper-jdbc:mysql://host/database");
 </pre>
+Support for Derby databases (pgdb and bridge files) is provided by the plugin org.bridgedb.rdb.derby,
+for DuckDB databases by the plugin org.bridgedb.rdb.duckdb.
 </body>
 </html>

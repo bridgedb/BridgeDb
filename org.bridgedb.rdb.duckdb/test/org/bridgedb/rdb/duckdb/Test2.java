@@ -51,7 +51,7 @@ public class Test2 {
 		assertTrue (new File (GDB_HUMAN).exists()); // if gdb can't be found, rest of test doesn't make sense.
 		long start, end, delta;
 		start = System.currentTimeMillis();
-		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + GDB_HUMAN);
+		IDMapper gdb = BridgeDb.connect ("idmapper-duckdb:" + GDB_HUMAN);
 		end = System.currentTimeMillis();
 		delta = end - start;
 
@@ -70,7 +70,7 @@ public class Test2 {
 	public void testGdbAttributes() throws IDMapperException {
 		// test special attributes that are grabbed from backpage
 		// since this is a Schema v2 database
-		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + GDB_HUMAN);
+		IDMapper gdb = BridgeDb.connect ("idmapper-duckdb:" + GDB_HUMAN);
 		AttributeMapper am = (AttributeMapper)gdb;
 		Xref ref = new Xref ("26873", DataSource.getExistingBySystemCode("L"));
 		assertTrue (am.getAttributes(ref, "Synonyms").contains ("5-Opase|DKFZP434H244|OPLA"));
@@ -88,7 +88,7 @@ public class Test2 {
 	 */
 	@Disabled
 	public void testGdbProperties() throws IDMapperException {
-		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + GDB_CE_V3);
+		IDMapper gdb = BridgeDb.connect ("idmapper-duckdb:" + GDB_CE_V3);
 		for (String key : gdb.getCapabilities().getKeys())
 		{
 			System.out.println (key + " -> " + gdb.getCapabilities().getProperty(key));
@@ -98,7 +98,7 @@ public class Test2 {
 		assertEquals ("Ensembl", gdb.getCapabilities().getProperty("DATASOURCENAME"));
 		assertEquals ("20090720", gdb.getCapabilities().getProperty("BUILDDATE"));
 
-		IDMapper gdb2 = BridgeDb.connect ("idmapper-pgdb:" + GDB_HUMAN);
+		IDMapper gdb2 = BridgeDb.connect ("idmapper-duckdb:" + GDB_HUMAN);
 		for (String key : gdb2.getCapabilities().getKeys())
 		{
 			System.out.println (key + " -> " + gdb2.getCapabilities().getProperty(key));
@@ -109,7 +109,7 @@ public class Test2 {
 
 	@Disabled
 	public void testSimpleGdbImpl4() throws IDMapperException {
-		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + System.getProperty ("user.home") + File.separator +
+		IDMapper gdb = BridgeDb.connect ("idmapper-duckdb:" + System.getProperty ("user.home") + File.separator +
 				"/tmp/secID/hgncSymbol.bridge");
 		assertEquals ("4", gdb.getCapabilities().getProperty("SCHEMAVERSION"));
 		Set<Xref> xrefs = gdb.mapID(new Xref("TIC1", DataSource.getExistingBySystemCode("H")));

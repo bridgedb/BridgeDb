@@ -17,7 +17,6 @@
 package org.bridgedb.rdb;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -179,7 +178,7 @@ public abstract class SimpleGdb extends IDMapperRdb
 		// if singleConnection is false, each call to getConneciton() will lead to a new connection object being created.
 		if (!singleConnection || con == null)
 		{
-			con = DriverManager.getConnection(connectionString); 
+			con = SimpleGdbFactory.openConnection(connectionString);
 			con.setReadOnly(true);
 		}
 		return con;

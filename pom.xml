@@ -30,6 +30,7 @@
         <module>org.bridgedb.uri.ws.server</module>
         <module>org.bridgedb.uri.ws.client</module>
         <module>org.bridgedb.rdb</module>
+        <module>org.bridgedb.rdb.derby</module>
         <module>org.bridgedb.rdb.duckdb</module>
   	<module>org.bridgedb.rdb.construct</module>
   	<module>org.bridgedb.webservice.bridgerest</module>

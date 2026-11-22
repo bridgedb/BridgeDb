@@ -1,0 +1,12 @@
+<html>
+<body>
+Plugin for org.bridgedb.rdb to use Apache Derby databases as identifier mapping services.
+<p>
+For example, to use a downloadable Derby database (pgdb or bridge file) as a mapping resource,
+you can use the following piece of code:
+<pre>
+	Class.forName("org.bridgedb.rdb.derby.IDMapperDerby");
+	mapper = BridgeDb.connect ("idmapper-pgdb:path/to/file.bridge");
+</pre>
+</body>
+</html>

@@ -24,6 +24,8 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.bio.DataSourceTxt;
 import org.bridgedb.bio.Organism;
+import org.bridgedb.rdb.SimpleGdb;
+import org.bridgedb.rdb.SimpleGdbFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -61,7 +63,7 @@ public class Test {
 	public void testSimpleGdb() throws ClassNotFoundException, IDMapperException, IOException, SQLException{
 		// Load drivers
 		Class.forName("org.bridgedb.file.IDMapperText");
-		Class.forName("org.bridgedb.rdb.duckdb.IDMapperRdb");
+		Class.forName("org.bridgedb.rdb.duckdb.IDMapperDuckDB");
 
 		String fileName = "yeast_id_mapping";
 		String fullName = fileName + ".txt";

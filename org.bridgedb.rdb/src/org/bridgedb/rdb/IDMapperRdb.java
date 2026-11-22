@@ -16,11 +16,8 @@
 //
 package org.bridgedb.rdb;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.bridgedb.AttributeMapper;
@@ -40,22 +37,26 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper, XrefIter
 {
 	static
 	{
-		BridgeDb.register ("idmapper-pgdb", new DriverPgdb());
-		BridgeDb.register ("idmapper-derbyclient", new DriverClient());
-		BridgeDb.register ("idmapper-jdbc", new DriverJdbc());
-	}
-	
-	private static final class DriverPgdb implements org.bridgedb.Driver
-	{
-		/** private constructor to prevent instantiation. */
-		private DriverPgdb() { } 
-		
-		/** {@inheritDoc} */
-		public IDMapper connect(String location) throws IDMapperException 
+		// BridgeDb.register() is not thread-safe, so let the plugins finish registering first
+		try
 		{
-			String url = "jdbc:derby:jar:(" + location + ")database";
-			return SimpleGdbFactory.createInstance(location, url);
+			// optional plugin, loaded by name to not depend on it
+			Class.forName("org.bridgedb.rdb.derby.IDMapperDerby");
 		}
+		catch (ClassNotFoundException e)
+		{
+			// the Derby plugin is not used, so there is no idmapper-pgdb or idmapper-derbyclient
+		}
+		try
+		{
+			// optional plugin, loaded by name to not depend on it
+			Class.forName("org.bridgedb.rdb.duckdb.IDMapperDuckDB");
+		}
+		catch (ClassNotFoundException e)
+		{
+			// the DuckDB plugin is not used, so there is no idmapper-duckdb
+		}
+		BridgeDb.register ("idmapper-jdbc", new DriverJdbc());
 	}
 
 	private static final class DriverJdbc implements org.bridgedb.Driver
@@ -71,52 +72,6 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper, XrefIter
 		}
 	}
 
-	private static final class DriverClient implements org.bridgedb.Driver
-	{
-		/** private constructor to prevent instantiation. */
-		private DriverClient() { } 
-		
-		/** {@inheritDoc} */
-		public IDMapper connect(String location) throws IDMapperException 
-		{
-			try
-			{
-	            Map<String, String> args = 
-	            	InternalUtils.parseLocation(location, "host", "port");
-
-	            if (!args.containsKey("BASE")) 
-	            	throw new IllegalArgumentException("Expected species name in connection string: " + location);
-
-	            String host = args.containsKey("host") ? args.get("host") : "wikipathways.org";
-	            String port = args.containsKey("port") ? args.get("port") : "1527";
-
-	            try {
-	    			Class.forName("org.apache.derby.jdbc.ClientDriver"); // Derby 10.4
-	    			System.out.println("Derby ClientDriver loaded (for Derby 10.4)");
-	            } catch (ClassNotFoundException e) {
-	            	// ignore, probably we're running this with Derby 10.14 or higher
-	            }
-	            try {
-	            	Class.forName("org.apache.derby.jdbc.EmbeddedDriver"); // Derby 10.14 or higher
-	            	System.out.println("Derby ClientDriver loaded (for Derby 10.14+)");
-	            } catch (ClassNotFoundException e) {
-	            	// ignore, probably we're running this with Derby lower than 10.14
-	            }
-
-	            Properties sysprop = System.getProperties();
-				sysprop.setProperty("derby.storage.tempDirectory", System.getProperty("java.io.tmpdir"));
-				sysprop.setProperty("derby.stream.error.file", File.createTempFile("derby",".log").toString());
-				
-				String url = "jdbc:derby://" + host + ":" + port + "/" + args.get("BASE");
-				return SimpleGdbFactory.createInstance(location, url);
-			}
-			catch (IOException e)
-			{
-				throw new IDMapperException (e);
-			}
-		}
-	}
-	
 	/**
 	 * Gets the name of te currently used gene database.
 	 * @return the database name as specified in the connection string

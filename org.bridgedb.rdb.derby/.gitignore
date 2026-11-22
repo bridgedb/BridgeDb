@@ -1,0 +1,2 @@
+gdb*config
+!test-data/unknownDataSource.bridge

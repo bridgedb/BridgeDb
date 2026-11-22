@@ -40,7 +40,9 @@
                         <Bundle-SymbolicName>org.bridgedb.rdb</Bundle-SymbolicName>
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Export-Package>org.bridgedb.rdb,org.bridgedb.rdb.impl</Export-Package>
-                        <Require-Bundle>org.bridgedb,org.bridgedb.bio,derby</Require-Bundle>
+                        <!-- bnd would otherwise require the optional plugins, which are loaded by name -->
+                        <Import-Package>!org.bridgedb.rdb.derby,!org.bridgedb.rdb.duckdb,*</Import-Package>
+                        <Require-Bundle>org.bridgedb,org.bridgedb.bio</Require-Bundle>
                     </instructions>
             </configuration>
                 <executions>
@@ -85,26 +87,6 @@
 			<type>jar</type>
 			<scope>runtime</scope>
 		</dependency>
-                <dependency>
-                        <groupId>org.apache.derby</groupId>
-                        <artifactId>derby</artifactId>
-                        <version>${derby.version}</version>
-                </dependency>
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derbytools</artifactId>
-			<version>${derby.version}</version>
-		</dependency>
-                <dependency>
-                        <groupId>org.apache.derby</groupId>
-                        <artifactId>derbyshared</artifactId>
-                        <version>${derby.version}</version>
-                </dependency>
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derbyclient</artifactId>
-            <version>${derby.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>

@@ -54,7 +54,7 @@ public class TestStack {
 	public void setUp() throws ClassNotFoundException {
 		DataSourceTxt.init();
 		Class.forName ("org.bridgedb.file.IDMapperText");
-		Class.forName ("org.bridgedb.rdb.duckdb.IDMapperRdb");
+		Class.forName ("org.bridgedb.rdb.duckdb.IDMapperDuckDB");
 	}
 
 	public void testNeededFiles() {
@@ -74,7 +74,7 @@ public class TestStack {
 	}
 
 	public void testPgdb() throws IDMapperException {
-		IDMapper mapper = BridgeDb.connect("idmapper-pgdb:" + GDB_HUMAN);
+		IDMapper mapper = BridgeDb.connect("idmapper-duckdb:" + GDB_HUMAN);
 		src.add (INSR);
 		Map<Xref, Set<Xref>> refmap = mapper.mapID(src, DataSource.getExistingBySystemCode("L"));
 		Set<Xref> expected = new HashSet<Xref>();
@@ -84,7 +84,7 @@ public class TestStack {
 
 	public void testStack() throws IDMapperException, MalformedURLException {
 		IDMapperStack stack = new IDMapperStack();
-		stack.addIDMapper("idmapper-pgdb:" + GDB_HUMAN);
+		stack.addIDMapper("idmapper-duckdb:" + GDB_HUMAN);
 		stack.addIDMapper("idmapper-text:" + YEAST_ID_MAPPING.toURL());
 		src.add (INSR);
 		src.add (RAD51);
@@ -99,7 +99,7 @@ public class TestStack {
 
 	public void testTransitive() throws IDMapperException, ClassNotFoundException, MalformedURLException {
 		IDMapper textMapper = BridgeDb.connect ("idmapper-text:" + NUGO_CUSTOM_MAPPINGS.toURL());
-		IDMapper duckdbMapper = BridgeDb.connect ("idmapper-pgdb:" + GDB_HUMAN);
+		IDMapper duckdbMapper = BridgeDb.connect ("idmapper-duckdb:" + GDB_HUMAN);
 		IDMapperStack stack = new IDMapperStack();
 		stack.addIDMapper(duckdbMapper);
 		stack.addIDMapper(textMapper);

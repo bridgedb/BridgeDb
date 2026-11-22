@@ -1,13 +1,12 @@
 <html>
 <body>
-Driver and helper classes for using relational databases as identifier mapping services,
-backed by <a href="https://duckdb.org/">DuckDB</a> instead of Apache Derby.
+Plugin for org.bridgedb.rdb to use <a href="https://duckdb.org/">DuckDB</a> databases as identifier mapping services.
 <p>
-For example, to use a downloadable DuckDB database (pgdb file) as a mapping resource,
+For example, to use a downloadable DuckDB database (bridge file) as a mapping resource,
 you can use the following piece of code:
 <pre>
-	Class.forName("org.bridgedb.rdb.duckdb.IDMapperRdb");
-	mapper = BridgeDb.connect ("idmapper-pgdb:path/to/file.duckdb");
+	Class.forName("org.bridgedb.rdb.duckdb.IDMapperDuckDB");
+	mapper = BridgeDb.connect ("idmapper-duckdb:path/to/file.bridge");
 </pre>
 </body>
 </html>
