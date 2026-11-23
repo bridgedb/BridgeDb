@@ -9,7 +9,8 @@
 *.versionsBackup
 version.props
 *.bridge
-*.qc
+/*.qc
+!/org.bridgedb.tools.qc/
 
 # ignore target files #
 target/
