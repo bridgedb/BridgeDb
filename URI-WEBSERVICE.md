@@ -169,9 +169,10 @@ Known limitations
   `/map`, fail with HTTP 500. `WebTemplates` configures Velocity's logging in
   the Velocity 1 way, which Velocity 2.3 rejects.
 * The results for acetic acid include three URIs that are wrong, such as
-  `http://identifiers.org/cl/CHEMBL539`. In `DataSource.ttl`, the Cell Ontology
-  uses the same system code (`Cl`) as ChEMBL compound, so ChEMBL identifiers
-  also get Cell Ontology URIs.
+  `http://identifiers.org/cl/CHEMBL539`. The system codes of ChEMBL compound
+  (`Cl`) and the Cell Ontology (`cl`) differ only in case, and MariaDB compares
+  text without regard to case by default. ChEMBL identifiers therefore also get
+  Cell Ontology URIs.
 * The Jetty 9 project no longer supports Jetty 9, but Debian 13 still provides
   security updates for its `jetty9` package. By default, the web service only
   listens on `localhost`.
