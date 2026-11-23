@@ -61,7 +61,7 @@ public class IDMapperTest extends org.bridgedb.utils.IDMapperTest{
     @BeforeAll
     public static void setupIDMapper() throws IDMapperException, MalformedURLException{
     	URL INTERFACE_TEST_FILE = IDMapperCapabilitiesTest.class.getResource("/interfaceTest.txt");
-        assertNotNull(INTERFACE_TEST_FILE, "Can't find test-data/interfaceTest.txt");
+        assertNotNull(INTERFACE_TEST_FILE, "Can't find src/test/resources/interfaceTest.txt");
         IDMapper inner = new IDMapperText(INTERFACE_TEST_FILE);
         WSCoreInterface  webService = new WSCoreService(inner);
         idMapper = new WSCoreMapper(webService);
@@ -74,8 +74,8 @@ public class IDMapperTest extends org.bridgedb.utils.IDMapperTest{
     	DataSourceTxt.init();
         URL INTERFACE_TEST_FILE = IDMapperCapabilitiesTest.class.getResource("/interfaceTest2.txt");
         URL INTERFACE_TEST_FILE_EMPTY = IDMapperCapabilitiesTest.class.getResource("/interfaceTest3.txt");
-        assertNotNull(INTERFACE_TEST_FILE, "Can't find test-data/interfaceTest2.txt");
-        assertNotNull(INTERFACE_TEST_FILE_EMPTY, "Can't find test-data/interfaceTest3.txt");
+        assertNotNull(INTERFACE_TEST_FILE, "Can't find src/test/resources/interfaceTest2.txt");
+        assertNotNull(INTERFACE_TEST_FILE_EMPTY, "Can't find src/test/resources/interfaceTest3.txt");
         IDMapper inner = new IDMapperText(INTERFACE_TEST_FILE);
         IDMapper empty = new IDMapperText(INTERFACE_TEST_FILE_EMPTY);
         WSCoreService  webService = new WSCoreService(inner);
@@ -117,7 +117,7 @@ public class IDMapperTest extends org.bridgedb.utils.IDMapperTest{
     public void testXrefExists() throws Exception {
     	DataSourceTxt.init();
         URL INTERFACE_TEST_FILE = IDMapperCapabilitiesTest.class.getResource("/interfaceTest2.txt");
-        assertNotNull(INTERFACE_TEST_FILE, "Can't find test-data/interfaceTest2.txt");
+        assertNotNull(INTERFACE_TEST_FILE, "Can't find src/test/resources/interfaceTest2.txt");
         IDMapper inner = new IDMapperText(INTERFACE_TEST_FILE);
         WSCoreService  webService = new WSCoreService(inner);
         List<String> id = new ArrayList<String>();
@@ -143,7 +143,7 @@ public class IDMapperTest extends org.bridgedb.utils.IDMapperTest{
     public void testGetTgtDS() throws Exception {
     	DataSourceTxt.init();
         URL INTERFACE_TEST_FILE = IDMapperCapabilitiesTest.class.getResource("/interfaceTest2.txt");
-        assertNotNull(INTERFACE_TEST_FILE, "Can't find test-data/interfaceTest2.txt");
+        assertNotNull(INTERFACE_TEST_FILE, "Can't find src/test/resources/interfaceTest2.txt");
         IDMapper inner = new IDMapperText(INTERFACE_TEST_FILE);
         WSCoreService  webService = new WSCoreService(inner);
         List<String> id = new ArrayList<String>();
@@ -170,7 +170,7 @@ public class IDMapperTest extends org.bridgedb.utils.IDMapperTest{
 	   public void testFreeSearchSupported() throws Exception {
     	DataSourceTxt.init();
         URL INTERFACE_TEST_FILE = IDMapperCapabilitiesTest.class.getResource("/interfaceTest2.txt");
-        assertNotNull(INTERFACE_TEST_FILE, "Can't find test-data/interfaceTest2.txt");
+        assertNotNull(INTERFACE_TEST_FILE, "Can't find src/test/resources/interfaceTest2.txt");
         IDMapper inner = new IDMapperText(INTERFACE_TEST_FILE);
         WSCoreService  webService = new WSCoreService(inner);
         List<String> id = new ArrayList<String>();
@@ -196,7 +196,7 @@ public class IDMapperTest extends org.bridgedb.utils.IDMapperTest{
 	   public void testGetCapabilities() throws Exception {
     	DataSourceTxt.init();
         URL INTERFACE_TEST_FILE = IDMapperCapabilitiesTest.class.getResource("/interfaceTest2.txt");
-        assertNotNull(INTERFACE_TEST_FILE, "Can't find test-data/interfaceTest2.txt");
+        assertNotNull(INTERFACE_TEST_FILE, "Can't find src/test/resources/interfaceTest2.txt");
         IDMapper inner = new IDMapperText(INTERFACE_TEST_FILE);
         WSCoreService  webService = new WSCoreService(inner);
         List<String> id = new ArrayList<String>();
@@ -233,7 +233,7 @@ public class IDMapperTest extends org.bridgedb.utils.IDMapperTest{
 	   public void testMappingSupported() throws Exception {
     	DataSourceTxt.init();
         URL INTERFACE_TEST_FILE = IDMapperCapabilitiesTest.class.getResource("/interfaceTest2.txt");
-        assertNotNull(INTERFACE_TEST_FILE, "Can't find test-data/interfaceTest2.txt");
+        assertNotNull(INTERFACE_TEST_FILE, "Can't find src/test/resources/interfaceTest2.txt");
         IDMapper inner = new IDMapperText(INTERFACE_TEST_FILE);
         WSCoreService  webService = new WSCoreService(inner);
         List<String> id = new ArrayList<String>();
@@ -256,7 +256,7 @@ public class IDMapperTest extends org.bridgedb.utils.IDMapperTest{
 	   public void testExceptions() throws Exception {
     	DataSourceTxt.init();
         URL INTERFACE_TEST_FILE = IDMapperCapabilitiesTest.class.getResource("/interfaceTest2.txt");
-        assertNotNull(INTERFACE_TEST_FILE, "Can't find test-data/interfaceTest2.txt");
+        assertNotNull(INTERFACE_TEST_FILE, "Can't find src/test/resources/interfaceTest2.txt");
         IDMapper inner = new IDMapperText(INTERFACE_TEST_FILE);
         WSCoreService  webService = new WSCoreService(inner);
         List<String> id = new ArrayList<String>();
