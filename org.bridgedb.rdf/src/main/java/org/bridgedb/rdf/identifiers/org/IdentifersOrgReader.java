@@ -138,7 +138,7 @@ public class IdentifersOrgReader extends RdfBase {
             InputStream inputStream = url.openStream();
             InputStreamReader inputReader = new InputStreamReader(inputStream);
             BufferedReader inputBuffer = new BufferedReader(inputReader);
-            File outputFile = new File ("resources/" + LOCAL_MIRAM_REGISTRY);
+            File outputFile = new File ("src/main/resources/" + LOCAL_MIRAM_REGISTRY);
             FileWriter outputWriter = new FileWriter(outputFile);
             BufferedWriter outputBuffer = new BufferedWriter(outputWriter);
             String line;
@@ -161,11 +161,11 @@ public class IdentifersOrgReader extends RdfBase {
         init();
         UriPattern.refreshUriPatterns();
         
-        File mergedFile = new File("resources/IdentifiersOrgDataSource.ttl");
+        File mergedFile = new File("src/main/resources/IdentifiersOrgDataSource.ttl");
         BridgeDBRdfHandler.writeRdfToFile(mergedFile);
         BridgeDBRdfHandler.parseRdfFile(mergedFile);  
         
-        File textFile = new File("resources/IdentifiersOrgDataSource.txt");
+        File textFile = new File("src/main/resources/IdentifiersOrgDataSource.txt");
         BufferedWriter writer = new BufferedWriter(new FileWriter(textFile));
         DataSourceTxt.writeToBuffer(writer);
         InputStream is = new FileInputStream(textFile);

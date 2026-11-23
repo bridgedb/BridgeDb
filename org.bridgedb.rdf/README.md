@@ -20,9 +20,9 @@ Including future updates to datasources.txt (until BioDataSource.ttl becomes def
 
 These files reflect http://identifiers.org/ registry (Date: 20xx-XX-xx):
 
-* [resources/IdentifiersOrgDataSource.ttl](resources/IdentifiersOrgDataSource.ttl)
-* [resources/IdentifiersOrgDataSource.txt](resources/IdentifiersOrgDataSource.txt)
-* [resources/MiriamRegistry.ttl](resources/MiriamRegistry.ttl)
+* [src/main/resources/IdentifiersOrgDataSource.ttl](src/main/resources/IdentifiersOrgDataSource.ttl)
+* [src/main/resources/IdentifiersOrgDataSource.txt](src/main/resources/IdentifiersOrgDataSource.txt)
+* [src/main/resources/MiriamRegistry.ttl](src/main/resources/MiriamRegistry.ttl)
 
 Run the `IdentifersOrgReader` to update the files:
 
@@ -34,7 +34,7 @@ The file `MiriamRegistry.ttl` will be updated with the
 content of http://www.ebi.ac.uk/miriam/main/export/registry.ttl
 and used to populate `IdentifiersOrgDataSource.*`.
 
-It is currently unclear how the remaining files in [resources/](resources/)
+It is currently unclear how the remaining files in [src/main/resources/](src/main/resources/)
 are used or maintained (See [GitHub issue #21](https://github.com/bridgedb/BridgeDb/issues/21))
 and the relevance to [datasources.txt](../org.bridgedb.bio/resources/org/bridgedb/bio/datasources.txt)
 from `org.bridgedb.bio`.

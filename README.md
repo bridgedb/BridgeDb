@@ -267,7 +267,7 @@ To install local properties you need to.
 3. Copy the keys from the original file  
 
 ### BridgeDB.properties
-(Default file is included in build and can be found in org.bridgedb.utils/resources)
+(Default file is included in build and can be found in org.bridgedb.utils/src/main/resources)
 
 This file contains the local setup information which **MUST** be configured correctly for the service to run. It is essential that the
 database user, password and database name are correct.
@@ -317,17 +317,17 @@ The BaseURI variable is no longer used but may be in the future so is worth sett
 Other Configuration files
 -------------------------
 ### log4j.properties
-(Default file is included in build and can be found in org.bridgedb.utils/resources)
+(Default file is included in build and can be found in org.bridgedb.utils/src/main/resources)
 
 Edit this to change the logger setup.
 The default can be found in the Utils Resource directory
 Please refer to the log4j documentation for more information.
 
 ### DataSource.ttl 
-(Included in the build and found at org.bridgedb.rdf/resources)
+(Included in the build and found at org.bridgedb.rdf/src/main/resources)
 
 RDF format of all the BridgeDb DataSource(s) and Registered UriPatterns,
-Found in $BRIDGEDB_HOME/org.bridgedb.rdf/resources
+Found in $BRIDGEDB_HOME/org.bridgedb.rdf/src/main/resources
 
 This file defines all the URI patterns that will match every BridgeDb DataSource.
 Warning: As additional UriPatterns are constantly being found and created this file is subject to continuous updates. 

@@ -48,7 +48,7 @@ public class CreateRdf {
 
         //Load DataSources from BioDataSource and save that
         DataSourceTxt.init();
-        File biofile = new File("resources/BioDataSource.ttl");
+        File biofile = new File("src/main/resources/BioDataSource.ttl");
         BridgeDBRdfHandler.writeRdfToFile(biofile);
         BridgeDBRdfHandler.parseRdfFile(biofile);        
      }
