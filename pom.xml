@@ -95,23 +95,6 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-		<directory>target</directory>
-		<outputDirectory>target/classes</outputDirectory>
-		<finalName>${project.artifactId}-${project.version}</finalName>
-		<testOutputDirectory>target/test-classes</testOutputDirectory>
-		<sourceDirectory>src</sourceDirectory>
-		<scriptSourceDirectory>scripts</scriptSourceDirectory>
-		<testSourceDirectory>test</testSourceDirectory>
-		<resources>
-			<resource>
-				<directory>resources</directory>
-			</resource>
-		</resources>
-		<testResources>
-			<testResource>
-				<directory>test-data</directory>
-			</testResource>
-		</testResources>
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
