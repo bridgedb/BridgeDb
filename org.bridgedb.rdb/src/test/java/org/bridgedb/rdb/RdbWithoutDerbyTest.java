@@ -25,7 +25,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests that org.bridgedb.rdb works without Derby.
+ * Tests that org.bridgedb.rdb works without Derby and MySQL.
  */
 public class RdbWithoutDerbyTest {
 
@@ -55,6 +55,13 @@ public class RdbWithoutDerbyTest {
 			IDMapperException e = assertThrows(IDMapperException.class,
 				() -> BridgeDb.connect(protocol + ":test"));
 			assertTrue(e.getMessage().startsWith("Unknown protocol"), e.getMessage());
+		}
+	}
+
+	@Test
+	public void testMySQLIsNotOnClasspath() {
+		for (String name : new String[] {"com.mysql.cj.jdbc.Driver", "org.bridgedb.rdb.mysql.IDMapperMySQL"}) {
+			assertThrows(ClassNotFoundException.class, () -> Class.forName(name), name);
 		}
 	}
 }

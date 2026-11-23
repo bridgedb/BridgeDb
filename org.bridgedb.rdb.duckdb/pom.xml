@@ -68,13 +68,6 @@
             <groupId>org.bridgedb</groupId>
             <artifactId>org.bridgedb.rdb</artifactId>
             <version>${project.parent.version}</version>
-            <exclusions>
-                <!-- not needed for DuckDB -->
-                <exclusion>
-                    <groupId>com.mysql</groupId>
-                    <artifactId>mysql-connector-j</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.duckdb</groupId>

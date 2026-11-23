@@ -56,6 +56,15 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper, XrefIter
 		{
 			// the DuckDB plugin is not used, so there is no idmapper-duckdb
 		}
+		try
+		{
+			// optional plugin, loaded by name to not depend on it
+			Class.forName("org.bridgedb.rdb.mysql.IDMapperMySQL");
+		}
+		catch (ClassNotFoundException e)
+		{
+			// the MySQL plugin is not used, so idmapper-jdbc cannot connect to MySQL or MariaDB
+		}
 		BridgeDb.register ("idmapper-jdbc", new DriverJdbc());
 	}
 

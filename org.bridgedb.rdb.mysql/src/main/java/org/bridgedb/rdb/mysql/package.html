@@ -1,0 +1,14 @@
+<html>
+<body>
+Plugin for org.bridgedb.rdb to use <a href="https://www.mysql.com/">MySQL</a> and
+<a href="https://mariadb.org/">MariaDB</a> databases as identifier mapping services.
+<p>
+It adds the MySQL JDBC driver, which org.bridgedb.rdb no longer depends on. With this plugin,
+you can use a database on a MySQL or MariaDB server as a mapping resource with the following
+piece of code:
+<pre>
+	Class.forName("org.bridgedb.rdb.IDMapperRdb");
+	mapper = BridgeDb.connect ("idmapper-jdbc:mysql://host/database");
+</pre>
+</body>
+</html>

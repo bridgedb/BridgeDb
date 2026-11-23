@@ -41,10 +41,9 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.mysql</groupId>
-			<artifactId>mysql-connector-j</artifactId>
-			<version>${mysql.version}</version>
-			<type>jar</type>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.rdb.mysql</artifactId>
+			<version>${project.parent.version}</version>
 			<scope>compile</scope>
 		</dependency>
         <dependency>

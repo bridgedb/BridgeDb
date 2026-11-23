@@ -53,34 +53,16 @@
                         <groupId>org.bridgedb</groupId>
                         <artifactId>org.bridgedb.rdb</artifactId>
                         <version>${project.parent.version}</version>
-                        <exclusions>
-                                <exclusion>
-                                        <groupId>com.mysql</groupId>
-                                        <artifactId>mysql-connector-j</artifactId>
-                                </exclusion>
-                        </exclusions>
                 </dependency>
                 <dependency>
                         <groupId>org.bridgedb</groupId>
                         <artifactId>org.bridgedb.rdb.derby</artifactId>
                         <version>${project.parent.version}</version>
-                        <exclusions>
-                                <exclusion>
-                                        <groupId>com.mysql</groupId>
-                                        <artifactId>mysql-connector-j</artifactId>
-                                </exclusion>
-                        </exclusions>
                 </dependency>
                 <dependency>
                         <groupId>org.bridgedb</groupId>
                         <artifactId>org.bridgedb.rdb.construct</artifactId>
                         <version>${project.parent.version}</version>
-                        <exclusions>
-                                <exclusion>
-                                        <groupId>com.mysql</groupId>
-                                        <artifactId>mysql-connector-j</artifactId>
-                                </exclusion>
-                        </exclusions>
                 </dependency>
                 <dependency>
                         <groupId>com.google.guava</groupId>

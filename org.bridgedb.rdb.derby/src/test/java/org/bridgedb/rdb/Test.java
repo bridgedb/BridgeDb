@@ -150,7 +150,6 @@ public class Test {
 		// Load drivers
 		Class.forName("org.bridgedb.file.IDMapperText");
 		Class.forName("org.bridgedb.rdb.IDMapperRdb");
-		Class.forName("com.mysql.jdbc.Driver");
 
 		String fileName = "yeast_id_mapping";
 		String fullName = fileName + ".txt";

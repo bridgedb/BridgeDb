@@ -140,7 +140,7 @@ public class GdbProvider {
 		// add a few defaults that will always be loaded
 		drivers.add("org.bridgedb.rdb.IDMapperRdb");
 		drivers.add("org.bridgedb.file.IDMapperText");
-		drivers.add("com.mysql.jdbc.Driver");
+		drivers.add("org.bridgedb.rdb.mysql.IDMapperMySQL");
 		
 		for (String driver : drivers)
 		{

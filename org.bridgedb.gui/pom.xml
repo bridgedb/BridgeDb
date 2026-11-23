@@ -24,7 +24,7 @@
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Export-Package>org.bridgedb.gui</Export-Package>
                         <Require-Bundle>org.bridgedb,org.pathvisio.jgoodies.forms;bundle-version="1.2.0",org.bridgedb.rdb;resolution:=optional,org.bridgedb.webservice.bridgerest;resolution:=optional,org.bridgedb.webservice.biomart;resolution:=optional,org.bridgedb.webservice.cronos;resolution:=optional,org.bridgedb.webservice.picr;resolution:=optional,org.bridgedb.file.orthoxml;resolution:=optional,org.bridgedb.webservice.synergizer;resolution:=optional</Require-Bundle>
-                        <Import-Package>com.mysql.jdbc;resolution:=optional</Import-Package>
+                        <Import-Package>com.mysql.cj.jdbc;resolution:=optional</Import-Package>
                     </instructions>
             </configuration>
                 <executions>

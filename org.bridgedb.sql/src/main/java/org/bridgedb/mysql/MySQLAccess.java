@@ -47,7 +47,7 @@ public class MySQLAccess implements SQLAccess{
      */
     public MySQLAccess(String dbUrl, String username, String password) throws BridgeDBException {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             if (dbUrl.equals("jdbc:mysql://localhost:3306/irs")){
                 throw new BridgeDBException ("Saftey Error! "
                         + "jdbc:mysql://localhost:3306/irs is resevered for March 2012 version");

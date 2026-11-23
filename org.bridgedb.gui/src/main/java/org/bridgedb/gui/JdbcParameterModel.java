@@ -75,7 +75,7 @@ public class JdbcParameterModel extends SimpleParameterModel implements BridgeDb
 		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
 		enabled = true;
 		// optional...
-		Class.forName("com.mysql.jdbc.Driver");		
+		Class.forName("com.mysql.cj.jdbc.Driver");
 	}
 
 	@Override

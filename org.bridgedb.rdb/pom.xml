@@ -24,7 +24,7 @@
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Export-Package>org.bridgedb.rdb,org.bridgedb.rdb.impl</Export-Package>
                         <!-- bnd would otherwise require the optional plugins, which are loaded by name -->
-                        <Import-Package>!org.bridgedb.rdb.derby,!org.bridgedb.rdb.duckdb,*</Import-Package>
+                        <Import-Package>!org.bridgedb.rdb.derby,!org.bridgedb.rdb.duckdb,!org.bridgedb.rdb.mysql,*</Import-Package>
                         <Require-Bundle>org.bridgedb,org.bridgedb.bio</Require-Bundle>
                     </instructions>
             </configuration>
@@ -62,13 +62,6 @@
 			<artifactId>org.bridgedb.bio</artifactId>
 			<version>${project.parent.version}</version>
 			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.mysql</groupId>
-			<artifactId>mysql-connector-j</artifactId>
-			<version>${mysql.version}</version>
-			<type>jar</type>
-			<scope>runtime</scope>
 		</dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
