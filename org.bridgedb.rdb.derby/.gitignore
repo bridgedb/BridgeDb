@@ -1,2 +1,2 @@
 gdb*config
-!test-data/unknownDataSource.bridge
+!src/test/resources/unknownDataSource.bridge

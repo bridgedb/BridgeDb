@@ -12,7 +12,7 @@
  *See the License for the specific language governing permissions and limitations under the License.
  */
 
-package org.bridgedb.rdb;
+package org.bridgedb.rdb.duckdb;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -33,15 +33,14 @@ import org.bridgedb.Xref;
 import org.bridgedb.bio.DataSourceTxt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 
 @Disabled
 public class TestStack {
-	private static final String GDB_HUMAN = 
-		System.getProperty ("user.home") + File.separator + 
-		"PathVisio-Data/gene databases/Hs_Derby_20081119.pgdb";
-	private static final File YEAST_ID_MAPPING = new File ("test-data/yeast_id_mapping.txt");
-	private static final File NUGO_CUSTOM_MAPPINGS = new File ("test-data/Nugo-hs-custom.txt");
+	private static final String GDB_HUMAN =
+		System.getProperty ("user.home") + File.separator +
+		"PathVisio-Data/gene databases/Hs_DuckDB_20081119.pgdb";
+	private static final File YEAST_ID_MAPPING = new File ("src/test/resources/yeast_id_mapping.txt");
+	private static final File NUGO_CUSTOM_MAPPINGS = new File ("src/test/resources/Nugo-hs-custom.txt");
 
 	private Set<Xref> src = new HashSet<Xref>();
 	private static final Xref RAD51 = new Xref ("YER095W", DataSource.getExistingBySystemCode("En"));
@@ -55,16 +54,14 @@ public class TestStack {
 	public void setUp() throws ClassNotFoundException {
 		DataSourceTxt.init();
 		Class.forName ("org.bridgedb.file.IDMapperText");
-		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
+		Class.forName ("org.bridgedb.rdb.duckdb.IDMapperDuckDB");
 	}
-	
-	@Test
+
 	public void testNeededFiles() {
 		assertTrue (YEAST_ID_MAPPING.exists());
 		assertTrue (new File(GDB_HUMAN).exists());
 	}
-	
-	@Test
+
 	public void testFile() throws IDMapperException, MalformedURLException {
 		IDMapper mapper = BridgeDb.connect ("idmapper-text:" + YEAST_ID_MAPPING.toURL());
 		src.add (RAD51);
@@ -72,13 +69,12 @@ public class TestStack {
 		Set<Xref> expected = new HashSet<Xref>();
 		expected.add (new Xref ("856831", DataSource.getExistingBySystemCode("L")));
 		assertEquals (expected, refmap.get(RAD51));
-		
+
 		System.out.println (mapper.getCapabilities().getSupportedTgtDataSources());
 	}
-	
-	@Test
+
 	public void testPgdb() throws IDMapperException {
-		IDMapper mapper = BridgeDb.connect("idmapper-pgdb:" + GDB_HUMAN);
+		IDMapper mapper = BridgeDb.connect("idmapper-duckdb:" + GDB_HUMAN);
 		src.add (INSR);
 		Map<Xref, Set<Xref>> refmap = mapper.mapID(src, DataSource.getExistingBySystemCode("L"));
 		Set<Xref> expected = new HashSet<Xref>();
@@ -86,10 +82,9 @@ public class TestStack {
 		assertEquals (expected, refmap.get(INSR));
 	}
 
-	@Test
 	public void testStack() throws IDMapperException, MalformedURLException {
 		IDMapperStack stack = new IDMapperStack();
-		stack.addIDMapper("idmapper-pgdb:" + GDB_HUMAN);
+		stack.addIDMapper("idmapper-duckdb:" + GDB_HUMAN);
 		stack.addIDMapper("idmapper-text:" + YEAST_ID_MAPPING.toURL());
 		src.add (INSR);
 		src.add (RAD51);
@@ -102,32 +97,31 @@ public class TestStack {
 		assertEquals (expected, refmap.get(RAD51));
 	}
 
-	@Test
 	public void testTransitive() throws IDMapperException, ClassNotFoundException, MalformedURLException {
 		IDMapper textMapper = BridgeDb.connect ("idmapper-text:" + NUGO_CUSTOM_MAPPINGS.toURL());
-		IDMapper derbyMapper = BridgeDb.connect ("idmapper-pgdb:" + GDB_HUMAN);
+		IDMapper duckdbMapper = BridgeDb.connect ("idmapper-duckdb:" + GDB_HUMAN);
 		IDMapperStack stack = new IDMapperStack();
-		stack.addIDMapper(derbyMapper);
+		stack.addIDMapper(duckdbMapper);
 		stack.addIDMapper(textMapper);
 		stack.setTransitive(false);
 
-		// test the link between NUGO and ENSEMBL that only occurs in text		
+		// test the link between NUGO and ENSEMBL that only occurs in text
 		Set<Xref> result = stack.mapID(NUGO);
 		assertTrue(result.contains(ENSEMBL));
 		assertFalse(result.contains(ENTREZ));
-				
+
 		// test the link between ENTREZ and ENSEMBL that only occurs in pgdb
-		result = stack.mapID(ENTREZ);		
+		result = stack.mapID(ENTREZ);
 		assertFalse(result.contains(NUGO));
 		assertTrue(result.contains(ENSEMBL));
-		
+
 		stack.setTransitive(true);
 
 		// test transitive
 		result = stack.mapID(NUGO);
 		assertTrue(result.contains(ENTREZ));
 		assertTrue(result.contains(ENSEMBL));
-		
+
 		// and the other way around
 		result = stack.mapID(ENTREZ);
 		assertTrue(result.contains(NUGO));
