@@ -25,9 +25,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * Utility to extract RDF data from derby database and store it as text file.
+ * Utility to extract the VoID data from a BridgeDb database (schema 4, Derby
+ * or DuckDB) and store it as Turtle.
  *  Run with two parameters: [database] and [filename]
- *  database already contains the RDF data.
  */
 public class VoIDTool {
     private final File Db;
@@ -104,7 +104,37 @@ public class VoIDTool {
     }
 
     /**
-     * this method creates RDF file from the derby database passed through the CLI Tool
+     * The namespaces of the output, as in background/wikipathways-rdf-void.ttl.
+     * Attributes and values in the VoID tables can use these prefixes.
+     */
+    private static final String[][] PREFIXES = {
+        {"biopax", "http://www.biopax.org/release/biopax-level3.owl#"},
+        {"cito", "http://purl.org/spar/cito/"},
+        {"dcat", "http://www.w3.org/ns/dcat#"},
+        {"dcterms", "http://purl.org/dc/terms/"},
+        {"foaf", "http://xmlns.com/foaf/0.1/"},
+        {"freq", "http://purl.org/cld/freq/"},
+        {"gpml", "http://vocabularies.wikipathways.org/gpml#"},
+        {"hmdb", "https://identifiers.org/hmdb/"},
+        {"ncbigene", "https://identifiers.org/ncbigene/"},
+        {"owl", "http://www.w3.org/2002/07/owl#"},
+        {"pav", "http://purl.org/pav/"},
+        {"prov", "http://www.w3.org/ns/prov#"},
+        {"pubmed", "http://www.ncbi.nlm.nih.gov/pubmed/"},
+        {"rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#"},
+        {"rdfs", "http://www.w3.org/2000/01/rdf-schema#"},
+        {"skos", "http://www.w3.org/2004/02/skos/core#"},
+        {"void", "http://rdfs.org/ns/void#"},
+        {"wp", "http://vocabularies.wikipathways.org/wp#"},
+        {"xsd", "http://www.w3.org/2001/XMLSchema#"},
+    };
+
+    /**
+     * Writes the VoID data of the database as Turtle. Each VoID table, named
+     * after the system code of its data source, becomes one void:Linkset with
+     * that system code as relative IRI, and the full name of the data source
+     * as dcterms:title. Each row of the table adds one property, in the order
+     * of the rows.
      * @throws SQLException
      * @throws IDMapperException
      */
@@ -119,18 +149,86 @@ public class VoIDTool {
                 isSchemaUpdated = true;
             }
         }
-        if (isSchemaUpdated) {
-            for (DataSource ds : Gdb.getCapabilities().getSupportedSrcDataSources()) {
-                // the VoID table of a data source is named after its system code
-                String sql = "SELECT * from \"" + ds.getSystemCode() + "\"";
-                ResultSet resultSet = st.executeQuery(sql);
-                while (resultSet.next()) {
-                    appendStrToFile(fileName, resultSet.getString("ATTRIB") + " " + resultSet.getString("VAL") + "\n");
-                }
-            }
-        }
-        else
+        if (!isSchemaUpdated) {
             System.out.println("Schema version less than 4 isn't supported");
+            return;
+        }
+
+        StringBuilder ttl = new StringBuilder();
+        for (String[] prefix : PREFIXES) {
+            ttl.append(String.format("@prefix %-9s <%s> .%n", prefix[0] + ":", prefix[1]));
+        }
+        for (DataSource ds : Gdb.getCapabilities().getSupportedSrcDataSources()) {
+            String code = ds.getSystemCode();
+            StringBuilder linkset = new StringBuilder();
+            linkset.append("\n<").append(code).append(">\n");
+            linkset.append("        rdf:type             void:Linkset ;\n");
+            String title = ds.getFullName() != null && !ds.getFullName().isEmpty() ? ds.getFullName() : code;
+            linkset.append("        dcterms:title        ").append(literal(title));
+            // the VoID table of a data source is named after its system code
+            String sql = "SELECT * from \"" + code + "\"";
+            try (ResultSet resultSet = st.executeQuery(sql)) {
+                while (resultSet.next()) {
+                    String attrib = resultSet.getString("ATTRIB");
+                    String predicate = predicate(attrib);
+                    if (predicate == null) {
+                        System.err.println("WARNING: skipped " + attrib + " of " + code
+                            + ", as it is not an IRI or a name with a known prefix");
+                        continue;
+                    }
+                    linkset.append(" ;\n        ").append(String.format("%-20s ", predicate))
+                        .append(object(resultSet.getString("VAL")));
+                }
+            } catch (SQLException e) {
+                System.err.println("WARNING: no VoID data for " + code + " (" + title + "): " + e.getMessage());
+                continue;
+            }
+            linkset.append(" .\n");
+            ttl.append(linkset);
+        }
+        appendStrToFile(fileName, ttl.toString());
+    }
+
+    private static boolean isPrefixedName(String value) {
+        int colon = value.indexOf(':');
+        if (colon < 1 || !value.substring(colon + 1).matches("[A-Za-z0-9_][A-Za-z0-9_.\\-]*|")
+            || value.endsWith(".")) return false;
+        String prefix = value.substring(0, colon);
+        for (String[] known : PREFIXES) {
+            if (known[0].equals(prefix)) return true;
+        }
+        return false;
+    }
+
+    private static boolean isIRI(String value) {
+        return value.matches("https?://[^\\s<>\"{}|^`\\\\]+");
+    }
+
+    /** Returns the attribute as a Turtle predicate, or null if it isn't one. */
+    private static String predicate(String attrib) {
+        if (attrib == null) return null;
+        attrib = attrib.trim();
+        if (isPrefixedName(attrib)) return attrib;
+        if (isIRI(attrib)) return "<" + attrib + ">";
+        return null;
+    }
+
+    /** Returns the value as a Turtle object: an IRI, a prefixed name, a typed or plain literal. */
+    private static String object(String value) {
+        if (value == null) return literal("");
+        String v = value.trim();
+        if (isIRI(v)) return "<" + v + ">";
+        if (isPrefixedName(v)) return v;
+        if (v.matches("-?\\d+")) return v;
+        if (v.matches("\\d{4}-\\d{2}-\\d{2}")) return literal(v) + "^^xsd:date";
+        if (v.matches("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})?"))
+            return literal(v) + "^^xsd:dateTime";
+        return literal(value);
+    }
+
+    private static String literal(String value) {
+        return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"")
+            .replace("\n", "\\n").replace("\r", "\\r") + "\"";
     }
 
     public void run() throws IDMapperException, SQLException {
