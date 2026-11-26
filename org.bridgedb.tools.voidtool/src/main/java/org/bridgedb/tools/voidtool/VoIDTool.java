@@ -71,9 +71,37 @@ public class VoIDTool {
         }
     }
 
+    /**
+     * Opens the database, either a Derby or a DuckDB BridgeDb database.
+     * The JDBC driver is loaded by name, as the jar-with-dependencies may not
+     * register it: its META-INF/services/java.sql.Driver lists only one driver.
+     * @throws IDMapperException if the format is not recognized, or the database could not be opened
+     */
     public void initDatabases() throws IDMapperException{
-        String url = "jdbc:derby:jar:(" + Db + ")database";
+        String url;
+        switch (DbFormatDetector.detect(Db)) {
+        case DERBY:
+            System.out.println("INFO: database '" + Db + "' detected as a Derby database");
+            loadDriver("org.apache.derby.jdbc.EmbeddedDriver");
+            url = "jdbc:derby:jar:(" + Db + ")database";
+            break;
+        case DUCKDB:
+            System.out.println("INFO: database '" + Db + "' detected as a DuckDB database");
+            loadDriver("org.duckdb.DuckDBDriver");
+            url = "jdbc:duckdb:" + Db;
+            break;
+        default:
+            throw new IDMapperException("Unrecognized database format for '" + Db + "'");
+        }
         Gdb = SimpleGdbFactory.createInstance("db1", url);
+    }
+
+    private static void loadDriver(String className) throws IDMapperException {
+        try {
+            Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            throw new IDMapperException("Could not find the JDBC driver " + className + " on the classpath", e);
+        }
     }
 
     /**
