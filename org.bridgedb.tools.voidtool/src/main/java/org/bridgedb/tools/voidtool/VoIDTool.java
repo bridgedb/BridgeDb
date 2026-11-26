@@ -125,7 +125,7 @@ public class VoIDTool {
                 String sql = "SELECT * from " + (ds.getFullName()).toUpperCase();
                 ResultSet resultSet = st.executeQuery(sql);
                 while (resultSet.next()) {
-                    appendStrToFile(fileName, resultSet.getString("ATTRIB") + " " + resultSet.getString("VAL"));
+                    appendStrToFile(fileName, resultSet.getString("ATTRIB") + " " + resultSet.getString("VAL") + "\n");
                 }
             }
         }
