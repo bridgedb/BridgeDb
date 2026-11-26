@@ -25,7 +25,7 @@
 						<configuration>
 							<archive>
 								<manifest>
-									<mainClass>org.bridgedb.tools.qc.BridgeQC</mainClass>
+									<mainClass>org.bridgedb.tools.voidtool.VoIDTool</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
