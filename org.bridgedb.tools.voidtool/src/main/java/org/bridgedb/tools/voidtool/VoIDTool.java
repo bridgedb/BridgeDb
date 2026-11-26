@@ -1,7 +1,5 @@
-/*
- *BridgeDb,
- *An abstraction layer for identifier mapping services, both local and online.
- *Copyright (c) 2019 Manas Awasthi, <marvex17@gmail.com>
+/* Copyright (c) 2019 Manas Awasthi <marvex17@gmail.com>
+ *               2026 Egon Willighagen <egonw@users.sf.net>
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *you may not use this file except in compliance with the License.
@@ -47,7 +45,7 @@ public class VoIDTool {
      */
     public VoIDTool(File f1, String fileName) throws  IOException {
         Db = f1;
-        file = new FileWriter(fileName+"txt", true);
+        file = new FileWriter(fileName, false); // false -> overwrite
         this.fileName = fileName;
     }
 
