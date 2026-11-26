@@ -163,20 +163,32 @@ public class GdbConstructImpl4 implements GdbConstruct
         }
     }
 
+    /**
+     * Adds a row of VoID data for one data source, creating its table if needed.
+     *
+     * @param table the system code of the data source, which is used as the
+     *   name of the table. The name is quoted, so that it keeps its case and
+     *   can be an SQL keyword, such as On.
+     * @param Key the attribute, for example dcterms:title
+     * @param Value the value
+     * @return 0 on success, 1 on failure; see recentException()
+     */
     public int setRDF(String table, String Key, String Value){
         try {
             Statement sh = con.createStatement();
             String query;
+            String quotedTable = "\"" + table + "\"";
             if (con != null) {
+                // the name is quoted, so the database stores it with this exact case
                 DatabaseMetaData dbmd = con.getMetaData();
-                ResultSet rs = dbmd.getTables(null, null, table.toUpperCase(), null);
+                ResultSet rs = dbmd.getTables(null, null, table, null);
                 if (rs.next()) {
-                    query = "INSERT INTO " +table +" (ATTRIB, VAL) VALUES( '"  + Key + "','" + Value + "')";
+                    query = "INSERT INTO " + quotedTable + " (ATTRIB, VAL) VALUES( '"  + Key + "','" + Value + "')";
                     sh.execute(query);
                 } else {
-                    query =  "CREATE TABLE " +table+ " (ATTRIB VARCHAR(256), VAL VARCHAR(256))";
+                    query =  "CREATE TABLE " + quotedTable + " (ATTRIB VARCHAR(256), VAL VARCHAR(256))";
                     sh.execute(query);
-                    query = "INSERT INTO " +table+ " (ATTRIB, VAL) VALUES ('" + Key + "','" + Value + "')";
+                    query = "INSERT INTO " + quotedTable + " (ATTRIB, VAL) VALUES ('" + Key + "','" + Value + "')";
                     sh.execute(query);
                 }
             }

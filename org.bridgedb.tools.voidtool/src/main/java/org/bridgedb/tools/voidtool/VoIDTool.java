@@ -121,7 +121,8 @@ public class VoIDTool {
         }
         if (isSchemaUpdated) {
             for (DataSource ds : Gdb.getCapabilities().getSupportedSrcDataSources()) {
-                String sql = "SELECT * from " + (ds.getFullName()).toUpperCase();
+                // the VoID table of a data source is named after its system code
+                String sql = "SELECT * from \"" + ds.getSystemCode() + "\"";
                 ResultSet resultSet = st.executeQuery(sql);
                 while (resultSet.next()) {
                     appendStrToFile(fileName, resultSet.getString("ATTRIB") + " " + resultSet.getString("VAL") + "\n");
