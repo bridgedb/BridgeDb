@@ -46,6 +46,7 @@ public class VoIDTool {
     public VoIDTool(File f1, String fileName) throws  IOException {
         Db = f1;
         file = new FileWriter(fileName, false); // false -> overwrite
+        file.close(); // we can close it, because appendStrToFile opens it anew
         this.fileName = fileName;
     }
 
