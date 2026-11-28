@@ -72,6 +72,13 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.bridgedb</groupId>
+            <artifactId>org.bridgedb.rdb</artifactId>
+            <version>${project.parent.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derby</artifactId>
             <version>${derby.version}</version>

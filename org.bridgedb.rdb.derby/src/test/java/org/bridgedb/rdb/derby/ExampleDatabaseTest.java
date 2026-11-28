@@ -1,0 +1,66 @@
+// Copyright 2026 Egon Willighagen <egonw@users.sf.net>
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+package org.bridgedb.rdb.derby;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.File;
+import java.nio.file.Files;
+
+import org.bridgedb.BridgeDb;
+import org.bridgedb.bio.DataSourceTxt;
+import org.bridgedb.bio.Organism;
+import org.bridgedb.rdb.DbFormatDetector;
+import org.bridgedb.rdb.ExampleDatabases;
+import org.bridgedb.rdb.GdbProvider;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+/**
+ * Tests the Derby plugin with the Derby example database from org.bridgedb.rdb.
+ */
+public class ExampleDatabaseTest {
+
+	@TempDir
+	static File dir;
+
+	private static File db;
+
+	@BeforeAll
+	public static void copyDatabase() throws Exception {
+		DataSourceTxt.init();
+		Class.forName("org.bridgedb.rdb.IDMapperRdb");
+		db = ExampleDatabases.copyTo(ExampleDatabases.DERBY, dir);
+	}
+
+	@Test
+	public void testFormat() throws Exception {
+		assertEquals(DbFormatDetector.Format.DERBY, DbFormatDetector.detect(db));
+	}
+
+	@Test
+	public void testDerbyProtocol() throws Exception {
+		ExampleDatabases.assertContent(BridgeDb.connect("idmapper-pgdb:" + db));
+	}
+
+	@Test
+	public void testGdbProvider() throws Exception {
+		// a path without protocol, which GdbProvider opens as a Derby database
+		File config = new File(dir, "gdb.config");
+		Files.writeString(config.toPath(), "Homo sapiens\t" + db + "\n");
+		ExampleDatabases.assertMappings(GdbProvider.fromConfigFile(config).getStack(Organism.HomoSapiens));
+	}
+}
