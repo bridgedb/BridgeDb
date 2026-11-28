@@ -29,6 +29,7 @@ import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.bio.DataSourceTxt;
+import org.bridgedb.rdb.DbFormatDetector;
 import org.bridgedb.rdb.construct.DBConnector;
 import org.bridgedb.rdb.construct.DataDerby;
 import org.bridgedb.rdb.construct.DataDuckDB;

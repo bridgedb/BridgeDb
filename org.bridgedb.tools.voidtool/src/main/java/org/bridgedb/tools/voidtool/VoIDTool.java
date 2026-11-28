@@ -15,6 +15,7 @@ package org.bridgedb.tools.voidtool;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.bio.DataSourceTxt;
+import org.bridgedb.rdb.DbFormatDetector;
 import org.bridgedb.rdb.SimpleGdb;
 import org.bridgedb.rdb.SimpleGdbFactory;
 
