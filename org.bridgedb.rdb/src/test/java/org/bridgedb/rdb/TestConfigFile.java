@@ -15,6 +15,7 @@
 package org.bridgedb.rdb;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -98,10 +99,10 @@ public class TestConfigFile {
 	}
 
 	@Test
-	public void testPlainPaths() throws IOException {
+	public void testPlainPaths(@TempDir File dbDir) throws IOException {
 		// a plain path gets the protocol that matches the format of the file
-		File derby = ExampleDatabases.copyTo(ExampleDatabases.DERBY, dir);
-		File duckdb = ExampleDatabases.copyTo(ExampleDatabases.DUCKDB, dir);
+		File derby = ExampleDatabases.copyTo(ExampleDatabases.DERBY, dbDir);
+		File duckdb = ExampleDatabases.copyTo(ExampleDatabases.DUCKDB, dbDir);
 		File config = writeConfig("paths.config",
 			"Homo sapiens\t" + derby + "\n" +
 			"*\t" + duckdb + "\n");
@@ -117,6 +118,23 @@ public class TestConfigFile {
 		File config = writeConfig("undetected.config", "*\t/data/missing.bridge\n");
 		assertEquals(Map.of("*", List.of("idmapper-pgdb:/data/missing.bridge")),
 			new ConfigFile(config).getMappers());
+	}
+
+	@Test
+	public void testMissingDerbyPlugin(@TempDir File dbDir) throws IOException {
+		// this module's tests have neither the Derby nor the DuckDB plugin
+		File derby = ExampleDatabases.copyTo(ExampleDatabases.DERBY, dbDir);
+		File config = writeConfig("derby.config", "*\t" + derby + "\n");
+		IDMapperException e = assertThrows(IDMapperException.class, () -> GdbProvider.fromConfigFile(config));
+		assertTrue(e.getMessage().contains("module org.bridgedb.rdb.derby"), e.getMessage());
+	}
+
+	@Test
+	public void testMissingDuckDBPlugin(@TempDir File dbDir) throws IOException {
+		File duckdb = ExampleDatabases.copyTo(ExampleDatabases.DUCKDB, dbDir);
+		File config = writeConfig("duckdb.config", "*\t" + duckdb + "\n");
+		IDMapperException e = assertThrows(IDMapperException.class, () -> GdbProvider.fromConfigFile(config));
+		assertTrue(e.getMessage().contains("module org.bridgedb.rdb.duckdb"), e.getMessage());
 	}
 
 	@Test

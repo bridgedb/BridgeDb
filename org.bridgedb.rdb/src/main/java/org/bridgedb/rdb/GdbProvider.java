@@ -120,6 +120,42 @@ public class GdbProvider {
 		this.transitive = transitive;
 	}
 	
+	/**
+	 * The database plugins, as {protocol, plugin class, module, format}. Without
+	 * the plugin, BridgeDb.connect() only reports an unknown protocol.
+	 */
+	private static final String[][] PLUGINS = {
+		{ "idmapper-pgdb", "org.bridgedb.rdb.derby.IDMapperDerby", "org.bridgedb.rdb.derby", "Derby" },
+		{ "idmapper-derbyclient", "org.bridgedb.rdb.derby.IDMapperDerby", "org.bridgedb.rdb.derby", "Derby" },
+		{ "idmapper-duckdb", "org.bridgedb.rdb.duckdb.IDMapperDuckDB", "org.bridgedb.rdb.duckdb", "DuckDB" },
+	};
+
+	/**
+	 * Checks that the plugin for a Derby or DuckDB connection string is on the
+	 * classpath. Other connection strings are not checked.
+	 * @param connectionString a connection string from a config file
+	 * @throws IDMapperException if the plugin is missing, with the name of the module to add
+	 */
+	static void checkPlugin(String connectionString) throws IDMapperException
+	{
+		for (String[] plugin : PLUGINS)
+		{
+			if (connectionString.startsWith(plugin[0] + ":"))
+			{
+				try
+				{
+					Class.forName(plugin[1]);
+				}
+				catch (ClassNotFoundException e)
+				{
+					throw new IDMapperException("Cannot open '" + connectionString + "': this needs the " +
+						plugin[3] + " plugin, from the module " + plugin[2] + ", which is not on the classpath");
+				}
+				return;
+			}
+		}
+	}
+
 	public static GdbProvider fromConfigFile(File f) throws IDMapperException, IOException, ClassNotFoundException
 	{
 		return fromConfigFile(f, false);
@@ -159,6 +195,7 @@ public class GdbProvider {
 		{
 			for (String value : cf.getMappers().get(key))
 			{
+				checkPlugin(value);
 				IDMapper mapper = BridgeDb.connect (value);
 				Organism org = Organism.fromLatinName(key);
 				if(org != null) {
