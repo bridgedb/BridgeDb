@@ -92,10 +92,36 @@
                         <artifactId>derbyshared</artifactId>
                         <version>${derby.version}</version>
                 </dependency>
-                <dependency> 
+                <dependency>
                         <groupId>org.apache.derby</groupId>
                         <artifactId>derbyclient</artifactId>
                         <version>${derby.version}</version>
+                </dependency>
+                <dependency>
+                        <!-- the example databases -->
+                        <groupId>org.bridgedb</groupId>
+                        <artifactId>org.bridgedb.rdb</artifactId>
+                        <version>${project.parent.version}</version>
+                        <type>test-jar</type>
+                        <scope>test</scope>
+                </dependency>
+                <dependency>
+                        <groupId>org.junit.platform</groupId>
+                        <artifactId>junit-platform-launcher</artifactId>
+                        <version>${junit.version}</version>
+                        <scope>test</scope>
+                </dependency>
+                <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-engine</artifactId>
+                        <version>${junit.version}</version>
+                        <scope>test</scope>
+                </dependency>
+                <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-api</artifactId>
+                        <version>${junit.version}</version>
+                        <scope>test</scope>
                 </dependency>
 	</dependencies>
   
