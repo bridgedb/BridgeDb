@@ -28,7 +28,6 @@ import org.bridgedb.rdb.SimpleGdb;
 import org.bridgedb.rdb.SimpleGdbFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 
 /**
  * Tests for the DuckDB-backed IDMapper stack.
@@ -46,17 +45,6 @@ public class Test {
 	@BeforeAll
 	public static void setup() {
 		DataSourceTxt.init();
-	}
-
-	/**
-	 * GdbProvider.fromConfigFile() opens every mapper it is pointed at, which
-	 * requires a real gene database file to connect to. Unlike the Derby-based
-	 * org.bridgedb.rdb module, there is no bundled DuckDB fixture database to
-	 * exercise this with, so this is disabled until such a fixture is added.
-	 */
-	@Disabled("requires a DuckDB gene database fixture file, which is not bundled with this module")
-	@org.junit.jupiter.api.Test
-	public void testGdbProvider() throws ClassNotFoundException, IDMapperException, IOException {
 	}
 
 	@org.junit.jupiter.api.Test

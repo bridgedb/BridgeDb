@@ -7,7 +7,7 @@
   <parent>
   	<artifactId>bridgedb-bundle</artifactId>
   	<groupId>org.bridgedb</groupId>
-  	<version>4.0.1</version>
+  	<version>4.0.2-SNAPSHOT</version>
   </parent>
 
 	<build>
@@ -47,6 +47,14 @@
                         <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
                     </archive>
                 </configuration>
+                <executions>
+                    <!-- the example databases in src/test/resources, for the tests of the Derby and DuckDB plugins -->
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
 	</build>

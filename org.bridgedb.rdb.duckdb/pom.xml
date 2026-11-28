@@ -7,7 +7,7 @@
   <parent>
   	<artifactId>bridgedb-bundle</artifactId>
   	<groupId>org.bridgedb</groupId>
-  	<version>4.0.1</version>
+  	<version>4.0.2-SNAPSHOT</version>
   </parent>
 
 	<build>
@@ -68,6 +68,13 @@
             <groupId>org.bridgedb</groupId>
             <artifactId>org.bridgedb.rdb</artifactId>
             <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bridgedb</groupId>
+            <artifactId>org.bridgedb.rdb</artifactId>
+            <version>${project.parent.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.duckdb</groupId>

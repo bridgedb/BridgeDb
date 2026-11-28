@@ -36,8 +36,16 @@ import org.bridgedb.rdb.SimpleGdbFactory;
 public final class IDMapperDerby
 {
 	// Must not initialize IDMapperRdb, as that class initializes this one.
-	static
-	{
+	/** the JDBC driver for local Derby databases, such as .bridge files */
+	private static final String EMBEDDED_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
+
+	static {
+		try {
+			// not found automatically in OSGi, nor in fat jars with several JDBC drivers
+			Class.forName(EMBEDDED_DRIVER);
+		} catch (ClassNotFoundException exception) {
+			// must not break org.bridgedb.rdb, so this is only reported when connecting
+		}
 		BridgeDb.register ("idmapper-pgdb", new DriverPgdb());
 		BridgeDb.register ("idmapper-derbyclient", new DriverClient());
 	}
@@ -51,8 +59,15 @@ public final class IDMapperDerby
 		private DriverPgdb() { }
 
 		/** {@inheritDoc} */
-		public IDMapper connect(String location) throws IDMapperException
-		{
+		public IDMapper connect(String location) throws IDMapperException {
+			try {
+				Class.forName(EMBEDDED_DRIVER);
+			} catch (ClassNotFoundException exception) {
+				throw new IDMapperException(
+					"Could not find the Derby JDBC driver (" + EMBEDDED_DRIVER + ") on the classpath",
+					exception
+				);
+			}
 			String url = "jdbc:derby:jar:(" + location + ")database";
 			return SimpleGdbFactory.createInstance(location, url);
 		}
@@ -84,8 +99,8 @@ public final class IDMapperDerby
 	            	// ignore, probably we're running this with Derby 10.14 or higher
 	            }
 	            try {
-	            	Class.forName("org.apache.derby.jdbc.EmbeddedDriver"); // Derby 10.14 or higher
-	            	System.out.println("Derby ClientDriver loaded (for Derby 10.14+)");
+	            	Class.forName(EMBEDDED_DRIVER); // Derby 10.14 or higher
+	            	System.out.println("Derby EmbeddedDriver loaded (for Derby 10.14+)");
 	            } catch (ClassNotFoundException e) {
 	            	// ignore, probably we're running this with Derby lower than 10.14
 	            }

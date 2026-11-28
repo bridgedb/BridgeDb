@@ -25,7 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bridgedb.IDMapperException;
 import org.bridgedb.impl.InternalUtils;
+import org.bridgedb.rdb.DbFormatDetector;
 
 public class ConfigFile
 {
@@ -46,14 +48,14 @@ public class ConfigFile
 		String line = in.readLine();
 		while(line != null) 
 		{
-			// strip whitespace
-			line = line.trim();
-			
 			// strip comments
 			int pos = line.indexOf('#');
 			if (pos > -1)
 				line = line.substring(0, pos);
-			
+
+			// strip whitespace, also the whitespace before a comment
+			line = line.trim();
+
 			// ignore empty lines
 			if (line.equals("")) {}
 			// section header
@@ -72,10 +74,11 @@ public class ConfigFile
 					{
 						String key = kv[0];
 						String value = kv[1];
-	
-						// next line is a backwards-compatibility hack
-						if (!value.startsWith("idmapper")) value = "idmapper-pgdb:" + value;
-						
+
+						// a plain path instead of a connection string: add the protocol
+						// that matches the format of the database file
+						if (!value.startsWith("idmapper")) value = protocolFor(value) + value;
+
 						InternalUtils.multiMapAdd(mappers, key, value);
 					} else {
 						System.out.println("Invalid key/value pair in gene database configuration: " + line);
@@ -96,6 +99,33 @@ public class ConfigFile
 
 	}
 	
+	/**
+	 * Returns the BridgeDb protocol for a database file, based on its format:
+	 * "idmapper-pgdb:" for Derby and "idmapper-duckdb:" for DuckDB. If the format
+	 * can't be detected, for example because the file doesn't exist, this returns
+	 * "idmapper-pgdb:", the protocol that was used for all plain paths before
+	 * BridgeDb 4.0.2, and connecting will report the problem.
+	 */
+	static String protocolFor(String path)
+	{
+		try
+		{
+			switch (DbFormatDetector.detect(new File(path)))
+			{
+			case DUCKDB:
+				return "idmapper-duckdb:";
+			case DERBY:
+			default:
+				return "idmapper-pgdb:";
+			}
+		}
+		catch (IDMapperException e)
+		{
+			System.out.println("Warning: " + e.getMessage() + "; trying it as a Derby database");
+			return "idmapper-pgdb:";
+		}
+	}
+
 	public List<String> getDrivers()
 	{
 		return drivers;
