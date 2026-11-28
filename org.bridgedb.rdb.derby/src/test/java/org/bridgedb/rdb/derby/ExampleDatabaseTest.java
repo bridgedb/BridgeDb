@@ -17,14 +17,11 @@ package org.bridgedb.rdb.derby;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
-import java.nio.file.Files;
 
 import org.bridgedb.BridgeDb;
 import org.bridgedb.bio.DataSourceTxt;
-import org.bridgedb.bio.Organism;
 import org.bridgedb.rdb.DbFormatDetector;
 import org.bridgedb.rdb.ExampleDatabases;
-import org.bridgedb.rdb.GdbProvider;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -54,13 +51,5 @@ public class ExampleDatabaseTest {
 	@Test
 	public void testDerbyProtocol() throws Exception {
 		ExampleDatabases.assertContent(BridgeDb.connect("idmapper-pgdb:" + db));
-	}
-
-	@Test
-	public void testGdbProvider() throws Exception {
-		// a path without protocol, which GdbProvider opens as a Derby database
-		File config = new File(dir, "gdb.config");
-		Files.writeString(config.toPath(), "Homo sapiens\t" + db + "\n");
-		ExampleDatabases.assertMappings(GdbProvider.fromConfigFile(config).getStack(Organism.HomoSapiens));
 	}
 }

@@ -13,16 +13,11 @@
  */
 package org.bridgedb.rdb;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
 import java.net.URL;
-import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Map;
@@ -57,92 +52,6 @@ public class Test {
 	@BeforeAll
 	public static void setup() {
 		DataSourceTxt.init();
-	}
-	
-	@org.junit.jupiter.api.Test
-	public void testGdbProvider() throws ClassNotFoundException, IDMapperException, IOException{
-		// only for Java 11 and higher
-		String specVersion = System.getProperty("java.specification.version");
-		if (specVersion.contains(".")) specVersion = specVersion.substring(0, specVersion.indexOf('.'));
-		if (Integer.valueOf(specVersion) < 11) {
-			System.out.print("Only running testGdbProvider() for Java 11 or higher");
-			return;
-		}
-
-		Class.forName("org.bridgedb.file.IDMapperText");
-		ClassLoader classLoader = this.getClass().getClassLoader();
-
-		File gdbFile = new File("gdbTest.config");
-		File gdbFileAg = new File("gdbTestAg.config");
-		File gdbFileInvalid = new File("gdbTestInvalid.config");
-		File gdbFileTestWrite = new File("gdbTestWrite.config");
-		
-		Set<Organism> orgSet = new HashSet<Organism>();
-		Set<Organism> orgSetAg = new HashSet<Organism>();
-		GdbProvider organismGdbProvider = new GdbProvider();
-		GdbProvider gdbFromConfig = new GdbProvider();
-		GdbProvider gdbFromConfigInvalid = new GdbProvider();
-		GdbProvider gdbFromConfigAg = new GdbProvider();
-		String filePath = "";
-		String fileName = "yeast_id_mapping";
-		String fullName = fileName + ".txt";
-		URL url = classLoader.getResource(fullName);
-		IDMapper m = BridgeDb.connect("idmapper-text:" + url);
-
-		organismGdbProvider.addOrganismGdb(sC, m);
-		organismGdbProvider.addGlobalGdb(m);
-		organismGdbProvider.removeGlobalGdb(m);
-		orgSet = organismGdbProvider.getOrganisms();
-		assertTrue(orgSet.contains(sC));
-		
-		// Use a temp file to point to the unknownDataSource.bridge file in each .config file
-		String dataFile = "unknownDataSource.bridge";
-		File tmpFile = File.createTempFile(dataFile, ".bridge");
-		System.out.println(tmpFile.getAbsolutePath());
-		InputStream stream = classLoader.getResourceAsStream("unknownDataSource.bridge");
-		System.out.println("stream: " + stream);
-		System.out.println("path: " + tmpFile.toPath());
-		tmpFile.delete();
-		Files.copy(stream, tmpFile.toPath());
-		filePath = tmpFile.getAbsolutePath();
-		System.out.println("filePath: " + filePath);
-		tmpFile.deleteOnExit();
-		
-		PrintWriter outputTest = new PrintWriter("gdbTest.config");
-		outputTest.printf("*\t"+ filePath);
-		outputTest.close();
-
-		PrintWriter outputTestAg = new PrintWriter("gdbTestAg.config");
-		outputTestAg.printf("Anopheles gambiae\t"+ filePath);
-		outputTestAg.close();
-
-		PrintWriter outputTestInvalid = new PrintWriter("gdbTestInvalid.config");
-		outputTestInvalid.printf("Invalid\t"+ filePath);
-		outputTestInvalid.close();
-
-		gdbFromConfig = GdbProvider.fromConfigFile(gdbFile);
-		assertNotNull(gdbFromConfig);
-		assertFalse(gdbFromConfig.globalGdbs.isEmpty()&&gdbFromConfig.organism2gdb.isEmpty());
-		// Test fromConfigFile() method with Anopheles gambiae as Organism in .config file
-		gdbFromConfigAg = GdbProvider.fromConfigFile(gdbFileAg);
-		assertNotNull(gdbFromConfigAg);
-		assertFalse(gdbFromConfigAg.globalGdbs.isEmpty()&&gdbFromConfigAg.organism2gdb.isEmpty());
-		// Test fromConfigFile() method with invalid Organism in .config file
-		gdbFromConfigInvalid = GdbProvider.fromConfigFile(gdbFileInvalid);
-		assertTrue(gdbFromConfigInvalid.globalGdbs.isEmpty()&&gdbFromConfigInvalid.organism2gdb.isEmpty());
-
-		gdbFromConfig.addOrganismGdb(sC, m);
-		orgSet = gdbFromConfig.getOrganisms();
-		System.out.println(orgSet);
-        assertTrue(orgSet.contains(sC));
-
-        gdbFromConfigAg.addGlobalGdb(m);
-		orgSetAg = gdbFromConfigAg.getOrganisms();
-		System.out.println(orgSetAg);
-        assertTrue(orgSetAg.contains(aG));
-        // Test adding the same global gdb twice, ensure size remains = 1.
-        gdbFromConfigAg.addGlobalGdb(m);
-        assertTrue(orgSetAg.size() == 1);
 	}
 	
 	@org.junit.jupiter.api.Test

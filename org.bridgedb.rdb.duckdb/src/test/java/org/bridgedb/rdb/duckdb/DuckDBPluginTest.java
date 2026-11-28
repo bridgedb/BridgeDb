@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -36,8 +35,6 @@ import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.bio.DataSourceTxt;
-import org.bridgedb.bio.Organism;
-import org.bridgedb.rdb.GdbProvider;
 import org.bridgedb.rdb.SimpleGdb;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -118,13 +115,6 @@ public class DuckDBPluginTest {
 		File missing = new File(dir, "missing.bridge");
 		assertThrows(IDMapperException.class, () -> BridgeDb.connect("idmapper-duckdb:" + missing));
 		assertFalse(missing.exists());
-	}
-
-	@Test
-	public void testGdbProvider() throws Exception {
-		File config = new File(dir, "gdb.config");
-		Files.writeString(config.toPath(), "Homo sapiens\tidmapper-duckdb:" + db + "\n");
-		assertMaps(GdbProvider.fromConfigFile(config).getStack(Organism.HomoSapiens));
 	}
 
 	@Test

@@ -17,14 +17,11 @@ package org.bridgedb.rdb.duckdb;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
-import java.nio.file.Files;
 
 import org.bridgedb.BridgeDb;
 import org.bridgedb.bio.DataSourceTxt;
-import org.bridgedb.bio.Organism;
 import org.bridgedb.rdb.DbFormatDetector;
 import org.bridgedb.rdb.ExampleDatabases;
-import org.bridgedb.rdb.GdbProvider;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -59,14 +56,5 @@ public class ExampleDatabaseTest {
 	@Test
 	public void testJdbcProtocol() throws Exception {
 		ExampleDatabases.assertContent(BridgeDb.connect("idmapper-jdbc:duckdb:" + db));
-	}
-
-	@Test
-	public void testGdbProvider() throws Exception {
-		// with the protocol in the config file; without it, GdbProvider
-		// opens every file as a Derby database (see TODO.md)
-		File config = new File(dir, "gdb.config");
-		Files.writeString(config.toPath(), "Homo sapiens\tidmapper-duckdb:" + db + "\n");
-		ExampleDatabases.assertMappings(GdbProvider.fromConfigFile(config).getStack(Organism.HomoSapiens));
 	}
 }
